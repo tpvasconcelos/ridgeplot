@@ -1,3 +1,7 @@
+![ridgeplot - beautiful ridgeline plots in Python](assets/hero.png)
+
+---
+
 # ridgeplot: beautiful ridgeline plots in Python
 
 
@@ -87,11 +91,13 @@ fig = ridgeplot(
 
 # Again, update the figure layout to your liking here
 fig.update_layout(
+    title="What probability would you assign to the phrase <i>“Highly likely”</i>?",
     height=650,
     width=800,
     plot_bgcolor="rgba(255, 255, 255, 0.0)",
     xaxis_gridcolor="rgba(0, 0, 0, 0.1)",
     yaxis_gridcolor="rgba(0, 0, 0, 0.1)",
+    yaxis_title="Assigned Probability (%)",
 )
 fig.show()
 ```
