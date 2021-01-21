@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "ridgeplot"
+version = "0.1.1"
+description = ""
+authors = ["Tomas Pereira de Vasconcelos <tomas@tiqets.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7.1"
+plotly = "^4.14.3"
+statsmodels = "^0.12.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+numpy = "^1.19.5"
+pandas = "^1.2.0"
+black = "^20.8b1"
+ipython = "^7.19.0"
+jupyter = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | \.git-crypt
+    | \.cache
+    | \.pytest_cache
+    | \.idea
+    | \.circleci
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
+
