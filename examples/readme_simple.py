@@ -8,7 +8,7 @@ synthetic_samples = [normal(n / 1.2, size=600) for n in reversed(range(9))]
 fig = ridgeplot(samples=synthetic_samples)
 
 # and the returned Plotly figure is still fully customizable
-fig.update_layout(height=700, width=800)
+fig.update_layout(height=500, width=800)
 
 # show us the work!!
 fig.show()

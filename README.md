@@ -13,8 +13,8 @@ Bumper stickers:
 - Do one thing, and do it well!
 - Use sensible defaults, but allow for extensive configuration!
 
-## How to get it?
 
+## How to get it?
 The source code is currently hosted on GitHub at: https://github.com/tpvasconcelos/ridgeplot
 
 Install and update using [pip](https://pip.pypa.io/en/stable/quickstart/):
@@ -23,10 +23,10 @@ pip install -U ridgeplot
 ```
 
 ### Dependencies
-
 - [plotly](https://plotly.com/) - the interactive graphing backend that powers `ridgeplot`
 - [statsmodels](https://www.statsmodels.org/) - Used for Kernel Density Estimation (KDE)
 - [numpy](https://numpy.org/) - Supporting library for multi-dimensional array manipulations
+
 
 ## How to use it?
 
@@ -42,14 +42,15 @@ synthetic_samples = [normal(n / 1.2, size=600) for n in reversed(range(9))]
 fig = ridgeplot(samples=synthetic_samples)
 
 # and the returned Plotly figure is still fully customizable
-fig.update_layout(height=700, width=800)
+fig.update_layout(height=500, width=800)
 
 # show us the work!!
 fig.show()
 ```
+![ridgeline plot example using the ridgeplot Python library](assets/example_simple.png)
+
 
 ### Fully configurable
-
 In this example, we will be replicating the first ridgeline plot example in
 [this _from Data to Viz_ post](https://www.data-to-viz.com/graph/ridgeline.html),
 which uses the _probly_ dataset. You can find the _plobly_ dataset on multiple sources like in the
@@ -57,7 +58,6 @@ which uses the _probly_ dataset. You can find the _plobly_ dataset on multiple s
 python interactive visualization library. I'll be using the
 [same source](https://raw.githubusercontent.com/zonination/perceptions/master/probly.csv)
 used in the original post.
-
 ```python
 import numpy as np
 import pandas as pd
@@ -101,3 +101,4 @@ fig.update_layout(
 )
 fig.show()
 ```
+![ridgeline plot of the probly dataset using the ridgeplot Python library](assets/example_probly.png)
