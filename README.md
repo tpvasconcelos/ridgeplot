@@ -1,8 +1,30 @@
-# Ridgeplot
+# ridgeplot: beautiful ridgeline plots in Python
 
-Simple API for plotting beautiful [ridgeline plots](https://www.data-to-viz.com/graph/ridgeline.html) in
-Python using the [Plotly](https://plotly.com/python/) interactive graphing library.
 
+The `ridgeplot` python library aims at providing a simple API for plotting beautiful
+[ridgeline plots](https://www.data-to-viz.com/graph/ridgeline.html) within the
+extensive [Plotly](https://plotly.com/python/) interactive graphing environment.
+
+Bumper stickers:
+- Do one thing, and do it well!
+- Use sensible defaults, but allow for extensive configuration!
+
+## How to get it?
+
+The source code is currently hosted on GitHub at: https://github.com/tpvasconcelos/ridgeplot
+
+Install and update using [pip](https://pip.pypa.io/en/stable/quickstart/):
+```shell
+pip install -U ridgeplot
+```
+
+### Dependencies
+
+- [plotly](https://plotly.com/) - the interactive graphing backend that powers `ridgeplot`
+- [statsmodels](https://www.statsmodels.org/) - Used for Kernel Density Estimation (KDE)
+- [numpy](https://numpy.org/) - Supporting library for multi-dimensional array manipulations
+
+## How to use it?
 
 ### A very simple example
 ```python
