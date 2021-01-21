@@ -4,8 +4,7 @@ from ridgeplot import ridgeplot
 
 
 # Get the raw data
-df = pd.read_csv(
-    "https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv")
+df = pd.read_csv("https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv")
 
 
 # Let's grab only the subset of columns displayed in the example
