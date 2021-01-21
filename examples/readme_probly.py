@@ -1,38 +1,3 @@
-# Ridgeplot
-
-Simple API for plotting beautiful [ridgeline plots](https://www.data-to-viz.com/graph/ridgeline.html) in
-Python using the [Plotly](https://plotly.com/python/) interactive graphing library.
-
-
-### A very simple example
-```python
-from numpy.random import normal
-from ridgeplot import ridgeplot
-
-# Put your real samples here...
-synthetic_samples = [normal(n / 1.2, size=600) for n in reversed(range(9))]
-
-# The 'ridgeplot(...)' function comes packed with sensible defaults
-fig = ridgeplot(samples=synthetic_samples)
-
-# and the returned Plotly figure is still fully customizable
-fig.update_layout(height=700, width=800)
-
-# show us the work!!
-fig.show()
-```
-
-### Fully configurable
-
-In this example, we will be replicating the first ridgeline plot example in
-[this _from Data to Viz_ post](https://www.data-to-viz.com/graph/ridgeline.html),
-which uses the _probly_ dataset. You can find the _plobly_ dataset on multiple sources like in the
-[bokeh](https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv)
-python interactive visualization library. I'll be using the
-[same source](https://raw.githubusercontent.com/zonination/perceptions/master/probly.csv)
-used in the original post.
-
-```python
 import numpy as np
 import pandas as pd
 from ridgeplot import ridgeplot
@@ -82,4 +47,3 @@ fig.update_layout(
     yaxis_gridcolor="rgba(0, 0, 0, 0.1)",
 )
 fig.show()
-```

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 import plotly.graph_objects as go
@@ -50,6 +50,9 @@ class RidgePlot:
                 f"{tuple(self.colormode_maps.keys())}, not {colormode}."
             )
 
+        if coloralpha is not None:
+            coloralpha = float(coloralpha)
+
         if labels is not None:
             n_labels = len(labels)
             if n_labels != n_traces:
@@ -59,7 +62,7 @@ class RidgePlot:
 
         self.densities: List[np.ndarray] = new_densities
         self.colorscale: ColorScaleType = colorscale
-        self.coloralpha = float(coloralpha)
+        self.coloralpha: Optional[float] = coloralpha
         self.colormode = str(colormode)
         self.labels: list = labels
         self.linewidth: float = float(linewidth)
@@ -164,17 +167,18 @@ class RidgePlot:
 def ridgeplot(
     samples=None,
     densities=None,
-    colorscale="viridis",
-    coloralpha=0.7,
-    colormode="mean-means",
-    labels=None,
     # Kernel Density Estimation
     kernel="gau",
     bandwidth="normal_reference",
     kde_points=500,
+    # Colors
+    colorscale="viridis",
+    colormode="mean-means",
+    coloralpha=None,
     # Layout
+    labels=None,
     linewidth=1.4,
-    spacing: float = 5 / 9,
+    spacing: float = 0.5,
     show_annotations=True,
     xpad=0.05,
 ) -> go.Figure:
@@ -183,15 +187,15 @@ def ridgeplot(
     :param samples:
     :param densities:
     :param colorscale:
-    :param coloralpha: If None, this argument will be ignored. Otherwise, the value will be used to
-    overwrite the transparency of the colors from the colorscale.
+    :param coloralpha: If None, this argument will be ignored. Otherwise, the
+     value will be used to overwrite the transparency of the colors from the colorscale.
     :param colormode:
     :param labels:
     :param kernel:
     :param bandwidth:
     :param kde_points:
     :param linewidth:
-    :param spacing:
+    :param spacing: The spacing is defined in units of the highest distribution
     :param show_annotations:
     :param xpad:
     :return:
@@ -206,10 +210,10 @@ def ridgeplot(
 
     rp = RidgePlot(
         densities=densities,
+        labels=labels,
         colorscale=colorscale,
         coloralpha=coloralpha,
         colormode=colormode,
-        labels=labels,
         linewidth=linewidth,
         spacing=spacing,
         show_annotations=show_annotations,
