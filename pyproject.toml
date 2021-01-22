@@ -16,6 +16,11 @@ pandas = "^1.2.0"
 black = "^20.8b1"
 ipython = "^7.19.0"
 jupyter = "^1.0.0"
+isort = "^5.7.0"
+blackcellmagic = "^0.0.2"
+jupyterlab-code-formatter = "^1.4.2"
+ipywidgets = "^7.6.3"
+jupyter-dash = "^0.3.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
