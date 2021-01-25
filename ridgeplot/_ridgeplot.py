@@ -57,6 +57,7 @@ class RidgePlot:
             n_labels = len(labels)
             if n_labels != n_traces:
                 raise ValueError(f"Expected {n_traces} labels, got {n_labels}.")
+            labels = list(map(str, labels))
         else:
             labels = [f"Trace {i + 1}" for i in range(n_traces)]
 
