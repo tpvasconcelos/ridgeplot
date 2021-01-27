@@ -1,8 +1,14 @@
 [tool.poetry]
 name = "ridgeplot"
-version = "0.1.5"
+version = "0.1.6"
 description = ""
-authors = ["Tomas Pereira de Vasconcelos <tomas@tiqets.com>"]
+authors = ["Tomas Pereira de Vasconcelos <tomasvasconcelos1@gmail.com>"]
+homepage = "https://github.com/tpvasconcelos/ridgeplot"
+repository = "https://github.com/tpvasconcelos/ridgeplot"
+#documentation = "..."
+#download_url = "..."
+
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.7.1"
