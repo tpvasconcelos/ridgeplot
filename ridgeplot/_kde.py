@@ -18,6 +18,12 @@ def evaluate_density(samples, points, kernel, bandwidth) -> Tuple[np.ndarray, np
     else:
         points = np.asarray(points)
 
+    if points.ndim > 1:
+        raise ValueError(
+            f"The 'points' at which KDE is computed should be represented by a "
+            f"one-dimensional array, got an array of shape {points.shape} instead."
+        )
+
     # I decided to use statsmodels' KDEUnivariate for KDE. There are many
     # other supported alternatives in the python scientific computing
     # ecosystem. See, for instance, scipy's alternative - on which
