@@ -25,9 +25,10 @@ def ridgeplot(
     """Creates and returns a Plotly figure with a beautiful ridgeline plot.
 
     Note:
-      If you specify both `samples` and `densities` arguments, a `ValueError`
-      exception will be raised! One of these arguments should always remain set
-      to `None`. See `samples` and `densities` bellow.
+      You have to specify one of: `samples` or `densities`. If you specify
+      both `samples` and `densities` arguments, a `ValueError` exception will
+      be raised! One of these arguments should always remain set to `None`.
+      See `samples` and `densities` bellow for more information.
 
     Args:
       samples:
@@ -117,14 +118,17 @@ def ridgeplot(
         figure to your liking (e.g. using the `fig.update_layout()` method).
 
     Raises:
-      ValueError: If both `samples` and `densities` arguments are not `None`.
+      ValueError:
+        If both `samples` and `densities` arguments are not `None`, or if
+        neither `samples` or `densities` are specified.
     """
     has_samples = samples is not None
     has_densities = densities is not None
     if has_samples and has_densities:
         raise ValueError("You may not specify both `samples` and `densities` arguments!")
-
-    if not has_densities:
+    elif not has_samples and not has_densities:
+        raise ValueError("You have to specify one of: `samples` or `densities`")
+    elif not has_densities:
         densities = get_densities(samples, points=kde_points, kernel=kernel, bandwidth=bandwidth)
 
     ridgeplot_figure_factory = _RidgePlotFigureFactory(
