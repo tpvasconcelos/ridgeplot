@@ -1,4 +1,29 @@
-from typing import List, Optional
+"""ridgeplot: beautiful ridgeline plots in Python
+
+The ridgeplot python library aims at providing a simple API for plotting
+beautiful ridgeline plots within the extensive Plotly interactive graphing
+environment.
+
+
+  Sensible defaults:
+
+  from numpy.random import normal
+  from ridgeplot import ridgeplot
+
+  # Put your real samples here...
+  synthetic_samples = [normal(n / 1.2, size=600) for n in reversed(range(9))]
+
+  # The `ridgeplot()` helper comes packed with sensible defaults
+  fig = ridgeplot(samples=synthetic_samples)
+
+  # and the returned Plotly figure is still fully customizable
+  fig.update_layout(height=500, width=800)
+
+  # show us the work!!
+  fig.show()
+
+"""
+from typing import List, Optional, Union
 
 import numpy as np
 import plotly.graph_objects as go
@@ -47,7 +72,7 @@ class RidgePlot:
         if colormode not in self.colormode_maps.keys():
             raise ValueError(
                 f"The colormode argument should be one of "
-                f"{tuple(self.colormode_maps.keys())}, not {colormode}."
+                f"{tuple(self.colormode_maps.keys())}, got {colormode} instead."
             )
 
         if coloralpha is not None:
@@ -168,42 +193,119 @@ class RidgePlot:
 def ridgeplot(
     samples=None,
     densities=None,
-    # Kernel Density Estimation
-    kernel="gau",
+    kernel: str = "gau",
     bandwidth="normal_reference",
     kde_points=500,
-    colorscale="plasma",
-    colormode="mean-means",
-    coloralpha=None,
-    # Layout
+    colorscale: Union[str, ColorScaleType] = "plasma",
+    colormode: str = "mean-means",
+    coloralpha: Optional[float] = None,
     labels=None,
-    linewidth=1.4,
+    linewidth: float = 1.4,
     spacing: float = 0.5,
-    show_annotations=True,
-    xpad=0.05,
+    show_annotations: bool = True,
+    xpad: float = 0.05,
 ) -> go.Figure:
-    """Create a Plotly figure with a ridgeline plot.
+    """Creates and returns a Plotly figure with a beautiful ridgeline plot.
 
-    :param samples:
-    :param densities:
-    :param colorscale:
-    :param coloralpha: If None, this argument will be ignored. Otherwise, the
-     value will be used to overwrite the transparency of the colors from the colorscale.
-    :param colormode:
-    :param labels:
-    :param kernel:
-    :param bandwidth:
-    :param kde_points:
-    :param linewidth:
-    :param spacing: The spacing is defined in units of the highest distribution
-    :param show_annotations:
-    :param xpad:
-    :return:
+    Note:
+      If you specify both `samples` and `densities` arguments, a `ValueError`
+      exception will be raised! One of these arguments should always remain set
+      to `None`. See `samples` and `densities` bellow.
+
+    Args:
+      samples:
+        If `samples` data is specified, Kernel Density Estimation (KDE) will be
+        computed. See `kernel`, `bandwidth`, and `kde_points` for more details
+         and KDE configuration options.
+      densities:
+        If `densities` arrays are specified instead, the KDE step will be
+        skipped and all associated arguments ignored. Each density array should
+        have shape `(2, N)`, but `N` may vary with each array.
+      kernel:
+        The Kernel to be used during Kernel Density Estimation. The default is
+        a Gaussian Kernel ("gau"). Choices are:
+          - "biw" for biweight
+          - "cos" for cosine
+          - "epa" for Epanechnikov
+          - "gau" for Gaussian.
+          - "tri" for triangular
+          - "triw" for triweight
+          - "uni" for uniform
+      bandwidth:
+        The bandwidth to use during Kernel Density Estimation. The default is
+        "normal_reference". Choices are:
+          - "scott" - 1.059 * A * nobs ** (-1/5.), where A is
+          `min(std(x),IQR/1.34)`
+          - "silverman" - .9 * A * nobs ** (-1/5.), where A is
+            `min(std(x),IQR/1.34)`
+          - "normal_reference" - C * A * nobs ** (-1/5.), where C is calculated
+           from the kernel. Equivalent (up to 2 dp) to the "scott" bandwidth
+           for gaussian kernels. See `statsmodels/nonparametric/bandwidths.py`
+          - If a float is given, its value is used as the bandwidth.
+          - If a callable is given, it's return value is used. The callable
+          should take exactly two parameters, i.e., fn(x, kern), and return a
+          float, where:
+            * x - the clipped input data
+            * kern - the kernel instance used
+      kde_points:
+        This argument controls the points at which KDE is computed. If an `int`
+        value is passed (default), the densities will be evaluated at
+        `kde_points` evenly spaced points between the min and max of each set
+        of samples. However, you may also specify a custom range by instead
+        passing an array of points. This array should be one-dimensional.
+      colorscale:
+        Any valid Plotly color-scale or a `str` with a valid named color-scale.
+        See `ridgeplot.named_colorscales()` to see which names are available,
+        <https://plotly.com/python/builtin-colorscales/> for more on Plotly's
+        built-in color-scales.
+      colormode:
+        This argument controls the logic for choosing the color filling of each
+        ridgeline trace. Each option provides a different method for
+        calculating the `colorscale` midpoint of each trace. The default is
+        mode is "mean-means". Choices are:
+          - "index" - uses the trace's index. e.g. if 3 traces are specified,
+           then the midpoints will be [0, 0.5, 1].
+          - "mean-minmax" - uses the min-max normalized (weighted) mean of
+          each density to calculate the midpoints. The normalization min and
+          max values are the minimum and maximum x-values from all densities,
+           respectively.
+          - "mean-means" - uses the min-max normalized (weighted) mean of
+          each density to calculate the midpoints. The normalization min and
+          max values are the minimum and maximum mean values from all
+          densities, respectively.
+      coloralpha:
+        If None (default), this argument will be ignored and the transparency
+        values of the specifies color-scale will remain untouched. Otherwise,
+        if a `float` value is passed, it will be used to overwrite the
+        transparency (alpha) of the color-scale's colors.
+      labels:
+        A list of string labels for each trace. The default value is `None`,
+        which will result in auto-generated labels of form "Trace n". If,
+        instead, a list of labels is specified, it must be of the same
+        size/length as the number of traces.
+      linewidth:
+        The traces' line width (in px).
+      spacing:
+        The vertical spacing between density traces, which is defined in units
+        of the highest distribution (i.e. the maximum y-value).
+      show_annotations:
+        If `True` (default), it will show the label names as "y-tick-labels".
+      xpad:
+        Specifies the extra padding to use on the x-axis. It is defined in
+        units of the range between the minimum and maximum x-values from all
+        distributions.
+
+    Returns:
+        A Plotly figure with a ridgeline plot. You can further customize this
+        figure to your liking (e.g. using the `fig.update_layout()` method).
+
+    Raises:
+      ValueError: If both `samples` and `densities` arguments are not `None`.
     """
     has_samples = samples is not None
     has_densities = densities is not None
     if has_samples and has_densities:
-        raise ValueError("You may only specify one of 'samples' or 'densities', not both.")
+        raise ValueError("You may not specify both `samples` and `densities` arguments!")
 
     if not has_densities:
         densities = get_densities(samples, points=kde_points, kernel=kernel, bandwidth=bandwidth)
