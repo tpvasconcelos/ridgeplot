@@ -1,14 +1,18 @@
+import json
 from numbers import Number
-from typing import List, Union
+from pathlib import Path
+from typing import Dict, List, Union
 
 from plotly.colors import find_intermediate_color, hex_to_rgb, label_rgb
 
-from ridgeplot._all_colors_dict import ALL_PLOTLY_COLORS_SCALES
-
-# Ideally: ColorScaleType = List[Tuple[Number, str]]
 from ridgeplot._utils import normalise
 
+# Ideally: ColorScaleType = List[Tuple[Number, str]]
 ColorScaleType = List[List[Union[Number, str]]]
+
+_path_to_colors_dict = Path(__file__).parent.joinpath("colors.json")
+with _path_to_colors_dict.open() as _colors_json:
+    ALL_PLOTLY_COLORS_SCALES: Dict[str, ColorScaleType] = json.load(_colors_json)
 
 
 def any_to_rgb(color: Union[tuple, str]) -> str:

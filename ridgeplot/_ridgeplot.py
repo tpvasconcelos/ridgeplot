@@ -172,8 +172,7 @@ def ridgeplot(
     kernel="gau",
     bandwidth="normal_reference",
     kde_points=500,
-    # Colors
-    colorscale="viridis",
+    colorscale="plasma",
     colormode="mean-means",
     coloralpha=None,
     # Layout
