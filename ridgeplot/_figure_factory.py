@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Callable, Dict, List, Optional
 
 import numpy as np
 from _plotly_utils.colors import validate_colorscale
@@ -40,11 +40,6 @@ class _RidgePlotFigureFactory:
             colorscale = get_plotly_colorscale(name=colorscale)
         validate_colorscale(colorscale)
 
-        self.colormode_maps = {
-            "index": self._compute_midpoints_index,
-            "mean-minmax": self._compute_midpoints_mean_minmax,
-            "mean-means": self._compute_midpoints_mean_means,
-        }
         if colormode not in self.colormode_maps.keys():
             raise ValueError(
                 f"The colormode argument should be one of "
@@ -79,6 +74,14 @@ class _RidgePlotFigureFactory:
         self.x_min, self.x_max, _, self.y_max = get_extrema_3d(densities)
         self.fig: go.Figure = go.Figure()
         self.colors: List[str] = self.pre_compute_colors()
+
+    @property
+    def colormode_maps(self) -> Dict[str, Callable[[], List[float]]]:
+        return {
+            "index": self._compute_midpoints_index,
+            "mean-minmax": self._compute_midpoints_mean_minmax,
+            "mean-means": self._compute_midpoints_mean_means,
+        }
 
     def draw_base(self, x, y_shifted) -> None:
         """Adds an invisible trace at constant y that will serve as the
