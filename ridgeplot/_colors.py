@@ -1,7 +1,7 @@
 import json
 from numbers import Number
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 
 from plotly.colors import find_intermediate_color, hex_to_rgb, label_rgb
 
@@ -15,7 +15,7 @@ with _path_to_colors_dict.open() as _colors_json:
     ALL_PLOTLY_COLORS_SCALES: Dict[str, ColorScaleType] = json.load(_colors_json)
 
 
-def any_to_rgb(color: Union[tuple, str]) -> str:
+def _any_to_rgb(color: Union[tuple, str]) -> str:
     if isinstance(color, tuple):
         color = label_rgb(color)
     if color.startswith("#"):
@@ -23,6 +23,10 @@ def any_to_rgb(color: Union[tuple, str]) -> str:
     if not color.startswith("rgb("):
         raise RuntimeError("Something went wrong with the logic above!")
     return color
+
+
+def named_colorscales() -> Tuple[str]:
+    return tuple(ALL_PLOTLY_COLORS_SCALES.keys())
 
 
 def get_plotly_colorscale(name: str) -> ColorScaleType:
@@ -42,7 +46,7 @@ def get_color(colorscale: ColorScaleType, midpoint: float) -> str:
     if 0 > midpoint > 1:
         raise ValueError(f"The 'midpoint' should be a float value between 0 and 1, not {midpoint}.")
     scale = [s for s, _ in colorscale]
-    colors = [any_to_rgb(c) for _, c in colorscale]
+    colors = [_any_to_rgb(c) for _, c in colorscale]
     del colorscale
     if midpoint in scale:
         return colors[scale.index(midpoint)]
@@ -59,5 +63,5 @@ def get_color(colorscale: ColorScaleType, midpoint: float) -> str:
 
 
 def apply_alpha(color: Union[tuple, str], alpha) -> str:
-    color = any_to_rgb(color)
+    color = _any_to_rgb(color)
     return f"rgba({color[4:-1]}, {alpha})"
