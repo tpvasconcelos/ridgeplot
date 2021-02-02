@@ -16,6 +16,9 @@ indent_style = space
 indent_size = 4
 max_line_length=100
 
+[*.md]
+max_line_length=100
+
 # 2 space indentation
 [*.{yml,yaml,json,js,css,html,jsx,ts,tsx,less}]
 indent_style = space
