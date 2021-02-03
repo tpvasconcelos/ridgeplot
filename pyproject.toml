@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ridgeplot"
-version = "0.1.7"
+version = "0.1.8"
 description = ""
 authors = ["Tomas Pereira de Vasconcelos <tomasvasconcelos1@gmail.com>"]
 homepage = "https://github.com/tpvasconcelos/ridgeplot"
