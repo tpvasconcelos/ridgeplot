@@ -113,7 +113,7 @@ class _RidgePlotFigureFactory:
             ),
         )
 
-    def update_layout(self, y_ticks: list) -> go.Figure:
+    def update_layout(self, y_ticks: list) -> None:
         """Update figure's layout."""
         self.fig.update_layout(
             hovermode=False,

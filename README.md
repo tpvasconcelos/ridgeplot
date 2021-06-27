@@ -1,8 +1,31 @@
-![ridgeplot - beautiful ridgeline plots in Python](assets/hero.png)
+<h1 align="center">
+    <img src="assets/hero.png" alt="ridgeplot - beautiful ridgeline plots in Python">
+</h1>
+
+<h1 id="ridgeplot" align="center">
+    ridgeplot: beautiful ridgeline plots in Python
+</h1>
+
+<p align="center">
+  <!-- TODO: https://bestpractices.coreinfrastructure.org/en -->
+  <!-- TODO: https://www.gitpod.io/docs/getting-started -->
+  <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/v/ridgeplot" alt="PyPI - Latest Release"></a>
+  <a href="https://github.com/tpvasconcelos/ridgeplot/"><img src="https://img.shields.io/pypi/pyversions/ridgeplot" alt="PyPI - Python Versions"></a>
+  <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/status/ridgeplot.svg" alt="PyPI - Package Status"></a>
+  <a href="https://github.com/tpvasconcelos/ridgeplot/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/ridgeplot" alt="PyPI - License"></a>
+  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
+  <br>
+  <a href="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/"><img src="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/badge.svg" alt="GitHub CI"></a>
+  <a href="https://codecov.io/gh/tpvasconcelos/ridgeplot"><img src="https://codecov.io/gh/tpvasconcelos/ridgeplot/branch/master/graph/badge.svg" alt="codecov"></a>
+  <a href="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot"><img src="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge" alt="CodeFactor"></a>
+  <a href="https://www.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpvasconcelos/ridgeplot&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/24e94a244a504de8a345b70f41c34445" alt="Codacy code quality"></a>
+  <a href="https://requires.io/github/tpvasconcelos/ridgeplot/requirements/?branch=master"><img src="https://requires.io/github/tpvasconcelos/ridgeplot/requirements.svg?branch=master" alt="Requirements Status" /></a>
+</p>
+
+
+<!-- <p align="center"><i>Beautiful ridgeline plots in python</i></p> -->
 
 ---
-
-# ridgeplot: beautiful ridgeline plots in Python
 
 The `ridgeplot` python library aims at providing a simple API for plotting beautiful
 [ridgeline plots](https://www.data-to-viz.com/graph/ridgeline.html) within the extensive
@@ -61,8 +84,7 @@ from ridgeplot import ridgeplot
 
 
 # Get the raw data
-df = pd.read_csv(
-    "https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv")
+df = pd.read_csv("https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv")
 
 # Let's grab only the subset of columns displayed in the example
 column_names = [
@@ -106,4 +128,3 @@ fig.show()
 - [`bokeh` - from examples/galery](https://docs.bokeh.org/en/latest/docs/gallery/ridgeplot.html)
 - [`matplotlib` - from blogpost](https://matplotlib.org/matplotblog/posts/create-ridgeplots-in-matplotlib/)
 - [`joypy` - Ridgeplot library using a `matplotlib` backend](https://github.com/sbebo/joypy)
-

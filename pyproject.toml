@@ -1,39 +1,9 @@
-[tool.poetry]
-name = "ridgeplot"
-version = "0.1.8"
-description = ""
-authors = ["Tomas Pereira de Vasconcelos <tomasvasconcelos1@gmail.com>"]
-homepage = "https://github.com/tpvasconcelos/ridgeplot"
-repository = "https://github.com/tpvasconcelos/ridgeplot"
-#documentation = "..."
-#download_url = "..."
-
-readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.7.1"
-plotly = "^4.14.3"
-statsmodels = "^0.12.1"
-numpy = "^1.19.5"
-
-[tool.poetry.dev-dependencies]
-pytest = "^5.2"
-pandas = "^1.2.0"
-black = "^20.8b1"
-ipython = "^7.19.0"
-jupyter = "^1.0.0"
-isort = "^5.7.0"
-blackcellmagic = "^0.0.2"
-jupyterlab-code-formatter = "^1.4.2"
-ipywidgets = "^7.6.3"
-jupyter-dash = "^0.3.1"
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools >= 40.9.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.black]
-line-length = 100
+line-length = 120
 target-version = ['py37']
 include = '\.pyi?$'
 exclude = '''
@@ -41,23 +11,37 @@ exclude = '''
   /(
       \.eggs         # exclude a few common directories in the
     | \.git          # root of the project
-    | \.hg
     | \.mypy_cache
     | \.tox
     | \.venv
     | _build
-    | buck-out
     | build
     | dist
     | \.git-crypt
-    | \.cache
     | \.pytest_cache
     | \.idea
     | \.circleci
-    | examples
   )/
   | foo.py           # also separately exclude a file named foo.py in
                      # the root of the project
 )
 '''
 
+
+#[tool.poetry.dependencies]
+#python = "^3.7.1"
+#plotly = "^4.14.3"
+#statsmodels = "^0.12.1"
+#numpy = "^1.19.5"
+#
+#[tool.poetry.dev-dependencies]
+#pytest = "^5.2"
+#pandas = "^1.2.0"
+#black = "^20.8b1"
+#ipython = "^7.19.0"
+#jupyter = "^1.0.0"
+#isort = "^5.7.0"
+#blackcellmagic = "^0.0.2"
+#jupyterlab-code-formatter = "^1.4.2"
+#ipywidgets = "^7.6.3"
+#jupyter-dash = "^0.3.1"

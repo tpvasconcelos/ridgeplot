@@ -47,17 +47,11 @@ def evaluate_density(samples, points, kernel, bandwidth) -> Tuple[np.ndarray, np
     # (and shape) are being returned.
     if not isinstance(densities, np.ndarray) or densities.shape != points.shape:
         raise RuntimeError(
-            f"Could now evaluate densities using the {repr(kernel)} kernel! "
-            f"Try using kernel='gau' (default)."
+            f"Could now evaluate densities using the {repr(kernel)} kernel! " f"Try using kernel='gau' (default)."
         )
 
     return points, densities
 
 
 def get_densities(samples, points, kernel, bandwidth) -> np.ndarray:
-    return np.asarray(
-        [
-            evaluate_density(samples=s, points=points, kernel=kernel, bandwidth=bandwidth)
-            for s in samples
-        ]
-    )
+    return np.asarray([evaluate_density(samples=s, points=points, kernel=kernel, bandwidth=bandwidth) for s in samples])

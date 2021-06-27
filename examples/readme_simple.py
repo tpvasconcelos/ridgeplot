@@ -1,4 +1,5 @@
 from numpy.random import normal
+
 from ridgeplot import ridgeplot
 
 # Put your real samples here...

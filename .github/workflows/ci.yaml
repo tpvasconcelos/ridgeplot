@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    paths-ignore:
+      - assets/**
+      - .editorconfig
+      - .gitignore
+      - Makefile
+      - README.md
+  pull_request:
+    paths-ignore:
+      - assets/**
+      - .editorconfig
+      - .gitignore
+      - Makefile
+      - README.md
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip pre-commit
+          pre-commit install --install-hooks --overwrite
+
+      - name: Code style and linting checks
+        run: pre-commit run --all-files
+
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+      fail-fast: true
+    env:
+      OS: ${{ matrix.os }}
+      PYTHON: ${{ matrix.python-version }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e ".[tests]"
+
+      - name: Generate coverage report
+        run: pytest --cov-report=xml -vv
+
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          flags: unittests
+          env_vars: OS,PYTHON
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: Upload coverage to codacy
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage.xml

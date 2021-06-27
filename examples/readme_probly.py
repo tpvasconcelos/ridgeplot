@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from ridgeplot import ridgeplot
 
+from ridgeplot import ridgeplot
 
 # Get the raw data
 df = pd.read_csv("https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv")
@@ -9,8 +9,14 @@ df = pd.read_csv("https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampl
 
 # Let's grab only the subset of columns displayed in the example
 column_names = [
-    "Almost Certainly", "Very Good Chance", "We Believe", "Likely",
-    "About Even", "Little Chance", "Chances Are Slight", "Almost No Chance",
+    "Almost Certainly",
+    "Very Good Chance",
+    "We Believe",
+    "Likely",
+    "About Even",
+    "Little Chance",
+    "Chances Are Slight",
+    "Almost No Chance",
 ]
 df = df[column_names]
 

@@ -5,25 +5,31 @@ root = true
 
 # Unix-style newlines with a newline ending every file
 [*]
+indent_style = space
+indent_size = 4
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
 [*.py]
-indent_style = space
-# Docstrings and comments use max_line_length = 79
-indent_size = 4
-max_line_length=100
-
-[*.md]
-max_line_length=100
+# docstrings and comments use max_line_length = 80
+# import statements use max_line_length = 100
+max_line_length=120
 
 # 2 space indentation
 [*.{yml,yaml,json,js,css,html,jsx,ts,tsx,less}]
-indent_style = space
 indent_size = 2
 
-# Makefiles always use tabs for indentation
+[LICENSE]
+insert_final_newline = false
+
+[*.bat]
+indent_style = tab
+end_of_line = crlf
+
 [Makefile]
 indent_style = tab
+
+[*.{diff,patch}]
+trim_trailing_whitespace = false
