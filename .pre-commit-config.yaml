@@ -41,7 +41,6 @@ repos:
       - id: black
         description: The uncompromising Python code formatter
         language_version: python3.7
-        #args: ['--force-exclude'] after PR merge: https://github.com/psf/black/pull/1032
 
   - repo: https://github.com/pycqa/isort
     rev: 5.7.0
