@@ -62,12 +62,12 @@ jupyter-plotly: ## setup jupyterlab's plotly extensions
 
 .PHONY: lint
 lint: ## run all pre-commit hooks against all files
-	.venv/bin/pre-commit run --all-files
+	.venv/bin/tox -e lint
 
 
 .PHONY: test
 test: ## run tests quickly with the default Python
-	.venv/bin/pytest --cov=ridgeplot --cov=tests --cov-report=xml tests
+	.venv/bin/tox -e py37
 
 
 .PHONY: test-all
