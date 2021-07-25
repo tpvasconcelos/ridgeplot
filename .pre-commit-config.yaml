@@ -65,9 +65,3 @@ repos:
   #   hooks:
   #     - id: mypy
   #       pass_filenames: false
-
-  - repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v1.16.0
-    hooks:
-      - id: setup-cfg-fmt
-        description: apply a consistent format to `setup.cfg` files
