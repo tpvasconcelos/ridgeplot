@@ -17,7 +17,11 @@ on:
       - README.md
 
 jobs:
-  lint:
+
+  # Run code style and linting checks.
+  # Note that these only need to run against the lowest supported python3
+  # version (python3.7) and on any supported  operating system.
+  linting:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
@@ -30,17 +34,22 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade pip pre-commit
-          pre-commit install --install-hooks --overwrite
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[linting]"
 
       - name: Code style and linting checks
         run: pre-commit run --all-files
 
-  test:
+  # Run python tests and generate coverage reports for all major OS (macOS,
+  # Ubuntu, and Windows) and all supported Python versions (see matrix)
+  tests:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version:
+          - 3.7
+          - 3.8
+          - 3.9
         os:
           - ubuntu-latest
           - macos-latest
@@ -61,11 +70,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
-          pip install -e ".[tests]"
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[tests]"
 
-      - name: Generate coverage report
-        run: pytest --cov-report=xml -vv
+      - name: Run tests and generate coverage report
+        run: pytest
 
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v1

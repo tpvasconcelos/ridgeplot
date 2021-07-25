@@ -29,25 +29,24 @@ help:
 
 
 .PHONY: init
-init: clean-all venv-init install jupyter-init ## initialise development environment
+init: clean-all venv-init install ## initialise development environment
 
 
 .PHONY: venv-init
 venv-init: clean-venv ## create a virtual environment
-	python3.7 -m pip install --upgrade pip virtualenv
-	python3.7 -m virtualenv -p python3.7 .venv
+	python3.7 -m venv .venv
 
 
 .PHONY: install
-install: clean ## install the package in editable mode and install all pre-commit hooks
+install: ## install the package in editable mode and install all pre-commit hooks
 	.venv/bin/pip install --upgrade pip
-	.venv/bin/pip install -e ".[tests,dev]"
-	.venv/bin/pip install -U pre-commit
+	.venv/bin/pip install -e ".[dev]"
 	.venv/bin/pre-commit install --install-hooks --overwrite
 
 
 .PHONY: jupyter-init
 jupyter-init: ## initialise a jupyterlab environment and install extensions
+	.venv/bin/pip install -e ".[notebook]"
 	.venv/bin/python -m ipykernel install --user --name="ridgeplot"
 	.venv/bin/jupyter lab build
 
@@ -91,7 +90,7 @@ servedocs: docs ## compile the docs watching for changes
 
 
 .PHONY: dist
-dist: clean ## builds source and wheel package
+dist: clean-build ## builds source and wheel package
 	.venv/bin/python setup.py sdist bdist_wheel
 	.venv/bin/twine check --strict dist/*
 
@@ -110,12 +109,8 @@ release-prod: dist ## package and upload a release prod pypi
 # ---  Clean
 # ==============================================================
 
-.PHONY: clean
-clean: clean-build clean-pyc clean-test ## remove all artifacts (excl. venv!)
-
-
 .PHONY: clean-all
-clean-all: clean clean-venv ## remove all artifacts
+clean-all: clean-ci clean-venv clean-build clean-pyc ## remove all artifacts
 
 
 .PHONY: clean-build
@@ -135,13 +130,13 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '__pycache__' -exec rm -fr {} +
 
 
-.PHONY: clean-test
-clean-test: ## remove test and coverage artifacts
+.PHONY: clean-ci
+clean-ci: ## remove linting, testing, and coverage artifacts
 	rm -fr .tox/
-	rm -f coverage.xml
-	rm -f .coverage
 	rm -fr .pytest_cache
 	rm -fr .mypy_cache/
+	find . -name 'coverage.xml' -exec rm -f {} +
+	find . -name '.coverage' -exec rm -f {} +
 
 
 .PHONY: clean-venv
