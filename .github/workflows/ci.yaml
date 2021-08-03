@@ -54,7 +54,7 @@ jobs:
         id: pip-cache-dir
         run: echo "::set-output name=dir::$(pip cache dir)"
 
-      - name: pip cache
+      - name: Restore cache
         uses: actions/cache@v2
         with:
           path: |
