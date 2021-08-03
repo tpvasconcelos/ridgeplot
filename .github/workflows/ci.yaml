@@ -17,32 +17,7 @@ on:
       - README.md
 
 jobs:
-
-  # Run code style and linting checks.
-  # Note that these only need to run against the lowest supported python3
-  # version (python3.7) and on any supported  operating system.
-  linting:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.7
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e ".[linting]"
-
-      - name: Code style and linting checks
-        run: pre-commit run --all-files
-
-  # Run python tests and generate coverage reports for all major OS (macOS,
-  # Ubuntu, and Windows) and all supported Python versions (see matrix)
-  tests:
+  ci:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -68,13 +43,26 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e ".[tests]"
+      - name: Ensure pip, setuptools, and wheel are up to date
+        run: python -m pip install --upgrade pip setuptools wheel
 
-      - name: Run tests and generate coverage report
-        run: pytest
+      - name: Get pip cache dir
+        id: pip-cache-dir
+        run: echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: pip cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.pip-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.cfg') }}
+          restore-keys: ${{ runner.os }}-pip-
+
+      - name: Install package (and extra requirements)
+        run: python -m pip install -e ".[ci]"
+
+      - name: Run Tox's integration approval steps
+        run: tox -e lint,py
 
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v1
