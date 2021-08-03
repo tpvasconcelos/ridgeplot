@@ -61,6 +61,7 @@ jobs:
         with:
           path: |
             ${{ steps.pip-cache-dir.outputs.dir }}
+            ~/.cache/pre-commit/repo*
           key: |
             ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/setup.cfg') }}
           restore-keys: |
