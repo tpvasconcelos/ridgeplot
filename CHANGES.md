@@ -6,7 +6,7 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+- 🧪 Add tests for example scripts ([#14](https://github.com/tpvasconcelos/ridgeplot/pull/14))
 
 0.1.12
 ------
