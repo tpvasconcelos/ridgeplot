@@ -288,11 +288,11 @@ on [Continuous Integration](#continuous-integration).
    ```
 4. Open a pull request titled `"Release version X.X.X"`
 5. Wait for all CI checks to pass.
-6. A ridgeplot main contributor should sign off and merge release the pull requests.
+6. A ridgeplot main contributor should sign off and merge this pull requests.
 7. Create a new release using the GitHub UI.
+    - Pick the corresponding `X.X.X` tag and use it as the release title as well.
     - Copy the raw markdown section in `CHANGES.md` corresponding to this release and use it as the
       description of the GitHub Release.
-    - Use the same `X.X.X` tag used in the release.
 8. At this point a GitHub Actions workflow will be triggered which will build and publish new wheels to PyPI.
    Be sure to check whether all workflows passed successfully.
 
