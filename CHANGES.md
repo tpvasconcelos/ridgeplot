@@ -6,6 +6,11 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+0.1.12
+------
+
 ### Internal
 
 - 📦 Update and standardise CI steps ([#6](https://github.com/tpvasconcelos/ridgeplot/pull/6))
