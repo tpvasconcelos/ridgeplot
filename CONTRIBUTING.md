@@ -10,16 +10,14 @@ The contribution process for ridgeplot should start with
 - 🐛 Bug reports
 - 📚 Documentation fixes
 
-After the implementation strategy has been agreed on by a ridgeplot committer, the next
-step is to introduce your changes as a pull request (see
-[Submitting a Pull Request](#submitting-a-pull-request)) against the ridgeplot repository.
-Once your pull request is merged, your changes will be automatically included in the next
-ridgeplot release. Every change should be listed in the
-ridgeplot [Release Notes](CHANGES.md).
+After the implementation strategy has been agreed on by a ridgeplot committer, the next step is to introduce
+your changes as a pull request (see [Submitting a Pull Request](#submitting-a-pull-request)) against the
+ridgeplot repository. Once your pull request is merged, your changes will be automatically included in the
+next ridgeplot release. Every change should be listed in the ridgeplot [Release Notes](CHANGES.md).
 
-The following is a set of (slightly opinionated) rules and general guidelines for contributing to
-ridgeplot. Emphasis on **guidelines**, not _rules_. Use your best judgment, and feel free
-to propose changes to this document in a pull request.
+The following is a set of (slightly opinionated) rules and general guidelines for contributing to ridgeplot.
+Emphasis on **guidelines**, not _rules_. Use your best judgment, and feel free to propose changes to this
+document in a pull request.
 
 ## Table of Contents
 
@@ -46,10 +44,9 @@ peak inside [`Makefile`](Makefile) at any time to see exactly what is being run,
 
 First, you will need to
 [clone](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork)
-this repository. For this, make sure you have a [GitHub account](https://github.com/join), fork
-ridgeplot to your GitHub account by clicking the
-[Fork](https://github.com/tpvasconcelos/ridgeplot/fork) button, and
-clone the main repository locally (e.g. using SSH)
+this repository. For this, make sure you have a [GitHub account](https://github.com/join), fork ridgeplot to
+your GitHub account by clicking the [Fork](https://github.com/tpvasconcelos/ridgeplot/fork) button, and clone
+the main repository locally (e.g. using SSH)
 
 ```shell
 git clone git@github.com:tpvasconcelos/ridgeplot.git
@@ -130,8 +127,7 @@ make jupyter-plotly
    . Remember to update the pull request's description with relevant notes on the changes implemented, and to
    [link to relevant issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)
    (e.g., `fixes #XXX` or `closes #XXX`).
-9. Wait for all remote CI checks to pass and for a ridgeplot contributor to approve your
-   pull request.
+9. Wait for all remote CI checks to pass and for a ridgeplot contributor to approve your pull request.
 
 ## Continuous Integration
 
@@ -259,8 +255,7 @@ on [Continuous Integration](#continuous-integration).
 
 ## Release process
 
-- ridgeplot uses the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`) versioning
-  standard.
+- ridgeplot uses the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`) versioning standard.
 - You can determine the latest release version by running `git describe --tags --abbrev=0` on the master
   branch.
 
