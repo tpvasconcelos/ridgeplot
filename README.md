@@ -38,7 +38,7 @@ Bumper stickers:
 
 ## How to get it?
 
-The source code is currently hosted on GitHub at: https://github.com/tpvasconcelos/ridgeplot
+The source code is currently hosted on GitHub at: <https://github.com/tpvasconcelos/ridgeplot>
 
 Install and update using [pip](https://pip.pypa.io/en/stable/quickstart/):
 

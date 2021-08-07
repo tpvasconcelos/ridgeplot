@@ -4,7 +4,12 @@ import numpy as np
 from _plotly_utils.colors import validate_colorscale
 from plotly import graph_objects as go
 
-from ridgeplot._colors import ColorScaleType, apply_alpha, get_color, get_plotly_colorscale
+from ridgeplot._colors import (
+    ColorScaleType,
+    apply_alpha,
+    get_color,
+    get_plotly_colorscale,
+)
 from ridgeplot._utils import get_extrema_3d, normalise
 
 
