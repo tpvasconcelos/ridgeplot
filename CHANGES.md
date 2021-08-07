@@ -12,9 +12,9 @@ Unreleased changes
 
 ### Documentation
 
-- 📚 Publish contribution guidelines (`CONTRIBUTING.md`) ([#8](https://github.com/tpvasconcelos/ridgeplot/pull/8))
+- 📚 Publish official contribution guidelines (`CONTRIBUTING.md`) ([#8](https://github.com/tpvasconcelos/ridgeplot/pull/8))
 - 📚 Publish an official Code of Conduct (`CODE_OF_CONDUCT.md`) ([#7](https://github.com/tpvasconcelos/ridgeplot/pull/7))
-- 📚 Create and start a `CHANGES.md` release log ([#6](https://github.com/tpvasconcelos/ridgeplot/pull/6))
+- 📚 Publish an official release/change log (`CHANGES.md`) ([#6](https://github.com/tpvasconcelos/ridgeplot/pull/6))
 
 0.1.11
 ------
