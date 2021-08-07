@@ -6,9 +6,14 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Internal
+
+- 📦 Update and standardise CI steps ([#6](https://github.com/tpvasconcelos/ridgeplot/pull/6))
+
+### Documentation
+
 - 📚 Publish contribution guidelines (`CONTRIBUTING.md`) ([#8](https://github.com/tpvasconcelos/ridgeplot/pull/8))
 - 📚 Publish an official Code of Conduct (`CODE_OF_CONDUCT.md`) ([#7](https://github.com/tpvasconcelos/ridgeplot/pull/7))
-- 📦 Update and standardise CI steps ([#6](https://github.com/tpvasconcelos/ridgeplot/pull/6))
 - 📚 Create and start a `CHANGES.md` release log ([#6](https://github.com/tpvasconcelos/ridgeplot/pull/6))
 
 0.1.11
