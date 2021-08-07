@@ -264,9 +264,9 @@ on [Continuous Integration](#continuous-integration).
 1. Review the `## Unreleased changes` section in [`CHANGES.md`](CHANGES.md) by checking for consistency in
    format and, if necessary, refactoring related entries into relevant subsections (e.g. Features, Docs,
    Bugfixes, Security, etc).
-2. Submit a pull request with these changes. You may use the `"Update release notes for X.X.X release"`
+   - Submit a pull request with these changes. You may use the `"Update release notes for X.X.X release"`
    template for the pull request title.
-3. Use the [`bumpversion`](https://github.com/peritus/bumpversion) utility to bump the current version. This
+2. Use the [`bumpversion`](https://github.com/peritus/bumpversion) utility to bump the current version. This
    utility will automatically bump the current version, and issue a relevant commit and git tag. E.g.,
    ```shell
    # Bump MAJOR version
@@ -282,18 +282,18 @@ on [Continuous Integration](#continuous-integration).
    ```shell
    bumpversion --dry-run --verbose [major,minor,patch]
    ```
-4. Push your changes along with all tag references:
+3. Push your changes along with all tag references:
    ```shell
    git push --tags
    ```
-5. Open a pull request titled `"Release version X.X.X"`
-6. Wait for all CI checks to pass.
-7. A ridgeplot main contributor should sign off and merge release the pull requests.
-8. Create a new release using the GitHub UI.
+4. Open a pull request titled `"Release version X.X.X"`
+5. Wait for all CI checks to pass.
+6. A ridgeplot main contributor should sign off and merge release the pull requests.
+7. Create a new release using the GitHub UI.
     - Copy the raw markdown section in `CHANGES.md` corresponding to this release and use it as the
       description of the GitHub Release.
     - Use the same `X.X.X` tag used in the release.
-9. At this point a GitHub Actions workflow will be triggered which will build and publish new wheels to PyPI.
+8. At this point a GitHub Actions workflow will be triggered which will build and publish new wheels to PyPI.
    Be sure to check whether all workflows passed successfully.
 
 ## Code of Conduct
