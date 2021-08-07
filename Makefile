@@ -1,13 +1,8 @@
+# ==============================================================
+# ---  Help (default goal)
+# ==============================================================
+
 .DEFAULT_GOAL := help
-
-define BROWSER_PYSCRIPT
-import os, webbrowser, sys
-
-from urllib.request import pathname2url
-
-webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
-endef
-export BROWSER_PYSCRIPT
 
 define PRINT_HELP_PYSCRIPT
 import re, sys
@@ -20,60 +15,64 @@ for line in sys.stdin:
 endef
 export PRINT_HELP_PYSCRIPT
 
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
-
 
 .PHONY: help
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 
+# ==============================================================
+# ---  Variables
+# ==============================================================
+
+# Adjustable through export
+BASE_PYTHON	?= python3.7
+
+# Virtual environment
+VENV_PATH	= .venv
+VENV_BIN	= $(VENV_PATH)/bin
+PYTHON		= $(VENV_BIN)/python
+
+
+# ==============================================================
+# ---  Setup development environment
+# ==============================================================
+
 .PHONY: init
-init: clean-all venv-init install jupyter-init ## initialise development environment
+init: clean-all venv-init install ## initialise development environment
 
 
 .PHONY: venv-init
 venv-init: clean-venv ## create a virtual environment
-	python3.7 -m pip install --upgrade pip virtualenv
-	python3.7 -m virtualenv -p python3.7 .venv
+	$(BASE_PYTHON) -m pip install --upgrade pip
+	$(BASE_PYTHON) -m venv "$(VENV_PATH)"
 
 
 .PHONY: install
-install: clean ## install the package in editable mode and install all pre-commit hooks
-	.venv/bin/pip install --upgrade pip
-	.venv/bin/pip install -e ".[tests,dev]"
-	.venv/bin/pip install -U pre-commit
-	.venv/bin/pre-commit install --install-hooks --overwrite
+install: ## install the package in editable mode and install all pre-commit hooks
+	$(PYTHON) -m pip install --upgrade pip setuptools wheel
+	$(PYTHON) -m pip install -e ".[dev]"
+	$(PYTHON) -m pre_commit install --install-hooks --overwrite
 
 
 .PHONY: jupyter-init
 jupyter-init: ## initialise a jupyterlab environment and install extensions
-	.venv/bin/python -m ipykernel install --user --name="ridgeplot"
-	.venv/bin/jupyter lab build
+	$(PYTHON) -m pip install -e ".[notebook]"
+	$(PYTHON) -m ipykernel install --user --name="ridgeplot"
+	$(PYTHON) -m jupyter lab build
 
 
 .PHONY: jupyter-plotly
 jupyter-plotly: ## setup jupyterlab's plotly extensions
-	.venv/bin/jupyter labextension install @jupyter-widgets/jupyterlab-manager \
-                                           jupyterlab-plotly \
-                                           plotlywidget
-	.venv/bin/jupyter lab build
+	$(PYTHON) -m jupyter labextension install @jupyter-widgets/jupyterlab-manager \
+                                              jupyterlab-plotly \
+                                              plotlywidget
+	$(PYTHON) -m jupyter lab build
 
 
-.PHONY: lint
-lint: ## run all pre-commit hooks against all files
-	.venv/bin/pre-commit run --all-files
-
-
-.PHONY: test
-test: ## run tests quickly with the default Python
-	.venv/bin/pytest --cov=ridgeplot --cov=tests --cov-report=xml tests
-
-
-.PHONY: test-all
-test-all: ## run tests on every Python version with tox
-	.venv/bin/tox
-
+# ==============================================================
+# ---  Building and releasing
+# ==============================================================
 
 .PHONY: docs
 docs: ## generate Sphinx HTML documentation, including API docs
@@ -82,40 +81,36 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	#sphinx-apidoc -o docs/ ridgeplot
 	$(MAKE) --directory=docs clean
 	$(MAKE) --directory=docs html
-	$(BROWSER) docs/build/html/index.html
+	$(PYTHON) "scripts/open_in_browser.py" "docs/build/html/index.html"
 
 
 .PHONY: servedocs
 servedocs: docs ## compile the docs watching for changes
-	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
+	watchmedo shell-command -p '*.rst' -c '$(MAKE) --directory=docs html' -R -D .
 
 
 .PHONY: dist
-dist: clean ## builds source and wheel package
-	.venv/bin/python setup.py sdist bdist_wheel
-	.venv/bin/twine check --strict dist/*
+dist: clean-build ## builds source and wheel package
+	$(PYTHON) setup.py sdist bdist_wheel
+	$(PYTHON) -m twine check --strict dist/*
 
 
 .PHONY: release-test
 release-test: dist ## package and upload a release to test pypi
-	.venv/bin/twine upload --repository testpypi dist/*
+	$(PYTHON) -m twine upload --verbose --repository testpypi dist/*
 
 
 .PHONY: release-prod
 release-prod: dist ## package and upload a release prod pypi
-	.venv/bin/twine upload dist/*
+	$(PYTHON) -m twine upload --verbose dist/*
 
 
 # ==============================================================
-# ---  Clean
+# ---  Cleaning
 # ==============================================================
-
-.PHONY: clean
-clean: clean-build clean-pyc clean-test ## remove all artifacts (excl. venv!)
-
 
 .PHONY: clean-all
-clean-all: clean clean-venv ## remove all artifacts
+clean-all: clean-ci clean-venv clean-build clean-pyc ## remove all artifacts
 
 
 .PHONY: clean-build
@@ -135,13 +130,13 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '__pycache__' -exec rm -fr {} +
 
 
-.PHONY: clean-test
-clean-test: ## remove test and coverage artifacts
+.PHONY: clean-ci
+clean-ci: ## remove linting, testing, and coverage artifacts
 	rm -fr .tox/
-	rm -f coverage.xml
-	rm -f .coverage
 	rm -fr .pytest_cache
 	rm -fr .mypy_cache/
+	find . -name 'coverage.xml' -exec rm -f {} +
+	find . -name '.coverage' -exec rm -f {} +
 
 
 .PHONY: clean-venv

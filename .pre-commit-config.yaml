@@ -39,9 +39,6 @@ repos:
     rev: 20.8b1
     hooks:
       - id: black
-        description: The uncompromising Python code formatter
-        language_version: python3.7
-        #args: ['--force-exclude'] after PR merge: https://github.com/psf/black/pull/1032
 
   - repo: https://github.com/pycqa/isort
     rev: 5.7.0
@@ -66,9 +63,3 @@ repos:
   #   hooks:
   #     - id: mypy
   #       pass_filenames: false
-
-  - repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v1.16.0
-    hooks:
-      - id: setup-cfg-fmt
-        description: apply a consistent format to `setup.cfg` files
