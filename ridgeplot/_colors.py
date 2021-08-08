@@ -1,7 +1,7 @@
 import json
 from numbers import Number
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Union
 
 from plotly.colors import find_intermediate_color, hex_to_rgb, label_rgb
 
@@ -10,9 +10,9 @@ from ridgeplot._utils import normalise
 # Ideally: ColorScaleType = List[Tuple[Number, str]]
 ColorScaleType = List[List[Union[Number, str]]]
 
+# Load all plotly colorscales
 _path_to_colors_dict = Path(__file__).parent.joinpath("colors.json")
-with _path_to_colors_dict.open() as _colors_json:
-    ALL_PLOTLY_COLORS_SCALES: Dict[str, ColorScaleType] = json.load(_colors_json)
+PLOTLY_COLORSCALES: Dict[str, ColorScaleType] = json.loads(_path_to_colors_dict.read_text())
 
 
 def _any_to_rgb(color: Union[tuple, str]) -> str:
@@ -25,19 +25,15 @@ def _any_to_rgb(color: Union[tuple, str]) -> str:
     return color
 
 
-def named_colorscales() -> Tuple[str]:
-    return tuple(ALL_PLOTLY_COLORS_SCALES.keys())
-
-
 def get_plotly_colorscale(name: str) -> ColorScaleType:
     """Helper to get a known Plotly colorscale, raising a ValueError if an
     invalid name is provided."""
-    if name not in ALL_PLOTLY_COLORS_SCALES:
+    if name not in PLOTLY_COLORSCALES:
         raise ValueError(
             f"Could not find colorscale '{name}'. The available colorscale"
-            f" names are {tuple(ALL_PLOTLY_COLORS_SCALES.keys())}."
+            f" names are {tuple(PLOTLY_COLORSCALES.keys())}."
         )
-    return ALL_PLOTLY_COLORS_SCALES[name]
+    return PLOTLY_COLORSCALES[name]
 
 
 def get_color(colorscale: ColorScaleType, midpoint: float) -> str:

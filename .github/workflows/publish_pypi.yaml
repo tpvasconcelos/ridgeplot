@@ -1,4 +1,4 @@
-name: Release
+name: Publish to PyPI
 
 on:
   release:
@@ -6,8 +6,8 @@ on:
       - created
 
 jobs:
-  release:
-    name: Release to PyPI
+  build-n-publish:
+    name: Build and publish Python 🐍 distributions 📦 to PyPI and TestPyPI
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +21,7 @@ jobs:
       - name: Install latest pip, setuptools, twine + wheel
         run: python -m pip install --upgrade pip setuptools wheel twine
 
-      - name: Build wheels
+      - name: Build a binary wheel and a source tarball
         run: |
           python setup.py sdist bdist_wheel
           twine check --strict dist/*

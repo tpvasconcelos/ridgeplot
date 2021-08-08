@@ -6,7 +6,7 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+- 📦 Remove `named_colorscales` from public API ([#18](https://github.com/tpvasconcelos/ridgeplot/pull/18))
 
 0.1.13
 ------

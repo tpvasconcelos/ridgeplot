@@ -23,8 +23,7 @@ environment.
   fig.show()
 
 """
-from ridgeplot._colors import named_colorscales
 from ridgeplot._ridgeplot import ridgeplot
 from ridgeplot._version import __version__
 
-__all__ = ["ridgeplot", "named_colorscales", "__version__"]
+__all__ = ["ridgeplot", "__version__"]
