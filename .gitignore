@@ -5,19 +5,17 @@
 # add custom entries here...
 
 
+# PyCharm  ---
+# exclude everything under
+.idea/*
+# except for...
+!.idea/ridgeplot.iml
+
+
 # ============================================================================
 #  My custom additions missing from
 #  https://github.com/github/gitignore (see bellow)
 # ============================================================================
-
-# Virtual environments  ---
-envs/
-venvs/
-pyvenv.cfg
-pip-selfcheck.json
-
-# poetry  ---
-poetry.lock
 
 # celery  ---
 **/celery*.log
@@ -26,45 +24,14 @@ poetry.lock
 # dynaconf  ---
 **/*.local*
 
-# Pycharm  ---
-*.iml
-modules.xml
-*.ipr
-
 # System files  ---
 Desktop.ini
 Thumbs.db
-
-# Misc  ---
-# TODO: what is this?
-vcs.xml
-# .ssh/id_rsa
-id_rsa
 
 
 # ============================================================================
 #  Templates from https://github.com/github/gitignore
 # ============================================================================
-
-# Unused templates  ---
-# https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
-# https://github.com/github/gitignore/blob/master/Swift.gitignore
-# https://github.com/github/gitignore/blob/master/Ruby.gitignore
-# https://github.com/github/gitignore/blob/master/Rails.gitignore
-# https://github.com/github/gitignore/blob/master/R.gitignore
-# https://github.com/github/gitignore/blob/master/Qt.gitignore
-# https://github.com/github/gitignore/blob/master/Node.gitignore
-# https://github.com/github/gitignore/blob/master/Julia.gitignore
-# https://github.com/github/gitignore/blob/master/Jekyll.gitignore
-# https://github.com/github/gitignore/blob/master/Go.gitignore
-# https://github.com/github/gitignore/blob/master/GitBook.gitignore
-# https://github.com/github/gitignore/blob/master/Fortran.gitignore
-# https://github.com/github/gitignore/blob/master/Dart.gitignore
-# https://github.com/github/gitignore/blob/master/CUDA.gitignore
-# https://github.com/github/gitignore/blob/master/CMake.gitignore
-# https://github.com/github/gitignore/blob/master/C.gitignore
-# https://github.com/github/gitignore/blob/master/C%2B%2B.gitignore
-# https://github.com/github/gitignore/blob/master/Terraform.gitignore
 
 # macOS  ---
 # ---> https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
@@ -90,27 +57,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-
-# JetBrains  ---
-# ---> https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
-# ---> https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-.idea/
-# CMake
-cmake-build-*/
-# File-based project format
-*.iws
-# IntelliJ
-out/
-# JIRA plugin
-atlassian-ide-plugin.xml
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
-# Editor-based Rest Client
-.idea/httpRequests
-
 
 # Python  ---
 # ---> https://github.com/github/gitignore/blob/master/Python.gitignore
@@ -227,13 +173,6 @@ dmypy.json
 .pytype/
 # Cython debug symbols
 cython_debug/
-# Jupyter
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
-# IPython
-profile_default/
-ipython_config.py
-
 
 # Archives  ---
 # ---> https://github.com/github/gitignore/blob/master/Global/Archives.gitignore
@@ -260,7 +199,6 @@ ipython_config.py
 *.dmg
 *.xpi
 *.gem
-*.egg
 *.deb
 *.rpm
 *.msi
