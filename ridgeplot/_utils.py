@@ -1,15 +1,16 @@
 from typing import Callable, Iterator, List, Mapping, Optional, Tuple, TypeVar
 
 import numpy as np
+import numpy.typing as npt
 
 
-def get_extrema_2d(arr) -> Tuple[float, float]:
+def get_extrema_2d(arr: npt.ArrayLike) -> Tuple[float, float]:
     """Calculates and returns the extrema (min, max) of a 2D (N, M) array."""
     arr = np.asarray(arr).flat
     return np.min(arr), np.max(arr)
 
 
-def get_extrema_3d(arr: List[np.ndarray]) -> Tuple[float, float, float, float]:
+def get_extrema_3d(arr: List[npt.ArrayLike]) -> Tuple[float, float, float, float]:
     """Calculates and returns the x-y extrema (x_min, x_max, y_min, y_max) of
     a 3D (N, 2, M) array."""
     x_min = 0

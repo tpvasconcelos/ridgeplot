@@ -72,7 +72,7 @@ def get_color(colorscale: ColorScaleType, midpoint: float) -> str:
     ceil = min(filter(lambda s: s > midpoint, scale))
     floor = max(filter(lambda s: s < midpoint, scale))
     midpoint_normalised = normalise(midpoint, min_=floor, max_=ceil)
-    color = find_intermediate_color(
+    color: str = find_intermediate_color(
         lowcolor=colors[scale.index(floor)],
         highcolor=colors[scale.index(ceil)],
         intermed=midpoint_normalised,
@@ -81,6 +81,6 @@ def get_color(colorscale: ColorScaleType, midpoint: float) -> str:
     return color
 
 
-def apply_alpha(color: Union[tuple, str], alpha) -> str:
+def apply_alpha(color: Union[tuple, str], alpha: float) -> str:
     color = _any_to_rgb(color)
     return f"rgba({color[4:-1]}, {alpha})"
