@@ -6,7 +6,8 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+- 🔧 Implement `LazyMapping` helper to allow `ridgeplot._colors.PLOTLY_COLORSCALES` to lazy-load from
+  `colors,json` ([#19](https://github.com/tpvasconcelos/ridgeplot/pull/19))
 
 0.1.14
 ------
