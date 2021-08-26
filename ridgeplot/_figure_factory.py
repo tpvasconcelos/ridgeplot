@@ -1,7 +1,6 @@
 from typing import Callable, Dict, List, Optional
 
 import numpy as np
-from _plotly_utils.colors import validate_colorscale
 from plotly import graph_objects as go
 
 from ridgeplot._colors import (
@@ -9,6 +8,7 @@ from ridgeplot._colors import (
     apply_alpha,
     get_color,
     get_plotly_colorscale,
+    validate_colorscale,
 )
 from ridgeplot._utils import get_extrema_3d, normalise
 

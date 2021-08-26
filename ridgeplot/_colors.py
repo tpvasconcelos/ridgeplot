@@ -1,28 +1,51 @@
 import json
-from numbers import Number
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 
+from _plotly_utils.colors import validate_colors, validate_scale_values
 from plotly.colors import find_intermediate_color, hex_to_rgb, label_rgb
 
-from ridgeplot._utils import normalise
+from ridgeplot._utils import LazyMapping, normalise
+from ridgeplot.exceptions import InvalidColorscaleError
 
-# Ideally: ColorScaleType = List[Tuple[Number, str]]
-ColorScaleType = List[List[Union[Number, str]]]
+ColorScaleType = List[Tuple[float, str]]
+ColorScaleMappingType = Dict[str, ColorScaleType]
 
-# Load all plotly colorscales
-_path_to_colors_dict = Path(__file__).parent.joinpath("colors.json")
-PLOTLY_COLORSCALES: Dict[str, ColorScaleType] = json.loads(_path_to_colors_dict.read_text())
+
+def _colormap_loader() -> ColorScaleMappingType:
+    _path_to_colors_dict = Path(__file__).parent.joinpath("colors.json")
+    colors: dict = json.loads(_path_to_colors_dict.read_text())
+    for name, colorscale in colors.items():
+        colors[name] = [tuple(entry) for entry in colorscale]
+    return colors
+
+
+PLOTLY_COLORSCALES = LazyMapping(loader=_colormap_loader)
+
+
+def validate_colorscale(colorscale: ColorScaleType) -> None:
+    """Validate the structure, scale values, and colors of colorscale.
+
+    Adapted from ``_plotly_utils.colors.validate_colorscale``, changing the
+    requirement that a colorscale must be a list of tuples instead of a list of
+    lists.
+    """
+    if not isinstance(colorscale, list):
+        raise InvalidColorscaleError("A valid colorscale must be a list.")
+    if not all(isinstance(inner_tuple, tuple) for inner_tuple in colorscale):
+        raise InvalidColorscaleError("A valid colorscale must be a list.")
+    scale, colors = zip(*colorscale)
+    validate_scale_values(scale=scale)
+    validate_colors(colors=colors)
 
 
 def _any_to_rgb(color: Union[tuple, str]) -> str:
-    if isinstance(color, tuple):
-        color = label_rgb(color)
-    if color.startswith("#"):
-        color = label_rgb(hex_to_rgb(color))
-    if not color.startswith("rgb("):
+    c: str = label_rgb(color) if isinstance(color, tuple) else color
+    if c.startswith("#"):
+        c = label_rgb(hex_to_rgb(c))
+    if not c.startswith("rgb("):
         raise RuntimeError("Something went wrong with the logic above!")
-    return color
+    return c
 
 
 def get_plotly_colorscale(name: str) -> ColorScaleType:
