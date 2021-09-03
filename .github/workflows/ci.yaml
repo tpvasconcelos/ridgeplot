@@ -43,6 +43,9 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
 
     steps:
+
+      # Set up python project  ---
+
       - name: Checkout source code
         uses: actions/checkout@v2
 
@@ -54,8 +57,10 @@ jobs:
       - name: Ensure pip, setuptools, and wheel are up to date
         run: python -m pip install --upgrade pip setuptools wheel
 
-      - name: Install package (and extra requirements)
+      - name: Install dependencies
         run: python -m pip install -e ".[ci]"
+
+      # Run CI  ---
 
       - name: Run Tox's integration approval steps
         run: tox -e lint,py
