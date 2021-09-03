@@ -11,9 +11,10 @@ from ridgeplot.exceptions import InvalidColorscaleError
 ColorScaleType = List[Tuple[float, str]]
 ColorScaleMappingType = Dict[str, ColorScaleType]
 
+_path_to_colors_dict = Path(__file__).parent.joinpath("colors.json")
+
 
 def _colormap_loader() -> ColorScaleMappingType:
-    _path_to_colors_dict = Path(__file__).parent.joinpath("colors.json")
     colors: dict = json.loads(_path_to_colors_dict.read_text())
     for name, colorscale in colors.items():
         colors[name] = [tuple(entry) for entry in colorscale]
