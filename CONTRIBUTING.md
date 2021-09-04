@@ -10,16 +10,14 @@ The contribution process for ridgeplot should start with
 - 🐛 Bug reports
 - 📚 Documentation fixes
 
-After the implementation strategy has been agreed on by a ridgeplot committer, the next
-step is to introduce your changes as a pull request (see
-[Submitting a Pull Request](#submitting-a-pull-request)) against the ridgeplot repository.
-Once your pull request is merged, your changes will be automatically included in the next
-ridgeplot release. Every change should be listed in the
-ridgeplot [Release Notes](CHANGES.md).
+After the implementation strategy has been agreed on by a ridgeplot committer, the next step is to introduce
+your changes as a pull request (see [Submitting a Pull Request](#submitting-a-pull-request)) against the
+ridgeplot repository. Once your pull request is merged, your changes will be automatically included in the
+next ridgeplot release. Every change should be listed in the ridgeplot [Release Notes](CHANGES.md).
 
-The following is a set of (slightly opinionated) rules and general guidelines for contributing to
-ridgeplot. Emphasis on **guidelines**, not _rules_. Use your best judgment, and feel free
-to propose changes to this document in a pull request.
+The following is a set of (slightly opinionated) rules and general guidelines for contributing to ridgeplot.
+Emphasis on **guidelines**, not _rules_. Use your best judgment, and feel free to propose changes to this
+document in a pull request.
 
 ## Table of Contents
 
@@ -46,10 +44,9 @@ inside [Makefile](Makefile) at any time to see exactly what is being run, and in
 
 First, you will need to
 [clone](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork)
-this repository. For this, make sure you have a [GitHub account](https://github.com/join), fork
-ridgeplot to your GitHub account by clicking the
-[Fork](https://github.com/tpvasconcelos/ridgeplot/fork) button, and
-clone the main repository locally (e.g. using SSH)
+this repository. For this, make sure you have a [GitHub account](https://github.com/join), fork ridgeplot to
+your GitHub account by clicking the [Fork](https://github.com/tpvasconcelos/ridgeplot/fork) button, and clone
+the main repository locally (e.g. using SSH)
 
 ```shell
 git clone git@github.com:tpvasconcelos/ridgeplot.git
@@ -63,14 +60,13 @@ username.
 git remote add fork git@github.com:{username}/ridgeplot.git
 ```
 
-The following command will 1) create a new virtual environment (under `.venv`), 2) install
-ridgeplot in
+The following command will 1) create a new virtual environment (under `.venv`), 2) install ridgeplot in
 [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#install-editable) (along with all it's
 dependencies), and 3) set up and install all [pre-commit hooks](https://pre-commit.com/). Make sure you always
 work within this virtual environment (i.e., `$ source .venv/bin/activate`). On top of this, you should also
 set up your IDE to always point to this python interpreter. In PyCharm, open
-`Preferences -> Project: ridgeplot -> Project Interpreter` and point the python
-interpreter to `.venv/bin/python`.
+`Preferences -> Project: ridgeplot -> Project Interpreter` and point the python interpreter
+to `.venv/bin/python`.
 
 ```shell
 make init
@@ -134,8 +130,7 @@ make jupyter-plotly
    . Remember to update the pull request's description with relevant notes on the changes implemented, and to
    [link to relevant issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)
    (e.g., `fixes #XXX` or `closes #XXX`).
-9. Wait for all remote CI checks to pass and for a ridgeplot contributor to approve your
-   pull request.
+9. Wait for all remote CI checks to pass and for a ridgeplot contributor to approve your pull request.
 
 ## Continuous Integration
 
@@ -263,8 +258,7 @@ on [Continuous Integration](#continuous-integration).
 
 ## Release process
 
-- ridgeplot uses the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`) versioning
-  standard.
+- ridgeplot uses the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`) versioning standard.
 - You can determine the latest release version by running `git describe --tags --abbrev=0` on the master
   branch.
 
