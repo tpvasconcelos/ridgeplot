@@ -4,7 +4,8 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-from ridgeplot import __version__
+import importlib_metadata
+import sphinx_material
 
 # -- Path setup --------------------------------------------------------------
 
@@ -19,10 +20,12 @@ from ridgeplot import __version__
 
 # -- Project information -----------------------------------------------------
 
-project = "ridgeplot"
+metadata = importlib_metadata.metadata("ridgeplot")
+
+project = metadata["name"]
+author = metadata["author"]
+version = metadata["version"]
 copyright = "2021, Tomas Pereira de Vasconcelos"
-author = "Tomas Pereira de Vasconcelos"
-release = version = __version__
 
 master_doc = "index"
 language = "en"
@@ -51,7 +54,7 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
+exclude_patterns = ["_build", "**.ipynb_checkpoints", "*/autosummary/*.rst", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -59,37 +62,66 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_material"
 extensions.append("sphinx_material")
+html_theme_path = sphinx_material.html_theme_path()
+html_context = sphinx_material.get_html_context()
+html_theme = "sphinx_material"
+html_title = project
+html_short_title = project
+
+project_urls = [(n[:-1], url) for n, url in map(str.split, metadata.get_all("project-url"))]
+repo_url = [url for n, url in project_urls if n == "Source"][0]
+docs_url = [url for n, url in project_urls if n == "Documentation"][0]
 
 html_theme_options = {
-    # Set the name of the project to appear in the navigation.
-    "nav_title": "ridgeplot",
-    # Set you GA account ID to enable tracking
+    "nav_title": f"{project} {version}",
+    "base_url": docs_url,
+    "repo_name": project,
+    "repo_url": repo_url,
     # 'google_analytics_account': 'UA-XXXXX',
-    # Specify a base_url used to generate sitemap.xml. If not
-    # specified, then no sitemap will be built.
-    # 'base_url': 'https://project.github.io/project',
-    # Set the color and the accent color
-    "color_primary": "dark-blue",
-    "color_accent": "light-blue",
-    # Set the repo location to get a badge with stats
-    "repo_url": "https://github.com/tpvasconcelos/ridgeplot/",
-    "repo_name": "ridgeplot",
-    # Visible levels of the global TOC; -1 means unlimited
+    "color_primary": "indigo",
+    "color_accent": "blue",
     "globaltoc_depth": 3,
-    # If False, expand all TOC entries
     "globaltoc_collapse": False,
-    # If True, show hidden TOC entries
     "globaltoc_includehidden": False,
     "html_minify": False,
     "html_prettify": True,
     "css_minify": True,
     "repo_type": "github",
+    "master_doc": False,
+    "nav_links": [],
+    "version_dropdown": True,
 }
 
+# Custom sidebar templates, maps document names to template names.
+html_sidebars = {"**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+# Logos
+html_favicon = "_static/favicon.ico"  # 32x32 pixel .ico file
+# html_logo = "_static/images/logo.svg"
+
+# imgmath options
+imgmath_image_format = "png"
+imgmath_latex_preamble = r"\usepackage[active]{preview}"
+imgmath_use_preview = True
+
+# Example configuration for intersphinx: refer to the Python standard library.
+intersphinx_mapping = {
+    "numpy": ("https://docs.scipy.org/doc/numpy/", None),
+    "python": ("https://docs.python.org/3/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
+}
+
+# ghissue config
+github_project_url = repo_url
+
+
+# Misc
+html_last_updated_fmt = ""
+html_domain_indices = True

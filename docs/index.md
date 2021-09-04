@@ -1,11 +1,12 @@
 # Welcome to ridgeplot's documentation!
 
+
+
 ```{toctree}
 ---
-maxdepth: 2
-caption: "Contents:"
+maxdepth: 1
 ---
-test.md
+contributing/index.md
 ```
 
 
