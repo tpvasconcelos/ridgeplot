@@ -1,32 +1,25 @@
-from typing import Callable, Iterator, List, Mapping, Optional, Tuple, TypeVar
+from typing import Callable, Iterable, Iterator, Mapping, Optional, Tuple, TypeVar
 
-import numpy as np
 import numpy.typing as npt
 
 
-def get_extrema_2d(arr: npt.ArrayLike) -> Tuple[float, float]:
-    """Calculates and returns the extrema (min, max) of a 2D (N, M) array."""
-    arr = np.asarray(arr).flat
-    return np.min(arr), np.max(arr)
+def get_xy_extrema(arrays: Iterable[npt.ArrayLike]) -> Tuple[float, float, float, float]:
+    """Returns the x-y extrema (x_min, x_max, y_min, y_max) of a list of 2D
+    arrays of shape (2, M)."""
+    # Unpack and flatten all x and y values from `arrays`
+    x = []
+    y = []
+    for array in arrays:
+        x.extend(array[0])
+        y.extend(array[1])
+    return min(x), max(x), min(y), max(y)
 
 
-def get_extrema_3d(arr: List[npt.ArrayLike]) -> Tuple[float, float, float, float]:
-    """Calculates and returns the x-y extrema (x_min, x_max, y_min, y_max) of
-    a 3D (N, 2, M) array."""
-    x_min = 0
-    x_max = 0
-    y_min = 0
-    y_max = 0
-    for x in arr:
-        x_min = min(x_min, np.min(x[0]))
-        x_max = max(x_max, np.max(x[0]))
-        y_min = min(y_min, np.min(x[1]))
-        y_max = max(y_max, np.max(x[1]))
-    return x_min, x_max, y_min, y_max
-
-
-def normalise(val: float, min_: float, max_: float) -> float:
-    assert max_ > min_
+def normalise_min_max(val: float, min_: float, max_: float) -> float:
+    if max_ <= min_:
+        raise ValueError(f"max_ should be greater than min_. Got max_={max_} and min_={min_} instead.")
+    if not (min_ <= val <= max_):
+        raise ValueError(f"val ({val}) is out of bounds ({min_}, {max_}).")
     return (val - min_) / (max_ - min_)
 
 
@@ -35,6 +28,8 @@ VT = TypeVar("VT")  # Mapping value type
 
 
 class LazyMapping(Mapping[KT, VT]):
+    __slots__ = ("_loader", "_inner_mapping")
+
     def __init__(self, loader: Callable[[], Mapping[KT, VT]]):
         self._loader = loader
         self._inner_mapping: Optional[Mapping[KT, VT]] = None

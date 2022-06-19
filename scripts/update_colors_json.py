@@ -11,7 +11,7 @@ from plotly.colors import (
 from plotly.express.colors import sequential
 
 # noinspection PyProtectedMember
-from ridgeplot._colors import _path_to_colors_dict
+from ridgeplot._colors import _PATH_TO_COLORS_JSON
 
 # start off by getting all named color-scales defined in PLOTLY_SCALES
 all_colorscales_raw = PLOTLY_SCALES.copy()
@@ -35,5 +35,5 @@ for name, colorscale in all_colorscales_raw.items():
     validate_colorscale(colorscale)
     all_colorscales_clean[name.lower()] = colorscale
 
-with _path_to_colors_dict.open(mode="w") as _colors_json:
+with _PATH_TO_COLORS_JSON.open(mode="w") as _colors_json:
     json.dump(all_colorscales_clean, _colors_json, indent=2)

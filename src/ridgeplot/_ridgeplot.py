@@ -114,8 +114,8 @@ def ridgeplot(
         distributions.
 
     Returns:
-        A Plotly figure with a ridgeline plot. You can further customize this
-        figure to your liking (e.g. using the `fig.update_layout()` method).
+      A Plotly figure with a ridgeline plot. You can further customize this
+      figure to your liking (e.g. using the `fig.update_layout()` method).
 
     Raises:
       ValueError:

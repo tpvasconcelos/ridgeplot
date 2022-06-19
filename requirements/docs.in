@@ -1,0 +1,14 @@
+-e file:.
+
+Jinja2==3.*
+sphinx==4.*
+sphinx-book-theme==0.*
+myst_nb==0.*
+sphinx-copybutton==0.*
+sphinx_thebe==0.*
+sphinx_design==0.*
+sphinx-togglebutton==0.*
+sphinxext-opengraph==0.*
+sphinx-inline-tabs
+sphinx-autobuild
+numpydoc==1.*

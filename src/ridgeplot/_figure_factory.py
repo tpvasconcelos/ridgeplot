@@ -7,10 +7,10 @@ from ridgeplot._colors import (
     ColorScaleType,
     apply_alpha,
     get_color,
-    get_plotly_colorscale,
+    get_colorscale,
     validate_colorscale,
 )
-from ridgeplot._utils import get_extrema_3d, normalise
+from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
 
 class _RidgePlotFigureFactory:
@@ -42,7 +42,7 @@ class _RidgePlotFigureFactory:
             new_densities.append(d)
 
         if isinstance(colorscale, str):
-            colorscale = get_plotly_colorscale(name=colorscale)
+            colorscale = get_colorscale(name=colorscale)
         validate_colorscale(colorscale)
 
         if colormode not in self.colormode_maps.keys():
@@ -76,7 +76,7 @@ class _RidgePlotFigureFactory:
         # ---  Other instance variables
         # ==============================================================
         self.n_traces: int = n_traces
-        self.x_min, self.x_max, _, self.y_max = get_extrema_3d(densities)
+        self.x_min, self.x_max, _, self.y_max = get_xy_extrema(densities)
         self.fig: go.Figure = go.Figure()
         self.colors: List[str] = self.pre_compute_colors()
 
@@ -146,11 +146,11 @@ class _RidgePlotFigureFactory:
 
     def _compute_midpoints_mean_minmax(self) -> List[float]:
         means = [np.sum(x * y) / np.sum(y) for x, y in self.densities]
-        return [normalise(mean, min_=self.x_min, max_=self.x_max) for mean in means]
+        return [normalise_min_max(mean, min_=self.x_min, max_=self.x_max) for mean in means]
 
     def _compute_midpoints_mean_means(self) -> List[float]:
         means = [np.sum(x * y) / np.sum(y) for x, y in self.densities]
-        return [normalise(mean, min_=min(means), max_=max(means)) for mean in means]
+        return [normalise_min_max(mean, min_=min(means), max_=max(means)) for mean in means]
 
     def pre_compute_colors(self) -> List[str]:
         midpoints = self.colormode_maps[self.colormode]()

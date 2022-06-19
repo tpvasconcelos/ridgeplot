@@ -1,5 +1,15 @@
 # ==============================================================
-# ---  Help (default goal)
+# >>>  Variables
+# ==============================================================
+
+BASE_PYTHON ?= python3.7
+
+VENV_PATH = .venv
+VENV_BIN = $(VENV_PATH)/bin
+
+
+# ==============================================================
+# >>>  Help (default goal)
 # ==============================================================
 
 .DEFAULT_GOAL := help
@@ -8,7 +18,7 @@ define PRINT_HELP_PYSCRIPT
 import re, sys
 
 for line in sys.stdin:
-	match = re.match(r'^([a-zA-Z_-]+):.*?## (.*)$$', line)
+	match = re.match(r'^([a-zA-Z_\.-]+):.*?## (.*)$$', line)
 	if match:
 		target, help = match.groups()
 		print("%-20s %s" % (target, help))
@@ -22,56 +32,34 @@ help:
 
 
 # ==============================================================
-# ---  Variables
-# ==============================================================
-
-# Adjustable through export
-BASE_PYTHON	?= python3.7
-
-# Virtual environment
-VENV_PATH	= .venv
-VENV_BIN	= $(VENV_PATH)/bin
-VENV_PYTHON		= $(VENV_BIN)/python
-
-
-# ==============================================================
-# ---  Setup development environment
+# >>>  Setup development environment
 # ==============================================================
 
 .PHONY: init
-init: clean-all venv-init install ## initialise development environment
+init: clean-all .venv install ## initialise development environment
 
 
-.PHONY: venv-init
-venv-init: clean-venv ## create a virtual environment
+.venv: ## create a virtual environment
 	$(BASE_PYTHON) -m pip install --upgrade pip
 	$(BASE_PYTHON) -m venv "$(VENV_PATH)"
 
 
 .PHONY: install
-install: ## install the package in editable mode and install all pre-commit hooks
-	$(VENV_PYTHON) -m pip install --upgrade pip setuptools wheel
-	$(VENV_PYTHON) -m pip install -e ".[dev]"
-	$(VENV_PYTHON) -m pre_commit install --install-hooks --overwrite
+install: ## install all dev dependencies
+	$(VENV_BIN)/python -m pip install --upgrade pip setuptools wheel
+	$(VENV_BIN)/python -m pip install -r requirements/local-dev.txt
+	$(VENV_BIN)/pre-commit install --install-hooks --overwrite
 
 
-.PHONY: jupyter-init
+.PHONY: init-jupyter
 jupyter-init: ## initialise a jupyterlab environment and install extensions
-	$(VENV_PYTHON) -m pip install -e ".[notebook]"
-	$(VENV_PYTHON) -m ipykernel install --user --name="ridgeplot"
-	$(VENV_PYTHON) -m jupyter lab build
-
-
-.PHONY: jupyter-plotly
-jupyter-plotly: ## setup jupyterlab's plotly extensions
-	$(VENV_PYTHON) -m jupyter labextension install @jupyter-widgets/jupyterlab-manager \
-                                              jupyterlab-plotly \
-                                              plotlywidget
-	$(VENV_PYTHON) -m jupyter lab build
+	$(VENV_BIN)/python -m pip install -r requirements/jupyter.txt
+	$(VENV_BIN)/python -m ipykernel install --user --name="ridgeplot"
+	$(VENV_BIN)/python -m jupyter lab build
 
 
 # ==============================================================
-# ---  Building and releasing
+# >>>  Docs
 # ==============================================================
 
 .PHONY: docs
@@ -81,32 +69,16 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	#sphinx-apidoc -o docs/ ridgeplot
 	$(MAKE) --directory=docs clean
 	$(MAKE) --directory=docs html
-	$(VENV_PYTHON) "scripts/open_in_browser.py" "docs/build/html/index.html"
+	$(VENV_BIN)/python "scripts/open_in_browser.py" "docs/build/html/index.html"
 
 
-.PHONY: servedocs
-servedocs: docs ## compile the docs watching for changes
-	watchmedo shell-command -p '*.rst' -c '$(MAKE) --directory=docs html' -R -D .
-
-
-.PHONY: build
-build: clean-build ## builds source and wheel package
-	$(VENV_PYTHON) -m build
-	$(VENV_PYTHON) -m twine check --strict dist/*
-
-
-.PHONY: release-test
-release-test: build ## package and upload a release to test pypi
-	$(VENV_PYTHON) -m twine upload --verbose --repository testpypi dist/*
-
-
-.PHONY: release-prod
-release-prod: build ## package and upload a release prod pypi
-	$(VENV_PYTHON) -m twine upload --verbose dist/*
+.PHONY: docs-livehtml
+docs-livehtml: ## run sphinx-autobuild
+	sphinx-autobuild --open-browser --delay=0 docs docs/build/html
 
 
 # ==============================================================
-# ---  Cleaning
+# >>>  Cleaning
 # ==============================================================
 
 .PHONY: clean-all

@@ -1,0 +1,24 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build-and-publish:
+    name: Build and publish Python 🐍 distributions 📦 to PyPI and TestPyPI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-python
+        with:
+          python-version: 3.7
+      - name: Package and upload a release to test pypi
+        env:
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
+        run: tox -e release-test
+      - name: Package and upload a release prod pypi
+        env:
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: tox -e release-prod

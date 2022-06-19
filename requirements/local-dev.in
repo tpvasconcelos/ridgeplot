@@ -1,0 +1,12 @@
+# Install python package in editable mode
+-e file:.
+
+# Install other other requirement groups
+-r ci.in
+-r linting.in
+
+# Various useful utilities for local development
+ipython
+ptpython
+pipdeptree
+pip-tools

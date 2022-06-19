@@ -1,0 +1,5 @@
+# Tox is used to orchestrate most of our CI steps
+tox==3.*
+
+# Resolve dependency conflicts between environments
+importlib-metadata==4.2.0;python_version=="3.7"
