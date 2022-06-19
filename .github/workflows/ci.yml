@@ -26,10 +26,9 @@ jobs:
       PYTHON: ${{ matrix.python-version }}
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/ci-checks
+      - uses: ./.github/actions/setup-python
         with:
           python-version: ${{ matrix.python-version }}
-          upload-coverage: true
       - name: Run CI checks with Tox
         run: tox
       - name: Upload coverage to codecov
