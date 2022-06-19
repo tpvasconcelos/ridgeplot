@@ -1,4 +1,4 @@
-name: CI Checks for all Pull Requests
+name: CI
 
 on:
   push:
@@ -22,8 +22,8 @@ jobs:
           - windows-latest
       fail-fast: true
     env:
-      OS: ${{ matrix.os }}
-      PYTHON: ${{ matrix.python-version }}
+      OS: "${{ matrix.os }}"
+      PYTHON: "${{ matrix.python-version }}"
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-python
