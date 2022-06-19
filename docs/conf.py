@@ -113,8 +113,10 @@ html_static_path = ["_static"]
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "numpy": ("https://docs.scipy.org/doc/numpy/", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "statsmodels": ("https://www.statsmodels.org/stable/", None),
+    "plotly": ("https://plotly.com/python-api-reference/", None),
 }
 
 # If true, figures, tables and code-blocks are automatically numbered if they have a caption

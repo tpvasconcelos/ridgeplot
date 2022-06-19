@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="assets/hero.png" alt="ridgeplot - beautiful ridgeline plots in Python" width="800">
+    <img src="docs/_static/img/hero.png" alt="ridgeplot - beautiful ridgeline plots in Python" width="800">
 </p>
 
 <h1 id="ridgeplot" align="center">
@@ -52,6 +52,8 @@ pip install -U ridgeplot
 
 ## How to use it?
 
+The official docs can be found at: https://ridgeplot.readthedocs.io/en/stable/
+
 ### Sensible defaults
 
 ```python
@@ -73,7 +75,7 @@ fig.update_layout(height=500, width=800)
 fig.show()
 ```
 
-![ridgeline plot example using the ridgeplot Python library](assets/example_simple.png)
+![ridgeline plot example using the ridgeplot Python library](docs/_static/img/example_simple.png)
 
 ### Fully configurable
 
@@ -127,12 +129,4 @@ fig.update_layout(
 fig.show()
 ```
 
-![ridgeline plot of the probly dataset using the ridgeplot Python library](assets/example_probly.png)
-
-## Alternatives
-
-- [`plotly` - from examples/galery](https://plotly.com/python/violin/#ridgeline-plot)
-- [`seaborn` - from examples/galery](https://seaborn.pydata.org/examples/kde_ridgeplot)
-- [`bokeh` - from examples/galery](https://docs.bokeh.org/en/latest/docs/gallery/ridgeplot.html)
-- [`matplotlib` - from blogpost](https://matplotlib.org/matplotblog/posts/create-ridgeplots-in-matplotlib/)
-- [`joypy` - Ridgeplot library using a `matplotlib` backend](https://github.com/sbebo/joypy)
+![ridgeline plot of the probly dataset using the ridgeplot Python library](docs/_static/img/example_probly.png)

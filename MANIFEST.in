@@ -19,12 +19,12 @@ include src/ridgeplot/colors.json
 # Docs
 include docs/Makefile docs/make.bat
 recursive-include docs/_static *.ico
+recursive-include docs/_static/img *.png
 recursive-include docs *.md *.py
 prune docs/build
 
 # Misc
 recursive-include .github *.yaml
-recursive-include assets *.png
 recursive-include examples *.py *.ipynb
 recursive-include misc *.py *.ipynb
 recursive-include requirements *.txt *.in

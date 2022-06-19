@@ -45,7 +45,7 @@ _COLORSCALE_MAPPING = LazyMapping(loader=_colormap_loader)
 def validate_colorscale(colorscale: ColorScaleType) -> None:
     """Validate the structure, scale values, and colors of colorscale.
 
-    Adapted from ``_plotly_utils.colors.validate_colorscale``.
+    Adapted from :py:func:`_plotly_utils.colors.validate_colorscale`.
     """
     scale, colors = zip(*colorscale)
     validate_scale_values(scale=scale)
@@ -69,19 +69,24 @@ def _any_to_rgb(color: Union[str, tuple]) -> str:
     return rgb
 
 
+def get_all_colorscale_names() -> Tuple[str]:
+    """Returns a tuple with all available colorscale names."""
+    return tuple(_COLORSCALE_MAPPING.keys())
+
+
 def get_colorscale(name: str) -> ColorScaleType:
     """Helper to get a known colorscale.
 
     Parameters
     ----------
     name
-        The colorscale name. This argument is case insensitive. For  instance,
+        The colorscale name. This argument is case-insensitive. For  instance,
         "YlOrRd" and "ylorrd" map to the same colorscale. Colorscale names
         ending in '*_r' represent to a _reversed_ colorscale.
 
     Raises
     ------
-    ValueError
+    :py:func:`ValueError`
         If an unknown name is provided
 
     """

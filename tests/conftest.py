@@ -24,11 +24,13 @@ def pytest_sessionstart(session: Session) -> None:
     """Called after the ``Session`` object has been created and before
     performing collection and entering the run test loop.
 
-    Args:
-      session:
+    Parameters
+    ----------
+    session
         The pytest session object.
 
-    References:
-      - https://docs.pytest.org/en/6.2.x/reference.html#initialization-hooks
+    References
+    ----------
+    - https://docs.pytest.org/en/6.2.x/reference.html#initialization-hooks
     """
     _patch_plotly_show()

@@ -10,6 +10,7 @@ from ridgeplot._colors import (
     _any_to_rgb,
     _colormap_loader,
     apply_alpha,
+    get_all_colorscale_names,
     get_color,
     get_colorscale,
     validate_colorscale,
@@ -154,6 +155,19 @@ def test_any_to_rgb_bug_in_validation_incomplete(
     color: Any, expected_exception: Type[Exception], exception_match: Optional[str]
 ) -> None:
     pytest.raises(expected_exception, _any_to_rgb, color=color).match(exception_match or "")
+
+
+# ==============================================================
+# --- get_all_colorscale_names()
+# ==============================================================
+
+
+def test_get_all_colorscale_names() -> None:
+    all_colorscale_names = get_all_colorscale_names()
+    assert all(isinstance(name, str) for name in all_colorscale_names)
+    assert "viridis" in all_colorscale_names
+    for name in all_colorscale_names:
+        get_colorscale(name=name)
 
 
 # ==============================================================

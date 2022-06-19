@@ -14,7 +14,7 @@ from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
 
 class _RidgePlotFigureFactory:
-    """Refer to ridgeplot.ridgeplot() for docstring."""
+    """Refer to :py:func:`ridgeplot.ridgeplot()` for docstring."""
 
     def __init__(
         self,

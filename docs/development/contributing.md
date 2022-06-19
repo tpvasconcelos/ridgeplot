@@ -1,4 +1,4 @@
-# Contributing to ridgeplot
+# Contributing
 
 Thank you for your interest in contributing to ridgeplot! 🚀
 
@@ -13,7 +13,7 @@ We define three main categories of issues, and each category has its own GitHub 
 After the implementation strategy has been agreed on by a ridgeplot contributor, the next step is to introduce
 your changes as a pull request (see [](#pull-request-workflow)) against the ridgeplot repository. Once your
 pull request is merged, your changes will be automatically included in the next ridgeplot release. Every
-change should be listed in the ridgeplot [](../changelog.md).
+change should be listed in the ridgeplot [](../reference/changelog.md).
 
 The following is a set of (slightly opinionated) rules and general guidelines for contributing to ridgeplot.
 Emphasis on **guidelines**, not _rules_. Use your best judgment, and feel free to propose changes to this
