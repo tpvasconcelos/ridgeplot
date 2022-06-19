@@ -27,12 +27,11 @@ repos:
       - id: trailing-whitespace
         exclude: .bumpversion.cfg
 
-# TODO: re-add this
-#  - repo: https://github.com/mgedmin/check-manifest
-#    rev: "0.48"
-#    hooks:
-#      - id: check-manifest
-#        args: [ --no-build-isolation ]
+  - repo: https://github.com/mgedmin/check-manifest
+    rev: "0.48"
+    hooks:
+      - id: check-manifest
+        args: [ --no-build-isolation ]
 
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.34.0
