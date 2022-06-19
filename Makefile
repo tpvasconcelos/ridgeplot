@@ -59,25 +59,6 @@ jupyter-init: ## initialise a jupyterlab environment and install extensions
 
 
 # ==============================================================
-# >>>  Docs
-# ==============================================================
-
-.PHONY: docs
-docs: ## generate Sphinx HTML documentation, including API docs
-	#rm -f docs/ridgeplot.rst
-	#rm -f docs/modules.rst
-	#sphinx-apidoc -o docs/ ridgeplot
-	$(MAKE) --directory=docs clean
-	$(MAKE) --directory=docs html
-	$(VENV_BIN)/python "scripts/open_in_browser.py" "docs/build/html/index.html"
-
-
-.PHONY: docs-livehtml
-docs-livehtml: ## run sphinx-autobuild
-	sphinx-autobuild --open-browser --delay=0 docs docs/build/html
-
-
-# ==============================================================
 # >>>  Cleaning
 # ==============================================================
 
