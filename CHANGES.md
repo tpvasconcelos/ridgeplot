@@ -6,6 +6,11 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+0.1.15
+------
+
 - 🔧 Upgrade project structure, improve testing and CI checks, and start basic Sphinx
   docs. ([#21](https://github.com/tpvasconcelos/ridgeplot/pull/21))
 - 🔧 Implement `LazyMapping` helper to allow `ridgeplot._colors.PLOTLY_COLORSCALES` to lazy-load from
