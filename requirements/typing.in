@@ -4,4 +4,7 @@
 
 # mypy
 mypy==0.*
+
+# Third-party stubs
 types-pytz
+pandas-stubs
