@@ -6,6 +6,11 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+0.1.16
+------
+
 - 🔧 Fix automated release process to PyPi. ([#27](https://github.com/tpvasconcelos/ridgeplot/pull/27))
 
 0.1.15
