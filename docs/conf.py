@@ -72,21 +72,21 @@ repo_url = [url for n, url in project_urls if n == "Source"][0]
 docs_url = [url for n, url in project_urls if n == "Documentation"][0]
 
 html_theme_options = {
-    "repository_url": docs_url,
+    "repository_url": repo_url,
     "path_to_docs": "docs",
-    "launch_buttons": {
-        "binderhub_url": "https://mybinder.org",
-        "colab_url": "https://colab.research.google.com/",
-        "deepnote_url": "https://deepnote.com/",
-        "notebook_interface": "jupyterlab",
-        "thebe": True,
-    },
     "use_edit_page_button": True,
     "use_issues_button": True,
     "use_repository_button": True,
     "use_download_button": True,
-    # "logo_only": True,
     "show_toc_level": 2,
+    # "logo_only": True,
+    # "launch_buttons": {
+    #     "binderhub_url": "https://mybinder.org",
+    #     "colab_url": "https://colab.research.google.com/",
+    #     "deepnote_url": "https://deepnote.com/",
+    #     "notebook_interface": "jupyterlab",
+    #     "thebe": True,
+    # },
     # "announcement": (
     #     "⚠️The latest release refactored our HTML, "
     #     "so double-check your custom CSS rules!⚠️"
@@ -94,7 +94,7 @@ html_theme_options = {
 }
 
 # ghissue config
-# github_project_url = repo_url
+github_project_url = repo_url
 
 # Custom sidebar templates, maps document names to template names.
 # html_sidebars = {"**": ["html_sidebars.html"]}
