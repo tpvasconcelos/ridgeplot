@@ -21,16 +21,14 @@ def _patch_plotly_show() -> None:
 
 
 def pytest_sessionstart(session: Session) -> None:
-    """Called after the ``Session`` object has been created and before
-    performing collection and entering the run test loop.
+    """Called after the :py:class:`pytest.Session` object has been created and
+    before performing collection and entering the run test loop.
 
-    Parameters
-    ----------
-    session
-        The pytest session object.
+    Args:
+        session
+            The pytest :py:class:`~pytest.Session` object.
 
-    References
-    ----------
+    References:
     - https://docs.pytest.org/en/6.2.x/reference.html#initialization-hooks
     """
     _patch_plotly_show()

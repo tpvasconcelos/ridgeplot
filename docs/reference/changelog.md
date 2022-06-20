@@ -1,5 +1,5 @@
 # Changelog
 
-```{include} ../../../CHANGES.md
+```{include} ../../CHANGES.md
 :start-line: 1
 ```
