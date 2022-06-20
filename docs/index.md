@@ -43,8 +43,8 @@ getting_started
 :caption: Reference
 :maxdepth: 1
 
-reference/changelog
 reference/api
+reference/changelog
 reference/alternatives
 ```
 
