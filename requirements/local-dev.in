@@ -3,6 +3,7 @@
 
 # Install other other requirement groups
 -r ci.in
+-r cd.in
 -r linting.in
 
 # Various useful utilities for local development
