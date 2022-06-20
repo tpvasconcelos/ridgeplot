@@ -1,9 +1,9 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.3.0
     hooks:
       - id: check-added-large-files
-        args: ['--maxkb=500']
+        args: [ '--maxkb=500' ]
       - id: check-ast
       - id: check-builtin-literals
       - id: check-case-conflict
@@ -22,45 +22,55 @@ repos:
       - id: end-of-file-fixer
       - id: fix-byte-order-marker
       - id: mixed-line-ending
-      - id: name-tests-test
-        args: ['--django']
       - id: pretty-format-json
-        args: ['--autofix']
+        args: [ '--autofix' ]
       - id: trailing-whitespace
         exclude: .bumpversion.cfg
 
+  - repo: https://github.com/mgedmin/check-manifest
+    rev: "0.48"
+    hooks:
+      - id: check-manifest
+        args: [ --no-build-isolation ]
+
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.10.0
+    rev: v2.34.0
     hooks:
       - id: pyupgrade
-        args: [ --py36-plus, --keep-runtime-typing]
+        args: [ --py36-plus, --keep-runtime-typing ]
         description: Automatically upgrade syntax for newer versions of the python language.
 
-  - repo: https://github.com/psf/black
-    rev: 20.8b1
+  - repo: local
     hooks:
+
+      - id: pip-compile-multi-verify
+        name: pip-compile-multi verify
+        language: python
+        entry: pip-compile-multi verify
+        files: ^requirements/
+        pass_filenames: false
+        require_serial: true
+        types: [ file, non-executable, text ]
+
       - id: black
+        name: black
+        entry: black
+        language: python
+        require_serial: true
+        types_or: [ python, pyi, jupyter ]
 
-  - repo: https://github.com/pycqa/isort
-    rev: 5.7.0
-    hooks:
       - id: isort
-        name: isort (python)
-      - id: isort
-        name: isort (cython)
-        types: [cython]
-      - id: isort
-        name: isort (pyi)
-        types: [pyi]
+        name: isort
+        entry: isort
+        args: [ '--filter-files' ]
+        require_serial: true
+        language: python
+        language_version: python3
+        types_or: [ cython, pyi, python ]
 
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.8.4
-    hooks:
       - id: flake8
-        additional_dependencies: [flake8-typing-imports==1.7.0]
-
-  # - repo: https://github.com/pre-commit/mirrors-mypy
-  #   rev: v0.812
-  #   hooks:
-  #     - id: mypy
-  #       pass_filenames: false
+        name: flake8
+        entry: flake8
+        language: python
+        types: [ python ]
+        require_serial: true

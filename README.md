@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="assets/hero.png" alt="ridgeplot - beautiful ridgeline plots in Python" width="800">
+    <img src="docs/_static/img/hero.png" alt="ridgeplot - beautiful ridgeline plots in Python" width="800">
 </p>
 
 <h1 id="ridgeplot" align="center">
@@ -13,13 +13,11 @@
   <a href="https://github.com/tpvasconcelos/ridgeplot/"><img src="https://img.shields.io/pypi/pyversions/ridgeplot" alt="PyPI - Python Versions"></a>
   <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/status/ridgeplot.svg" alt="PyPI - Package Status"></a>
   <a href="https://github.com/tpvasconcelos/ridgeplot/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/ridgeplot" alt="PyPI - License"></a>
-  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
   <br>
   <a href="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/"><img src="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/badge.svg" alt="GitHub CI"></a>
   <a href="https://codecov.io/gh/tpvasconcelos/ridgeplot"><img src="https://codecov.io/gh/tpvasconcelos/ridgeplot/branch/master/graph/badge.svg" alt="codecov"></a>
   <a href="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot"><img src="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge" alt="CodeFactor"></a>
   <a href="https://www.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpvasconcelos/ridgeplot&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021" alt="Codacy code quality"/></a>
-  <a href="https://requires.io/github/tpvasconcelos/ridgeplot/requirements/?branch=master"><img src="https://requires.io/github/tpvasconcelos/ridgeplot/requirements.svg?branch=master" alt="Requirements Status" /></a>
 </p>
 
 
@@ -54,18 +52,30 @@ pip install -U ridgeplot
 
 ## How to use it?
 
+The official docs can be found at: https://ridgeplot.readthedocs.io/en/stable/
+
 ### Sensible defaults
 
 ```python
-from numpy.random import normal
+import numpy as np
+
 from ridgeplot import ridgeplot
 
-synthetic_samples = [normal(n / 1.2, size=600) for n in reversed(range(9))]
+# Put your real samples here...
+np.random.seed(0)
+synthetic_samples = [np.random.normal(n / 1.2, size=600) for n in range(9, 0, -1)]
+
+# Call the `ridgeplot()` helper, packed with sensible defaults
 fig = ridgeplot(samples=synthetic_samples)
+
+# The returned Plotly `Figure` is still fully customizable
+fig.update_layout(height=500, width=800)
+
+# show us the work!
 fig.show()
 ```
 
-![ridgeline plot example using the ridgeplot Python library](assets/example_simple.png)
+![ridgeline plot example using the ridgeplot Python library](docs/_static/img/example_simple.png)
 
 ### Fully configurable
 
@@ -119,12 +129,4 @@ fig.update_layout(
 fig.show()
 ```
 
-![ridgeline plot of the probly dataset using the ridgeplot Python library](assets/example_probly.png)
-
-## Alternatives
-
-- [`plotly` - from examples/galery](https://plotly.com/python/violin/#ridgeline-plot)
-- [`seaborn` - from examples/galery](https://seaborn.pydata.org/examples/kde_ridgeplot)
-- [`bokeh` - from examples/galery](https://docs.bokeh.org/en/latest/docs/gallery/ridgeplot.html)
-- [`matplotlib` - from blogpost](https://matplotlib.org/matplotblog/posts/create-ridgeplots-in-matplotlib/)
-- [`joypy` - Ridgeplot library using a `matplotlib` backend](https://github.com/sbebo/joypy)
+![ridgeline plot of the probly dataset using the ridgeplot Python library](docs/_static/img/example_probly.png)

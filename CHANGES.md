@@ -6,6 +6,8 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- 🔧 Upgrade project structure, improve testing and CI checks, and start basic Sphinx
+  docs. ([#21](https://github.com/tpvasconcelos/ridgeplot/pull/21))
 - 🔧 Implement `LazyMapping` helper to allow `ridgeplot._colors.PLOTLY_COLORSCALES` to lazy-load from
   `colors.json` ([#20](https://github.com/tpvasconcelos/ridgeplot/pull/20))
 
@@ -28,9 +30,12 @@ Unreleased changes
 
 ### Documentation
 
-- 📚 Publish official contribution guidelines (`CONTRIBUTING.md`) ([#8](https://github.com/tpvasconcelos/ridgeplot/pull/8))
-- 📚 Publish an official Code of Conduct (`CODE_OF_CONDUCT.md`) ([#7](https://github.com/tpvasconcelos/ridgeplot/pull/7))
-- 📚 Publish an official release/change log (`CHANGES.md`) ([#6](https://github.com/tpvasconcelos/ridgeplot/pull/6))
+- 📚 Publish official contribution
+  guidelines (`CONTRIBUTING.md`) ([#8](https://github.com/tpvasconcelos/ridgeplot/pull/8))
+- 📚 Publish an official Code of
+  Conduct (`CODE_OF_CONDUCT.md`) ([#7](https://github.com/tpvasconcelos/ridgeplot/pull/7))
+- 📚 Publish an official release/change
+  log (`CHANGES.md`) ([#6](https://github.com/tpvasconcelos/ridgeplot/pull/6))
 
 0.1.11
 ------

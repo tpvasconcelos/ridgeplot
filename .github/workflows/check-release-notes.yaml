@@ -1,0 +1,18 @@
+name: Check Release Notes
+
+on:
+  pull_request:
+    types: [ opened, reopened, synchronize, labeled, unlabeled ]
+
+jobs:
+  build:
+    name: Check for entry in CHANGES.md
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Grep CHANGES.md for PR number
+        if: contains(github.event.pull_request.labels.*.name, 'skip news') != true
+        run: |
+          grep "(\[#${{ github.event.pull_request.number }}\](https://github.com/tpvasconcelos/ridgeplot/pull/${{ github.event.pull_request.number }}))" CHANGES.md || \
+          (echo "Entry for PR #${{ github.event.pull_request.number }} missing from CHANGES.md" && \
+          exit 1)

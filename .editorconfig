@@ -13,8 +13,6 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 [*.py]
-# docstrings and comments use max_line_length = 80
-# import statements use max_line_length = 100
 max_line_length=120
 
 # 2 space indentation

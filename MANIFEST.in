@@ -1,13 +1,35 @@
-include LICENSE
-include README.md
-include CHANGELOG.md
-include AUTHORS.md
+# Top-level dir files not included by default
+include .bumpversion.cfg
+include .editorconfig
+include .pre-commit-config.yaml
+include .readthedocs.yaml
+include Makefile
+include mypy.ini
+include tox.ini
+include CHANGES.md
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
 
-recursive-include ridgeplot *
-recursive-include tests *
-recursive-include examples *
-recursive-include docs *
+# Stubs
+recursive-include src py.typed *.pyi
 
-recursive-exclude * *.py[co]
-recursive-exclude * __pycache__
-recursive-exclude * *.egg-info
+# Data files
+include src/ridgeplot/colors.json
+
+# Docs
+include docs/Makefile docs/make.bat
+recursive-include docs/_static *.ico
+recursive-include docs/_static/img *.png
+recursive-include docs *.md *.py
+prune docs/build
+
+# Misc
+recursive-include .github *.yaml
+recursive-include examples *.py *.ipynb
+recursive-include misc *.py *.ipynb
+recursive-include requirements *.txt *.in
+recursive-include scripts *.py
+recursive-include tests *.py
+
+# Globally excluded patterns
+recursive-exclude * *.py[cod] *.egg-info __pycache__

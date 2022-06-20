@@ -1,0 +1,10 @@
+# typing.in needs to inherit from tests.in
+# such that mypy can infer pytest's type hints
+-r tests.in
+
+# mypy
+mypy==0.*
+
+# Third-party stubs
+types-pytz
+pandas-stubs
