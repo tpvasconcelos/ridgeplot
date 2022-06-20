@@ -178,7 +178,7 @@ pyyaml==6.0
     #   myst-nb
     #   myst-parser
     #   sphinx-book-theme
-pyzmq==23.1.0
+pyzmq==23.2.0
     # via
     #   ipykernel
     #   jupyter-client
