@@ -252,6 +252,9 @@ on [Continuous Integration](#continuous-integration).
 
 ## Release process
 
+You need push access to the project's repository to make releases. The following release steps are
+here for reference only.
+
 1. Review the `## Unreleased changes` section in CHANGES.md by checking for consistency in
    format and, if necessary, refactoring related entries into relevant subsections (e.g. _Features_
    , _Docs_, _Bugfixes_, _Security_, etc). Take a look at previous release notes for guidance and
@@ -284,15 +287,19 @@ on [Continuous Integration](#continuous-integration).
    ```shell
    git push && git push --tags
    ```
-5. Open a pull request titled `"Release version X.X.X"`
-6. Wait for all CI checks to pass.
-7. A ridgeplot main contributor should sign off and merge this pull requests.
-8. Create a new release using the GitHub UI.
-    - Copy the raw markdown section in `CHANGES.md` corresponding to this release and use it as the
-      description of the GitHub Release.
-    - Use the same `X.X.X` tag used in the release.
-9. At this point a GitHub Actions workflow will be triggered which will build and publish new wheels
-   to PyPI. Be sure to check whether all workflows passed successfully.
+5. At this point a couple of GitHub Actions workflows will be triggered:
+    1. `.github/workflows/release.yaml`: Issues a new GitHub release whenever a new git tag is
+       pushed.
+    2. `.github/workflows/publish-pypi.yaml` Builds, packages, and uploads the source and wheel
+       package to pypi (and test pypi) whenever a new GitHub release is created.
+6. Verify that all workflows passed successfully:
+    1. Verify that the new tag is present in the remote
+       repository: <https://github.com/tpvasconcelos/ridgeplot/tags>
+    2. Verify that the new release is present in the remote repository and that the release notes
+       were correctly included: <https://github.com/tpvasconcelos/ridgeplot/releases>
+    3. Verify that the new package is available in pypi: <https://pypi.org/project/ridgeplot/>
+    4. Verify that the docs were updated and available in
+       at <https://ridgeplot.readthedocs.io/en/stable/>
 
 ## Code of Conduct
 
