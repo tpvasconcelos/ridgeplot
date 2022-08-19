@@ -3,4 +3,4 @@ def test_version() -> None:
     from ridgeplot._version import __version__ as v_private
 
     assert v_public is v_private
-    assert v_public == "0.1.17"
+    assert v_public == "0.1.18"
