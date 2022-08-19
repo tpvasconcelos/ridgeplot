@@ -6,6 +6,11 @@ the [commit logs](https://github.com/tpvasconcelos/ridgeplot/commits/).
 Unreleased changes
 ------------------
 
+- ...
+
+0.1.17
+------
+
 - 🔧 Automate the release process. See .github/workflows/release.yaml, which issues a new GitHub
   release whenever a new git tag is pushed to the master branch by extracting the release notes from
   the changelog.
