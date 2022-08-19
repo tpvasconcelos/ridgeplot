@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List
+from typing import List, Sequence
 
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
@@ -28,14 +28,16 @@ def get_tokens_latest_release() -> List[Token]:
     return tokens_latest_release
 
 
-def render(tokens: List[Token]) -> str:
+def render_release_text(tokens: Sequence[Token]) -> str:
     md_renderer = MDRenderer()
     return md_renderer.render(tokens=tokens, options={}, env={})
 
 
 def main() -> None:
     latest_release_tokens = get_tokens_latest_release()
-    PATH_TO_CHANGES_LATEST.write_text(data=render(latest_release_tokens))
+    md_renderer = MDRenderer()
+    release_text = md_renderer.render(tokens=latest_release_tokens, options={}, env={})
+    PATH_TO_CHANGES_LATEST.write_text(data=release_text)
 
 
 if __name__ == "__main__":

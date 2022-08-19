@@ -7,7 +7,6 @@ on:
 
 jobs:
   build-and-publish:
-    name: Build and publish Python 🐍 distributions 📦 to PyPI and TestPyPI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,8 +17,8 @@ jobs:
       - name: Package and upload a release to test pypi
         env:
           TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN_TEST }}"
-        run: tox -e build,release-test
+        run: tox -e build,publish-pypi-test
       - name: Package and upload a release prod pypi
         env:
           TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN }}"
-        run: tox -e build,release-prod
+        run: tox -e build,publish-pypi
