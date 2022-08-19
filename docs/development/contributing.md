@@ -188,20 +188,20 @@ and all supported Python versions. Finally, the generated coverage reports are u
 Here is a quick overview of all CI tools and software in use, some of which have already been discussed in the
 sections above.
 
-| Tool                                                                        | Category         | config files                                 | Details                                                                                                                                                                                             |
-|-----------------------------------------------------------------------------| ---------------- |----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Tox](https://github.com/tox-dev/tox)                                       | 🔧 Orchestration | {{ repo_file('tox.ini') }}                   | We use Tox to reliably run all integration approval steps in reproducible isolated virtual environments.                                                                                            |
-| [GitHub Actions](https://github.com/features/actions)                       | 🔧 Orchestration | {{ repo_file('.github/workflows/ci.yaml') }} | Workflow automation for GitHub. We use it to automatically run all integration approval steps defined with Tox on every push or pull request event.                                                 |
-| [Git](https://git-scm.com/)                                                 | 🕰 VCS           | {{ repo_file('.gitignore') }}                | Projects version control system software of choice.                                                                                                                                                 |
-| [pytest](https://github.com/pytest-dev/pytest)                              | 🧪 Testing       | {{ repo_file('tox.ini') }}                   | Testing framework for python code.                                                                                                                                                                  |
-| [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/)                  | 📊 Coverage      | {{ repo_file('tox.ini') }}                   | Coverage plugin for pytest.                                                                                                                                                                         |
-| [Codecov](https://about.codecov.io/) and [Codacy](https://www.codacy.com/)  | 📊 Coverage      |                                              | Two great services for tracking, monitoring, and alerting on code coverage and code quality.                                                                                                        |
-| [pre-commit hooks](https://pre-commit.com/)                                 | 💅 Linting       | {{ repo_file('.pre-commit-config.yaml') }}   | Used to to automatically check and fix any formatting rules on every commit.                                                                                                                        |
-| [mypy](https://github.com/python/mypy)                                      | 💅 Linting       | {{ repo_file('mypy.ini') }}                  | A static type checker for Python. We use quite a strict configuration here, which can be tricky at times. Feel free to ask for help from the community by commenting on your issue or pull request. |
-| [black](https://github.com/psf/black)                                       | 💅 Linting       | {{ repo_file('pyproject.toml') }}            | "The uncompromising Python code formatter". We use `black` to automatically format Python code in a deterministic manner. We use a maximum line length of 120 characters.                           |
-| [flake8](https://github.com/pycqa/flake8)                                   | 💅 Linting       | {{ repo_file('setup.cfg') }}                 | Used to check the style and quality of python code.                                                                                                                                                 |
-| [isort](https://github.com/pycqa/isort)                                     | 💅 Linting       | {{ repo_file('setup.cfg') }}                 | Used to sort python imports.                                                                                                                                                                        |
-| [EditorConfig](https://editorconfig.org/)                                   | 💅 Linting       | {{ repo_file('.editorconfig') }}             | This repository uses the `.editorconfig` standard configuration file, which aims to ensure consistent style across multiple programming environments.                                               |
+| Tool                                                                       | Category         | config files                                  | Details                                                                                                                                                                                              |
+|----------------------------------------------------------------------------|------------------|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Tox](https://github.com/tox-dev/tox)                                      | 🔧 Orchestration | {{ repo_file('tox.ini') }}                    | We use Tox to reliably run all integration approval steps in reproducible isolated virtual environments.                                                                                             |
+| [GitHub Actions](https://github.com/features/actions)                      | 🔧 Orchestration | {{ repo_file('.github/workflows/ci.yaml') }}  | Workflow automation for GitHub. We use it to automatically run all integration approval steps defined with Tox on every push or pull request event.                                                  |
+| [Git](https://git-scm.com/)                                                | 🕰 VCS           | {{ repo_file('.gitignore') }}                 | Projects version control system software of choice.                                                                                                                                                  |
+| [pytest](https://github.com/pytest-dev/pytest)                             | 🧪 Testing       | {{ repo_file('tox.ini') }}                    | Testing framework for python code.                                                                                                                                                                   |
+| [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/)                 | 📊 Coverage      | {{ repo_file('tox.ini') }}                    | Coverage plugin for pytest.                                                                                                                                                                          |
+| [Codecov](https://about.codecov.io/) and [Codacy](https://www.codacy.com/) | 📊 Coverage      |                                               | Two great services for tracking, monitoring, and alerting on code coverage and code quality.                                                                                                         |
+| [pre-commit hooks](https://pre-commit.com/)                                | 💅 Linting       | {{ repo_file('.pre-commit-config.yaml') }}    | Used to to automatically check and fix any formatting rules on every commit.                                                                                                                         |
+| [mypy](https://github.com/python/mypy)                                     | 💅 Linting       | {{ repo_file('mypy.ini') }}                   | A static type checker for Python. We use quite a strict configuration here, which can be tricky at times. Feel free to ask for help from the community by commenting on your issue or pull request.  |
+| [black](https://github.com/psf/black)                                      | 💅 Linting       | {{ repo_file('pyproject.toml') }}             | "The uncompromising Python code formatter". We use `black` to automatically format Python code in a deterministic manner. We use a maximum line length of 120 characters.                            |
+| [flake8](https://github.com/pycqa/flake8)                                  | 💅 Linting       | {{ repo_file('setup.cfg') }}                  | Used to check the style and quality of python code.                                                                                                                                                  |
+| [isort](https://github.com/pycqa/isort)                                    | 💅 Linting       | {{ repo_file('setup.cfg') }}                  | Used to sort python imports.                                                                                                                                                                         |
+| [EditorConfig](https://editorconfig.org/)                                  | 💅 Linting       | {{ repo_file('.editorconfig') }}              | This repository uses the `.editorconfig` standard configuration file, which aims to ensure consistent style across multiple programming environments.                                                |
 
 ## Project structure
 
@@ -238,18 +238,17 @@ on [Continuous Integration](#continuous-integration).
 
 ## Release process
 
-- ridgeplot uses the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`) versioning standard.
-- You can determine the latest release version by running `git describe --tags --abbrev=0` on the master
-  branch.
-
-### Release steps
-
 1. Review the `## Unreleased changes` section in CHANGES.md by checking for consistency in
-   format and, if necessary, refactoring related entries into relevant subsections (e.g. Features, Docs,
-   Bugfixes, Security, etc).
-    - Submit a pull request with these changes. You may use the `"Update release notes for X.X.X release"`
-      template for the pull request title.
-2. Use the [bumpversion](https://github.com/peritus/bumpversion) utility to bump the current version. This
+   format and, if necessary, refactoring related entries into relevant subsections (e.g. _Features_, _Docs_,
+   _Bugfixes_, _Security_, etc). Take a look at previous release notes for guidance and try to keep it
+   consistent.
+2. Submit a pull request with these changes only and use the `"Cleanup release notes for X.X.X release"`
+   template for the pull request title. ridgeplot uses the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`)
+   versioning standard. You can determine the latest release version by running `git describe --tags --abbrev=0` on the
+   master branch. Based on this, you can determine the next release version by incrementing the MAJOR, MINOR, or PATCH.
+   More on this on the next section. For now, just make sure you merge this pull request into the master branch before
+   continuing.
+3. Use the [bumpversion](https://github.com/peritus/bumpversion) utility to bump the current version. This
    utility will automatically bump the current version, and issue a relevant commit and git tag. E.g.,
    ```shell
    # Bump MAJOR version (e.g., 0.4.2 -> 1.0.0)
@@ -265,18 +264,18 @@ on [Continuous Integration](#continuous-integration).
    ```shell
    bumpversion --dry-run --verbose [--allow-dirty] [major,minor,patch]
    ```
-3. Push your changes along with all tag references:
+4. Push your changes along with all tag references:
    ```shell
    git push --tags
    ```
-4. Open a pull request titled `"Release version X.X.X"`
-5. Wait for all CI checks to pass.
-6. A ridgeplot main contributor should sign off and merge this pull requests.
-7. Create a new release using the GitHub UI.
+5. Open a pull request titled `"Release version X.X.X"`
+6. Wait for all CI checks to pass.
+7. A ridgeplot main contributor should sign off and merge this pull requests.
+8. Create a new release using the GitHub UI.
     - Copy the raw markdown section in `CHANGES.md` corresponding to this release and use it as the
       description of the GitHub Release.
     - Use the same `X.X.X` tag used in the release.
-8. At this point a GitHub Actions workflow will be triggered which will build and publish new wheels to PyPI.
+9. At this point a GitHub Actions workflow will be triggered which will build and publish new wheels to PyPI.
    Be sure to check whether all workflows passed successfully.
 
 ## Code of Conduct

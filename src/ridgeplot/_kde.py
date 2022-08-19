@@ -33,7 +33,7 @@ def evaluate_density(samples, points, kernel, bandwidth) -> Tuple[np.ndarray, np
     # I'm hard-coding the `fft=self.kernel == "gau"` for convenience here.
     # This avoids the need to expose yet another __init__ argument (fft)
     # to this class. The drawback is that, if and when statsmodels
-    # implements another kernel with fft, this will fallback to
+    # implements another kernel with fft, this will fall back to
     # using the unoptimised version (with fft = False).
     dens.fit(kernel=kernel, fft=kernel == "gau", bw=bandwidth)
     densities = dens.evaluate(points)
