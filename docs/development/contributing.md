@@ -282,7 +282,7 @@ on [Continuous Integration](#continuous-integration).
    ```
 4. Push your changes along with all tag references:
    ```shell
-   git push --tags
+   git push && git push --tags
    ```
 5. Open a pull request titled `"Release version X.X.X"`
 6. Wait for all CI checks to pass.

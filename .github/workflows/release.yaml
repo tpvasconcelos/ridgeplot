@@ -2,8 +2,6 @@ name: Release workflow
 
 on:
   push:
-    branches:
-      - master
     tags:
       - "*.*.*"
 
