@@ -1,12 +1,16 @@
 # Release notes
 
-This document outlines the list of changes to ridgeplot between each release. For full details, see the
-[commit logs](https://github.com/tpvasconcelos/ridgeplot/commits/).
+This document outlines the list of changes to ridgeplot between each release. For full details, see
+the [commit logs](https://github.com/tpvasconcelos/ridgeplot/commits/).
 
 Unreleased changes
 ------------------
 
-- 🔧 Fix automated release process to PyPi. ([#27](https://github.com/tpvasconcelos/ridgeplot/pull/27))
+- 🔧 Automate the release process. See .github/workflows/release.yaml, which issues a new GitHub
+  release whenever a new git tag is pushed to the master branch by extracting the release notes from
+  the changelog.
+- 🔧 Fix automated release process to
+  PyPi. ([#27](https://github.com/tpvasconcelos/ridgeplot/pull/27))
 
 0.1.16
 ------
@@ -19,7 +23,8 @@ Unreleased changes
 0.1.14
 ------
 
-- 📦 Remove `named_colorscales` from public API ([#18](https://github.com/tpvasconcelos/ridgeplot/pull/18))
+- 📦 Remove `named_colorscales` from public
+  API ([#18](https://github.com/tpvasconcelos/ridgeplot/pull/18))
 
 0.1.13
 ------
