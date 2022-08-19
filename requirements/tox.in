@@ -1,0 +1,2 @@
+# Tox is used to orchestrate most of our CI steps
+tox

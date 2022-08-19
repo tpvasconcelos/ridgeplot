@@ -1,4 +1,4 @@
 -e file:.
 
 pytest==7.*
-pytest-cov==3.*
+pytest-cov

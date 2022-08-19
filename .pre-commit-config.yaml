@@ -34,43 +34,29 @@ repos:
         args: [ --no-build-isolation ]
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.34.0
+    rev: v2.37.3
     hooks:
       - id: pyupgrade
         args: [ --py36-plus, --keep-runtime-typing ]
         description: Automatically upgrade syntax for newer versions of the python language.
 
-  - repo: local
+  - repo: https://github.com/peterdemin/pip-compile-multi
+    rev: v2.4.6
     hooks:
-
       - id: pip-compile-multi-verify
-        name: pip-compile-multi verify
-        language: python
-        entry: pip-compile-multi verify
-        files: ^requirements/
-        pass_filenames: false
-        require_serial: true
-        types: [ file, non-executable, text ]
 
+  - repo: https://github.com/psf/black
+    rev: 22.6.0
+    hooks:
       - id: black
-        name: black
-        entry: black
-        language: python
-        require_serial: true
-        types_or: [ python, pyi, jupyter ]
 
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
       - id: isort
-        name: isort
-        entry: isort
-        args: [ '--filter-files' ]
-        require_serial: true
-        language: python
-        language_version: python3
-        types_or: [ cython, pyi, python ]
 
+  - repo: https://github.com/pycqa/flake8
+    rev: 5.0.4
+    hooks:
       - id: flake8
-        name: flake8
-        entry: flake8
-        language: python
-        types: [ python ]
-        require_serial: true
+        additional_dependencies: [flake8-typing-imports]

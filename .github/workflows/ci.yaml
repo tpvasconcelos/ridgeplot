@@ -29,6 +29,7 @@ jobs:
       - uses: ./.github/actions/setup-python
         with:
           python-version: "${{ matrix.python-version }}"
+          requirements-path: requirements/tox.txt
       - name: Run CI checks with Tox
         run: tox
       - name: Upload coverage to codecov

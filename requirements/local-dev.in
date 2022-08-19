@@ -2,12 +2,16 @@
 -e file:.
 
 # Install other other requirement groups
--r ci.in
--r cd.in
--r linting.in
+-r tox.in
+-r pre-commit.in
+-r dependency-management.in
+
+# Releases are still a manual process that
+# requires the use of bumpversion locally
+bumpversion
 
 # Various useful utilities for local development
-ipython
-ptpython
-pipdeptree
+ipython==7.*
 pip-tools
+pipdeptree
+ptpython

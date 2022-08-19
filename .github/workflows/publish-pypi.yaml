@@ -14,6 +14,7 @@ jobs:
       - uses: ./.github/actions/setup-python
         with:
           python-version: "3.7"
+          requirements-path: requirements/tox.txt
       - name: Package and upload a release to test pypi
         env:
           TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN_TEST }}"

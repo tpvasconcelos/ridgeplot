@@ -1,10 +1,12 @@
 # Top-level dir files not included by default
 include .bumpversion.cfg
+include .coveragerc
 include .editorconfig
 include .pre-commit-config.yaml
 include .readthedocs.yaml
 include Makefile
 include mypy.ini
+include pytest.ini
 include tox.ini
 include CHANGES.md
 include CODE_OF_CONDUCT.md
@@ -27,7 +29,7 @@ prune docs/build
 recursive-include .github *.yaml
 recursive-include examples *.py *.ipynb
 recursive-include misc *.py *.ipynb
-recursive-include requirements *.txt *.in
+recursive-include requirements *.txt *.in *.md
 recursive-include scripts *.py
 recursive-include tests *.py
 

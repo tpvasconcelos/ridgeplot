@@ -3,7 +3,7 @@
 -r tests.in
 
 # mypy
-mypy==0.*
+mypy
 
 # Third-party stubs
 types-pytz
