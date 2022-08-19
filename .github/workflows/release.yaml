@@ -19,4 +19,4 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: CHANGES-latest.md
+          body_path: LATEST_RELEASE_NOTES.md
