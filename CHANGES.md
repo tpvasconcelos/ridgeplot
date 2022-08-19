@@ -8,7 +8,7 @@ Unreleased changes
 
 - 🔧 Fix automated release process to PyPi. ([#27](https://github.com/tpvasconcelos/ridgeplot/pull/27))
 
-0.1.15
+0.1.16
 ------
 
 - 🔧 Upgrade project structure, improve testing and CI checks, and start basic Sphinx

@@ -18,6 +18,9 @@ ij_visual_guides = 100
 max_line_length = 100
 ij_visual_guides = 80, 100
 
+[.bumpversion.cfg]
+trim_trailing_whitespace = false
+
 [Makefile]
 indent_style = tab
 
