@@ -20,7 +20,7 @@ Unreleased changes
   release whenever a new git tag is pushed to the master branch by extracting the release notes from
   the changelog.
 - 🔧 Fix automated release process to
-  PyPi. ([#27](https://github.com/tpvasconcelos/ridgeplot/pull/27))
+  PyPI. ([#27](https://github.com/tpvasconcelos/ridgeplot/pull/27))
 
 0.1.16
 ------

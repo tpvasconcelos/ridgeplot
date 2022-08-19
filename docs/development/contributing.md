@@ -288,18 +288,23 @@ here for reference only.
    git push && git push --tags
    ```
 5. At this point a couple of GitHub Actions workflows will be triggered:
-    1. `.github/workflows/release.yaml`: Issues a new GitHub release whenever a new git tag is
-       pushed.
-    2. `.github/workflows/publish-pypi.yaml` Builds, packages, and uploads the source and wheel
-       package to pypi (and test pypi) whenever a new GitHub release is created.
-6. Verify that all workflows passed successfully:
-    1. Verify that the new tag is present in the remote
+    1. `.github/workflows/ci.yaml`: Runs all CI checks with Tox against the new changes pushed to
+       master.
+    2. `.github/workflows/release.yaml`: Issues a new GitHub release triggered by the new git tag
+       pushed in the previous step.
+    3. `.github/workflows/publish-pypi.yaml`: Builds, packages, and uploads the source and wheel
+       package to PyPI (and test PyPI). This is triggered by the new GitHub release created in the
+       previous step.
+6. **Trust but verify!**
+    1. Verify that all three workflows passed
+       successfully: <https://github.com/tpvasconcelos/ridgeplot/actions>
+    2. Verify that the new git tag is present in the remote
        repository: <https://github.com/tpvasconcelos/ridgeplot/tags>
-    2. Verify that the new release is present in the remote repository and that the release notes
-       were correctly included: <https://github.com/tpvasconcelos/ridgeplot/releases>
-    3. Verify that the new package is available in pypi: <https://pypi.org/project/ridgeplot/>
-    4. Verify that the docs were updated and available in
-       at <https://ridgeplot.readthedocs.io/en/stable/>
+    3. Verify that the new release is present in the remote repository and that the release notes
+       were correctly parsed: <https://github.com/tpvasconcelos/ridgeplot/releases>
+    4. Verify that the new package is available in PyPI: <https://pypi.org/project/ridgeplot/>
+    5. Verify that the docs were updated and published
+       to <https://ridgeplot.readthedocs.io/en/stable/>
 
 ## Code of Conduct
 
