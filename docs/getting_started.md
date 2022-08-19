@@ -2,7 +2,8 @@
 
 ## Sensible defaults
 
-Get started with a simple function call to {py:func}`~ridgeplot.ridgeplot()` with sensible (plotly) defaults.
+Get started with a simple function call to {py:func}`~ridgeplot.ridgeplot()` with sensible (plotly)
+defaults.
 
 ```python
 import numpy as np

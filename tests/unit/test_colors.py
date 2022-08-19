@@ -96,7 +96,10 @@ def test_validate_colorscale(colorscale: ColorScaleType) -> None:
         (((1, "a"), (0, "a")), PlotlyError),
     ),
 )
-def test_validate_colorscale_fails_for_invalid_colorscale(colorscale: Any, expected_exception: Type[Exception]) -> None:
+def test_validate_colorscale_fails_for_invalid_colorscale(
+    colorscale: Any,
+    expected_exception: Type[Exception],
+) -> None:
     pytest.raises(expected_exception, validate_colorscale, colorscale=colorscale)
 
 

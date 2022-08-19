@@ -1,5 +1,5 @@
 <h1 id="ridgeplot" align="center">
-    ridgeplot: beautiful ridgeline plots in Python
+  ridgeplot: beautiful ridgeline plots in Python
 </h1>
 
 <p align="center">
@@ -29,7 +29,7 @@ Bumper stickers:
 - Use sensible defaults, but allow for extensive configuration!
 
 <p align="center">
-    <img src="_static/img/hero.png" alt="ridgeplot - beautiful ridgeline plots in Python" width="800">
+  <img src="_static/img/hero.png" alt="ridgeplot - beautiful ridgeline plots in Python" width="800">
 </p>
 
 ```{toctree}

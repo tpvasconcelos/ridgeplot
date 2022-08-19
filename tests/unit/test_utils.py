@@ -75,8 +75,12 @@ class TestNormaliseMinMax:
             r"max_ should be greater than min_"
         )
         # val is not in range
-        pytest.raises(ValueError, normalise_min_max, val=1.0, min_=2.0, max_=3.0).match(r"val (.*) is out of bounds")
-        pytest.raises(ValueError, normalise_min_max, val=5.0, min_=2.0, max_=3.0).match(r"val (.*) is out of bounds")
+        pytest.raises(ValueError, normalise_min_max, val=1.0, min_=2.0, max_=3.0).match(
+            r"val (.*) is out of bounds"
+        )
+        pytest.raises(ValueError, normalise_min_max, val=5.0, min_=2.0, max_=3.0).match(
+            r"val (.*) is out of bounds"
+        )
 
     @pytest.mark.parametrize("val", (0.0, 0.5, 1.0))
     def test_same_val_unchanged_for_range_0_to_1(self, val: float) -> None:

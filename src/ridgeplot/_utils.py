@@ -17,7 +17,9 @@ def get_xy_extrema(arrays: Iterable[npt.ArrayLike]) -> Tuple[float, float, float
 
 def normalise_min_max(val: float, min_: float, max_: float) -> float:
     if max_ <= min_:
-        raise ValueError(f"max_ should be greater than min_. Got max_={max_} and min_={min_} instead.")
+        raise ValueError(
+            f"max_ should be greater than min_. Got max_={max_} and min_={min_} instead."
+        )
     if not (min_ <= val <= max_):
         raise ValueError(f"val ({val}) is out of bounds ({min_}, {max_}).")
     return (val - min_) / (max_ - min_)

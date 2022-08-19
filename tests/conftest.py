@@ -13,7 +13,10 @@ def _patch_plotly_show() -> None:
     from plotly.io._utils import validate_coerce_fig_to_dict  # noqa
 
     def wrapped(
-        fig: Union[Figure, dict], renderer: str = None, validate: bool = True, **kwargs: Dict[str, Any]
+        fig: Union[Figure, dict],
+        renderer: str = None,
+        validate: bool = True,
+        **kwargs: Dict[str, Any],
     ) -> None:
         validate_coerce_fig_to_dict(fig, validate)
 

@@ -63,7 +63,8 @@ def _any_to_rgb(color: Union[str, tuple]) -> str:
         rgb = str(color)
     else:
         raise ValueError(
-            f"color should be a tuple or a str representation of a hex or rgb color, got {color!r} instead."
+            f"color should be a tuple or a str representation "
+            f"of a hex or rgb color, got {color!r} instead."
         )
     validate_colors(rgb)
     return rgb

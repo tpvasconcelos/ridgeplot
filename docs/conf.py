@@ -51,7 +51,13 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "**.ipynb_checkpoints", "*/autosummary/*.rst", "Thumbs.db", ".DS_Store"]
+exclude_patterns = [
+    "_build",
+    "**.ipynb_checkpoints",
+    "*/autosummary/*.rst",
+    "Thumbs.db",
+    ".DS_Store",
+]
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -133,9 +139,8 @@ myst_enable_extensions = [
     "substitution",
 ]
 myst_dmath_double_inline = True
-myst_heading_anchors = (
-    2  # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html#auto-generated-header-anchors
-)
+# https://myst-parser.readthedocs.io/en/latest/syntax/optional.html#auto-generated-header-anchors
+myst_heading_anchors = 2
 myst_substitutions = {"some_jinja2_key": "value"}
 
 from jinja2.defaults import DEFAULT_NAMESPACE  # noqa: E402
