@@ -69,29 +69,21 @@ If you need to use jupyter-lab, you can install all extra requirements, as well 
 environment and jupyter kernel with
 
 ```shell
-make init-jupyter
-```
-
-**Bonus:** If you need to
-use [plotly inside a jupyter-lab](https://plotly.com/python/getting-started/#jupyterlab-support)
-notebook, just run
-
-```shell
-make jupyter-plotly
+make jupyter-init
 ```
 
 ## Pull Request Workflow
 
 1. Always confirm that you have properly configured your Git username and email.
    ```shell
-   git config --global user.name 'Your real name'
+   git config --global user.name 'Your name'
    git config --global user.email 'Your email address'
    ```
 2. Each release series has its own branch (i.e. `MAJOR.MINOR.x`). If submitting a documentation or
    bug fix contribution, branch off of the latest release series branch.
    ```shell
    git fetch origin
-   git checkout -b <YOUR-BRANCH-NAME> origin/2.0.x
+   git checkout -b <YOUR-BRANCH-NAME> origin/x.x.x
    ```
    Otherwise, if submitting a new feature or API change, branch off of the "master" branch
    ```shell

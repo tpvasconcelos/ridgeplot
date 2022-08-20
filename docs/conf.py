@@ -69,7 +69,7 @@ html_title = project_name
 html_short_title = project_name
 
 html_favicon = "_static/favicon.ico"  # 32x32 pixel .ico file
-# html_logo = "_static/images/logo.svg"
+html_logo = "_static/img/logo-wide.png"
 html_sourcelink_suffix = ""
 html_last_updated_fmt = ""
 
@@ -85,7 +85,7 @@ html_theme_options = {
     "use_repository_button": True,
     "use_download_button": True,
     "show_toc_level": 2,
-    # "logo_only": True,
+    "logo_only": True,
     # "launch_buttons": {
     #     "binderhub_url": "https://mybinder.org",
     #     "colab_url": "https://colab.research.google.com/",
