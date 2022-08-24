@@ -23,6 +23,22 @@ repos:
       - id: trailing-whitespace
         exclude: .bumpversion.cfg
 
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.15
+    hooks:
+      - id: mdformat
+        additional_dependencies:
+          - mdformat-beautysh
+          - mdformat-black
+          - mdformat-config
+          - mdformat-web
+          - mdformat-gfm
+          - mdformat-myst
+          - mdformat-tables
+          - mdformat-toc
+          - mdformat-frontmatter
+          - mdformat-deflist
+
   - repo: https://github.com/mgedmin/check-manifest
     rev: "0.48"
     hooks:
