@@ -17,7 +17,7 @@
   <a href="https://www.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpvasconcelos/ridgeplot&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021" alt="Codacy code quality"/></a>
 </p>
 
----
+______________________________________________________________________
 
 The `ridgeplot` python library aims at providing a simple API for plotting beautiful
 [ridgeline plots](https://www.data-to-viz.com/graph/ridgeline.html) within the extensive
@@ -33,25 +33,28 @@ Bumper stickers:
 </p>
 
 ```{toctree}
-:caption: Getting started
-:maxdepth: 1
-
+---
+caption: Getting started
+maxdepth: 1
+---
 installation
 getting_started
 ```
 
 ```{toctree}
-:caption: Reference
-:maxdepth: 1
-
+---
+caption: Reference
+maxdepth: 1
+---
 reference/api
 reference/changelog
 reference/alternatives
 ```
 
 ```{toctree}
-:caption: Development
-:maxdepth: 1
-
+---
+caption: Development
+maxdepth: 1
+---
 development/contributing
 ```
