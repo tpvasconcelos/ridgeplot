@@ -11,7 +11,7 @@ build==0.8.0
     # via -r requirements/release.in
 certifi==2022.6.15
     # via requests
-charset-normalizer==2.1.0
+charset-normalizer==2.1.1
     # via requests
 commonmark==0.9.1
     # via rich
@@ -21,12 +21,14 @@ idna==3.3
     # via requests
 importlib-metadata==4.12.0
     # via
-    #   build
     #   keyring
-    #   pep517
     #   twine
-keyring==23.8.2
+jaraco-classes==3.2.2
+    # via keyring
+keyring==23.9.1
     # via twine
+more-itertools==8.14.0
+    # via jaraco-classes
 packaging==21.3
     # via build
 pep517==0.13.0
@@ -39,7 +41,7 @@ pygments==2.13.0
     #   rich
 pyparsing==3.0.9
     # via packaging
-readme-renderer==36.0
+readme-renderer==37.1
     # via twine
 requests==2.28.1
     # via
@@ -60,16 +62,12 @@ tomli==2.0.1
 twine==4.0.1
     # via -r requirements/release.in
 typing-extensions==4.3.0
-    # via
-    #   importlib-metadata
-    #   rich
-urllib3==1.26.11
+    # via rich
+urllib3==1.26.12
     # via
     #   requests
     #   twine
 webencodings==0.5.1
     # via bleach
 zipp==3.8.1
-    # via
-    #   importlib-metadata
-    #   pep517
+    # via importlib-metadata

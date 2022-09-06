@@ -7,16 +7,12 @@
 #
 cfgv==3.3.1
     # via pre-commit
-distlib==0.3.5
+distlib==0.3.6
     # via virtualenv
 filelock==3.8.0
     # via virtualenv
-identify==2.5.3
+identify==2.5.5
     # via pre-commit
-importlib-metadata==4.12.0
-    # via
-    #   pre-commit
-    #   virtualenv
 nodeenv==1.7.0
     # via pre-commit
 platformdirs==2.5.2
@@ -27,12 +23,8 @@ pyyaml==6.0
     # via pre-commit
 toml==0.10.2
     # via pre-commit
-typing-extensions==4.3.0
-    # via importlib-metadata
-virtualenv==20.16.3
+virtualenv==20.16.4
     # via pre-commit
-zipp==3.8.1
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

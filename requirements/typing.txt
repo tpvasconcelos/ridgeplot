@@ -12,9 +12,11 @@ mypy==0.971
     # via -r requirements/typing.in
 mypy-extensions==0.4.3
     # via mypy
-pandas-stubs==1.2.0.62
+pandas-stubs==1.4.4.220906
     # via -r requirements/typing.in
-typed-ast==1.5.4
-    # via mypy
 types-pytz==2022.2.1.0
-    # via -r requirements/typing.in
+    # via
+    #   -r requirements/typing.in
+    #   pandas-stubs
+typing-extensions==4.3.0
+    # via mypy
