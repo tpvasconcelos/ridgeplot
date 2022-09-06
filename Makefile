@@ -36,7 +36,7 @@ help:
 # ==============================================================
 
 .PHONY: init
-init: clean-all local-dev-deps ## initialise development environment
+init: clean-all install ## initialise development environment
 	@echo "==> Initialised development environment!"
 
 
@@ -48,8 +48,8 @@ init: clean-all local-dev-deps ## initialise development environment
 	@$(VENV_BIN)/python -m pip install --upgrade pip setuptools wheel
 
 
-.PHONY: local-dev-deps
-local-dev-deps: .venv ## install all local development dependencies
+.PHONY: install
+install: .venv ## install all local development dependencies
 	@echo "==> Installing local development requirements..."
 	@$(VENV_BIN)/python -m pip install -r requirements/local-dev.txt
 	@echo "==> Installing pre-commit hooks..."
