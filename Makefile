@@ -2,7 +2,7 @@
 # >>>  Variables
 # ==============================================================
 
-BASE_PYTHON ?= python3.7
+BASE_PYTHON ?= python3.8
 
 VENV_PATH = .venv
 VENV_BIN = $(VENV_PATH)/bin
@@ -36,29 +36,29 @@ help:
 # ==============================================================
 
 .PHONY: init
-init: clean-all .venv install ## initialise development environment
-	@echo "Initialised development environment!"
+init: clean-all install ## initialise development environment
+	@echo "==> Initialised development environment!"
 
 
 .venv: ## create a virtual environment
-	@echo "Creating local virtual environment under: $(VENV_PATH)"
+	@echo "==> Creating local virtual environment under: $(VENV_PATH)/"
 	@$(BASE_PYTHON) -m pip install --upgrade pip
 	@$(BASE_PYTHON) -m venv "$(VENV_PATH)"
+	@echo "==> Installing and/or upgrading python build packages..."
+	@$(VENV_BIN)/python -m pip install --upgrade pip setuptools wheel
 
 
 .PHONY: install
-install: ## install all development requirements
-	@echo "Installing and/or upgrading python build packages..."
-	@$(VENV_BIN)/python -m pip install --upgrade pip setuptools wheel
-	@echo "Installing local development requirements..."
+install: .venv ## install all local development dependencies
+	@echo "==> Installing local development requirements..."
 	@$(VENV_BIN)/python -m pip install -r requirements/local-dev.txt
-	@echo "Installing pre-commit hooks..."
-	@$(VENV_BIN)/pre-commit install --install-hooks --overwrite
+	@echo "==> Installing pre-commit hooks..."
+	@$(VENV_BIN)/pre-commit install --install-hooks
 
 
 .PHONY: init-jupyter
 jupyter-init: ## initialise a jupyterlab environment and install extensions
-	@echo "Setting up jupyterlab environment..."
+	@echo "==> Setting up jupyterlab environment..."
 	@$(VENV_BIN)/python -m pip install --upgrade ipykernel jupyterlab
 	@$(VENV_BIN)/python -m ipykernel install --user --name="ridgeplot"
 	@$(VENV_BIN)/python -m jupyter lab build
@@ -70,12 +70,12 @@ jupyter-init: ## initialise a jupyterlab environment and install extensions
 
 .PHONY: clean-all
 clean-all: clean-ci clean-venv clean-build clean-pyc ## remove all artifacts
-	@echo "Removed all artifacts!"
+	@echo "==> Removed all artifacts!"
 
 
 .PHONY: clean-build
 clean-build: ## remove build artifacts
-	@echo "Removing build artifacts..."
+	@echo "==> Removing build artifacts..."
 	@rm -fr build/
 	@rm -fr dist/
 	@rm -fr .eggs/
@@ -85,7 +85,7 @@ clean-build: ## remove build artifacts
 
 .PHONY: clean-pyc
 clean-pyc: ## remove Python file artifacts
-	@echo "Removing python file artifacts..."
+	@echo "==> Removing python file artifacts..."
 	@find . -name '*.pyc' -exec rm -f {} +
 	@find . -name '*.pyo' -exec rm -f {} +
 	@find . -name '*~' -exec rm -f {} +
@@ -94,7 +94,7 @@ clean-pyc: ## remove Python file artifacts
 
 .PHONY: clean-ci
 clean-ci: ## remove linting, testing, and coverage artifacts
-	@echo "Removing lint, test, and coverage artifacts..."
+	@echo "==> Removing lint, test, and coverage artifacts..."
 	@rm -fr .tox/
 	@rm -fr .pytest_cache
 	@rm -fr .mypy_cache/
@@ -104,5 +104,5 @@ clean-ci: ## remove linting, testing, and coverage artifacts
 
 .PHONY: clean-venv
 clean-venv: ## remove venv artifacts
-	@echo "Removing virtual environment..."
+	@echo "==> Removing virtual environment..."
 	@rm -fr .venv

@@ -14,18 +14,12 @@ appdirs==1.4.4
     # via ptpython
 backcall==0.2.0
     # via ipython
-beniget==0.4.1
-    # via pythran
 bump2version==1.0.1
     # via bumpversion
 bumpversion==0.6.0
     # via -r requirements/local-dev.in
 decorator==5.1.1
     # via ipython
-gast==0.5.3
-    # via
-    #   beniget
-    #   pythran
 ipython==7.34.0
     # via -r requirements/local-dev.in
 jedi==0.18.1
@@ -38,7 +32,6 @@ numpy==1.21.6
     # via
     #   pandas
     #   patsy
-    #   pythran
     #   ridgeplot
     #   scipy
     #   statsmodels
@@ -56,8 +49,6 @@ pipdeptree==2.3.0
     # via -r requirements/local-dev.in
 plotly==5.10.0
     # via ridgeplot
-ply==3.11
-    # via pythran
 prompt-toolkit==3.0.31
     # via
     #   ipython
@@ -72,8 +63,6 @@ pygments==2.13.0
     #   ptpython
 python-dateutil==2.8.2
     # via pandas
-pythran==0.11.0
-    # via ridgeplot
 pytz==2022.2.1
     # via pandas
 scipy==1.7.3
