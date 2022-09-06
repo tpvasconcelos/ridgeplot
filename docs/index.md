@@ -1,3 +1,7 @@
+---
+title: beautiful ridgeline plots in Python
+---
+
 <h1 id="ridgeplot" align="center">
   ridgeplot: beautiful ridgeline plots in Python
 </h1>
