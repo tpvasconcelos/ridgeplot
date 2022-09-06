@@ -3,8 +3,7 @@ name: Upgrade and Lock Dependencies
 on:
   workflow_dispatch:
   schedule:
-    # “At 00:00 on Monday.”
-    - cron: '0 0 * * 1'
+    - cron: '0 0 * * 1'  # every Monday at midnight
 
 jobs:
   workflow:
