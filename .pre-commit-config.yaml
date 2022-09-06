@@ -24,20 +24,13 @@ repos:
         exclude: .bumpversion.cfg
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.15
+    rev: 0.7.16
     hooks:
       - id: mdformat
+        files: '^docs/.*\.md$'
         additional_dependencies:
-          - mdformat-beautysh
-          - mdformat-black
-          - mdformat-config
-          - mdformat-web
           - mdformat-gfm
           - mdformat-myst
-          - mdformat-tables
-          - mdformat-toc
-          - mdformat-frontmatter
-          - mdformat-deflist
 
   - repo: https://github.com/mgedmin/check-manifest
     rev: "0.48"
@@ -58,7 +51,7 @@ repos:
       - id: pip-compile-multi-verify
 
   - repo: https://github.com/psf/black
-    rev: 22.6.0
+    rev: 22.8.0
     hooks:
       - id: black
 
