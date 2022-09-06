@@ -2,6 +2,7 @@
 include .bumpversion.cfg
 include .coveragerc
 include .editorconfig
+include .mdformat.toml
 include .pre-commit-config.yaml
 include .readthedocs.yaml
 include Makefile

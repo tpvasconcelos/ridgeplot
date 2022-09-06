@@ -31,8 +31,8 @@ fig.show()
 In this example, we will be replicating the first ridgeline plot example in
 [this _from Data to Viz_ post](https://www.data-to-viz.com/graph/ridgeline.html), which uses the
 _probly_ dataset. You can find the _plobly_ dataset on multiple sources like in the
-[bokeh](https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv)
-python interactive visualization library. I'll be using the
+[bokeh](https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv) python
+interactive visualization library. I'll be using the
 [same source](https://raw.githubusercontent.com/zonination/perceptions/master/probly.csv) used in
 the original post.
 
