@@ -69,7 +69,7 @@ If you need to use jupyter-lab, you can install all extra requirements, as well 
 environment and jupyter kernel with
 
 ```shell
-make jupyter-init
+make init-jupyter
 ```
 
 ## Pull Request Workflow
