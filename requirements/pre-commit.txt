@@ -29,7 +29,7 @@ toml==0.10.2
     # via pre-commit
 typing-extensions==4.3.0
     # via importlib-metadata
-virtualenv==20.16.4
+virtualenv==20.16.5
     # via pre-commit
 zipp==3.8.1
     # via importlib-metadata
