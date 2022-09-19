@@ -89,7 +89,7 @@ make init-jupyter
    git checkout -b <YOUR-BRANCH-NAME> origin/x.x.x
    ```
 
-   Otherwise, if submitting a new feature or API change, branch off of the "master" branch
+   Otherwise, if submitting a new feature or API change, branch off of the `main` branch
 
    ```shell
    git fetch origin
@@ -268,10 +268,10 @@ here for reference only.
 2. Submit a pull request with these changes only and use the
    `"Cleanup release notes for X.X.X release"` template for the pull request title. ridgeplot uses
    the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`) versioning standard. You can determine
-   the latest release version by running `git describe --tags --abbrev=0` on the master branch.
+   the latest release version by running `git describe --tags --abbrev=0` on the `main` branch.
    Based on this, you can determine the next release version by incrementing the MAJOR, MINOR, or
    PATCH. More on this on the next section. For now, just make sure you merge this pull request into
-   the master branch before continuing.
+   the `main` branch before continuing.
 3. Use the [bumpversion](https://github.com/peritus/bumpversion) utility to bump the current
    version. This utility will automatically bump the current version, and issue a relevant commit
    and git tag. E.g.,
@@ -295,7 +295,7 @@ here for reference only.
    ```
 5. At this point a couple of GitHub Actions workflows will be triggered:
    1. `.github/workflows/ci.yaml`: Runs all CI checks with Tox against the new changes pushed to
-      master.
+      `main`.
    2. `.github/workflows/release.yaml`: Issues a new GitHub release triggered by the new git tag
       pushed in the previous step.
    3. `.github/workflows/publish-pypi.yaml`: Builds, packages, and uploads the source and wheel
@@ -315,4 +315,4 @@ here for reference only.
 ## Code of Conduct
 
 Please remember to read and follow our
-[Code of Conduct](https://github.com/tpvasconcelos/ridgeplot/blob/master/CODE_OF_CONDUCT.md). 🤝
+[Code of Conduct](https://github.com/tpvasconcelos/ridgeplot/blob/main/CODE_OF_CONDUCT.md). 🤝

@@ -27,7 +27,7 @@ Unreleased changes
 ------
 
 - 🔧 Automate the release process. See .github/workflows/release.yaml, which issues a new GitHub
-  release whenever a new git tag is pushed to the master branch by extracting the release notes from
+  release whenever a new git tag is pushed to the main branch by extracting the release notes from
   the changelog.
 - 🔧 Fix automated release process to PyPI.
   ([#27](https://github.com/tpvasconcelos/ridgeplot/pull/27))

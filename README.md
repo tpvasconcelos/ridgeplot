@@ -12,11 +12,11 @@
   <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/v/ridgeplot" alt="PyPI - Latest Release"></a>
   <a href="https://github.com/tpvasconcelos/ridgeplot/"><img src="https://img.shields.io/pypi/pyversions/ridgeplot" alt="PyPI - Python Versions"></a>
   <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/status/ridgeplot.svg" alt="PyPI - Package Status"></a>
-  <a href="https://github.com/tpvasconcelos/ridgeplot/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/ridgeplot" alt="PyPI - License"></a>
+  <a href="https://github.com/tpvasconcelos/ridgeplot/blob/main/LICENSE"><img src="https://img.shields.io/pypi/l/ridgeplot" alt="PyPI - License"></a>
   <br>
   <a href="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/"><img src="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/badge.svg" alt="GitHub CI"></a>
   <a href="https://ridgeplot.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/ridgeplot/badge/?version=latest&style=flat" alt="Docs"></a>
-  <a href="https://codecov.io/gh/tpvasconcelos/ridgeplot"><img src="https://codecov.io/gh/tpvasconcelos/ridgeplot/branch/master/graph/badge.svg" alt="codecov"></a>
+  <a href="https://codecov.io/gh/tpvasconcelos/ridgeplot"><img src="https://codecov.io/gh/tpvasconcelos/ridgeplot/branch/main/graph/badge.svg" alt="codecov"></a>
   <a href="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot"><img src="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge" alt="CodeFactor"></a>
   <a href="https://www.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpvasconcelos/ridgeplot&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021" alt="Codacy code quality"/></a>
 </p>
