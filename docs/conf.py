@@ -147,7 +147,7 @@ from jinja2.defaults import DEFAULT_NAMESPACE  # noqa: E402
 
 DEFAULT_NAMESPACE.update(
     {
-        "repo_file": lambda file_name: f"[{file_name}]({repo_url}/blob/master/{file_name})",
-        "repo_dir": lambda dir_name: f"[{dir_name}]({repo_url}/tree/master/{dir_name})",
+        "repo_file": lambda file_name: f"[{file_name}]({repo_url}/blob/main/{file_name})",
+        "repo_dir": lambda dir_name: f"[{dir_name}]({repo_url}/tree/main/{dir_name})",
     },
 )
