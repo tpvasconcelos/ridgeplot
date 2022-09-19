@@ -71,7 +71,7 @@ statsmodels==0.13.2
     # via ridgeplot
 tenacity==8.0.1
     # via plotly
-traitlets==5.3.0
+traitlets==5.4.0
     # via
     #   ipython
     #   matplotlib-inline
