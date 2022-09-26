@@ -69,7 +69,7 @@ scipy==1.7.3
     # via statsmodels
 statsmodels==0.13.2
     # via ridgeplot
-tenacity==8.0.1
+tenacity==8.1.0
     # via plotly
 traitlets==5.4.0
     # via
