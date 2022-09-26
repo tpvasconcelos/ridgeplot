@@ -58,7 +58,7 @@ six==1.16.0
     #   python-dateutil
 statsmodels==0.13.2
     # via ridgeplot
-tenacity==8.0.1
+tenacity==8.1.0
     # via plotly
 tomli==2.0.1
     # via
