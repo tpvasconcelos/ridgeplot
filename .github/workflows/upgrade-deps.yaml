@@ -40,7 +40,7 @@ jobs:
           if-no-files-found: error
       - name: List requirements directory
         if: always()
-        run: ls -l -a requirements/
+        run: ls -l requirements/
 
   create-pull-request:
     needs: upgrade-deps
@@ -48,14 +48,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: List requirements directory
-        run: ls -l -a requirements/
+        run: ls -l requirements/
       - uses: actions/download-artifact@v3
         with:
           name: ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}-requirements
           path: requirements/
       - name: List requirements directory
         if: always()
-        run: ls -l -a requirements/
+        run: ls -l requirements/
       - name: Print git diff
         if: always()
         run: git diff
