@@ -26,11 +26,7 @@ jobs:
         id: setup-python
         with:
           python-version: "${{ matrix.python-version }}"
-          # TODO: Revert this
-          # requirements-prefix: tox
-      # TODO: Revert this
-      - name: Install tox
-        run: python -m pip install tox
+          requirements-prefix: tox
       - name: Upgrade and lock dependencies
         run: ./scripts/tox -e upgrade-deps
       - uses: actions/upload-artifact@v3
