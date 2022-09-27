@@ -32,7 +32,7 @@ jobs:
       - name: Install tox
         run: python -m pip install tox
       - name: Upgrade and lock dependencies
-        run: ./scripts/tox -e upgrade-deps
+        run: python scripts/tox -e upgrade-deps
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}-requirements
