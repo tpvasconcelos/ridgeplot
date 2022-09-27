@@ -1,8 +1,0 @@
-# Requirements to manage, upgrade, and compile development dependencies
-
-# We use pre-commit autoupdate to upgrade the pre-commit dependencies.
--r pre-commit.in
-
-# pip-compile-multi is a wrapper around pip-compile that can be used to
-# upgrade and compile multiple requirements files at once.
-pip-compile-multi
