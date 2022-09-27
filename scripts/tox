@@ -8,10 +8,11 @@ ANSI_RED = "\033[31m"
 ANSI_RESET = "\033[0m"
 
 
-def _exit(exit_code: int) -> None:
-    cmd_original = " ".join(sys.argv)
-    msg = f"{cmd_original!r} failed with exit code {exit_code}"
-    print(f"{ANSI_RED}{msg}{ANSI_RESET}", file=sys.stderr)
+def _exit(exit_code: int, print_err_message: bool = True) -> None:
+    if print_err_message:
+        cmd_original = " ".join(sys.argv)
+        msg = f"{cmd_original!r} failed with exit code {exit_code}"
+        print(f"{ANSI_RED}{msg}{ANSI_RESET}", file=sys.stderr)
     sys.exit(exit_code)
 
 
@@ -29,7 +30,7 @@ def main() -> None:
     print(f"Running {cmd_string!r}")
 
     try:
-        subprocess.run(popen_args, capture_output=False, check=True)
+        subprocess.run(popen_args, check=True)
     except subprocess.CalledProcessError as exc:
         _exit(exc.returncode)
 
