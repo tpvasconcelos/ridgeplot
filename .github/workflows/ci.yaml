@@ -28,7 +28,7 @@ jobs:
           python-version: "${{ matrix.python-version }}"
           requirements-prefix: tox
       - name: Run CI checks with Tox
-        run: ./scripts/tox
+        run: python scripts/tox
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v2
         env:
