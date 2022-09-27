@@ -49,7 +49,7 @@ repos:
     rev: v2.4.6
     hooks:
       - id: pip-compile-multi-verify
-
+        args: [ "--out-ext", "38-darwin.txt" ]
   - repo: https://github.com/psf/black
     rev: 22.8.0
     hooks:
