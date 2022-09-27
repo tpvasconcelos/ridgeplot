@@ -10,6 +10,14 @@ inputs:
     description: "Prefix for requirements file (e.g. 'docs', 'release', 'tests', 'typing', etc.)"
     required: false
 
+outputs:
+  sys_platform:
+    description: "sys_platform environment marker"
+    value: ${{ steps.env_markers.outputs.sys_platform }}
+  python_version:
+    description: "python_version environment marker"
+    value: ${{ steps.env_markers.outputs.python_version }}
+
 runs:
   using: composite
   steps:
