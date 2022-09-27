@@ -102,7 +102,7 @@ mdurl==0.1.2
     # via markdown-it-py
 myst-nb==0.16.0
     # via -r requirements/docs.in
-myst-parser==0.18.0
+myst-parser==0.18.1
     # via myst-nb
 nbclient==0.5.13
     # via
