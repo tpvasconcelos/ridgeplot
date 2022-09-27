@@ -35,4 +35,4 @@ runs:
       shell: bash
       run: |
         python -m pip install -r \
-            "requirements/${{ inputs.requirements-prefix }}.{{ steps.env_markers.outputs.python_version }}-{{ steps.env_markers.outputs.sys_platform }}.txt"
+            "requirements/${{ inputs.requirements-prefix }}.${{ steps.env_markers.outputs.python_version }}-${{ steps.env_markers.outputs.sys_platform }}.txt"
