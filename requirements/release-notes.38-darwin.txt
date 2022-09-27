@@ -17,10 +17,5 @@ mdurl==0.1.2
     # via markdown-it-py
 tomli==2.0.1
     # via mdformat
-typing-extensions==4.3.0
-    # via
-    #   importlib-metadata
-    #   markdown-it-py
-    #   mdformat
 zipp==3.8.1
     # via importlib-metadata

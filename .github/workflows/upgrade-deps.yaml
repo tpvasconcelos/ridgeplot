@@ -6,16 +6,43 @@ on:
     - cron: '0 0 * * 1'  # every Monday at midnight
 
 jobs:
-  workflow:
-    runs-on: ubuntu-latest
+  upgrade-deps:
+    strategy:
+      matrix:
+        python-version:
+          - "3.7"
+          - "3.8"
+          - "3.9"
+          - "3.10"
+        os:
+          - "ubuntu-latest"
+          - "macos-latest"
+          - "windows-latest"
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-python
+        id: setup-python
         with:
-          python-version: "3.7"
-          requirements-path: requirements/tox.txt
+          python-version: "${{ matrix.python-version }}"
+          requirements-prefix: tox
       - name: Upgrade and lock dependencies
-        run: tox -e upgrade-deps
+        run: ./scripts/tox -e upgrade-deps
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}-requirements
+          path: requirements/
+
+  open-pull-request:
+    needs: upgrade-deps
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}-requirements
+          path: requirements/
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:

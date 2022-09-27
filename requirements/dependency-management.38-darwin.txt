@@ -5,7 +5,7 @@
 #
 #    pip-compile-multi
 #
--r pre-commit.txt
+-r pre-commit.38-darwin.txt
 build==0.8.0
     # via pip-tools
 click==8.1.3

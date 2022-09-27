@@ -13,12 +13,12 @@ jobs:
       - uses: ./.github/actions/setup-python
         with:
           python-version: "3.7"
-          requirements-path: requirements/tox.txt
+          requirements-prefix: tox
       - name: Package and upload a release to test PyPI
         env:
           TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN_TEST }}"
-        run: tox -e build,publish-pypi-test
+        run: ./scripts/tox -e build,publish-pypi-test
       - name: Package and upload a release prod PyPI
         env:
           TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN }}"
-        run: tox -e build,publish-pypi
+        run: ./scripts/tox -e build,publish-pypi
