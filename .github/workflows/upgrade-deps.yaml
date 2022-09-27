@@ -37,16 +37,28 @@ jobs:
         with:
           name: ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}-requirements
           path: requirements/*.${{ steps.setup-python.outputs.python_version }}-${{ steps.setup-python.outputs.sys_platform }}.txt"
+          if-no-files-found: error
+      - name: List requirements directory
+        if: always()
+        run: ls -la requirements/
 
   create-pull-request:
     needs: upgrade-deps
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: List requirements directory
+        run: ls -la requirements/
       - uses: actions/download-artifact@v3
         with:
           name: ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}-requirements
           path: requirements/
+      - name: List requirements directory
+        if: always()
+        run: ls -la requirements/
+      - name: Print git diff
+        if: always()
+        run: git diff
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
