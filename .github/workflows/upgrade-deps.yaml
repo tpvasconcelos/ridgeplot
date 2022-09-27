@@ -38,7 +38,7 @@ jobs:
           name: ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}-requirements
           path: requirements/*.${{ steps.setup-python.outputs.python_version }}-${{ steps.setup-python.outputs.sys_platform }}.txt"
 
-  open-pull-request:
+  create-pull-request:
     needs: upgrade-deps
     runs-on: ubuntu-latest
     steps:
