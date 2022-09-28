@@ -54,7 +54,7 @@ init: clean-all install ## initialise development environment
 .PHONY: install
 install: .venv ## install all local development dependencies
 	@echo "==> Installing local development requirements..."
-	@$(VENV_BIN)/python -m pip install -r requirements/local-dev.$(PY_PYTHON_VERSION)-$(PY_SYS_PLATFORM).txt
+	@$(VENV_BIN)/python -m pip install -r requirements/locked/local-dev.$(PY_PYTHON_VERSION)-$(PY_SYS_PLATFORM).txt
 	@echo "==> Installing pre-commit hooks..."
 	@$(VENV_BIN)/pre-commit install --install-hooks
 

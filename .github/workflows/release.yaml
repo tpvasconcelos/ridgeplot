@@ -15,7 +15,7 @@ jobs:
           python-version: "3.7"
           requirements-prefix: tox
       - name: Generate release notes
-        run: ./scripts/tox -e release-notes
+        run: ./bin/tox -e release-notes
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:

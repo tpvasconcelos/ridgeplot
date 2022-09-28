@@ -19,7 +19,7 @@ repos:
       - id: end-of-file-fixer
       - id: fix-byte-order-marker
       - id: pretty-format-json
-        args: [ '--autofix' ]
+        args: [ --autofix ]
       - id: trailing-whitespace
         exclude: .bumpversion.cfg
 
@@ -45,11 +45,13 @@ repos:
         args: [ --py36-plus, --keep-runtime-typing ]
         description: Automatically upgrade syntax for newer versions of the python language.
 
-  - repo: https://github.com/peterdemin/pip-compile-multi
-    rev: v2.4.6
-    hooks:
-      - id: pip-compile-multi-verify
-        args: [ "--in-ext", "in", "--out-ext", "38-darwin.txt" ]
+  # TODO: Add this back in once we can reconcile the different locked files into a single one
+  # - repo: https://github.com/peterdemin/pip-compile-multi
+  #   rev: v2.4.6
+  #   hooks:
+  #     - id: pip-compile-multi-verify
+  #       args: [ --out-ext, 38-darwin.txt ]
+
   - repo: https://github.com/psf/black
     rev: 22.8.0
     hooks:

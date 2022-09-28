@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+import subprocess
+import sys
+
+ANSI_RED = "\033[31m"
+ANSI_RESET = "\033[0m"
+
+
+def _set_env_markers() -> None:
+    import os
+    import platform
+    import sys
+
+    env_markers = (
+        ("PY_PYTHON_VERSION", "".join(platform.python_version_tuple()[:2])),
+        ("PY_SYS_PLATFORM", sys.platform),
+    )
+    for name, value in env_markers:
+        if name in os.environ:
+            print(f"Not setting {name} to {value!r}, as it is already set to {os.environ[name]!r}")
+            continue
+        print(f"Setting {name} to {value!r}")
+        os.environ[name] = value
+
+
+def _exit(exit_code: int, print_err_message: bool = True) -> None:
+    if print_err_message:
+        cmd_original = " ".join(sys.argv)
+        msg = f"{cmd_original!r} failed with exit code {exit_code}"
+        print(f"{ANSI_RED}{msg}{ANSI_RESET}", file=sys.stderr)
+    sys.exit(exit_code)
+
+
+def main() -> None:
+    _set_env_markers()
+
+    popen_args = ["tox", *sys.argv[1:]]
+    cmd_string = " ".join(popen_args)
+    print(f"Running: {cmd_string}")
+    try:
+        subprocess.run(popen_args, check=True)
+    except subprocess.CalledProcessError as exc:
+        _exit(exc.returncode)
+
+
+if __name__ == "__main__":
+    main()
