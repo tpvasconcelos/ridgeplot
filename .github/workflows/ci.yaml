@@ -29,7 +29,7 @@ jobs:
           requirements-prefix: tox
       - name: Run CI checks with Tox
         shell: bash
-        run: ./scripts/tox
+        run: ./bin/tox
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v2
         env:

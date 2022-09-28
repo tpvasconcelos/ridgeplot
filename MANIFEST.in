@@ -27,6 +27,7 @@ recursive-include docs *.md *.py
 prune docs/build
 
 # Misc
+include bin/tox
 recursive-include .github *.yaml
 recursive-include examples *.py *.ipynb
 recursive-include misc *.py *.ipynb

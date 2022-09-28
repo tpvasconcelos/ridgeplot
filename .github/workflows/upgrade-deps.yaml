@@ -33,16 +33,16 @@ jobs:
         run: python -m pip install tox
       - name: Upgrade and lock dependencies
         shell: bash
-        run: ./scripts/tox -e upgrade-deps
+        run: ./bin/tox -e upgrade-deps
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}-requirements
-          path: requirements/*.${{ steps.setup-python.outputs.python_version }}-${{ steps.setup-python.outputs.sys_platform }}.txt
+          path: requirements/locked/*.${{ steps.setup-python.outputs.python_version }}-${{ steps.setup-python.outputs.sys_platform }}.txt
           if-no-files-found: error
       - name: List requirements directory
         if: always()
         shell: bash
-        run: ls -la requirements/
+        run: ls -la requirements/locked/
 
   create-pull-request:
     needs: upgrade-deps
@@ -51,15 +51,15 @@ jobs:
       - uses: actions/checkout@v3
       - name: List requirements directory
         shell: bash
-        run: ls -la requirements/
+        run: ls -la requirements/locked/
       - uses: actions/download-artifact@v3
         with:
           name: ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}-requirements
-          path: requirements/
+          path: requirements/locked/
       - name: List requirements directory
         if: always()
         shell: bash
-        run: ls -la requirements/
+        run: ls -la requirements/locked/
       - name: Print git diff
         if: always()
         run: git diff
