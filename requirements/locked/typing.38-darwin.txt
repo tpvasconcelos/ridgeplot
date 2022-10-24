@@ -8,15 +8,15 @@
 -r tests.38-darwin.txt
 -e file:.
     # via -r requirements/tests.in
-mypy==0.981
+mypy==0.982
     # via -r requirements/typing.in
 mypy-extensions==0.4.3
     # via mypy
-pandas-stubs==1.5.0.220926
+pandas-stubs==1.5.0.221012
     # via -r requirements/typing.in
-types-pytz==2022.2.1.0
+types-pytz==2022.5.0.0
     # via
     #   -r requirements/typing.in
     #   pandas-stubs
-typing-extensions==4.3.0
+typing-extensions==4.4.0
     # via mypy

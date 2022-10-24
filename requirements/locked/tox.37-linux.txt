@@ -11,7 +11,7 @@ filelock==3.8.0
     # via
     #   tox
     #   virtualenv
-importlib-metadata==4.12.0
+importlib-metadata==5.0.0
     # via
     #   pluggy
     #   tox
@@ -32,9 +32,9 @@ tomli==2.0.1
     # via tox
 tox==3.26.0
     # via -r requirements/tox.in
-typing-extensions==4.3.0
+typing-extensions==4.4.0
     # via importlib-metadata
 virtualenv==20.16.5
     # via tox
-zipp==3.8.1
+zipp==3.10.0
     # via importlib-metadata
