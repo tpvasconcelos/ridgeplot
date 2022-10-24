@@ -45,24 +45,24 @@ docutils==0.17.1
     #   sphinx-togglebutton
 entrypoints==0.4
     # via jupyter-client
-executing==1.1.0
+executing==1.1.1
     # via stack-data
 fastjsonschema==2.16.2
     # via nbformat
-greenlet==1.1.3
+greenlet==1.1.3.post0
     # via sqlalchemy
 idna==3.4
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==4.12.0
+importlib-metadata==5.0.0
     # via
     #   jupyter-cache
     #   myst-nb
     #   sphinx
-importlib-resources==5.9.0
+importlib-resources==5.10.0
     # via jsonschema
-ipykernel==6.16.0
+ipykernel==6.16.1
     # via myst-nb
 ipython==8.5.0
     # via
@@ -80,11 +80,11 @@ jsonschema==4.16.0
     # via nbformat
 jupyter-cache==0.5.0
     # via myst-nb
-jupyter-client==7.3.5
+jupyter-client==7.4.3
     # via
     #   ipykernel
     #   nbclient
-jupyter-core==4.11.1
+jupyter-core==4.11.2
     # via
     #   jupyter-client
     #   nbformat
@@ -104,7 +104,7 @@ mdit-py-plugins==0.3.1
     # via myst-parser
 mdurl==0.1.2
     # via markdown-it-py
-myst-nb==0.16.0
+myst-nb==0.17.1
     # via -r requirements\docs.in
 myst-parser==0.18.1
     # via myst-nb
@@ -112,24 +112,24 @@ nbclient==0.5.13
     # via
     #   jupyter-cache
     #   myst-nb
-nbformat==5.6.1
+nbformat==5.7.0
     # via
     #   jupyter-cache
     #   myst-nb
     #   nbclient
-nest-asyncio==1.5.5
+nest-asyncio==1.5.6
     # via
     #   ipykernel
     #   jupyter-client
     #   nbclient
-numpy==1.23.3
+numpy==1.23.4
     # via
     #   pandas
     #   patsy
     #   ridgeplot
     #   scipy
     #   statsmodels
-numpydoc==1.4.0
+numpydoc==1.5.0
     # via -r requirements\docs.in
 packaging==21.3
     # via
@@ -137,11 +137,11 @@ packaging==21.3
     #   pydata-sphinx-theme
     #   sphinx
     #   statsmodels
-pandas==1.5.0
+pandas==1.5.1
     # via statsmodels
 parso==0.8.3
     # via jedi
-patsy==0.5.2
+patsy==0.5.3
     # via statsmodels
 pickleshare==0.7.5
     # via ipython
@@ -151,7 +151,7 @@ plotly==5.10.0
     # via ridgeplot
 prompt-toolkit==3.0.31
     # via ipython
-psutil==5.9.2
+psutil==5.9.3
     # via ipykernel
 pure-eval==0.2.2
     # via stack-data
@@ -169,7 +169,7 @@ python-dateutil==2.8.2
     # via
     #   jupyter-client
     #   pandas
-pytz==2022.2.1
+pytz==2022.5
     # via
     #   babel
     #   pandas
@@ -187,7 +187,7 @@ pyzmq==24.0.1
     #   jupyter-client
 requests==2.28.1
     # via sphinx
-scipy==1.9.1
+scipy==1.9.3
     # via statsmodels
 six==1.16.0
     # via
@@ -227,9 +227,7 @@ sphinx-inline-tabs==2022.1.2b11
 sphinx-thebe==0.1.2
     # via -r requirements\docs.in
 sphinx-togglebutton==0.3.2
-    # via
-    #   -r requirements\docs.in
-    #   myst-nb
+    # via -r requirements\docs.in
 sphinxcontrib-applehelp==1.0.2
     # via sphinx
 sphinxcontrib-devhelp==1.0.2
@@ -244,13 +242,13 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 sphinxext-opengraph==0.6.3
     # via -r requirements\docs.in
-sqlalchemy==1.4.41
+sqlalchemy==1.4.42
     # via jupyter-cache
 stack-data==0.5.1
     # via ipython
 statsmodels==0.13.2
     # via ridgeplot
-tabulate==0.8.10
+tabulate==0.9.0
     # via jupyter-cache
 tenacity==8.1.0
     # via plotly
@@ -259,7 +257,7 @@ tornado==6.2
     #   ipykernel
     #   jupyter-client
     #   livereload
-traitlets==5.4.0
+traitlets==5.5.0
     # via
     #   ipykernel
     #   ipython
@@ -268,7 +266,7 @@ traitlets==5.4.0
     #   matplotlib-inline
     #   nbclient
     #   nbformat
-typing-extensions==4.3.0
+typing-extensions==4.4.0
     # via
     #   myst-nb
     #   myst-parser
@@ -278,10 +276,11 @@ wcwidth==0.2.5
     # via prompt-toolkit
 wheel==0.37.1
     # via sphinx-togglebutton
-zipp==3.8.1
+zipp==3.10.0
     # via
     #   importlib-metadata
     #   importlib-resources
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools
+setuptools==65.5.0
+    # via sphinx-togglebutton
