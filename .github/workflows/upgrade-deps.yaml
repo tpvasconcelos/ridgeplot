@@ -28,7 +28,7 @@ jobs:
           python-version: "${{ matrix.python-version }}"
           # requirements-prefix: tox
       # TODO: I need to manually install tox because the exact lock file
-      #       might not be available for the current environment (markers).
+      #       might not be available for the current environment(-markers)
       - name: Install tox
         run: python -m pip install tox
       - name: Upgrade and lock dependencies

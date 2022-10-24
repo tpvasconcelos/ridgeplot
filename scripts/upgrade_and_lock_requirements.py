@@ -57,7 +57,7 @@ def main() -> None:
     for reqs_txt in Path("requirements/").glob(f"*{py_python_version}-{py_sys_platform}.txt"):
         locked_path = Path("requirements/locked").joinpath(reqs_txt.name)
         print(f"Moving {reqs_txt} to {locked_path}")
-        reqs_txt.rename(locked_path)
+        reqs_txt.replace(locked_path)
 
 
 if __name__ == "__main__":
