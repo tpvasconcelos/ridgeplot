@@ -5,7 +5,7 @@
 #
 #    pip-compile-multi
 #
-colorama==0.4.5
+colorama==0.4.6
     # via tox
 distlib==0.3.6
     # via virtualenv
@@ -27,7 +27,7 @@ six==1.16.0
     # via tox
 tomli==2.0.1
     # via tox
-tox==3.26.0
+tox==3.27.0
     # via -r requirements\tox.in
-virtualenv==20.16.5
+virtualenv==20.16.6
     # via tox
