@@ -13,7 +13,7 @@ appnope==0.1.3
     # via
     #   ipykernel
     #   ipython
-asttokens==2.0.8
+asttokens==2.1.0
     # via stack-data
 attrs==22.1.0
     # via
@@ -31,7 +31,7 @@ charset-normalizer==2.1.1
     # via requests
 click==8.1.3
     # via jupyter-cache
-colorama==0.4.5
+colorama==0.4.6
     # via sphinx-autobuild
 debugpy==1.6.3
     # via ipykernel
@@ -45,7 +45,7 @@ docutils==0.17.1
     #   sphinx-togglebutton
 entrypoints==0.4
     # via jupyter-client
-executing==1.1.1
+executing==1.2.0
     # via stack-data
 fastjsonschema==2.16.2
     # via nbformat
@@ -60,9 +60,9 @@ importlib-metadata==5.0.0
     #   jupyter-cache
     #   myst-nb
     #   sphinx
-ipykernel==6.16.1
+ipykernel==6.16.2
     # via myst-nb
-ipython==8.5.0
+ipython==8.6.0
     # via
     #   ipykernel
     #   myst-nb
@@ -78,7 +78,7 @@ jsonschema==4.16.0
     # via nbformat
 jupyter-cache==0.5.0
     # via myst-nb
-jupyter-client==7.4.3
+jupyter-client==7.4.4
     # via
     #   ipykernel
     #   nbclient
@@ -145,7 +145,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-plotly==5.10.0
+plotly==5.11.0
     # via ridgeplot
 prompt-toolkit==3.0.31
     # via ipython
@@ -163,7 +163,7 @@ pygments==2.13.0
     #   sphinx
 pyparsing==3.0.9
     # via packaging
-pyrsistent==0.18.1
+pyrsistent==0.19.1
     # via jsonschema
 python-dateutil==2.8.2
     # via
@@ -242,7 +242,7 @@ sphinxext-opengraph==0.6.3
     # via -r requirements/docs.in
 sqlalchemy==1.4.42
     # via jupyter-cache
-stack-data==0.5.1
+stack-data==0.6.0
     # via ipython
 statsmodels==0.13.2
     # via ridgeplot
