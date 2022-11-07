@@ -18,7 +18,7 @@ importlib-metadata==5.0.0
     #   virtualenv
 packaging==21.3
     # via tox
-platformdirs==2.5.2
+platformdirs==2.5.3
     # via virtualenv
 pluggy==1.0.0
     # via tox
