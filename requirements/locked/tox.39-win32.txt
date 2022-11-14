@@ -15,7 +15,7 @@ filelock==3.8.0
     #   virtualenv
 packaging==21.3
     # via tox
-platformdirs==2.5.2
+platformdirs==2.5.4
     # via virtualenv
 pluggy==1.0.0
     # via tox
@@ -27,7 +27,7 @@ six==1.16.0
     # via tox
 tomli==2.0.1
     # via tox
-tox==3.27.0
+tox==3.27.1
     # via -r requirements\tox.in
-virtualenv==20.16.6
+virtualenv==20.16.7
     # via tox
