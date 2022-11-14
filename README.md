@@ -82,10 +82,10 @@ fig.show()
 In this example, we will be replicating the first ridgeline plot example in
 [this _from Data to Viz_ post](https://www.data-to-viz.com/graph/ridgeline.html), which uses the
 _probly_ dataset. You can find the _plobly_ dataset on multiple sources like in the
-[bokeh](https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv) python
-interactive visualization library. I'll be using the
-[same source](https://raw.githubusercontent.com/zonination/perceptions/master/probly.csv) used in
-the original post.
+[bokeh](https://raw.githubusercontent.com/bokeh/bokeh/17a0b288052afac80ebcf0aa74e3915452fce3ca/src/bokeh/sampledata/_data/probly.csv)
+python interactive visualization library. I'll be using the
+[same source](https://raw.githubusercontent.com/zonination/perceptions/51207062aa173777264d3acce0131e1e2456d966/probly.csv)
+used in the original post.
 
 ```python
 import numpy as np
@@ -94,7 +94,10 @@ from ridgeplot import ridgeplot
 
 
 # Get the raw data
-df = pd.read_csv("https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv")
+df = pd.read_csv(
+    "https://raw.githubusercontent.com/zonination/perceptions/"
+    "51207062aa173777264d3acce0131e1e2456d966/probly.csv"
+)
 
 # Let's grab only the subset of columns displayed in the example
 column_names = [

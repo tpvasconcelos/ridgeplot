@@ -7,7 +7,8 @@ from ridgeplot import ridgeplot
 def main() -> None:
     # Get the raw data
     df = pd.read_csv(
-        "https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv"
+        "https://raw.githubusercontent.com/zonination/perceptions/"
+        "51207062aa173777264d3acce0131e1e2456d966/probly.csv"
     )
 
     # Let's grab only the subset of columns displayed in the example
@@ -39,7 +40,7 @@ def main() -> None:
         colormode="index",
         # Set the transparency level
         coloralpha=0.6,
-        # Always label your plots! Dont be evil...
+        # Always label your plots! Don't be evil...
         labels=column_names,
         # Adjust the vertical spacing between the distributions
         spacing=5 / 9,
