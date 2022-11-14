@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: ./bin/tox
       - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         env:
           OS: "${{ matrix.os }}"
           PYTHON: "${{ matrix.python-version }}"
