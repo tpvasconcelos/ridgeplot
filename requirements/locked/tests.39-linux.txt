@@ -11,7 +11,7 @@ attrs==22.1.0
     # via pytest
 coverage[toml]==6.5.0
     # via pytest-cov
-exceptiongroup==1.0.0
+exceptiongroup==1.0.2
     # via pytest
 iniconfig==1.1.1
     # via pytest
@@ -44,7 +44,7 @@ pytest-cov==4.0.0
     # via -r requirements/tests.in
 python-dateutil==2.8.2
     # via pandas
-pytz==2022.5
+pytz==2022.6
     # via pandas
 scipy==1.9.3
     # via statsmodels
@@ -52,7 +52,7 @@ six==1.16.0
     # via
     #   patsy
     #   python-dateutil
-statsmodels==0.13.2
+statsmodels==0.13.5
     # via ridgeplot
 tenacity==8.1.0
     # via plotly
