@@ -13,7 +13,7 @@ colorama==0.4.6
     # via pytest
 coverage[toml]==6.5.0
     # via pytest-cov
-exceptiongroup==1.0.2
+exceptiongroup==1.0.4
     # via pytest
 importlib-metadata==5.0.0
     # via

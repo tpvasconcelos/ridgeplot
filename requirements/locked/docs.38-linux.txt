@@ -76,7 +76,7 @@ jsonschema==4.17.0
     # via nbformat
 jupyter-cache==0.5.0
     # via myst-nb
-jupyter-client==7.4.5
+jupyter-client==7.4.7
     # via
     #   ipykernel
     #   nbclient
@@ -118,7 +118,7 @@ nest-asyncio==1.5.6
     #   ipykernel
     #   jupyter-client
     #   nbclient
-numpy==1.23.4
+numpy==1.23.5
     # via
     #   pandas
     #   patsy
@@ -218,7 +218,7 @@ sphinx-autobuild==2021.3.14
     # via -r requirements/docs.in
 sphinx-book-theme==0.3.3
     # via -r requirements/docs.in
-sphinx-copybutton==0.5.0
+sphinx-copybutton==0.5.1
     # via -r requirements/docs.in
 sphinx-design==0.3.0
     # via -r requirements/docs.in
@@ -282,5 +282,5 @@ zipp==3.10.0
     #   importlib-resources
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==65.5.1
+setuptools==65.6.0
     # via sphinx-togglebutton

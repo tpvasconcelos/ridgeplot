@@ -8,7 +8,7 @@
 -r tests.310-win32.txt
 -e file:.
     # via -r requirements\tests.in
-mypy==0.990
+mypy==0.991
     # via -r requirements\typing.in
 mypy-extensions==0.4.3
     # via mypy

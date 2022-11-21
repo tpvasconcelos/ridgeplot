@@ -26,7 +26,7 @@ click==8.1.3
     #   pip-tools
 decorator==5.1.1
     # via ipython
-identify==2.5.8
+identify==2.5.9
     # via pre-commit
 ipython==7.34.0
     # via -r requirements\local-dev.in
@@ -105,7 +105,7 @@ wheel==0.38.4
 # The following packages are considered to be unsafe in a requirements file:
 pip==22.3.1
     # via pip-tools
-setuptools==65.5.1
+setuptools==65.6.0
     # via
     #   ipython
     #   nodeenv

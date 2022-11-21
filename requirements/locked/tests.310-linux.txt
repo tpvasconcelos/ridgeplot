@@ -11,11 +11,11 @@ attrs==22.1.0
     # via pytest
 coverage[toml]==6.5.0
     # via pytest-cov
-exceptiongroup==1.0.2
+exceptiongroup==1.0.4
     # via pytest
 iniconfig==1.1.1
     # via pytest
-numpy==1.23.4
+numpy==1.23.5
     # via
     #   pandas
     #   patsy
