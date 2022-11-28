@@ -19,7 +19,7 @@ docutils==0.19
     # via readme-renderer
 idna==3.4
     # via requests
-importlib-metadata==5.0.0
+importlib-metadata==5.1.0
     # via
     #   keyring
     #   twine
@@ -63,11 +63,11 @@ twine==4.0.1
     # via -r requirements/release.in
 typing-extensions==4.4.0
     # via rich
-urllib3==1.26.12
+urllib3==1.26.13
     # via
     #   requests
     #   twine
 webencodings==0.5.1
     # via bleach
-zipp==3.10.0
+zipp==3.11.0
     # via importlib-metadata

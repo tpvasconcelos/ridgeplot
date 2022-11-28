@@ -13,7 +13,7 @@ coverage[toml]==6.5.0
     # via pytest-cov
 exceptiongroup==1.0.4
     # via pytest
-importlib-metadata==5.0.0
+importlib-metadata==5.1.0
     # via
     #   pluggy
     #   pytest
@@ -66,5 +66,5 @@ tomli==2.0.1
     #   pytest
 typing-extensions==4.4.0
     # via importlib-metadata
-zipp==3.10.0
+zipp==3.11.0
     # via importlib-metadata

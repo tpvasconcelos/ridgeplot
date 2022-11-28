@@ -55,7 +55,7 @@ idna==3.4
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==5.0.0
+importlib-metadata==5.1.0
     # via
     #   jupyter-cache
     #   myst-nb
@@ -66,7 +66,7 @@ ipython==8.6.0
     # via
     #   ipykernel
     #   myst-nb
-jedi==0.18.1
+jedi==0.18.2
     # via ipython
 jinja2==3.1.2
     # via
@@ -74,7 +74,7 @@ jinja2==3.1.2
     #   myst-parser
     #   numpydoc
     #   sphinx
-jsonschema==4.17.0
+jsonschema==4.17.1
     # via nbformat
 jupyter-cache==0.5.0
     # via myst-nb
@@ -135,7 +135,7 @@ packaging==21.3
     #   pydata-sphinx-theme
     #   sphinx
     #   statsmodels
-pandas==1.5.1
+pandas==1.5.2
     # via statsmodels
 parso==0.8.3
     # via jedi
@@ -149,7 +149,7 @@ platformdirs==2.5.4
     # via jupyter-core
 plotly==5.11.0
     # via ridgeplot
-prompt-toolkit==3.0.32
+prompt-toolkit==3.0.33
     # via ipython
 psutil==5.9.4
     # via ipykernel
@@ -240,11 +240,11 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-sphinxext-opengraph==0.7.2
+sphinxext-opengraph==0.7.3
     # via -r requirements/docs.in
 sqlalchemy==1.4.44
     # via jupyter-cache
-stack-data==0.6.1
+stack-data==0.6.2
     # via ipython
 statsmodels==0.13.5
     # via ridgeplot
@@ -270,15 +270,15 @@ typing-extensions==4.4.0
     # via
     #   myst-nb
     #   myst-parser
-urllib3==1.26.12
+urllib3==1.26.13
     # via requests
 wcwidth==0.2.5
     # via prompt-toolkit
 wheel==0.38.4
     # via sphinx-togglebutton
-zipp==3.10.0
+zipp==3.11.0
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==65.6.0
+setuptools==65.6.3
     # via sphinx-togglebutton
