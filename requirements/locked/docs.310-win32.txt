@@ -9,7 +9,7 @@
     # via -r requirements\docs.in
 alabaster==0.7.12
     # via sphinx
-asttokens==2.1.0
+asttokens==2.2.0
     # via stack-data
 attrs==22.1.0
     # via
@@ -33,7 +33,7 @@ colorama==0.4.6
     #   ipython
     #   sphinx
     #   sphinx-autobuild
-debugpy==1.6.3
+debugpy==1.6.4
     # via ipykernel
 decorator==5.1.1
     # via ipython
@@ -61,7 +61,7 @@ importlib-metadata==5.1.0
     #   myst-nb
 ipykernel==6.17.1
     # via myst-nb
-ipython==8.6.0
+ipython==8.7.0
     # via
     #   ipykernel
     #   myst-nb
@@ -73,7 +73,7 @@ jinja2==3.1.2
     #   myst-parser
     #   numpydoc
     #   sphinx
-jsonschema==4.17.1
+jsonschema==4.17.3
     # via nbformat
 jupyter-cache==0.5.0
     # via myst-nb
@@ -81,7 +81,7 @@ jupyter-client==7.4.7
     # via
     #   ipykernel
     #   nbclient
-jupyter-core==5.0.0
+jupyter-core==5.1.0
     # via
     #   jupyter-client
     #   nbformat
@@ -254,7 +254,7 @@ tornado==6.2
     #   ipykernel
     #   jupyter-client
     #   livereload
-traitlets==5.5.0
+traitlets==5.6.0
     # via
     #   ipykernel
     #   ipython

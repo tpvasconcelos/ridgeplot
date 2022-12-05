@@ -41,7 +41,7 @@ packaging==21.3
     # via build
 pep517==0.13.0
     # via build
-pkginfo==1.8.3
+pkginfo==1.9.2
     # via twine
 pycparser==2.21
     # via cffi
@@ -71,7 +71,7 @@ tomli==2.0.1
     # via
     #   build
     #   pep517
-twine==4.0.1
+twine==4.0.2
     # via -r requirements/release.in
 typing-extensions==4.4.0
     # via rich

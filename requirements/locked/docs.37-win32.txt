@@ -31,7 +31,7 @@ colorama==0.4.6
     #   ipython
     #   sphinx
     #   sphinx-autobuild
-debugpy==1.6.3
+debugpy==1.6.4
     # via ipykernel
 decorator==5.1.1
     # via ipython
@@ -76,7 +76,7 @@ jinja2==3.1.2
     #   myst-parser
     #   numpydoc
     #   sphinx
-jsonschema==4.17.1
+jsonschema==4.17.3
     # via nbformat
 jupyter-cache==0.5.0
     # via myst-nb
@@ -84,7 +84,7 @@ jupyter-client==7.4.7
     # via
     #   ipykernel
     #   nbclient
-jupyter-core==4.11.2
+jupyter-core==4.12.0
     # via
     #   jupyter-client
     #   nbformat
@@ -252,7 +252,7 @@ tornado==6.2
     #   ipykernel
     #   jupyter-client
     #   livereload
-traitlets==5.5.0
+traitlets==5.6.0
     # via
     #   ipykernel
     #   ipython
