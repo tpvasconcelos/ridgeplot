@@ -27,5 +27,5 @@ tomli==2.0.1
     # via tox
 tox==3.27.1
     # via -r requirements/tox.in
-virtualenv==20.16.7
+virtualenv==20.17.0
     # via tox
