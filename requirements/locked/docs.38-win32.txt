@@ -9,7 +9,7 @@
     # via -r requirements\docs.in
 alabaster==0.7.12
     # via sphinx
-asttokens==2.2.0
+asttokens==2.2.1
     # via stack-data
 attrs==22.1.0
     # via
@@ -21,7 +21,7 @@ backcall==0.2.0
     # via ipython
 beautifulsoup4==4.11.1
     # via pydata-sphinx-theme
-certifi==2022.9.24
+certifi==2022.12.7
     # via requests
 charset-normalizer==2.1.1
     # via requests
@@ -33,6 +33,8 @@ colorama==0.4.6
     #   ipython
     #   sphinx
     #   sphinx-autobuild
+comm==0.1.2
+    # via ipykernel
 debugpy==1.6.4
     # via ipykernel
 decorator==5.1.1
@@ -60,9 +62,9 @@ importlib-metadata==5.1.0
     #   jupyter-cache
     #   myst-nb
     #   sphinx
-importlib-resources==5.10.0
+importlib-resources==5.10.1
     # via jsonschema
-ipykernel==6.17.1
+ipykernel==6.19.2
     # via myst-nb
 ipython==8.7.0
     # via
@@ -80,7 +82,7 @@ jsonschema==4.17.3
     # via nbformat
 jupyter-cache==0.5.0
     # via myst-nb
-jupyter-client==7.4.7
+jupyter-client==7.4.8
     # via
     #   ipykernel
     #   nbclient
@@ -100,7 +102,7 @@ matplotlib-inline==0.1.6
     # via
     #   ipykernel
     #   ipython
-mdit-py-plugins==0.3.1
+mdit-py-plugins==0.3.3
     # via myst-parser
 mdurl==0.1.2
     # via markdown-it-py
@@ -131,7 +133,7 @@ numpy==1.23.5
     #   statsmodels
 numpydoc==1.5.0
     # via -r requirements\docs.in
-packaging==21.3
+packaging==22.0
     # via
     #   ipykernel
     #   pydata-sphinx-theme
@@ -147,11 +149,11 @@ pickleshare==0.7.5
     # via ipython
 pkgutil-resolve-name==1.3.10
     # via jsonschema
-platformdirs==2.5.4
+platformdirs==2.6.0
     # via jupyter-core
 plotly==5.11.0
     # via ridgeplot
-prompt-toolkit==3.0.33
+prompt-toolkit==3.0.36
     # via ipython
 psutil==5.9.4
     # via ipykernel
@@ -163,8 +165,6 @@ pygments==2.13.0
     # via
     #   ipython
     #   sphinx
-pyparsing==3.0.9
-    # via packaging
 pyrsistent==0.19.2
     # via jsonschema
 python-dateutil==2.8.2
@@ -244,7 +244,7 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 sphinxext-opengraph==0.7.3
     # via -r requirements\docs.in
-sqlalchemy==1.4.44
+sqlalchemy==1.4.45
     # via jupyter-cache
 stack-data==0.6.2
     # via ipython
@@ -259,8 +259,9 @@ tornado==6.2
     #   ipykernel
     #   jupyter-client
     #   livereload
-traitlets==5.6.0
+traitlets==5.7.0
     # via
+    #   comm
     #   ipykernel
     #   ipython
     #   jupyter-client

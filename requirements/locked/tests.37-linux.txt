@@ -26,7 +26,7 @@ numpy==1.21.6
     #   ridgeplot
     #   scipy
     #   statsmodels
-packaging==21.3
+packaging==22.0
     # via
     #   pytest
     #   statsmodels
@@ -38,8 +38,6 @@ plotly==5.11.0
     # via ridgeplot
 pluggy==1.0.0
     # via pytest
-pyparsing==3.0.9
-    # via packaging
 pytest==7.2.0
     # via
     #   -r requirements/tests.in
