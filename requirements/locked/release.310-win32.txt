@@ -9,7 +9,7 @@ bleach==5.0.1
     # via readme-renderer
 build==0.9.0
     # via -r requirements\release.in
-certifi==2022.9.24
+certifi==2022.12.7
     # via requests
 charset-normalizer==2.1.1
     # via requests
@@ -31,7 +31,7 @@ keyring==23.11.0
     # via twine
 more-itertools==9.0.0
     # via jaraco-classes
-packaging==21.3
+packaging==22.0
     # via build
 pep517==0.13.0
     # via build
@@ -41,8 +41,6 @@ pygments==2.13.0
     # via
     #   readme-renderer
     #   rich
-pyparsing==3.0.9
-    # via packaging
 pywin32-ctypes==0.2.0
     # via keyring
 readme-renderer==37.3
