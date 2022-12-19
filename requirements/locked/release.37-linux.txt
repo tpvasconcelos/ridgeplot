@@ -23,19 +23,21 @@ docutils==0.19
     # via readme-renderer
 idna==3.4
     # via requests
-importlib-metadata==5.1.0
+importlib-metadata==5.2.0
     # via
     #   build
     #   keyring
     #   pep517
     #   twine
+importlib-resources==5.10.1
+    # via keyring
 jaraco-classes==3.2.3
     # via keyring
 jeepney==0.8.0
     # via
     #   keyring
     #   secretstorage
-keyring==23.11.0
+keyring==23.13.1
     # via twine
 more-itertools==9.0.0
     # via jaraco-classes
@@ -86,4 +88,5 @@ webencodings==0.5.1
 zipp==3.11.0
     # via
     #   importlib-metadata
+    #   importlib-resources
     #   pep517

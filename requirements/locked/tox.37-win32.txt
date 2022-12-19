@@ -17,7 +17,7 @@ filelock==3.8.2
     # via
     #   tox
     #   virtualenv
-importlib-metadata==5.1.0
+importlib-metadata==5.2.0
     # via
     #   pluggy
     #   tox
@@ -38,7 +38,7 @@ tomli==2.0.1
     # via
     #   pyproject-api
     #   tox
-tox==4.0.8
+tox==4.0.14
     # via -r requirements\tox.in
 typing-extensions==4.4.0
     # via

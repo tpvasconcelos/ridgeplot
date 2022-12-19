@@ -47,7 +47,7 @@ idna==3.4
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==5.1.0
+importlib-metadata==5.2.0
     # via
     #   click
     #   jsonschema
@@ -165,7 +165,7 @@ python-dateutil==2.8.2
     # via
     #   jupyter-client
     #   pandas
-pytz==2022.6
+pytz==2022.7
     # via
     #   babel
     #   pandas
@@ -183,6 +183,10 @@ requests==2.28.1
     # via sphinx
 scipy==1.7.3
     # via statsmodels
+setuptools==65.6.3
+    # via
+    #   ipython
+    #   sphinx-togglebutton
 six==1.16.0
     # via
     #   livereload
@@ -248,7 +252,7 @@ tornado==6.2
     #   ipykernel
     #   jupyter-client
     #   livereload
-traitlets==5.7.0
+traitlets==5.7.1
     # via
     #   ipykernel
     #   ipython
@@ -274,9 +278,3 @@ zipp==3.11.0
     # via
     #   importlib-metadata
     #   importlib-resources
-
-# The following packages are considered to be unsafe in a requirements file:
-setuptools==65.6.3
-    # via
-    #   ipython
-    #   sphinx-togglebutton
