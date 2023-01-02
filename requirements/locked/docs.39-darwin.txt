@@ -57,7 +57,7 @@ idna==3.4
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==5.2.0
+importlib-metadata==6.0.0
     # via
     #   jupyter-cache
     #   myst-nb
@@ -122,7 +122,7 @@ nest-asyncio==1.5.6
     #   ipykernel
     #   jupyter-client
     #   nbclient
-numpy==1.24.0
+numpy==1.24.1
     # via
     #   pandas
     #   patsy
@@ -147,7 +147,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-platformdirs==2.6.0
+platformdirs==2.6.2
     # via jupyter-core
 plotly==5.11.0
     # via ridgeplot
@@ -161,11 +161,11 @@ pure-eval==0.2.2
     # via stack-data
 pydata-sphinx-theme==0.8.1
     # via sphinx-book-theme
-pygments==2.13.0
+pygments==2.14.0
     # via
     #   ipython
     #   sphinx
-pyrsistent==0.19.2
+pyrsistent==0.19.3
     # via jsonschema
 python-dateutil==2.8.2
     # via

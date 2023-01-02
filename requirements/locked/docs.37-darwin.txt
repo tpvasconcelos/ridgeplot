@@ -51,7 +51,7 @@ idna==3.4
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==5.2.0
+importlib-metadata==6.0.0
     # via
     #   click
     #   jsonschema
@@ -60,7 +60,7 @@ importlib-metadata==5.2.0
     #   nbformat
     #   sphinx
     #   sqlalchemy
-importlib-resources==5.10.1
+importlib-resources==5.10.2
     # via jsonschema
 ipykernel==6.16.2
     # via myst-nb
@@ -159,11 +159,11 @@ ptyprocess==0.7.0
     # via pexpect
 pydata-sphinx-theme==0.8.1
     # via sphinx-book-theme
-pygments==2.13.0
+pygments==2.14.0
     # via
     #   ipython
     #   sphinx
-pyrsistent==0.19.2
+pyrsistent==0.19.3
     # via jsonschema
 python-dateutil==2.8.2
     # via

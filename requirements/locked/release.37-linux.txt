@@ -23,13 +23,13 @@ docutils==0.19
     # via readme-renderer
 idna==3.4
     # via requests
-importlib-metadata==5.2.0
+importlib-metadata==6.0.0
     # via
     #   build
     #   keyring
     #   pep517
     #   twine
-importlib-resources==5.10.1
+importlib-resources==5.10.2
     # via keyring
 jaraco-classes==3.2.3
     # via keyring
@@ -49,7 +49,7 @@ pkginfo==1.9.2
     # via twine
 pycparser==2.21
     # via cffi
-pygments==2.13.0
+pygments==2.14.0
     # via
     #   readme-renderer
     #   rich
@@ -63,7 +63,7 @@ requests-toolbelt==0.10.1
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==12.6.0
+rich==13.0.0
     # via twine
 secretstorage==3.3.3
     # via keyring
