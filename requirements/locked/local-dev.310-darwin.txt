@@ -40,7 +40,7 @@ matplotlib-inline==0.1.6
     # via ipython
 nodeenv==1.7.0
     # via pre-commit
-numpy==1.24.1
+numpy==1.22.0
     # via
     #   pandas
     #   patsy

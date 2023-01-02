@@ -15,7 +15,7 @@ exceptiongroup==1.1.0
     # via pytest
 iniconfig==1.1.1
     # via pytest
-numpy==1.24.1
+numpy==1.22.0
     # via
     #   pandas
     #   patsy

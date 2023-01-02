@@ -21,7 +21,7 @@ importlib-metadata==6.0.0
     #   pytest
 iniconfig==1.1.1
     # via pytest
-numpy==1.21.6
+numpy==1.22.0
     # via
     #   pandas
     #   patsy
