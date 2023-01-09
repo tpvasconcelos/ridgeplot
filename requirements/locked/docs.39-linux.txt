@@ -31,7 +31,7 @@ colorama==0.4.6
     # via sphinx-autobuild
 comm==0.1.2
     # via ipykernel
-debugpy==1.6.4
+debugpy==1.6.5
     # via ipykernel
 decorator==5.1.1
     # via ipython
@@ -60,7 +60,7 @@ importlib-metadata==6.0.0
     #   sphinx
 ipykernel==6.19.4
     # via myst-nb
-ipython==8.7.0
+ipython==8.8.0
     # via
     #   ipykernel
     #   myst-nb
@@ -80,7 +80,7 @@ jupyter-client==7.4.8
     # via
     #   ipykernel
     #   nbclient
-jupyter-core==5.1.1
+jupyter-core==5.1.2
     # via
     #   jupyter-client
     #   nbformat
@@ -127,7 +127,7 @@ numpy==1.24.1
     #   statsmodels
 numpydoc==1.5.0
     # via -r requirements/docs.in
-packaging==22.0
+packaging==23.0
     # via
     #   ipykernel
     #   pydata-sphinx-theme
@@ -183,7 +183,7 @@ pyzmq==24.0.1
     #   jupyter-client
 requests==2.28.1
     # via sphinx
-scipy==1.9.3
+scipy==1.10.0
     # via statsmodels
 setuptools==65.6.3
     # via sphinx-togglebutton
@@ -222,11 +222,11 @@ sphinx-design==0.3.0
     # via -r requirements/docs.in
 sphinx-inline-tabs==2022.1.2b11
     # via -r requirements/docs.in
-sphinx-thebe==0.1.2
+sphinx-thebe==0.2.0
     # via -r requirements/docs.in
 sphinx-togglebutton==0.3.2
     # via -r requirements/docs.in
-sphinxcontrib-applehelp==1.0.2
+sphinxcontrib-applehelp==1.0.3
     # via sphinx
 sphinxcontrib-devhelp==1.0.2
     # via sphinx
@@ -238,9 +238,9 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-sphinxext-opengraph==0.7.4
+sphinxext-opengraph==0.7.5
     # via -r requirements/docs.in
-sqlalchemy==1.4.45
+sqlalchemy==1.4.46
     # via jupyter-cache
 stack-data==0.6.2
     # via ipython
