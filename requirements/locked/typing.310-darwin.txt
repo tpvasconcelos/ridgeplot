@@ -14,7 +14,7 @@ mypy-extensions==0.4.3
     # via mypy
 pandas-stubs==1.5.2.230105
     # via -r requirements/typing.in
-types-pytz==2022.7.0.0
+types-pytz==2022.7.1.0
     # via
     #   -r requirements/typing.in
     #   pandas-stubs

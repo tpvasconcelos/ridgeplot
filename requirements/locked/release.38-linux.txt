@@ -7,13 +7,13 @@
 #
 bleach==5.0.1
     # via readme-renderer
-build==0.9.0
+build==0.10.0
     # via -r requirements/release.in
 certifi==2022.12.7
     # via requests
 cffi==1.15.1
     # via cryptography
-charset-normalizer==2.1.1
+charset-normalizer==3.0.1
     # via requests
 commonmark==0.9.1
     # via rich
@@ -41,8 +41,6 @@ more-itertools==9.0.0
     # via jaraco-classes
 packaging==23.0
     # via build
-pep517==0.13.0
-    # via build
 pkginfo==1.9.6
     # via twine
 pycparser==2.21
@@ -51,9 +49,11 @@ pygments==2.14.0
     # via
     #   readme-renderer
     #   rich
+pyproject-hooks==1.0.0
+    # via build
 readme-renderer==37.3
     # via twine
-requests==2.28.1
+requests==2.28.2
     # via
     #   requests-toolbelt
     #   twine
@@ -61,7 +61,7 @@ requests-toolbelt==0.10.1
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.0.1
+rich==13.1.0
     # via twine
 secretstorage==3.3.3
     # via keyring
@@ -70,12 +70,12 @@ six==1.16.0
 tomli==2.0.1
     # via
     #   build
-    #   pep517
+    #   pyproject-hooks
 twine==4.0.2
     # via -r requirements/release.in
 typing-extensions==4.4.0
     # via rich
-urllib3==1.26.13
+urllib3==1.26.14
     # via
     #   requests
     #   twine
