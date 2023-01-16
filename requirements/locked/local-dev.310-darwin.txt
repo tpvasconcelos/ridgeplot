@@ -14,7 +14,7 @@ appnope==0.1.3
     # via ipython
 backcall==0.2.0
     # via ipython
-build==0.9.0
+build==0.10.0
     # via pip-tools
 bump2version==1.0.1
     # via bumpversion
@@ -28,7 +28,7 @@ click==8.1.3
     #   pip-tools
 decorator==5.1.1
     # via ipython
-identify==2.5.12
+identify==2.5.13
     # via pre-commit
 ipython==7.34.0
     # via -r requirements/local-dev.in
@@ -53,8 +53,6 @@ parso==0.8.3
     # via jedi
 patsy==0.5.3
     # via statsmodels
-pep517==0.13.0
-    # via build
 pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
@@ -69,7 +67,7 @@ pip-tools==6.12.1
     #   pip-compile-multi
 pipdeptree==2.3.3
     # via -r requirements/local-dev.in
-plotly==5.11.0
+plotly==5.12.0
     # via ridgeplot
 pre-commit==2.21.0
     # via -r requirements/local-dev.in
@@ -85,15 +83,17 @@ pygments==2.14.0
     # via
     #   ipython
     #   ptpython
+pyproject-hooks==1.0.0
+    # via build
 python-dateutil==2.8.2
     # via pandas
-pytz==2022.7
+pytz==2022.7.1
     # via pandas
 pyyaml==6.0
     # via pre-commit
 scipy==1.10.0
     # via statsmodels
-setuptools==65.6.3
+setuptools==65.7.0
     # via
     #   ipython
     #   nodeenv
@@ -106,13 +106,13 @@ statsmodels==0.13.5
     # via ridgeplot
 tenacity==8.1.0
     # via plotly
-toposort==1.7
+toposort==1.9
     # via pip-compile-multi
-traitlets==5.8.0
+traitlets==5.8.1
     # via
     #   ipython
     #   matplotlib-inline
-wcwidth==0.2.5
+wcwidth==0.2.6
     # via prompt-toolkit
 wheel==0.38.4
     # via pip-tools
