@@ -18,12 +18,13 @@ recursive-include src py.typed *.pyi
 
 # Data files
 include src/ridgeplot/colors.json
+recursive-include src/ridgeplot/datasets/data *.csv
 
 # Docs
 include docs/Makefile docs/make.bat
 recursive-include docs/_static *.ico
 recursive-include docs/_static/img *.png
-recursive-include docs *.md *.py
+recursive-include docs *.md *.py *.rst
 prune docs/build
 
 # Misc

@@ -70,7 +70,7 @@ def _any_to_rgb(color: Union[str, tuple]) -> str:
     return rgb
 
 
-def get_all_colorscale_names() -> Tuple[str]:
+def get_all_colorscale_names() -> Tuple[str, ...]:
     """Returns a tuple with all available colorscale names."""
     return tuple(_COLORSCALE_MAPPING.keys())
 
