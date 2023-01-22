@@ -33,6 +33,8 @@ click==8.1.3
     # via jupyter-cache
 colorama==0.4.6
     # via sphinx-autobuild
+comm==0.1.1
+    # via ipykernel
 debugpy==1.6.3
     # via ipykernel
 decorator==5.1.1
@@ -49,8 +51,6 @@ executing==1.2.0
     # via stack-data
 fastjsonschema==2.16.2
     # via nbformat
-greenlet==2.0.1
-    # via sqlalchemy
 idna==3.4
     # via requests
 imagesize==1.4.1
@@ -62,9 +62,9 @@ importlib-metadata==5.1.0
     #   sphinx
 importlib-resources==5.10.0
     # via jsonschema
-ipykernel==6.17.1
+ipykernel==6.18.1
     # via myst-nb
-ipython==8.6.0
+ipython==8.7.0
     # via
     #   ipykernel
     #   myst-nb
@@ -84,7 +84,7 @@ jupyter-client==7.4.7
     # via
     #   ipykernel
     #   nbclient
-jupyter-core==5.0.0
+jupyter-core==5.1.0
     # via
     #   jupyter-client
     #   nbformat
@@ -263,6 +263,7 @@ tornado==6.2
     #   livereload
 traitlets==5.5.0
     # via
+    #   comm
     #   ipykernel
     #   ipython
     #   jupyter-client
