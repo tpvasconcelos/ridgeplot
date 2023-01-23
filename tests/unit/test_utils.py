@@ -13,11 +13,30 @@ from ridgeplot._utils import LazyMapping, get_xy_extrema, normalise_min_max
 class TestGetXYExtrema:
     """Tests for the :py:func:`ridgeplot._utils.get_xy_extrema` function"""
 
-    def test_fails_for_empty_sequences(self) -> None:
+    def test_raise_for_empty_sequence(self) -> None:
         # Fails for empty sequence
-        pytest.raises(ValueError, get_xy_extrema, ())
-        # Fails for sequence of empty arrays
-        pytest.raises(ValueError, get_xy_extrema, ([(), ()], [(), ()]))
+        with pytest.raises(ValueError, match="Cannot get extrema of empty array sequence."):
+            get_xy_extrema(arrays=[])
+
+    def test_raise_for_empty_array(self) -> None:
+        # Fails if one of the arrays is empty
+        with pytest.raises(ValueError, match="Cannot get extrema of an empty array."):
+            get_xy_extrema(
+                arrays=[
+                    [["not"], ["empty"]],
+                    [[], []],  # empty 2D array
+                ]
+            )
+
+    def test_raise_for_non_2d_array(self) -> None:
+        # Fails if one of the arrays is not 2D
+        with pytest.raises(ValueError, match="Expected 2D array, got 3D array instead."):
+            get_xy_extrema(
+                arrays=[
+                    [[1, 2], [3, 4]],  # valid 2D array
+                    [[1, 2], [3, 4], [5, 6]],  # invalid 3D array
+                ]
+            )
 
     @pytest.mark.parametrize(
         "iterable_type,array_like_type",
@@ -28,7 +47,8 @@ class TestGetXYExtrema:
         iterable_type: Callable[[Iterable], Iterable],
         array_like_type: Callable[[npt.ArrayLike], npt.ArrayLike],
     ) -> None:
-        """Test :py:func:`get_xy_extrema()` against a varied combination of possible input types."""
+        """Test :py:func:`get_xy_extrema()` against a varied combination of
+        possible input types."""
 
         # This tuple contains a varied set of array-like objects. Which is to show
         # that get_xy_extrema accepts any iterable of any valid array-like objects

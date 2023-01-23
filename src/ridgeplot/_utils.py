@@ -1,17 +1,57 @@
-from typing import Callable, Iterable, Iterator, Mapping, Optional, Tuple, TypeVar
+import sys
+from typing import (
+    Callable,
+    Iterable,
+    Iterator,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    Tuple,
+    TypeVar,
+)
 
-import numpy.typing as npt
+if sys.version_info >= (3, 8):
+    from typing import Protocol
+else:
+    from typing_extensions import Protocol
 
 
-def get_xy_extrema(arrays: Iterable[npt.ArrayLike]) -> Tuple[float, float, float, float]:
-    """Returns the x-y extrema (x_min, x_max, y_min, y_max) of a list of 2D
-    arrays of shape (2, M)."""
-    # Unpack and flatten all x and y values from `arrays`
-    x = []
-    y = []
+class _Comparable(Protocol):
+    def __lt__(self, __other: "_Comparable") -> bool:
+        ...
+
+    def __gt__(self, __other: "_Comparable") -> bool:
+        ...
+
+
+_ComparableT = TypeVar("_ComparableT", bound=_Comparable)
+
+
+def get_xy_extrema(
+    arrays: Iterable[Sequence[Sequence[_ComparableT]]],
+) -> Tuple[_ComparableT, _ComparableT, _ComparableT, _ComparableT]:
+    """Returns the global x-y extrema (x_min, x_max, y_min, y_max) of a
+    sequence of 2D array-like objects.
+
+    Args:
+        arrays:
+            A sequence of 2D array-like objects.
+
+    Returns:
+        A tuple of the form (x_min, x_max, y_min, y_max).
+    """
+    x: List[_ComparableT] = []
+    y: List[_ComparableT] = []
     for array in arrays:
+        if len(array) != 2:
+            raise ValueError(f"Expected 2D array, got {len(array)}D array instead.")
+        if 0 in (len(array[0]), len(array[1])):
+            raise ValueError("Cannot get extrema of an empty array.")
         x.extend(array[0])
         y.extend(array[1])
+    if 0 in (len(x), len(y)):
+        raise ValueError("Cannot get extrema of empty array sequence.")
     return min(x), max(x), min(y), max(y)
 
 
