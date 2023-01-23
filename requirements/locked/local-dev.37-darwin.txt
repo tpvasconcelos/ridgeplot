@@ -93,7 +93,7 @@ pyyaml==6.0
     # via pre-commit
 scipy==1.7.3
     # via statsmodels
-setuptools==65.7.0
+setuptools==66.1.1
     # via
     #   ipython
     #   nodeenv

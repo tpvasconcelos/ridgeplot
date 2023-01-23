@@ -64,7 +64,7 @@ importlib-metadata==6.0.0
     #   sphinx
 importlib-resources==5.10.2
     # via jsonschema
-ipykernel==6.20.1
+ipykernel==6.20.2
     # via myst-nb
 ipython==8.8.0
     # via
@@ -96,7 +96,7 @@ markdown-it-py==2.1.0
     # via
     #   mdit-py-plugins
     #   myst-parser
-markupsafe==2.1.1
+markupsafe==2.1.2
     # via jinja2
 matplotlib-inline==0.1.6
     # via
@@ -139,7 +139,7 @@ packaging==23.0
     #   pydata-sphinx-theme
     #   sphinx
     #   statsmodels
-pandas==1.5.2
+pandas==1.5.3
     # via statsmodels
 parso==0.8.3
     # via jedi
@@ -191,7 +191,7 @@ requests==2.28.2
     # via sphinx
 scipy==1.10.0
     # via statsmodels
-setuptools==65.7.0
+setuptools==66.1.1
     # via sphinx-togglebutton
 six==1.16.0
     # via

@@ -45,7 +45,7 @@ numpy==1.24.1
     #   ridgeplot
     #   scipy
     #   statsmodels
-pandas==1.5.2
+pandas==1.5.3
     # via statsmodels
 parso==0.8.3
     # via jedi
@@ -87,7 +87,7 @@ pyyaml==6.0
     # via pre-commit
 scipy==1.10.0
     # via statsmodels
-setuptools==65.7.0
+setuptools==66.1.1
     # via
     #   ipython
     #   nodeenv

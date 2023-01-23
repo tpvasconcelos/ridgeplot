@@ -5,7 +5,7 @@
 #
 #    pip-compile-multi
 #
-cachetools==5.2.1
+cachetools==5.3.0
     # via tox
 chardet==5.1.0
     # via tox
@@ -32,13 +32,13 @@ platformdirs==2.6.2
     #   virtualenv
 pluggy==1.0.0
     # via tox
-pyproject-api==1.4.0
+pyproject-api==1.5.0
     # via tox
 tomli==2.0.1
     # via
     #   pyproject-api
     #   tox
-tox==4.2.8
+tox==4.3.5
     # via -r requirements/tox.in
 typing-extensions==4.4.0
     # via
