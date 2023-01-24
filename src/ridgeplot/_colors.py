@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict, Iterable, Tuple, Union
+from typing import Dict, Iterable, Tuple, Union, cast
 
 from _plotly_utils.colors import validate_colors, validate_scale_values
 from plotly.colors import find_intermediate_color, hex_to_rgb, label_rgb
@@ -56,9 +56,9 @@ def _any_to_rgb(color: Union[str, tuple]) -> str:
     if not isinstance(color, (str, tuple)):
         raise TypeError(f"Expected str or tuple for color, got {type(color)} instead.")
     if isinstance(color, tuple):
-        rgb = label_rgb(color)
+        rgb = cast(str, label_rgb(color))
     elif color.startswith("#"):
-        rgb = label_rgb(hex_to_rgb(color))
+        rgb = cast(str, label_rgb(hex_to_rgb(color)))
     elif color.startswith("rgb("):
         rgb = str(color)
     else:
