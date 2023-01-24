@@ -59,7 +59,8 @@ make init
 ```
 
 The default and **recommended** base python is `python3.7` . You can change this by exporting the
-`BASE_PYTHON` environment variable. For instance, you could instead run:
+`BASE_PYTHON` environment variable. For instance, if you are having issues installing scientific
+packages on macOS for python 3.7, you can try python 3.8 instead:
 
 ```shell
 BASE_PYTHON=python3.8 make init
