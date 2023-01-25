@@ -6,7 +6,12 @@ the [commit logs](https://github.com/tpvasconcelos/ridgeplot/commits/).
 Unreleased changes
 ------------------
 
-- ...
+- 🔧 Add `ridgeplot.datasets.load_probly()` helper function to load the `probly` toy dataset. The
+  `probly.csv` file is now included in the package under `ridgeplot/datasets/data/`.
+  ([#80](https://github.com/tpvasconcelos/ridgeplot/pull/80))
+- 🔧 Fixed and improved some type annotations, including the introduction of `ridgeplot._types`
+  module for type aliases such as `Numeric` and `NestedNumericSequence`.
+  ([#80](https://github.com/tpvasconcelos/ridgeplot/pull/80))
 
 0.1.20
 ------
