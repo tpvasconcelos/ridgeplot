@@ -3,21 +3,40 @@ from typing import Callable, Iterable, Mapping
 from unittest import mock
 
 import numpy as np
-import numpy.typing as npt
 import pytest
 
 from ridgeplot._testing import id_func
+from ridgeplot._types import NestedNumericSequence
 from ridgeplot._utils import LazyMapping, get_xy_extrema, normalise_min_max
 
 
 class TestGetXYExtrema:
     """Tests for the :py:func:`ridgeplot._utils.get_xy_extrema` function"""
 
-    def test_fails_for_empty_sequences(self) -> None:
+    def test_raise_for_empty_sequence(self) -> None:
         # Fails for empty sequence
-        pytest.raises(ValueError, get_xy_extrema, ())
-        # Fails for sequence of empty arrays
-        pytest.raises(ValueError, get_xy_extrema, ([(), ()], [(), ()]))
+        with pytest.raises(ValueError, match="Cannot get extrema of empty array sequence."):
+            get_xy_extrema(arrays=[])
+
+    def test_raise_for_empty_array(self) -> None:
+        # Fails if one of the arrays is empty
+        with pytest.raises(ValueError, match="Cannot get extrema of an empty array."):
+            get_xy_extrema(
+                arrays=[
+                    [[1, 2], [3, 4]],  # valid (non-empty) 2D array
+                    [[], []],  # invalid (empty) 2D array
+                ]
+            )
+
+    def test_raise_for_non_2d_array(self) -> None:
+        # Fails if one of the arrays is not 2D
+        with pytest.raises(ValueError, match="Expected 2D array, got 3D array instead."):
+            get_xy_extrema(
+                arrays=[
+                    [[1, 2], [3, 4]],  # valid 2D array
+                    [[1, 2], [3, 4], [5, 6]],  # invalid 3D array
+                ]
+            )
 
     @pytest.mark.parametrize(
         "iterable_type,array_like_type",
@@ -26,34 +45,35 @@ class TestGetXYExtrema:
     def test_expected_output(
         self,
         iterable_type: Callable[[Iterable], Iterable],
-        array_like_type: Callable[[npt.ArrayLike], npt.ArrayLike],
+        array_like_type: Callable[[NestedNumericSequence], NestedNumericSequence],
     ) -> None:
-        """Test :py:func:`get_xy_extrema()` against a varied combination of possible input types."""
+        """Test :py:func:`get_xy_extrema()` against a varied combination of
+        possible input types."""
 
         # This tuple contains a varied set of array-like objects. Which is to show
         # that get_xy_extrema accepts any iterable of any valid array-like objects
-        arrays = (
+        arrays: Iterable[NestedNumericSequence] = [
             (
-                [12, 2, 3, 40],
-                [0, 2, 3, 4],
+                [1, 2, 3, 4],  # x_min -> 1
+                [1, 2, 3, 4],
             ),
             [
-                (1, 2, 3, 4, 5, 6),
-                (1, 2, 3, 4, 5, 62),
+                (2, 36, 4),  # x_max -> 36
+                (2, 3, 62),  # y_max -> 62
             ],
             np.asarray(
                 [
                     [2, 3],
-                    [3, 2],
+                    [0, 1],  # y_min -> 0
                 ]
             ),
-        )
+        ]
         arrays = iterable_type(array_like_type(arr) for arr in arrays)
 
         # The x-y extrema of the array above are:
         expected = (
             1,  # x_min
-            40,  # x_max
+            36,  # x_max
             0,  # y_min
             62,  # y_max
         )

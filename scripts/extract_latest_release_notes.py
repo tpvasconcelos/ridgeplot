@@ -4,7 +4,7 @@
 - The body of this file is then used as the body of the GitHub release.
 """
 from pathlib import Path
-from typing import List, Sequence
+from typing import List, Sequence, cast
 
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
@@ -43,10 +43,11 @@ def get_tokens_latest_release() -> List[Token]:
 
 def render_md_tokens(tokens: Sequence[Token]) -> str:
     md_renderer = MDRenderer()
-    return md_renderer.render(tokens=tokens, options={}, env={})
+    text = md_renderer.render(tokens=tokens, options={}, env={})
+    return cast(str, text)
 
 
-def log_release_text(text: str):
+def log_release_text(text: str) -> None:
     print("EXTRACTED RELEASE NOTES:")
     print("⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇")
     print(text)

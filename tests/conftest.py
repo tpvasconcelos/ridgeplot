@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from pytest import Session
 
@@ -14,7 +14,7 @@ def _patch_plotly_show() -> None:
 
     def wrapped(
         fig: Union[Figure, dict],
-        renderer: str = None,
+        renderer: Optional[str] = None,
         validate: bool = True,
         **kwargs: Dict[str, Any],
     ) -> None:

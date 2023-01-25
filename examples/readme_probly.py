@@ -1,15 +1,12 @@
 import numpy as np
-import pandas as pd
 
 from ridgeplot import ridgeplot
+from ridgeplot.datasets import load_probly
 
 
 def main() -> None:
-    # Get the raw data
-    df = pd.read_csv(
-        "https://raw.githubusercontent.com/zonination/perceptions/"
-        "51207062aa173777264d3acce0131e1e2456d966/probly.csv"
-    )
+    # Load the probly dataset
+    df = load_probly()
 
     # Let's grab only the subset of columns displayed in the example
     column_names = [

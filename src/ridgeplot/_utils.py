@@ -1,18 +1,44 @@
-from typing import Callable, Iterable, Iterator, Mapping, Optional, Tuple, TypeVar
+from typing import Callable, Iterable, Iterator, List, Mapping, Optional, Tuple, TypeVar
 
-import numpy.typing as npt
+from ridgeplot._types import NestedNumericSequenceT, NumericT
 
 
-def get_xy_extrema(arrays: Iterable[npt.ArrayLike]) -> Tuple[float, float, float, float]:
-    """Returns the x-y extrema (x_min, x_max, y_min, y_max) of a list of 2D
-    arrays of shape (2, M)."""
-    # Unpack and flatten all x and y values from `arrays`
-    x = []
-    y = []
+def get_xy_extrema(
+    arrays: Iterable[NestedNumericSequenceT],
+) -> Tuple[NumericT, NumericT, NumericT, NumericT]:
+    """Returns the global x-y extrema (x_min, x_max, y_min, y_max) of a
+    sequence of 2D array-like objects.
+
+    Args:
+        arrays
+            A sequence of 2D array-like objects.
+
+    Returns:
+        A tuple of the form (x_min, x_max, y_min, y_max).
+
+    Raises:
+        :py:exc:`ValueError`
+            If the ``arrays`` sequence is empty, or if one of the arrays is
+            empty, or if one of the arrays is not 2D.
+
+    Examples:
+        >>> get_xy_extrema([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+        (1, 6, 3, 8)
+    """
+    x_flat: List[NumericT] = []
+    y_flat: List[NumericT] = []
     for array in arrays:
-        x.extend(array[0])
-        y.extend(array[1])
-    return min(x), max(x), min(y), max(y)
+        ndim = len(array)
+        if ndim != 2:
+            raise ValueError(f"Expected 2D array, got {ndim}D array instead.")
+        x, y = array[0], array[1]
+        if len(x) == 0 or len(y) == 0:
+            raise ValueError("Cannot get extrema of an empty array.")
+        x_flat.extend(x)
+        y_flat.extend(y)
+    if len(x_flat) == 0 or len(y_flat) == 0:
+        raise ValueError("Cannot get extrema of empty array sequence.")
+    return min(x_flat), max(x_flat), min(y_flat), max(y_flat)
 
 
 def normalise_min_max(val: float, min_: float, max_: float) -> float:

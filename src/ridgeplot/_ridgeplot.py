@@ -58,8 +58,7 @@ def ridgeplot(
               ``min(std(x),IQR/1.34)``
             - ``"normal_reference"`` - C * A * nobs ** (-1/5.), where C is
               calculated from the kernel. Equivalent (up to 2 dp) to the
-              ``"scott"`` bandwidth for gaussian kernels. See
-              `bandwidths.py <_bw>`_.
+              ``"scott"`` bandwidth for gaussian kernels. See `bandwidths.py`_.
             - If a float is given, its value is used as the bandwidth.
             - If a callable is given, it's return value is used. The callable
               should take exactly two parameters, i.e., ``fn(x, kern)``, and
@@ -76,8 +75,8 @@ def ridgeplot(
         colorscale
             Any valid Plotly color-scale or a str with a valid named
             color-scale. Use :py:func:`~ridgeplot.get_all_colorscale_names()`
-            to see which names are available or check out
-            `Plotly's built-in color-scales <cs>`_.
+            to see which names are available or check out `Plotly's built-in
+            color-scales`_.
         colormode
             This argument controls the logic for choosing the color filling of
             each ridgeline trace. Each option provides a different method for
@@ -115,8 +114,10 @@ def ridgeplot(
             units of the range between the minimum and maximum x-values from
             all distributions.
 
-    .. _bw: https://www.statsmodels.org/stable/_modules/statsmodels/nonparametric/bandwidths.html
-    .._cs: https://plotly.com/python/builtin-colorscales/
+    .. _bandwidths.py:
+        https://www.statsmodels.org/stable/_modules/statsmodels/nonparametric/bandwidths.html
+    .. _Plotly's built-in color-scales:
+        https://plotly.com/python/builtin-colorscales/
 
     Returns:
         :py:class:`plotly.graph_objects.Figure`
@@ -128,7 +129,7 @@ def ridgeplot(
     Raises:
         :py:exc:`ValueError`
             If both ``samples`` and ``densities`` arguments are not None, or if
-            neither ``samples`` or ``densities`` are specified.
+            neither ``samples`` nor ``densities`` are specified.
     """
     has_samples = samples is not None
     has_densities = densities is not None
