@@ -1,58 +1,44 @@
-import sys
-from typing import (
-    Callable,
-    Iterable,
-    Iterator,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Tuple,
-    TypeVar,
-)
+from typing import Callable, Iterable, Iterator, List, Mapping, Optional, Tuple, TypeVar
 
-if sys.version_info >= (3, 8):
-    from typing import Protocol
-else:
-    from typing_extensions import Protocol
-
-
-class _Comparable(Protocol):
-    def __lt__(self, __other: "_Comparable") -> bool:
-        ...
-
-    def __gt__(self, __other: "_Comparable") -> bool:
-        ...
-
-
-_ComparableT = TypeVar("_ComparableT", bound=_Comparable)
+from ridgeplot._types import NestedNumericSequenceT, NumericT
 
 
 def get_xy_extrema(
-    arrays: Iterable[Sequence[Sequence[_ComparableT]]],
-) -> Tuple[_ComparableT, _ComparableT, _ComparableT, _ComparableT]:
+    arrays: Iterable[NestedNumericSequenceT],
+) -> Tuple[NumericT, NumericT, NumericT, NumericT]:
     """Returns the global x-y extrema (x_min, x_max, y_min, y_max) of a
     sequence of 2D array-like objects.
 
     Args:
-        arrays:
+        arrays
             A sequence of 2D array-like objects.
 
     Returns:
         A tuple of the form (x_min, x_max, y_min, y_max).
+
+    Raises:
+        :py:exc:`ValueError`
+            If the ``arrays`` sequence is empty, or if one of the arrays is
+            empty, or if one of the arrays is not 2D.
+
+    Examples:
+        >>> get_xy_extrema([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+        (1, 6, 3, 8)
     """
-    x: List[_ComparableT] = []
-    y: List[_ComparableT] = []
+    x_flat: List[NumericT] = []
+    y_flat: List[NumericT] = []
     for array in arrays:
-        if len(array) != 2:
-            raise ValueError(f"Expected 2D array, got {len(array)}D array instead.")
-        if 0 in (len(array[0]), len(array[1])):
+        ndim = len(array)
+        if ndim != 2:
+            raise ValueError(f"Expected 2D array, got {ndim}D array instead.")
+        x, y = array[0], array[1]
+        if len(x) == 0 or len(y) == 0:
             raise ValueError("Cannot get extrema of an empty array.")
-        x.extend(array[0])
-        y.extend(array[1])
-    if 0 in (len(x), len(y)):
+        x_flat.extend(x)
+        y_flat.extend(y)
+    if len(x_flat) == 0 or len(y_flat) == 0:
         raise ValueError("Cannot get extrema of empty array sequence.")
-    return min(x), max(x), min(y), max(y)
+    return min(x_flat), max(x_flat), min(y_flat), max(y_flat)
 
 
 def normalise_min_max(val: float, min_: float, max_: float) -> float:

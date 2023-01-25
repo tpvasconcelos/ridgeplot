@@ -3,10 +3,10 @@ from typing import Callable, Iterable, Mapping
 from unittest import mock
 
 import numpy as np
-import numpy.typing as npt
 import pytest
 
 from ridgeplot._testing import id_func
+from ridgeplot._types import NestedNumericSequence
 from ridgeplot._utils import LazyMapping, get_xy_extrema, normalise_min_max
 
 
@@ -23,8 +23,8 @@ class TestGetXYExtrema:
         with pytest.raises(ValueError, match="Cannot get extrema of an empty array."):
             get_xy_extrema(
                 arrays=[
-                    [["not"], ["empty"]],
-                    [[], []],  # empty 2D array
+                    [[1, 2], [3, 4]],  # valid (non-empty) 2D array
+                    [[], []],  # invalid (empty) 2D array
                 ]
             )
 
@@ -45,35 +45,35 @@ class TestGetXYExtrema:
     def test_expected_output(
         self,
         iterable_type: Callable[[Iterable], Iterable],
-        array_like_type: Callable[[npt.ArrayLike], npt.ArrayLike],
+        array_like_type: Callable[[NestedNumericSequence], NestedNumericSequence],
     ) -> None:
         """Test :py:func:`get_xy_extrema()` against a varied combination of
         possible input types."""
 
         # This tuple contains a varied set of array-like objects. Which is to show
         # that get_xy_extrema accepts any iterable of any valid array-like objects
-        arrays = (
+        arrays: Iterable[NestedNumericSequence] = [
             (
-                [12, 2, 3, 40],
-                [0, 2, 3, 4],
+                [1, 2, 3, 4],  # x_min -> 1
+                [1, 2, 3, 4],
             ),
             [
-                (1, 2, 3, 4, 5, 6),
-                (1, 2, 3, 4, 5, 62),
+                (2, 36, 4),  # x_max -> 36
+                (2, 3, 62),  # y_max -> 62
             ],
             np.asarray(
                 [
                     [2, 3],
-                    [3, 2],
+                    [0, 1],  # y_min -> 0
                 ]
             ),
-        )
+        ]
         arrays = iterable_type(array_like_type(arr) for arr in arrays)
 
         # The x-y extrema of the array above are:
         expected = (
             1,  # x_min
-            40,  # x_max
+            36,  # x_max
             0,  # y_min
             62,  # y_max
         )
