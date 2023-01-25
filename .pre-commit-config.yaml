@@ -78,3 +78,4 @@ repos:
           - flake8-typing-imports
           - pep8-naming
           - flake8-pytest-style
+          - flake8-simplify
