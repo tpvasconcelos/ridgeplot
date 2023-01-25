@@ -57,6 +57,14 @@ repos:
     hooks:
       - id: black
 
+  - repo: https://github.com/adamchainz/blacken-docs
+    rev: v1.12.1
+    hooks:
+      - id: blacken-docs
+        additional_dependencies:
+          - black==22.12.0
+
+
   - repo: https://github.com/pycqa/isort
     rev: 5.11.4
     hooks:
@@ -69,3 +77,4 @@ repos:
         additional_dependencies:
           - flake8-typing-imports
           - pep8-naming
+          - flake8-pytest-style

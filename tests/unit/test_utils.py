@@ -39,7 +39,7 @@ class TestGetXYExtrema:
             )
 
     @pytest.mark.parametrize(
-        "iterable_type,array_like_type",
+        ("iterable_type", "array_like_type"),
         product((id_func, tuple, list), (id_func, tuple, list, np.asarray)),
     )
     def test_expected_output(
@@ -102,7 +102,7 @@ class TestNormaliseMinMax:
             r"val (.*) is out of bounds"
         )
 
-    @pytest.mark.parametrize("val", (0.0, 0.5, 1.0))
+    @pytest.mark.parametrize("val", [0.0, 0.5, 1.0])
     def test_same_val_unchanged_for_range_0_to_1(self, val: float) -> None:
         """The output of :py:func:`normalise_min_max()` should be equal to ``val`` whenever
         ``min_ == 0`` and ``max_ == 1``."""
@@ -129,7 +129,7 @@ class TestNormaliseMinMax:
 class TestLazyMapping:
     """Tests for the :py:func:`ridgeplot._utils.LazyMapping` class"""
 
-    @pytest.mark.parametrize("target_mapping", ({}, {"a": 1, "b": 2, "c": 3}))
+    @pytest.mark.parametrize("target_mapping", [{}, {"a": 1, "b": 2, "c": 3}])
     def test_mapping(self, target_mapping: Mapping) -> None:
         """Test the part of the implantation of the ``_mapping`` property.
 
@@ -148,7 +148,7 @@ class TestLazyMapping:
         # _inner_mapping should point to the same object
         assert lm._inner_mapping is m
 
-    @pytest.mark.parametrize("target_mapping", ({}, {"a": 1, "b": 2, "c": 3}))
+    @pytest.mark.parametrize("target_mapping", [{}, {"a": 1, "b": 2, "c": 3}])
     def test_loader_called_only_once(self, target_mapping: Mapping) -> None:
         """Check that ``LazyMapping`` only calls ``._loader()`` once."""
         lm = LazyMapping(loader=lambda: target_mapping)
@@ -165,7 +165,7 @@ class TestLazyMapping:
             _ = lm._loader()
             assert loader.call_count == 2
 
-    @pytest.mark.parametrize("target_mapping", ({}, {"a": 1, "b": 2, "c": 3}))
+    @pytest.mark.parametrize("target_mapping", [{}, {"a": 1, "b": 2, "c": 3}])
     def test_mapping_mirrors_mapping_returned_by_loader(self, target_mapping: Mapping) -> None:
         """Test that LazyMapping behaves just like the mapping returned by the
          ``loader`` callable argument.

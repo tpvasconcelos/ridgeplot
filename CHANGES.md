@@ -12,6 +12,9 @@ Unreleased changes
 - 🔧 Fixed and improved some type annotations, including the introduction of `ridgeplot._types`
   module for type aliases such as `Numeric` and `NestedNumericSequence`.
   ([#80](https://github.com/tpvasconcelos/ridgeplot/pull/80))
+- 🔧 Add the `blacken-docs` pre-commit hook and add the `pep8-naming` and `flake8-pytest-style`
+  plugins to the `flake8` pre-commit hook.
+  ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
 - 📝 Change to numpydoc style docstrings.
   ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
 - 📝 Add a robots.txt to the docs site.

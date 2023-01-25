@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional
 
-from pytest import Session
+import pytest
 
 
 def _patch_plotly_show() -> None:
@@ -23,7 +23,7 @@ def _patch_plotly_show() -> None:
     plotly.io.show = wrapped
 
 
-def pytest_sessionstart(session: Session) -> None:
+def pytest_sessionstart(session: pytest.Session) -> None:
     """Called after the :py:class:`pytest.Session` object has been created and
     before performing collection and entering the run test loop.
 
