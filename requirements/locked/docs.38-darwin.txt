@@ -74,6 +74,8 @@ fastjsonschema==2.16.2
     # via nbformat
 furo==2022.12.7
     # via -r requirements/docs.in
+greenlet==2.0.1
+    # via sqlalchemy
 html5lib==1.1
     # via sphinx-toolbox
 idna==3.4
