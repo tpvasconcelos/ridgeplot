@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Callable, Iterable, Iterator, List, Mapping, Optional, Tuple, TypeVar
 
 from ridgeplot._types import NestedNumericSequenceT, NumericT
@@ -9,21 +11,26 @@ def get_xy_extrema(
     """Returns the global x-y extrema (x_min, x_max, y_min, y_max) of a
     sequence of 2D array-like objects.
 
-    Args:
-        arrays
-            A sequence of 2D array-like objects.
+    Parameters
+    ----------
+    arrays
+        A sequence of 2D array-like objects.
 
-    Returns:
+    Returns
+    -------
+    Tuple[Numeric, Numeric, Numeric, Numeric]
         A tuple of the form (x_min, x_max, y_min, y_max).
 
-    Raises:
-        :py:exc:`ValueError`
-            If the ``arrays`` sequence is empty, or if one of the arrays is
-            empty, or if one of the arrays is not 2D.
+    Raises
+    ------
+    :py:exc:`ValueError`
+        If the ``arrays`` sequence is empty, or if one of the arrays is
+        empty, or if one of the arrays is not 2D.
 
-    Examples:
-        >>> get_xy_extrema([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
-        (1, 6, 3, 8)
+    Examples
+    --------
+    >>> get_xy_extrema([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+    (1, 6, 3, 8)
     """
     x_flat: List[NumericT] = []
     y_flat: List[NumericT] = []
@@ -56,6 +63,27 @@ VT = TypeVar("VT")  # Mapping value type
 
 
 class LazyMapping(Mapping[KT, VT]):
+    """A lazy mapping that loads its contents only when first needed.
+
+    Parameters
+    ----------
+    loader
+        A callable that returns a mapping.
+
+    Examples
+    --------
+    >>> from typing import Dict
+    >>>
+    >>> def my_io_loader() -> Dict[str, int]:
+    ...     print("Loading...")
+    ...     return {"a": 1, "b": 2}
+    ...
+    >>> lazy_mapping = LazyMapping(my_io_loader)
+    >>> lazy_mapping
+    Loading...
+    {'a': 1, 'b': 2}
+    """
+
     __slots__ = ("_loader", "_inner_mapping")
 
     def __init__(self, loader: Callable[[], Mapping[KT, VT]]):

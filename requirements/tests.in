@@ -1,5 +1,5 @@
 -e file:.
 
-pytest==7.*
+pytest
 pytest-cov
 pytest-socket

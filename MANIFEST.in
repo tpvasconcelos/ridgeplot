@@ -21,10 +21,12 @@ include src/ridgeplot/colors.json
 recursive-include src/ridgeplot/datasets/data *.csv
 
 # Docs
-include docs/Makefile docs/make.bat
+include docs/Makefile
+include docs/make.bat
+include docs/robots.txt
+recursive-include docs *.md *.py *.rst
 recursive-include docs/_static *.ico
 recursive-include docs/_static/img *.png
-recursive-include docs *.md *.py *.rst
 prune docs/build
 
 # Misc

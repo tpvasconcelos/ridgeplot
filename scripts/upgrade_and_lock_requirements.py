@@ -49,7 +49,7 @@ def main() -> None:
     py_sys_platform = os.environ["PY_SYS_PLATFORM"]
 
     popen_args = [
-        'pip-compile-multi', '--upgrade', '--allow-unsafe',
+        'pip-compile-multi', '--upgrade', '--allow-unsafe', '--backtracking',
         '--out-ext', f'{py_python_version}-{py_sys_platform}.txt',
     ]  # fmt: skip
     _run_subprocess(popen_args)

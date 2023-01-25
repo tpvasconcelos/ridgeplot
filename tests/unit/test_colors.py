@@ -3,10 +3,8 @@ from typing import Any, Optional, Type, Union
 import pytest
 from _plotly_utils.exceptions import PlotlyError
 
-# noinspection PyProtectedMember
 from ridgeplot._colors import (
     _COLORSCALE_MAPPING,
-    ColorScaleType,
     _any_to_rgb,
     _colormap_loader,
     apply_alpha,
@@ -15,8 +13,7 @@ from ridgeplot._colors import (
     get_colorscale,
     validate_colorscale,
 )
-
-# noinspection PyProtectedMember
+from ridgeplot._types import ColorScaleType
 from ridgeplot._utils import LazyMapping
 
 VIRIDIS = (
