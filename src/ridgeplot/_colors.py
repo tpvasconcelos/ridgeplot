@@ -26,7 +26,7 @@ _COLORSCALE_MAPPING = LazyMapping(loader=_colormap_loader)
 def validate_colorscale(colorscale: ColorScaleType) -> None:
     """Validate the structure, scale values, and colors of colorscale.
 
-    Adapted from :py:func:`_plotly_utils.colors.validate_colorscale`.
+    Adapted from :func:`_plotly_utils.colors.validate_colorscale`.
     """
     scale, colors = zip(*colorscale)
     validate_scale_values(scale=scale)
@@ -52,7 +52,7 @@ def _any_to_rgb(color: Union[str, tuple]) -> str:
 
 
 def get_all_colorscale_names() -> Tuple[str, ...]:
-    """Returns a tuple with all available colorscale names."""
+    """Get a tuple with all available colorscale names."""
     return tuple(_COLORSCALE_MAPPING.keys())
 
 
@@ -62,13 +62,13 @@ def get_colorscale(name: str) -> ColorScaleType:
     Parameters
     ----------
     name
-        The colorscale name. This argument is case-insensitive. For
-        instance, ``"YlOrRd"`` and ``"ylorrd"`` map to the same colorscale.
-        Colorscale names ending in ``_r`` represent a *reversed* colorscale.
+        The colorscale name. This argument is case-insensitive. For instance,
+        ``"YlOrRd"`` and ``"ylorrd"`` map to the same colorscale. Colorscale
+        names ending in ``_r`` represent a *reversed* colorscale.
 
     Raises
     ------
-    :py:exc:`ValueError`
+    :exc:`ValueError`
         If an unknown name is provided
     """
     name = name.lower()
@@ -81,8 +81,11 @@ def get_colorscale(name: str) -> ColorScaleType:
 
 
 def get_color(colorscale: ColorScaleType, midpoint: float) -> str:
-    """Given a colorscale, it interpolates the expected color at a given
-    midpoint, on a scale from 0 to 1."""
+    """Get a color from a colorscale at a given midpoint.
+
+    Given a colorscale, it interpolates the expected color at a given midpoint,
+    on a scale from 0 to 1.
+    """
     if not (0 <= midpoint <= 1):
         raise ValueError(f"The 'midpoint' should be a float value between 0 and 1, not {midpoint}.")
     scale = [s for s, _ in colorscale]

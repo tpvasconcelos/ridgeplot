@@ -142,7 +142,7 @@ def test_any_to_rgb_fails_for_invalid_color(
 
 @pytest.mark.xfail(reason="Incomplete implementation of RGB string validation from Plotly.")
 @pytest.mark.parametrize(
-    ("color,expected_exception", "exception_match"),
+    ("color", "expected_exception", "exception_match"),
     [
         # invalid rgb string
         ("rgb(1,2,3,4,5)", PlotlyError, None),

@@ -9,6 +9,7 @@ sphinx-copybutton
 sphinx_thebe
 sphinx_design
 sphinx-togglebutton
+sphinx-notfound-page
 sphinxext-opengraph
 sphinx-inline-tabs
 sphinx-autobuild

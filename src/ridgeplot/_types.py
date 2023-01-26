@@ -16,21 +16,21 @@ _T_co = TypeVar("_T_co", covariant=True)
 
 class SimpleSequence(Collection[_T_co], Protocol[_T_co]):
     """A simple Sequence protocol that inherits from
-    :py:class:`collections.abc.Collection` and implements a
-    ``__getitem__`` method."""
+    :class:`~collections.abc.Collection` and implements a ``__getitem__``
+    method."""
 
     def __getitem__(self, index: int) -> _T_co:
         ...
 
 
 Numeric = Union[int, float, np.number]
-"""A :py:class:`typing.TypeAlias` for numeric types."""
+"""A :class:`~typing.TypeAlias` for numeric types."""
 
 NumericT = TypeVar("NumericT", bound=Numeric)
-"""A :py:class:`typing.TypeVar` version of :py:class:`Numeric`."""
+"""A :class:`~typing.TypeVar` version of :class:`Numeric`."""
 
 NestedNumericSequence = Union[SimpleSequence[SimpleSequence[Numeric]], npt.NDArray[np.number]]
-"""A :py:class:`typing.TypeAlias` for a sequence of sequences of numeric values.
+"""A :class:`~typing.TypeAlias` for a sequence of sequences of numeric values.
 
 Examples of valid types:
 
@@ -41,12 +41,12 @@ Examples of valid types:
 """
 
 NestedNumericSequenceT = Union[SimpleSequence[SimpleSequence[NumericT]], npt.NDArray[NumericT]]
-"""Same as :py:data:`NestedNumericSequence`, but with a :py:data:`NumericT`
-type variable bound to :py:data:`Numeric` instead the :py:data:`Numeric` type
+"""Same as :data:`NestedNumericSequence`, but with a :data:`NumericT`
+type variable bound to :data:`Numeric` instead the :data:`Numeric` type
 alias."""
 
 ColorScaleType = Iterable[Tuple[float, str]]
-"""A colorscale is an :py:class:`typing.Iterable` of tuples of two elements:
+"""A colorscale is an :class:`~typing.Iterable` of tuples of two elements:
 
 0. the first element (a *scale value*) is a float bounded to the
    interval ``[0, 1]``

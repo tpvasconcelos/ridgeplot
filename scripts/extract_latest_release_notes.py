@@ -1,4 +1,6 @@
-"""
+"""Extract the latest release notes
+
+Execution steps:
 - Extracts the latest release notes from the CHANGES.md file.
 - The output is written to the `LATEST_RELEASE_NOTES.md` file.
 - The body of this file is then used as the body of the GitHub release.

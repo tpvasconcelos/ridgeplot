@@ -8,8 +8,8 @@ from ridgeplot._types import NestedNumericSequenceT, NumericT
 def get_xy_extrema(
     arrays: Iterable[NestedNumericSequenceT],
 ) -> Tuple[NumericT, NumericT, NumericT, NumericT]:
-    """Returns the global x-y extrema (x_min, x_max, y_min, y_max) of a
-    sequence of 2D array-like objects.
+    """Get the global x-y extrema (x_min, x_max, y_min, y_max) of a sequence of
+    2D array-like objects.
 
     Parameters
     ----------
@@ -23,9 +23,9 @@ def get_xy_extrema(
 
     Raises
     ------
-    :py:exc:`ValueError`
-        If the ``arrays`` sequence is empty, or if one of the arrays is
-        empty, or if one of the arrays is not 2D.
+    :exc:`ValueError`
+        If the ``arrays`` sequence is empty, or if one of the arrays is empty,
+        or if one of the arrays is not 2D.
 
     Examples
     --------

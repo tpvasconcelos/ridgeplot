@@ -58,7 +58,7 @@ repos:
       - id: black
 
   - repo: https://github.com/adamchainz/blacken-docs
-    rev: v1.12.1
+    rev: 1.13.0
     hooks:
       - id: blacken-docs
         additional_dependencies:
@@ -75,7 +75,11 @@ repos:
     hooks:
       - id: flake8
         additional_dependencies:
-          - flake8-typing-imports
-          - pep8-naming
+          - flake8-bugbear
+          - flake8-docstrings
+          - flake8-implicit-str-concat
           - flake8-pytest-style
+          - flake8-typing-imports
+          - flake8-rst-docstrings
           - flake8-simplify
+          - pep8-naming

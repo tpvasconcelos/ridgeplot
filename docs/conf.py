@@ -31,6 +31,7 @@ language = "en"
 # ones.
 extensions = [
     "myst_nb",
+    "notfound.extension",
     "sphinxext.opengraph",
     "sphinx.ext.autodoc",
     "sphinx.ext.doctest",
@@ -166,7 +167,7 @@ sitemap_url_scheme = "{link}"
 # autodoc config
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
 autodoc_member_order = "bysource"
-autodoc_typehints = "both"
+autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
 autodoc_type_aliases = {
     "Numeric": "Numeric",
@@ -188,11 +189,11 @@ napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_preprocess_types = True
 napoleon_type_aliases = {
-    "Numeric": ":py:data:`Numeric`",
-    "NumericT": ":py:data:`NumericT`",
-    "NestedNumericSequence": ":py:data:`NestedNumericSequence`",
-    "NestedNumericSequenceT": ":py:data:`NestedNumericSequenceT`",
-    "ColorScaleType": ":py:data:`ColorScaleType`",
+    "Numeric": ":data:`Numeric`",
+    "NumericT": ":data:`NumericT`",
+    "NestedNumericSequence": ":data:`NestedNumericSequence`",
+    "NestedNumericSequenceT": ":data:`NestedNumericSequenceT`",
+    "ColorScaleType": ":data:`ColorScaleType`",
 }
 
 # myst config
@@ -217,3 +218,8 @@ DEFAULT_NAMESPACE.update(
         "repo_dir": lambda dir_name: f"[{dir_name}]({repo_url}/tree/main/{dir_name})",
     },
 )
+
+rst_epilog = """
+.. |go.Figure| replace:: :class:`plotly.graph_objects.Figure`
+.. |~go.Figure| replace:: :class:`~plotly.graph_objects.Figure`
+"""

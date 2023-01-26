@@ -24,14 +24,20 @@ def _patch_plotly_show() -> None:
 
 
 def pytest_sessionstart(session: pytest.Session) -> None:
-    """Called after the :py:class:`pytest.Session` object has been created and
+    """Called after the :class:`pytest.Session` object has been created and
     before performing collection and entering the run test loop.
 
-    Args:
-        session
-            The pytest :py:class:`~pytest.Session` object.
+    Parameters
+    ----------
+    session
+        The pytest :class:`~pytest.Session` object.
 
-    References:
-    - https://docs.pytest.org/en/6.2.x/reference.html#initialization-hooks
+    References
+    ----------
+    https://docs.pytest.org/en/stable/reference.html#initialization-hooks
+
+    ..
+        Ignore the following `flake8-docstrings` errors:
+        # noqa: D401
     """
     _patch_plotly_show()

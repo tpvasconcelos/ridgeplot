@@ -16,7 +16,7 @@ from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
 
 class RidgePlotFigureFactory:
-    """Refer to :py:func:`ridgeplot.ridgeplot()` for docstring."""
+    """Refer to :func:`~ridgeplot.ridgeplot()`."""
 
     def __init__(
         self,
@@ -33,6 +33,7 @@ class RidgePlotFigureFactory:
         # ==============================================================
         # ---  Get clean and validated input arguments
         # ==============================================================
+
         # Check whether all density arrays have shape (2, N)
         new_densities: List[np.ndarray] = []
         for array in densities:
@@ -94,8 +95,11 @@ class RidgePlotFigureFactory:
         }
 
     def draw_base(self, x, y_shifted) -> None:
-        """Adds an invisible trace at constant y that will serve as the
-        fill-limit for the corresponding density trace."""
+        """Draw the base for a density trace.
+
+        Adds an invisible trace at constant y that will serve as the fill-limit
+        for the corresponding density trace.
+        """
         self.fig.add_trace(
             go.Scatter(
                 x=x,
@@ -108,8 +112,12 @@ class RidgePlotFigureFactory:
         )
 
     def draw_density_trace(self, x, y, label, color) -> None:
-        """Adds a density 'trace' to the Figure. The fill="tonexty" option
-        fills the trace until the previously drawn trace (see `draw_base`)."""
+        """Draw a density trace.
+
+        Adds a density 'trace' to the Figure. The ``fill="tonexty"`` option
+        fills the trace until the previously drawn trace (see
+        :meth:`draw_base`). This is why the base trace must be drawn first.
+        """
         line_color = "rgba(0,0,0,0.6)" if color is not None else None
         self.fig.add_trace(
             go.Scatter(

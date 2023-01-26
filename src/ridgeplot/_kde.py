@@ -7,9 +7,11 @@ import statsmodels.api as sm
 
 
 def evaluate_density(samples, points, kernel, bandwidth) -> Tuple[np.ndarray, np.ndarray]:
-    """For a given dataset, computes the kernel densities at the given points,
-    and returns the points and density arrays."""
+    """Evaluate a density function at a set of points.
 
+    For a given set of samples, computes the kernel densities at the given
+    points. Both the original points and density arrays are returned.
+    """
     # By default, we'll use a 'hard' KDE span. That is, we'll
     # evaluate the densities and N equally spaced points
     # over the range [min(samples), max(samples)]
