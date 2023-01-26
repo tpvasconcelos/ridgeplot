@@ -66,8 +66,6 @@ domdf-python-tools==3.6.0
     #   apeye-core
     #   dict2css
     #   sphinx-toolbox
-entrypoints==0.4
-    # via jupyter-client
 executing==1.2.0
     # via stack-data
 fastjsonschema==2.16.2
@@ -106,7 +104,7 @@ jsonschema==4.17.3
     # via nbformat
 jupyter-cache==0.5.0
     # via myst-nb
-jupyter-client==7.4.9
+jupyter-client==8.0.1
     # via
     #   ipykernel
     #   nbclient
@@ -156,7 +154,6 @@ nbformat==5.7.3
 nest-asyncio==1.5.6
     # via
     #   ipykernel
-    #   jupyter-client
     #   nbclient
 numpy==1.24.1
     # via

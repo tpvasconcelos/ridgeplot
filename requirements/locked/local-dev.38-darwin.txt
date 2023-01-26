@@ -73,7 +73,7 @@ pipdeptree==2.3.3
     # via -r requirements/local-dev.in
 plotly==5.13.0
     # via ridgeplot
-pre-commit==3.0.0
+pre-commit==3.0.1
     # via -r requirements/local-dev.in
 prompt-toolkit==3.0.36
     # via
