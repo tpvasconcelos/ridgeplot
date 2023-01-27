@@ -29,21 +29,6 @@ Unreleased changes
 - 💅 Cleanup and improve some type annotations.
   ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
 
-0.1.20
-------
-
-- ...
-
-0.1.19
-------
-
-- ...
-
-0.1.18
-------
-
-- ...
-
 0.1.17
 ------
 
