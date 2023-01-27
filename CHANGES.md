@@ -6,6 +6,11 @@ the [commit logs](https://github.com/tpvasconcelos/ridgeplot/commits/).
 Unreleased changes
 ------------------
 
+- ...
+
+0.1.21
+------
+
 ### Features
 
 - 🔧 Add `ridgeplot.datasets.load_probly()` helper function to load the `probly` toy dataset. The
