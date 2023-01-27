@@ -6,16 +6,14 @@ the [commit logs](https://github.com/tpvasconcelos/ridgeplot/commits/).
 Unreleased changes
 ------------------
 
+### Features
+
 - 🔧 Add `ridgeplot.datasets.load_probly()` helper function to load the `probly` toy dataset. The
   `probly.csv` file is now included in the package under `ridgeplot/datasets/data/`.
   ([#80](https://github.com/tpvasconcelos/ridgeplot/pull/80))
-- 🔧 Fixed and improved some type annotations, including the introduction of `ridgeplot._types`
-  module for type aliases such as `Numeric` and `NestedNumericSequence`.
-  ([#80](https://github.com/tpvasconcelos/ridgeplot/pull/80))
-- 🔧 Add the `blacken-docs` pre-commit hook and add the `pep8-naming`, `flake8-pytest-style`,
-  `flake8-simplify`, `flake8-implicit-str-concat`, `flake8-bugbear`, `flake8-rst-docstrings`,
-  `flake8-rst-docstrings`, etc... plugins to the `flake8` pre-commit hook.
-  ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
+
+### Documentation
+
 - 📝 Change to numpydoc style docstrings.
   ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
 - 📝 Add a robots.txt to the docs site.
@@ -25,6 +23,16 @@ Unreleased changes
 - 📝 Change the sphinx theme to `furo`.
   ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
 - 📝 Improve the internal documentation and some of these internals to the API reference.
+  ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
+
+### Internal
+
+- 🔧 Fixed and improved some type annotations, including the introduction of `ridgeplot._types`
+  module for type aliases such as `Numeric` and `NestedNumericSequence`.
+  ([#80](https://github.com/tpvasconcelos/ridgeplot/pull/80))
+- 🔧 Add the `blacken-docs` pre-commit hook and add the `pep8-naming`, `flake8-pytest-style`,
+  `flake8-simplify`, `flake8-implicit-str-concat`, `flake8-bugbear`, `flake8-rst-docstrings`,
+  `flake8-rst-docstrings`, etc... plugins to the `flake8` pre-commit hook.
   ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
 - 💅 Cleanup and improve some type annotations.
   ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
