@@ -44,7 +44,7 @@ init: clean-all install ## initialise development environment
 
 
 .venv: ## create a virtual environment
-	@echo "==> Creating local virtual environment under: $(VENV_PATH)/"
+	@echo "==> Creating local virtual environment under: $(VENV_PATH)/ ($(BASE_PYTHON))"
 	@$(BASE_PYTHON) -m pip install --upgrade pip
 	@$(BASE_PYTHON) -m venv "$(VENV_PATH)"
 	@echo "==> Installing and/or upgrading build dependencies..."

@@ -35,8 +35,8 @@ runs:
       id: env_markers
       shell: bash
       run: |
-        echo "::set-output name=sys_platform::$(python -c 'import sys; print(sys.platform)')"
-        echo "::set-output name=python_version::$(python -c 'import platform; print("".join(platform.python_version_tuple()[:2]))')"
+        echo "sys_platform=$(python -c 'import sys; print(sys.platform)')" >> $GITHUB_OUTPUT
+        echo "python_version=$(python -c 'import platform; print("".join(platform.python_version_tuple()[:2]))')" >> $GITHUB_OUTPUT
 
     - name: Install requirements
       if: ${{ inputs.requirements-prefix != '' }}
