@@ -28,6 +28,8 @@ Unreleased changes
   ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
 - 💅 Cleanup and improve some type annotations.
   ([#81](https://github.com/tpvasconcelos/ridgeplot/pull/81))
+- 🔧Update deprecated `set-output` commands (GitHub Actions)
+  ([#87](https://github.com/tpvasconcelos/ridgeplot/pull/87))
 
 0.1.17
 ------
