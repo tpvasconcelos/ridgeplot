@@ -21,4 +21,4 @@ jobs:
       - name: Package and upload a release prod PyPI
         env:
           TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN }}"
-        run: ./bin/tox -e build,publish-pypi
+        run: ./bin/tox -e build,publish-pypi-prod
