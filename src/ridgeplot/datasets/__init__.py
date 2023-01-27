@@ -8,7 +8,7 @@ _DATA_DIR = Path(__file__).parent / "data"
 
 
 def load_probly() -> pd.DataFrame:
-    """Load the `probly dataset`_
+    """Load the `probly dataset`_.
 
     .. _probly dataset:
         https://github.com/zonination/perceptions/blob/

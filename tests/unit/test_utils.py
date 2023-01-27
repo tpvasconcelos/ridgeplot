@@ -11,7 +11,7 @@ from ridgeplot._utils import LazyMapping, get_xy_extrema, normalise_min_max
 
 
 class TestGetXYExtrema:
-    """Tests for the :py:func:`ridgeplot._utils.get_xy_extrema` function"""
+    """Tests for the :func:`ridgeplot._utils.get_xy_extrema` function"""
 
     def test_raise_for_empty_sequence(self) -> None:
         # Fails for empty sequence
@@ -39,7 +39,7 @@ class TestGetXYExtrema:
             )
 
     @pytest.mark.parametrize(
-        "iterable_type,array_like_type",
+        ("iterable_type", "array_like_type"),
         product((id_func, tuple, list), (id_func, tuple, list, np.asarray)),
     )
     def test_expected_output(
@@ -47,9 +47,8 @@ class TestGetXYExtrema:
         iterable_type: Callable[[Iterable], Iterable],
         array_like_type: Callable[[NestedNumericSequence], NestedNumericSequence],
     ) -> None:
-        """Test :py:func:`get_xy_extrema()` against a varied combination of
+        """Test :func:`get_xy_extrema()` against a varied combination of
         possible input types."""
-
         # This tuple contains a varied set of array-like objects. Which is to show
         # that get_xy_extrema accepts any iterable of any valid array-like objects
         arrays: Iterable[NestedNumericSequence] = [
@@ -69,7 +68,6 @@ class TestGetXYExtrema:
             ),
         ]
         arrays = iterable_type(array_like_type(arr) for arr in arrays)
-
         # The x-y extrema of the array above are:
         expected = (
             1,  # x_min
@@ -77,15 +75,14 @@ class TestGetXYExtrema:
             0,  # y_min
             62,  # y_max
         )
-
         assert get_xy_extrema(arrays) == expected
 
 
 class TestNormaliseMinMax:
-    """Tests for the :py:func:`ridgeplot._utils.normalise_min_max` function"""
+    """Tests for the :func:`ridgeplot._utils.normalise_min_max` function."""
 
     def test_raises_for_invalid_range(self) -> None:
-        """Assert :py:func:`normalise_min_max()` fails for ``max_ <= min_`` or when ``val``
+        """Assert :func:`normalise_min_max()` fails for ``max_ <= min_`` or when ``val``
         is not in range."""
         # max_ <= min_
         pytest.raises(ValueError, normalise_min_max, val=0.0, min_=3.0, max_=2.9).match(
@@ -102,34 +99,34 @@ class TestNormaliseMinMax:
             r"val (.*) is out of bounds"
         )
 
-    @pytest.mark.parametrize("val", (0.0, 0.5, 1.0))
+    @pytest.mark.parametrize("val", [0.0, 0.5, 1.0])
     def test_same_val_unchanged_for_range_0_to_1(self, val: float) -> None:
-        """The output of :py:func:`normalise_min_max()` should be equal to ``val`` whenever
-        ``min_ == 0`` and ``max_ == 1``."""
+        """The output of :func:`normalise_min_max()` should be equal to
+        ``val`` whenever ``min_ == 0`` and ``max_ == 1``."""
         assert normalise_min_max(val=val, min_=0, max_=1) == val
 
     @pytest.mark.parametrize("val", range(4))
     def test_if_val_is_min_then_zero(self, val: float) -> None:
-        """The output of :py:func:`normalise_min_max()` should be equal to 0.0 whenever
-        ``val == min_``."""
+        """The output of :func:`normalise_min_max()` should be equal to 0.0
+        whenever ``val == min_``."""
         assert normalise_min_max(val=val, min_=val, max_=val + 12) == 0.0
 
     @pytest.mark.parametrize("val", range(4))
     def test_if_val_is_max_then_one(self, val: float) -> None:
-        """The output of :py:func:`normalise_min_max()` should be equal to 1.0 whenever
-        ``val == max_``."""
+        """The output of :func:`normalise_min_max()` should be equal to 1.0
+        whenever ``val == max_``."""
         assert normalise_min_max(val=val, min_=val - 12, max_=val) == 1.0
 
     def test_simple_examples(self) -> None:
-        """Test :py:func:`normalise_min_max()` against some simple examples."""
+        """Test :func:`normalise_min_max()` against some simple examples."""
         assert normalise_min_max(val=24, min_=12, max_=36) == 0.5
         assert normalise_min_max(val=6, min_=4, max_=24) == 0.1
 
 
 class TestLazyMapping:
-    """Tests for the :py:func:`ridgeplot._utils.LazyMapping` class"""
+    """Tests for the :func:`ridgeplot._utils.LazyMapping` class"""
 
-    @pytest.mark.parametrize("target_mapping", ({}, {"a": 1, "b": 2, "c": 3}))
+    @pytest.mark.parametrize("target_mapping", [{}, {"a": 1, "b": 2, "c": 3}])
     def test_mapping(self, target_mapping: Mapping) -> None:
         """Test the part of the implantation of the ``_mapping`` property.
 
@@ -148,7 +145,7 @@ class TestLazyMapping:
         # _inner_mapping should point to the same object
         assert lm._inner_mapping is m
 
-    @pytest.mark.parametrize("target_mapping", ({}, {"a": 1, "b": 2, "c": 3}))
+    @pytest.mark.parametrize("target_mapping", [{}, {"a": 1, "b": 2, "c": 3}])
     def test_loader_called_only_once(self, target_mapping: Mapping) -> None:
         """Check that ``LazyMapping`` only calls ``._loader()`` once."""
         lm = LazyMapping(loader=lambda: target_mapping)
@@ -165,10 +162,10 @@ class TestLazyMapping:
             _ = lm._loader()
             assert loader.call_count == 2
 
-    @pytest.mark.parametrize("target_mapping", ({}, {"a": 1, "b": 2, "c": 3}))
+    @pytest.mark.parametrize("target_mapping", [{}, {"a": 1, "b": 2, "c": 3}])
     def test_mapping_mirrors_mapping_returned_by_loader(self, target_mapping: Mapping) -> None:
         """Test that LazyMapping behaves just like the mapping returned by the
-         ``loader`` callable argument.
+        ``loader`` callable argument.
 
         This test should cover __getitem__, __iter__, and __len__ from Mapping
         and __str__ and __repr__ additionally.

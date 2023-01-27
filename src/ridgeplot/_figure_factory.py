@@ -1,24 +1,26 @@
-from typing import Callable, Dict, List, Optional
+from __future__ import annotations
+
+from typing import Callable, Dict, Iterable, List, Optional
 
 import numpy as np
 from plotly import graph_objects as go
 
 from ridgeplot._colors import (
-    ColorScaleType,
     apply_alpha,
     get_color,
     get_colorscale,
     validate_colorscale,
 )
+from ridgeplot._types import ColorScaleType, NestedNumericSequence
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
 
-class _RidgePlotFigureFactory:
-    """Refer to :py:func:`ridgeplot.ridgeplot()` for docstring."""
+class RidgePlotFigureFactory:
+    """Refer to :func:`~ridgeplot.ridgeplot()`."""
 
     def __init__(
         self,
-        densities,
+        densities: Iterable[NestedNumericSequence],
         colorscale,
         coloralpha,
         colormode,
@@ -31,15 +33,19 @@ class _RidgePlotFigureFactory:
         # ==============================================================
         # ---  Get clean and validated input arguments
         # ==============================================================
-        n_traces = len(densities)
 
         # Check whether all density arrays have shape (2, N)
-        new_densities = []
-        for i in range(n_traces):
-            d = np.asarray(densities[i])
-            if d.shape[0] != 2 or d.ndim != 2:
-                raise ValueError(f"Each density array should have shape (2, N), got {d.shape}")
-            new_densities.append(d)
+        new_densities: List[np.ndarray] = []
+        for array in densities:
+            array = np.asarray(array)
+            if array.ndim != 2 or array.shape[0] != 2:
+                raise ValueError(
+                    "Each density array must have shape (2, N), "
+                    f"but got array with shape {array.shape}"
+                )
+            new_densities.append(array)
+
+        n_traces = len(new_densities)
 
         if isinstance(colorscale, str):
             colorscale = get_colorscale(name=colorscale)
@@ -76,7 +82,7 @@ class _RidgePlotFigureFactory:
         # ---  Other instance variables
         # ==============================================================
         self.n_traces: int = n_traces
-        self.x_min, self.x_max, _, self.y_max = get_xy_extrema(densities)
+        self.x_min, self.x_max, _, self.y_max = get_xy_extrema(arrays=self.densities)
         self.fig: go.Figure = go.Figure()
         self.colors: List[str] = self.pre_compute_colors()
 
@@ -89,8 +95,11 @@ class _RidgePlotFigureFactory:
         }
 
     def draw_base(self, x, y_shifted) -> None:
-        """Adds an invisible trace at constant y that will serve as the
-        fill-limit for the corresponding density trace."""
+        """Draw the base for a density trace.
+
+        Adds an invisible trace at constant y that will serve as the fill-limit
+        for the corresponding density trace.
+        """
         self.fig.add_trace(
             go.Scatter(
                 x=x,
@@ -103,8 +112,12 @@ class _RidgePlotFigureFactory:
         )
 
     def draw_density_trace(self, x, y, label, color) -> None:
-        """Adds a density 'trace' to the Figure. The fill="tonexty" option
-        fills the trace until the previously drawn trace (see `draw_base`)."""
+        """Draw a density trace.
+
+        Adds a density 'trace' to the Figure. The ``fill="tonexty"`` option
+        fills the trace until the previously drawn trace (see
+        :meth:`draw_base`). This is why the base trace must be drawn first.
+        """
         line_color = "rgba(0,0,0,0.6)" if color is not None else None
         self.fig.add_trace(
             go.Scatter(

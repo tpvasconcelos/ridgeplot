@@ -33,13 +33,13 @@ repos:
           - mdformat-myst
 
   - repo: https://github.com/mgedmin/check-manifest
-    rev: "0.48"
+    rev: "0.49"
     hooks:
       - id: check-manifest
         args: [ --no-build-isolation ]
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.2.2
+    rev: v3.3.1
     hooks:
       - id: pyupgrade
         args: [ --py36-plus, --keep-runtime-typing ]
@@ -50,15 +50,23 @@ repos:
   #   rev: v2.4.6
   #   hooks:
   #     - id: pip-compile-multi-verify
-  #       args: [ --out-ext, 38-darwin.txt ]
+  #       args: [ --backtracking, --out-ext, 38-darwin.txt ]
 
   - repo: https://github.com/psf/black
-    rev: 22.10.0
+    rev: 22.12.0
     hooks:
       - id: black
 
+  - repo: https://github.com/adamchainz/blacken-docs
+    rev: 1.13.0
+    hooks:
+      - id: blacken-docs
+        additional_dependencies:
+          - black==22.12.0
+
+
   - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+    rev: 5.11.4
     hooks:
       - id: isort
 
@@ -66,4 +74,12 @@ repos:
     rev: 5.0.4
     hooks:
       - id: flake8
-        additional_dependencies: [ flake8-typing-imports ]
+        additional_dependencies:
+          - flake8-bugbear
+          - flake8-docstrings
+          - flake8-implicit-str-concat
+          - flake8-pytest-style
+          - flake8-typing-imports
+          - flake8-rst-docstrings
+          - flake8-simplify
+          - pep8-naming

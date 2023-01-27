@@ -13,7 +13,7 @@ pip-compile-multi
 bumpversion
 
 # Various useful utilities for local development
-ipython==7.*
+ipython
 pip-tools
 pipdeptree
 ptpython

@@ -99,7 +99,7 @@ df = load_probly()
 column_names = [
     "Almost Certainly", "Very Good Chance", "We Believe", "Likely",
     "About Even", "Little Chance", "Chances Are Slight", "Almost No Chance",
-]
+]  # fmt: skip
 df = df[column_names]
 
 # Not only does 'ridgeplot(...)' come configured with sensible defaults

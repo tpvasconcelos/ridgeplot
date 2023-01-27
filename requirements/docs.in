@@ -1,14 +1,17 @@
 -e file:.
 
 Jinja2
-sphinx==4.*
-sphinx-book-theme==0.*
+sphinx
+furo
 myst_nb
+sphinx-autodoc-typehints
 sphinx-copybutton
 sphinx_thebe
 sphinx_design
 sphinx-togglebutton
+sphinx-notfound-page
 sphinxext-opengraph
 sphinx-inline-tabs
 sphinx-autobuild
-numpydoc
+sphinx-toolbox
+sphinx-sitemap

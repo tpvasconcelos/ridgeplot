@@ -38,18 +38,17 @@ the original post.
 
 ```python
 import numpy as np
-import pandas as pd
 from ridgeplot import ridgeplot
+from ridgeplot.datasets import load_probly
 
-
-# Get the raw data
-df = pd.read_csv("https://raw.githubusercontent.com/bokeh/bokeh/main/bokeh/sampledata/_data/probly.csv")
+# Load the probly dataset
+df = load_probly()
 
 # Let's grab only the subset of columns displayed in the example
 column_names = [
     "Almost Certainly", "Very Good Chance", "We Believe", "Likely",
     "About Even", "Little Chance", "Chances Are Slight", "Almost No Chance",
-]
+]  # fmt: skip
 df = df[column_names]
 
 # Not only does 'ridgeplot(...)' come configured with sensible defaults
