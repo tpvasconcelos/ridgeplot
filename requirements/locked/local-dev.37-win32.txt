@@ -26,7 +26,7 @@ click==8.1.3
     #   pip-tools
 decorator==5.1.1
     # via ipython
-identify==2.5.15
+identify==2.5.16
     # via pre-commit
 ipython==7.34.0
     # via -r requirements\local-dev.in
@@ -87,7 +87,7 @@ pyyaml==6.0
     # via pre-commit
 scipy==1.7.3
     # via statsmodels
-setuptools==66.1.1
+setuptools==67.0.0
     # via
     #   ipython
     #   nodeenv
