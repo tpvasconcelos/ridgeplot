@@ -10,6 +10,7 @@
 
 # -- Project information -----------------------------------------------------
 from datetime import datetime
+from pathlib import Path
 
 import importlib_metadata
 
@@ -44,6 +45,7 @@ extensions = [
     # "sphinx_toolbox.more_autodoc.typehints",
     "sphinx_copybutton",
     "sphinx_design",
+    "sphinx_gallery.gen_gallery",
     "sphinx_inline_tabs",
     "sphinx_thebe",
     "sphinx_togglebutton",
@@ -196,6 +198,19 @@ napoleon_type_aliases = {
     "ColorScaleType": ":data:`ColorScaleType`",
 }
 
+# sphinx-gallery config
+import plotly.io as pio  # noqa: E402
+from plotly.io._sg_scraper import plotly_sg_scraper  # noqa: E402
+
+pio.renderers.default = "sphinx_gallery_png"
+sphinx_gallery_conf = {
+    "examples_dirs": "examples_gallery_in",
+    "gallery_dirs": "examples_gallery_out",
+    "run_stale_examples": False,
+    "download_all_examples": False,
+    "image_scrapers": (plotly_sg_scraper,),
+}
+
 # myst config
 myst_enable_extensions = [
     "dollarmath",
@@ -223,3 +238,9 @@ rst_epilog = """
 .. |go.Figure| replace:: :class:`plotly.graph_objects.Figure`
 .. |~go.Figure| replace:: :class:`~plotly.graph_objects.Figure`
 """
+
+
+def setup(app):
+    # html_css_files doesn't seem to be working...
+    for css_path in Path("_static/css").glob("*.css"):
+        app.add_css_file(css_path.relative_to("_static").as_posix())

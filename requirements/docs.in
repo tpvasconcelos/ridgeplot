@@ -15,3 +15,14 @@ sphinx-inline-tabs
 sphinx-autobuild
 sphinx-toolbox
 sphinx-sitemap
+
+# --- sphinx-gallery --- #
+sphinx-gallery
+# kaleido is used to export static images from plotly
+# figures, which is used by sphinx-gallery to generate
+# thumbnails for the examples gallery
+kaleido
+# matplotlib is an implicit dependency of sphinx-gallery.
+# although we don't need it for this project, we still
+# need to declare the dependency here.
+matplotlib

@@ -43,6 +43,7 @@ maxdepth: 1
 ---
 installation
 getting_started
+examples_gallery_out/index.rst
 ```
 
 ```{toctree}
