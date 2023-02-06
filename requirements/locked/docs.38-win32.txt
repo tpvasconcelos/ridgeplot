@@ -25,7 +25,7 @@ babel==2.11.0
     # via sphinx
 backcall==0.2.0
     # via ipython
-beautifulsoup4==4.11.1
+beautifulsoup4==4.11.2
     # via
     #   furo
     #   sphinx-toolbox
@@ -72,7 +72,7 @@ fastjsonschema==2.16.2
     # via nbformat
 furo==2022.12.7
     # via -r requirements\docs.in
-greenlet==2.0.1
+greenlet==2.0.2
     # via sqlalchemy
 html5lib==1.1
     # via sphinx-toolbox
@@ -91,9 +91,9 @@ importlib-metadata==6.0.0
     #   sphinx
 importlib-resources==5.10.2
     # via jsonschema
-ipykernel==6.20.2
+ipykernel==6.21.1
     # via myst-nb
-ipython==8.8.0
+ipython==8.9.0
     # via
     #   ipykernel
     #   myst-nb
@@ -109,12 +109,13 @@ jsonschema==4.17.3
     # via nbformat
 jupyter-cache==0.5.0
     # via myst-nb
-jupyter-client==8.0.1
+jupyter-client==8.0.2
     # via
     #   ipykernel
     #   nbclient
-jupyter-core==5.1.5
+jupyter-core==5.2.0
     # via
+    #   ipykernel
     #   jupyter-client
     #   nbformat
 livereload==2.6.3
@@ -160,7 +161,7 @@ nest-asyncio==1.5.6
     # via
     #   ipykernel
     #   nbclient
-numpy==1.24.1
+numpy==1.24.2
     # via
     #   pandas
     #   patsy
@@ -233,8 +234,6 @@ ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
 scipy==1.10.0
     # via statsmodels
-setuptools==66.1.1
-    # via sphinx-togglebutton
 six==1.16.0
     # via
     #   asttokens
@@ -269,7 +268,7 @@ sphinx==5.3.0
     #   sphinxext-opengraph
 sphinx-autobuild==2021.3.14
     # via -r requirements\docs.in
-sphinx-autodoc-typehints==1.21.8
+sphinx-autodoc-typehints==1.22
     # via
     #   -r requirements\docs.in
     #   sphinx-toolbox
@@ -287,11 +286,11 @@ sphinx-notfound-page==0.8.3
     # via -r requirements\docs.in
 sphinx-prompt==1.5.0
     # via sphinx-toolbox
-sphinx-sitemap==2.4.0
+sphinx-sitemap==2.5.0
     # via -r requirements\docs.in
 sphinx-tabs==3.4.1
     # via sphinx-toolbox
-sphinx-thebe==0.2.0
+sphinx-thebe==0.2.1
     # via -r requirements\docs.in
 sphinx-togglebutton==0.3.2
     # via -r requirements\docs.in
@@ -301,7 +300,7 @@ sphinxcontrib-applehelp==1.0.4
     # via sphinx
 sphinxcontrib-devhelp==1.0.2
     # via sphinx
-sphinxcontrib-htmlhelp==2.0.0
+sphinxcontrib-htmlhelp==2.0.1
     # via sphinx
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
@@ -328,7 +327,7 @@ tornado==6.2
     #   ipykernel
     #   jupyter-client
     #   livereload
-traitlets==5.8.1
+traitlets==5.9.0
     # via
     #   comm
     #   ipykernel
@@ -352,7 +351,11 @@ webencodings==0.5.1
     # via html5lib
 wheel==0.38.4
     # via sphinx-togglebutton
-zipp==3.11.0
+zipp==3.12.1
     # via
     #   importlib-metadata
     #   importlib-resources
+
+# The following packages are considered to be unsafe in a requirements file:
+setuptools==67.1.0
+    # via sphinx-togglebutton

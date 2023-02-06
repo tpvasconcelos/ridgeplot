@@ -38,7 +38,7 @@ tomli==2.0.1
     # via
     #   pyproject-api
     #   tox
-tox==4.4.2
+tox==4.4.4
     # via -r requirements/tox.in
 typing-extensions==4.4.0
     # via
@@ -47,5 +47,5 @@ typing-extensions==4.4.0
     #   tox
 virtualenv==20.17.1
     # via tox
-zipp==3.11.0
+zipp==3.12.1
     # via importlib-metadata

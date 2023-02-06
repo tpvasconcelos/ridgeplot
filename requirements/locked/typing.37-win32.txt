@@ -10,7 +10,7 @@
     # via -r requirements\tests.in
 mypy==0.991
     # via -r requirements\typing.in
-mypy-extensions==0.4.3
+mypy-extensions==1.0.0
     # via mypy
 pandas-stubs==1.2.0.62
     # via -r requirements\typing.in
