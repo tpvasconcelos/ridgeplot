@@ -86,7 +86,7 @@ importlib-metadata==6.0.0
     #   sphinx
 ipykernel==6.20.2
     # via myst-nb
-ipython==8.8.0
+ipython==8.10.0
     # via
     #   ipykernel
     #   myst-nb

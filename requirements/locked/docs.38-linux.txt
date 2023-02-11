@@ -89,7 +89,7 @@ importlib-resources==5.10.2
     # via jsonschema
 ipykernel==6.20.2
     # via myst-nb
-ipython==8.8.0
+ipython==8.10.0
     # via
     #   ipykernel
     #   myst-nb
