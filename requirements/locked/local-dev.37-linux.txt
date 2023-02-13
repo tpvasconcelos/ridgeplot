@@ -26,7 +26,7 @@ click==8.1.3
     #   pip-tools
 decorator==5.1.1
     # via ipython
-identify==2.5.15
+identify==2.5.17
     # via pre-commit
 ipython==7.34.0
     # via -r requirements/local-dev.in
@@ -55,11 +55,9 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pip==22.3.1
-    # via pip-tools
 pip-compile-multi==2.6.1
     # via -r requirements/local-dev.in
-pip-tools==6.12.1
+pip-tools==6.12.2
     # via
     #   -r requirements/local-dev.in
     #   pip-compile-multi
@@ -91,22 +89,17 @@ pyyaml==6.0
     # via pre-commit
 scipy==1.7.3
     # via statsmodels
-setuptools==66.1.1
-    # via
-    #   ipython
-    #   nodeenv
-    #   pip-tools
 six==1.16.0
     # via
     #   patsy
     #   python-dateutil
 statsmodels==0.13.5
     # via ridgeplot
-tenacity==8.1.0
+tenacity==8.2.1
     # via plotly
 toposort==1.9
     # via pip-compile-multi
-traitlets==5.8.1
+traitlets==5.9.0
     # via
     #   ipython
     #   matplotlib-inline
@@ -114,3 +107,12 @@ wcwidth==0.2.6
     # via prompt-toolkit
 wheel==0.38.4
     # via pip-tools
+
+# The following packages are considered to be unsafe in a requirements file:
+pip==23.0
+    # via pip-tools
+setuptools==67.2.0
+    # via
+    #   ipython
+    #   nodeenv
+    #   pip-tools
