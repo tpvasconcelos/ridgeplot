@@ -7,7 +7,7 @@
 #
 importlib-metadata==4.12.0
     # via mdformat
-markdown-it-py==2.1.0
+markdown-it-py==2.2.0
     # via
     #   -r requirements\release-notes.in
     #   mdformat
