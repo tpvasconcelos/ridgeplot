@@ -11,7 +11,7 @@ alabaster==0.7.13
     # via sphinx
 apeye==1.3.0
     # via sphinx-toolbox
-apeye-core==1.1.0
+apeye-core==1.1.1
     # via apeye
 asttokens==2.2.1
     # via stack-data
@@ -21,11 +21,11 @@ attrs==22.2.0
     #   jupyter-cache
 autodocsumm==0.2.10
     # via sphinx-toolbox
-babel==2.11.0
+babel==2.12.1
     # via sphinx
 backcall==0.2.0
     # via ipython
-beautifulsoup4==4.11.1
+beautifulsoup4==4.11.2
     # via
     #   furo
     #   sphinx-toolbox
@@ -41,8 +41,12 @@ colorama==0.4.6
     # via sphinx-autobuild
 comm==0.1.2
     # via ipykernel
+contourpy==1.0.7
+    # via matplotlib
 cssutils==2.6.0
     # via dict2css
+cycler==0.11.0
+    # via matplotlib
 debugpy==1.6.6
     # via ipykernel
 decorator==5.1.1
@@ -64,11 +68,13 @@ domdf-python-tools==3.6.0
     #   sphinx-toolbox
 executing==1.2.0
     # via stack-data
-fastjsonschema==2.16.2
+fastjsonschema==2.16.3
     # via nbformat
+fonttools==4.38.0
+    # via matplotlib
 furo==2022.12.7
     # via -r requirements/docs.in
-greenlet==2.0.1
+greenlet==2.0.2
     # via sqlalchemy
 html5lib==1.1
     # via sphinx-toolbox
@@ -84,9 +90,11 @@ importlib-metadata==6.0.0
     #   jupyter-client
     #   myst-nb
     #   sphinx
-ipykernel==6.20.2
+importlib-resources==5.12.0
+    # via matplotlib
+ipykernel==6.21.2
     # via myst-nb
-ipython==8.8.0
+ipython==8.11.0
     # via
     #   ipykernel
     #   myst-nb
@@ -102,21 +110,24 @@ jsonschema==4.17.3
     # via nbformat
 jupyter-cache==0.5.0
     # via myst-nb
-jupyter-client==8.0.1
+jupyter-client==8.0.3
     # via
     #   ipykernel
     #   nbclient
-jupyter-core==5.1.5
+jupyter-core==5.2.0
     # via
+    #   ipykernel
     #   jupyter-client
     #   nbformat
+kiwisolver==1.4.4
+    # via matplotlib
 livereload==2.6.3
     # via sphinx-autobuild
 lockfile==0.12.2
     # via
     #   cachecontrol
     #   sphinx-toolbox
-markdown-it-py==2.1.0
+markdown-it-py==2.2.0
     # via
     #   mdit-py-plugins
     #   myst-parser
@@ -124,11 +135,13 @@ markupsafe==2.1.2
     # via
     #   jinja2
     #   sphinx-jinja2-compat
+matplotlib==3.7.1
+    # via sphinxext-opengraph
 matplotlib-inline==0.1.6
     # via
     #   ipykernel
     #   ipython
-mdit-py-plugins==0.3.3
+mdit-py-plugins==0.3.5
     # via myst-parser
 mdurl==0.1.2
     # via markdown-it-py
@@ -138,7 +151,7 @@ myst-nb==0.17.1
     # via -r requirements/docs.in
 myst-parser==0.18.1
     # via myst-nb
-natsort==8.2.0
+natsort==8.3.1
     # via domdf-python-tools
 nbclient==0.5.13
     # via
@@ -153,8 +166,10 @@ nest-asyncio==1.5.6
     # via
     #   ipykernel
     #   nbclient
-numpy==1.24.1
+numpy==1.24.2
     # via
+    #   contourpy
+    #   matplotlib
     #   pandas
     #   patsy
     #   ridgeplot
@@ -163,6 +178,7 @@ numpy==1.24.1
 packaging==23.0
     # via
     #   ipykernel
+    #   matplotlib
     #   sphinx
     #   statsmodels
 pandas==1.5.3
@@ -175,13 +191,15 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-platformdirs==2.6.2
+pillow==9.4.0
+    # via matplotlib
+platformdirs==3.1.0
     # via
     #   apeye
     #   jupyter-core
-plotly==5.13.0
+plotly==5.13.1
     # via ridgeplot
-prompt-toolkit==3.0.36
+prompt-toolkit==3.0.38
     # via ipython
 psutil==5.9.4
     # via ipykernel
@@ -196,16 +214,17 @@ pygments==2.14.0
     #   sphinx
     #   sphinx-prompt
     #   sphinx-tabs
+pyparsing==3.0.9
+    # via matplotlib
 pyrsistent==0.19.3
     # via jsonschema
 python-dateutil==2.8.2
     # via
     #   jupyter-client
+    #   matplotlib
     #   pandas
 pytz==2022.7.1
-    # via
-    #   babel
-    #   pandas
+    # via pandas
 pyyaml==6.0
     # via
     #   jupyter-cache
@@ -224,10 +243,8 @@ ruamel-yaml==0.17.21
     # via sphinx-toolbox
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
-scipy==1.10.0
+scipy==1.10.1
     # via statsmodels
-setuptools==66.1.1
-    # via sphinx-togglebutton
 six==1.16.0
     # via
     #   asttokens
@@ -237,7 +254,7 @@ six==1.16.0
     #   python-dateutil
 snowballstemmer==2.2.0
     # via sphinx
-soupsieve==2.3.2.post1
+soupsieve==2.4
     # via beautifulsoup4
 sphinx==5.3.0
     # via
@@ -262,7 +279,7 @@ sphinx==5.3.0
     #   sphinxext-opengraph
 sphinx-autobuild==2021.3.14
     # via -r requirements/docs.in
-sphinx-autodoc-typehints==1.21.8
+sphinx-autodoc-typehints==1.22
     # via
     #   -r requirements/docs.in
     #   sphinx-toolbox
@@ -280,11 +297,11 @@ sphinx-notfound-page==0.8.3
     # via -r requirements/docs.in
 sphinx-prompt==1.5.0
     # via sphinx-toolbox
-sphinx-sitemap==2.4.0
+sphinx-sitemap==2.5.0
     # via -r requirements/docs.in
 sphinx-tabs==3.4.1
     # via sphinx-toolbox
-sphinx-thebe==0.2.0
+sphinx-thebe==0.2.1
     # via -r requirements/docs.in
 sphinx-togglebutton==0.3.2
     # via -r requirements/docs.in
@@ -294,7 +311,7 @@ sphinxcontrib-applehelp==1.0.4
     # via sphinx
 sphinxcontrib-devhelp==1.0.2
     # via sphinx
-sphinxcontrib-htmlhelp==2.0.0
+sphinxcontrib-htmlhelp==2.0.1
     # via sphinx
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
@@ -302,7 +319,7 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-sphinxext-opengraph==0.7.5
+sphinxext-opengraph==0.8.1
     # via -r requirements/docs.in
 sqlalchemy==1.4.46
     # via jupyter-cache
@@ -314,14 +331,14 @@ tabulate==0.9.0
     # via
     #   jupyter-cache
     #   sphinx-toolbox
-tenacity==8.1.0
+tenacity==8.2.2
     # via plotly
 tornado==6.2
     # via
     #   ipykernel
     #   jupyter-client
     #   livereload
-traitlets==5.8.1
+traitlets==5.9.0
     # via
     #   comm
     #   ipykernel
@@ -331,7 +348,7 @@ traitlets==5.8.1
     #   matplotlib-inline
     #   nbclient
     #   nbformat
-typing-extensions==4.4.0
+typing-extensions==4.5.0
     # via
     #   domdf-python-tools
     #   myst-nb
@@ -345,5 +362,11 @@ webencodings==0.5.1
     # via html5lib
 wheel==0.38.4
     # via sphinx-togglebutton
-zipp==3.11.0
-    # via importlib-metadata
+zipp==3.15.0
+    # via
+    #   importlib-metadata
+    #   importlib-resources
+
+# The following packages are considered to be unsafe in a requirements file:
+setuptools==67.5.0
+    # via sphinx-togglebutton
