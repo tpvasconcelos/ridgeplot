@@ -20,7 +20,6 @@ def plot_violin(
     ridgeplot = True
 
     for dist, name, color in zip(data, names, colors):
-
         defaults_violin = dict(
             fillcolor=color,
             line_color="black" if color else None,
