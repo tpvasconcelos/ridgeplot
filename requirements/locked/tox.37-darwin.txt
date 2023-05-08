@@ -13,39 +13,39 @@ colorama==0.4.6
     # via tox
 distlib==0.3.6
     # via virtualenv
-filelock==3.9.0
+filelock==3.12.0
     # via
     #   tox
     #   virtualenv
-importlib-metadata==6.0.0
+importlib-metadata==6.6.0
     # via
     #   pluggy
     #   tox
     #   virtualenv
-packaging==23.0
+packaging==23.1
     # via
     #   pyproject-api
     #   tox
-platformdirs==2.6.2
+platformdirs==3.5.0
     # via
     #   tox
     #   virtualenv
 pluggy==1.0.0
     # via tox
-pyproject-api==1.5.0
+pyproject-api==1.5.1
     # via tox
 tomli==2.0.1
     # via
     #   pyproject-api
     #   tox
-tox==4.4.2
+tox==4.5.1
     # via -r requirements/tox.in
-typing-extensions==4.4.0
+typing-extensions==4.5.0
     # via
     #   importlib-metadata
     #   platformdirs
     #   tox
-virtualenv==20.17.1
+virtualenv==20.23.0
     # via tox
-zipp==3.11.0
+zipp==3.15.0
     # via importlib-metadata
