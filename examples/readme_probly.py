@@ -34,7 +34,7 @@ def main() -> None:
         colorscale="viridis",
         # In the example, the distributions seem to be colored
         # by 'index'. Have a look at the other available options!
-        colormode="index",
+        colormode="row-index",
         # Set the transparency level
         coloralpha=0.6,
         # Always label your plots! Don't be evil...

@@ -5,7 +5,10 @@ def main() -> None:
 
     # Put your real samples here...
     np.random.seed(0)
-    synthetic_samples = [np.random.normal(n / 1.2, size=600) for n in range(9, 0, -1)]
+    synthetic_samples = [
+        [np.random.normal((i + n) / 1.6, scale=np.random.uniform(0.6), size=600) for i in (4, 2, 0)]
+        for n in range(22, 0, -3)
+    ]
 
     # Call the `ridgeplot()` helper, packed with sensible defaults
     fig = ridgeplot(samples=synthetic_samples)

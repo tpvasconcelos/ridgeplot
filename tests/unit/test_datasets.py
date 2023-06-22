@@ -11,4 +11,4 @@ def test_data_dir_not_empty() -> None:
 
 def test_load_probly() -> None:
     data = load_probly()
-    assert len(data) > 0
+    assert data.shape == (46, 17)

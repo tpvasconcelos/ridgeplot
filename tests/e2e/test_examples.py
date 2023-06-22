@@ -10,4 +10,5 @@ PATH_EXAMPLES = Path(__file__).parents[2].joinpath("examples")
 def test_example_scripts(example_script: Path) -> None:
     """Assert that the example scripts run with no errors."""
     assert example_script.exists()
+    # TODO: check against expected output
     run_path(example_script.as_posix(), run_name="__main__")

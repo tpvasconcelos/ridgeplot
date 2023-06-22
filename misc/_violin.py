@@ -47,7 +47,7 @@ def plot_violin(
         # legend_title="Legend Title",
         # xaxis_title=metric.upper() if ridgeplot else None,
         # yaxis_title=None if ridgeplot else metric.upper(),
-        xaxis_showticklabels=bool(ridgeplot),
+        xaxis_showticklabels=ridgeplot,
         yaxis_showticklabels=not ridgeplot,
         hovermode="y unified" if ridgeplot else "x unified",
         xaxis_showgrid=True,

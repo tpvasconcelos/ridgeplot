@@ -1,24 +1,42 @@
 from __future__ import annotations
 
-from typing import Iterable, Optional, Union
+import warnings
+from typing import Optional, Union
 
 import plotly.graph_objects as go
 
 from ridgeplot._figure_factory import RidgePlotFigureFactory
-from ridgeplot._kde import get_densities
-from ridgeplot._types import ColorScaleType, NestedNumericSequence
+from ridgeplot._kde import estimate_densities
+from ridgeplot._types import (
+    ColorScaleT,
+    DensitiesT,
+    KDEBandwidthT,
+    KDEPointsT,
+    LabelsArray,
+    SamplesT,
+    ShallowDensitiesT,
+    ShallowLabelsArrayT,
+    ShallowSamplesT,
+    is_flat_str_collection,
+    is_shallow_densities,
+    is_shallow_samples,
+    nest_shallow_collection,
+)
+
+_WARN_ON_SHALLOW_TYPES = False
+_SHALLOW_TYPES_WARN_TYPE = PendingDeprecationWarning
 
 
 def ridgeplot(
-    samples=None,
-    densities: Optional[Iterable[NestedNumericSequence]] = None,
+    samples: Union[SamplesT, ShallowSamplesT] = None,
+    densities: Union[DensitiesT, ShallowDensitiesT] = None,
     kernel: str = "gau",
-    bandwidth="normal_reference",
-    kde_points=500,
-    colorscale: Union[str, ColorScaleType] = "plasma",
+    bandwidth: KDEBandwidthT = "normal_reference",
+    kde_points: KDEPointsT = 500,
+    colorscale: Union[str, ColorScaleT] = "plasma",
     colormode: str = "mean-means",
     coloralpha: Optional[float] = None,
-    labels=None,
+    labels: Union[LabelsArray, ShallowLabelsArrayT] = None,
     linewidth: float = 1.4,
     spacing: float = 0.5,
     show_annotations: bool = True,
@@ -39,11 +57,30 @@ def ridgeplot(
     samples
         If ``samples`` data is specified, Kernel Density Estimation (KDE) will
         be computed. See ``kernel``, ``bandwidth``, and ``kde_points`` for more
-        details and KDE configuration options.
+        details and KDE configuration options. The ``samples`` argument should
+        be a 3D array with shape :math:`(R, T, P)`, where:
+
+        - :math:`R` is the number of rows in the plot
+        - :math:`T` is the number of traces per row (this value can be different
+          for each row, *à la* awkward array)
+        - :math:`P` is the number of points per trace (this value can be also
+           different for each trace)
+
+        The KDE will be performed the points :math:`P` in each trace
+        :math:`T_i` in each row :math:`R_i` independently. The resulting array
+        will be a ``densities`` array with shape :math:`(R, T, P, 2)` (see
+        ``densities`` bellow).
     densities
         If ``densities`` arrays are specified instead, the KDE step will be
         skipped and all associated arguments ignored. Each density array should
-        have shape :math:`(2, N)`, but :math:`N` may vary with each array.
+        have shape :math:`(R, T, P, 2)` (4D), where:
+
+        - :math:`R` is the number of rows in the plot
+        - :math:`T` is the number of traces per row (this value can be different
+          for each row, *à la* awkward array)
+        - :math:`P` is the number of points per trace (this value can be also
+          different for each trace)
+        - :math:`2` is the number of coordinates per point (x and y)
     kernel
         The Kernel to be used during Kernel Density Estimation. The default is
         a Gaussian Kernel (``"gau"``). Choices are:
@@ -75,7 +112,7 @@ def ridgeplot(
           - ``kern``: the kernel instance used
     kde_points
         This argument controls the points at which KDE is computed. If an int
-        value is passed (default), the densities will be evaluated at
+        value is passed (default=500), the densities will be evaluated at
         ``kde_points`` evenly spaced points between the min and max of each set
         of samples. However, you may also specify a custom range by instead
         passing an array of points. This array should be one-dimensional.
@@ -89,8 +126,12 @@ def ridgeplot(
         calculating the ``colorscale`` midpoint of each trace. The default is
         mode is ``"mean-means"``. Choices are:
 
-        - ``"index"`` - uses the trace's index. e.g. if 3 traces are
-          specified, then the midpoints will be [0, 0.5, 1].
+        - ``"row-index"`` - uses the row's index. e.g. if the ridgeplot has 3
+          rows of traces, then the midpoints will be
+          ``[[0, ...], [0.5, ...], [1, ...]]``.
+        - ``"trace-index"`` - uses the trace's index. e.g. if the ridgeplot has
+          a total of 3 traces (across all rows), then the midpoints will be
+          0, 0.5, and 1, respectively.
         - ``"mean-minmax"`` - uses the min-max normalized (weighted) mean of
           each density to calculate the midpoints. The normalization min
           and max values are the minimum and maximum x-values from all
@@ -141,8 +182,65 @@ def ridgeplot(
         raise ValueError("You may not specify both `samples` and `densities` arguments!")
     elif not has_samples and not has_densities:
         raise ValueError("You have to specify one of: `samples` or `densities`")
-    elif not has_densities:
-        densities = get_densities(samples, points=kde_points, kernel=kernel, bandwidth=bandwidth)
+
+    if has_densities:
+        if is_shallow_densities(densities):
+            if _WARN_ON_SHALLOW_TYPES:
+                warnings.warn(
+                    "It looks like you have passed a deprecated array shape for "
+                    "the `densities` argument. Support for this format will be "
+                    "removed in a future version. The new supported format is "
+                    "a 4D array of shape (R, T, P, 2). Refer to the `ridgeplot` "
+                    "function's docstring for more details.",
+                    _SHALLOW_TYPES_WARN_TYPE,
+                    stacklevel=2,
+                )
+            densities: DensitiesT = nest_shallow_collection(densities)
+    else:
+        if is_shallow_samples(samples):
+            if _WARN_ON_SHALLOW_TYPES:
+                warnings.warn(
+                    "It looks like you have passed a deprecated array shape for "
+                    "the `samples` argument. Support for this format will be "
+                    "removed in a future version. The new supported format is "
+                    "a 3D array of shape (R, T, P). Refer to the `ridgeplot` "
+                    "function's docstring for more details.",
+                    _SHALLOW_TYPES_WARN_TYPE,
+                    stacklevel=2,
+                )
+            samples: SamplesT = nest_shallow_collection(samples)
+        # Convert samples to densities
+        densities = estimate_densities(
+            samples=samples,
+            points=kde_points,
+            kernel=kernel,
+            bandwidth=bandwidth,
+        )
+
+    if is_flat_str_collection(labels):
+        if _WARN_ON_SHALLOW_TYPES:
+            warnings.warn(
+                "It looks like you have passed a deprecated array shape for "
+                "the `labels` argument. Support for this format will be "
+                "removed in a future version. The new supported format is "
+                "a 2D array of shape (R, T). Refer to the `ridgeplot` "
+                "function's docstring for more details.",
+                _SHALLOW_TYPES_WARN_TYPE,
+                stacklevel=2,
+            )
+        labels: LabelsArray = nest_shallow_collection(labels)
+
+    if colormode == "index":
+        warnings.warn(
+            "The colormode='index' value has been deprecated in favor of "
+            "colormode='row-index', which provides the same functionality but "
+            "is more explicit and allows to distinguishing between the "
+            "'row-index' and 'trace-index' modes. Support for the deprecated "
+            "colormode='index' value will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        colormode = "row-index"
 
     ridgeplot_figure_factory = RidgePlotFigureFactory(
         densities=densities,

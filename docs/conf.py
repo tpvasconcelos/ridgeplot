@@ -170,11 +170,7 @@ autodoc_member_order = "bysource"
 autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
 autodoc_type_aliases = {
-    "Numeric": "Numeric",
-    "NumericT": "NumericT",
-    "NestedNumericSequence": "NestedNumericSequence",
-    "NestedNumericSequenceT": "NestedNumericSequenceT",
-    "ColorScaleType": "ColorScaleType",
+    "ColorScale": "ColorScale",
 }
 
 # autodoc-typehints config
@@ -189,11 +185,7 @@ napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_preprocess_types = True
 napoleon_type_aliases = {
-    "Numeric": ":data:`Numeric`",
-    "NumericT": ":data:`NumericT`",
-    "NestedNumericSequence": ":data:`NestedNumericSequence`",
-    "NestedNumericSequenceT": ":data:`NestedNumericSequenceT`",
-    "ColorScaleType": ":data:`ColorScaleType`",
+    "ColorScale": ":data:`ColorScale`",
 }
 
 # myst config

@@ -59,12 +59,11 @@ install: .venv ## install all local development dependencies
 	@$(VENV_BIN)/pre-commit install --install-hooks
 
 
-.PHONY: init-jupyter
+.PHONY: jupyter-init
 jupyter-init: ## initialise a jupyterlab environment and install extensions
 	@echo "==> Setting up jupyterlab environment..."
-	@$(VENV_BIN)/python -m pip install --upgrade ipykernel jupyterlab
+	@$(VENV_BIN)/python -m pip install --upgrade ipykernel jupyter
 	@$(VENV_BIN)/python -m ipykernel install --user --name="ridgeplot"
-	@$(VENV_BIN)/python -m jupyter lab build
 
 
 # ==============================================================
