@@ -16,14 +16,16 @@ _DATA_DIR = Path(__file__).parent / "data"
 def load_probly(
     version: Literal["zonination", "wadefagen", "illinois"] = "zonination",
 ) -> pd.DataFrame:
-    """Load the "Perception of Probability Words" (a.k.a., *"probly"*) dataset
+    """Load a version of the "Perception of Probability Words"
+    (a.k.a., *"probly"*) dataset.
 
     Parameters
     ----------
     version
-        The version of the dataset to load (defaults to ``"zonination"``). Each
+        The version of the dataset to load. Valid options are
+        ``"zonination"`` (default), ``"wadefagen"``, and ``"illinois"``. Each
         version is slightly different and originates from different surveys.
-        See the `Notes`_ section for further details.
+        See the `Notes`_ section for more details.
 
     Returns
     -------
