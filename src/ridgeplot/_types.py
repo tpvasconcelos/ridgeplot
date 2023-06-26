@@ -19,7 +19,7 @@ import numpy as np
 _T = TypeVar("_T")
 
 _CollectionL1 = Collection[_T]
-"""A :class:`~typing.TypeAlias` for a (standard) shallow :class:`~Collection`
+"""A :data:`~typing.TypeAlias` for a (standard) shallow :class:`~Collection`
 (1 level).
 
 Example:
@@ -28,7 +28,7 @@ Example:
 """
 
 _CollectionL2 = Collection[Collection[_T]]
-"""A :class:`~typing.TypeAlias` for a 2-level-deep :class:`~Collection`.
+"""A :data:`~typing.TypeAlias` for a 2-level-deep :class:`~Collection`.
 
 Example:
 
@@ -36,7 +36,7 @@ Example:
 """
 
 _CollectionL3 = Collection[Collection[Collection[_T]]]
-"""A :class:`~typing.TypeAlias` for a 3-level-deep :class:`~Collection`.
+"""A :data:`~typing.TypeAlias` for a 3-level-deep :class:`~Collection`.
 
 Example:
 
@@ -51,7 +51,7 @@ Example:
 # ========================================================
 
 NumericT = Union[int, float, np.number]
-"""A :class:`~typing.TypeAlias` for numeric types."""
+"""A :data:`~typing.TypeAlias` for numeric types."""
 
 
 @overload

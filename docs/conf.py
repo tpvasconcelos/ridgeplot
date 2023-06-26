@@ -47,6 +47,7 @@ extensions = [
     "sphinx_inline_tabs",
     "sphinx_thebe",
     "sphinx_togglebutton",
+    "sphinx_toolbox.collapse",
     "sphinx_toolbox.more_autodoc.autoprotocol",
     "sphinx_toolbox.more_autodoc.generic_bases",
     "sphinx_sitemap",
@@ -164,14 +165,33 @@ numfig = True
 html_baseurl = docs_url
 sitemap_url_scheme = "{link}"
 
+_TYPE_ALIASES = {
+    "NumericT",
+    "KDEPointsT",
+    "KDEBandwidthT",
+    "ColorScaleT",
+    "LabelsArray",
+    "ColorsArrayT",
+    "MidpointsArrayT",
+    "XYCoordinateT",
+    "DensityTraceT",
+    "DensitiesRowT",
+    "DensitiesT",
+    "SamplesTraceT",
+    "SamplesRowT",
+    "SamplesT",
+    "ShallowLabelsArrayT",
+    "ShallowColorsArrayT",
+    "ShallowDensitiesT",
+    "ShallowSamplesT",
+}
+
 # autodoc config
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
 autodoc_member_order = "bysource"
 autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
-autodoc_type_aliases = {
-    "ColorScale": "ColorScale",
-}
+autodoc_type_aliases = {x: x for x in _TYPE_ALIASES}
 
 # autodoc-typehints config
 # https://github.com/tox-dev/sphinx-autodoc-typehints
@@ -184,9 +204,7 @@ autodoc_type_aliases = {
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_preprocess_types = True
-napoleon_type_aliases = {
-    "ColorScale": ":data:`ColorScale`",
-}
+napoleon_type_aliases = {x: f":data:`{x}`" for x in _TYPE_ALIASES}
 
 # myst config
 myst_enable_extensions = [

@@ -52,7 +52,13 @@ def _any_to_rgb(color: Union[str, tuple]) -> str:
 
 
 def get_all_colorscale_names() -> Tuple[str, ...]:
-    """Get a tuple with all available colorscale names."""
+    """Get a tuple with all available colorscale names.
+
+    Returns
+    -------
+    Tuple[str, ...]
+        A tuple with all available colorscale names.
+    """
     return tuple(_COLORSCALE_MAPPING.keys())
 
 
@@ -65,6 +71,11 @@ def get_colorscale(name: str) -> ColorScaleT:
         The colorscale name. This argument is case-insensitive. For instance,
         ``"YlOrRd"`` and ``"ylorrd"`` map to the same colorscale. Colorscale
         names ending in ``_r`` represent a *reversed* colorscale.
+
+    Returns
+    -------
+    :data:`ColorScaleT`
+        A colorscale.
 
     Raises
     ------

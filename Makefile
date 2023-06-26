@@ -98,7 +98,7 @@ clean-pyc: ## remove Python file artifacts
 clean-ci: ## remove linting, testing, and coverage artifacts
 	@echo "==> Removing lint, test, and coverage artifacts..."
 	@rm -fr .tox/
-	@rm -fr .pytest_cache
+	@rm -fr .pytest_cache/
 	@rm -fr .mypy_cache/
 	@find . -name 'coverage.xml' -exec rm -f {} +
 	@find . -name '.coverage' -exec rm -f {} +

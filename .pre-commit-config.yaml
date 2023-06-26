@@ -64,7 +64,6 @@ repos:
         additional_dependencies:
           - black==22.12.0
 
-
   - repo: https://github.com/pycqa/isort
     rev: 5.11.4
     hooks:
