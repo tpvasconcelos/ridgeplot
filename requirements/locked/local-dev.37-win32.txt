@@ -85,7 +85,7 @@ pytz==2022.7.1
     # via pandas
 pyyaml==6.0
     # via pre-commit
-scipy==1.7.3
+scipy==1.10.0
     # via statsmodels
 setuptools==66.1.1
     # via

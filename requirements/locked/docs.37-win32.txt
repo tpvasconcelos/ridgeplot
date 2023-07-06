@@ -230,7 +230,7 @@ ruamel-yaml==0.17.21
     # via sphinx-toolbox
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
-scipy==1.7.3
+scipy==1.10.0
     # via statsmodels
 setuptools==66.1.1
     # via
