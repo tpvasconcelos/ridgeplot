@@ -5,7 +5,7 @@
 #
 #    pip-compile-multi
 #
-cachetools==5.3.0
+cachetools==5.3.1
     # via tox
 chardet==5.1.0
     # via tox
@@ -13,27 +13,27 @@ colorama==0.4.6
     # via tox
 distlib==0.3.6
     # via virtualenv
-filelock==3.9.0
+filelock==3.12.2
     # via
     #   tox
     #   virtualenv
-packaging==23.0
+packaging==23.1
     # via
     #   pyproject-api
     #   tox
-platformdirs==2.6.2
+platformdirs==3.8.1
     # via
     #   tox
     #   virtualenv
-pluggy==1.0.0
+pluggy==1.2.0
     # via tox
-pyproject-api==1.5.0
+pyproject-api==1.5.3
     # via tox
 tomli==2.0.1
     # via
     #   pyproject-api
     #   tox
-tox==4.4.2
+tox==4.6.4
     # via -r requirements\tox.in
-virtualenv==20.17.1
+virtualenv==20.23.1
     # via tox
