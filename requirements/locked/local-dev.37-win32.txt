@@ -73,7 +73,7 @@ prompt-toolkit==3.0.36
     #   ptpython
 ptpython==3.0.22
     # via -r requirements\local-dev.in
-pygments==2.14.0
+pygments==2.15.0
     # via
     #   ipython
     #   ptpython

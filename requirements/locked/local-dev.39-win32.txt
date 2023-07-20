@@ -79,7 +79,7 @@ ptpython==3.0.22
     # via -r requirements\local-dev.in
 pure-eval==0.2.2
     # via stack-data
-pygments==2.14.0
+pygments==2.15.0
     # via
     #   ipython
     #   ptpython

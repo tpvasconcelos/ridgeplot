@@ -193,7 +193,7 @@ psutil==5.9.4
     # via ipykernel
 ptyprocess==0.7.0
     # via pexpect
-pygments==2.14.0
+pygments==2.15.0
     # via
     #   furo
     #   ipython
