@@ -42,7 +42,7 @@ def ridgeplot(
     r"""Return a beautiful ridgeline plot |~go.Figure|.
 
     You have to specify either ``samples`` or ``densities``, but not both. See
-    ``samples`` and ``densities`` bellow for more information.
+    ``samples`` and ``densities`` below for more information.
 
     .. _bandwidths.py:
         https://www.statsmodels.org/stable/_modules/statsmodels/nonparametric/bandwidths.html
@@ -65,7 +65,7 @@ def ridgeplot(
 
         The KDE will be performed at the points :math:`P_t` for each trace
         :math:`t \in T`. The resulting array will be a ``densities`` array with
-        shape :math:`(R, T, P_t, 2)` (see ``densities`` bellow).
+        shape :math:`(R, T, P_t, 2)` (see ``densities`` below).
     densities
         If ``densities`` arrays are specified instead, the KDE step will be
         skipped and all associated arguments ignored. Each density array should

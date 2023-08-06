@@ -183,7 +183,7 @@ def test_get_colorscale() -> None:
 
 def test_get_colorscale_fails_for_unknown_colorscale_name() -> None:
     with pytest.raises(ValueError, match="Unknown colorscale name"):
-        get_colorscale(name="this colorscale doesnt exist")
+        get_colorscale(name="this colorscale doesn't exist")
 
 
 # ==============================================================

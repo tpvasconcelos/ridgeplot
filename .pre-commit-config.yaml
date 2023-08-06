@@ -23,6 +23,17 @@ repos:
       - id: trailing-whitespace
         exclude: .bumpversion.cfg
 
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.5
+    hooks:
+      - id: codespell
+        args: [ "-L", "probly" ]
+
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.13
+    hooks:
+      - id: validate-pyproject
+
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.16
     hooks:
@@ -39,7 +50,7 @@ repos:
         args: [ --no-build-isolation ]
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.1
+    rev: v3.10.1
     hooks:
       - id: pyupgrade
         args: [ --py36-plus, --keep-runtime-typing ]
@@ -53,24 +64,24 @@ repos:
   #       args: [ --backtracking, --out-ext, 38-darwin.txt ]
 
   - repo: https://github.com/psf/black
-    rev: 22.12.0
+    rev: 23.7.0
     hooks:
       - id: black
 
   - repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.13.0
+    rev: 1.15.0
     hooks:
       - id: blacken-docs
         additional_dependencies:
           - black==22.12.0
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.11.4
+    rev: 5.12.0
     hooks:
       - id: isort
 
   - repo: https://github.com/pycqa/flake8
-    rev: 5.0.4
+    rev: 6.1.0
     hooks:
       - id: flake8
         additional_dependencies:
