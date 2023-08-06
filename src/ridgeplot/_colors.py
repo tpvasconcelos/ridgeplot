@@ -107,11 +107,14 @@ def get_color(colorscale: ColorScaleT, midpoint: float) -> str:
     ceil = min(filter(lambda s: s > midpoint, scale))
     floor = max(filter(lambda s: s < midpoint, scale))
     midpoint_normalised = normalise_min_max(midpoint, min_=floor, max_=ceil)
-    color: str = find_intermediate_color(
-        lowcolor=colors[scale.index(floor)],
-        highcolor=colors[scale.index(ceil)],
-        intermed=midpoint_normalised,
-        colortype="rgb",
+    color = cast(
+        str,
+        find_intermediate_color(
+            lowcolor=colors[scale.index(floor)],
+            highcolor=colors[scale.index(ceil)],
+            intermed=midpoint_normalised,
+            colortype="rgb",
+        ),
     )
     return color
 

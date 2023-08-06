@@ -5,18 +5,18 @@
 #
 #    pip-compile-multi
 #
--r tests.38-linux.txt
+-r tests.310-darwin.txt
 -e file:.
     # via -r requirements/tests.in
 mypy==0.991
-    # via -r requirements/typing.in
+    # via -r requirements/mypy.in
 mypy-extensions==0.4.3
     # via mypy
 pandas-stubs==1.5.2.230105
-    # via -r requirements/typing.in
+    # via -r requirements/mypy.in
 types-pytz==2022.7.1.0
     # via
-    #   -r requirements/typing.in
+    #   -r requirements/mypy.in
     #   pandas-stubs
 typing-extensions==4.4.0
     # via mypy

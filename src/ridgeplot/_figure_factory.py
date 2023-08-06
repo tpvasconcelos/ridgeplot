@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Callable, Collection, Dict, List, Optional, Tuple, Union
 
 from plotly import graph_objects as go
 
@@ -139,7 +139,7 @@ class RidgePlotFigureFactory:
             "mean-means": self._compute_midpoints_mean_means,
         }
 
-    def draw_base(self, x, y_shifted) -> None:
+    def draw_base(self, x: Collection[NumericT], y_shifted: float) -> None:
         """Draw the base for a density trace.
 
         Adds an invisible trace at constant y that will serve as the fill-limit
@@ -156,7 +156,14 @@ class RidgePlotFigureFactory:
             )
         )
 
-    def draw_density_trace(self, x, y, y_shifted, label, color) -> None:
+    def draw_density_trace(
+        self,
+        x: Collection[NumericT],
+        y: Collection[NumericT],
+        y_shifted: float,
+        label: str,
+        color: str,
+    ) -> None:
         """Draw a density trace.
 
         Adds a density 'trace' to the Figure. The ``fill="tonexty"`` option
@@ -167,7 +174,7 @@ class RidgePlotFigureFactory:
         self.fig.add_trace(
             go.Scatter(
                 x=x,
-                y=y + y_shifted,
+                y=[y_i + y_shifted for y_i in y],
                 fillcolor=color,
                 name=label,
                 fill="tonexty",
@@ -181,6 +188,7 @@ class RidgePlotFigureFactory:
 
     def update_layout(self, y_ticks: list) -> None:
         """Update figure's layout."""
+        # TODO: Fix hover information
         self.fig.update_layout(
             hovermode=False,
             legend=dict(traceorder="normal"),
@@ -282,7 +290,7 @@ class RidgePlotFigureFactory:
         y_ticks = []
         for i, (row, labels, colors) in enumerate(zip(self.densities, self.labels, self.colors)):
             # y_shifted is the y-origin for the new trace
-            y_shifted = -i * (self.y_max * self.spacing)
+            y_shifted = -i * float(self.y_max * self.spacing)
             y_ticks.append(y_shifted)
             for trace, label, color in zip(row, labels, colors):
                 x, y = zip(*trace)

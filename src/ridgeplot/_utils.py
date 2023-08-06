@@ -14,15 +14,17 @@ from typing import (
     Union,
 )
 
+from ridgeplot._types import NumericT
 
-def normalise_min_max(val: float, min_: float, max_: float) -> float:
+
+def normalise_min_max(val: NumericT, min_: NumericT, max_: NumericT) -> float:
     if max_ <= min_:
         raise ValueError(
             f"max_ should be greater than min_. Got max_={max_} and min_={min_} instead."
         )
     if not (min_ <= val <= max_):
         raise ValueError(f"val ({val}) is out of bounds ({min_}, {max_}).")
-    return (val - min_) / (max_ - min_)
+    return float((val - min_) / (max_ - min_))
 
 
 def get_collection_array_shape(collection_array: Collection) -> Tuple[Union[int, Set[int]], ...]:

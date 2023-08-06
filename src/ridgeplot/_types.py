@@ -50,12 +50,23 @@ Example:
 # ---  Basic types
 # ========================================================
 
-NumericT = Union[int, float, np.number]
+Float = Union[float, np.floating]
+"""A :data:`~typing.TypeAlias` for a float type."""
+
+Int = Union[int, np.integer]
+"""A :data:`~typing.TypeAlias` for an int type."""
+
+NumericT = Union[Int, Float]
 """A :data:`~typing.TypeAlias` for numeric types."""
 
 
 @overload
 def _is_numeric(obj: NumericT) -> Literal[True]:
+    ...
+
+
+@overload
+def _is_numeric(obj: Any) -> bool:
     ...
 
 
@@ -112,7 +123,7 @@ For instance, the following is a valid :data:`ColorsArray`:
 ... ]
 """
 
-MidpointsArrayT = _CollectionL2[NumericT]
+MidpointsArrayT = _CollectionL2[float]
 """A :data:`MidpointsArray` represents the midpoints of colorscales in a
 ridgeplot.
 
@@ -249,6 +260,11 @@ def is_flat_str_collection(obj: Collection[str]) -> Literal[True]:
     ...
 
 
+@overload
+def is_flat_str_collection(obj: Any) -> bool:
+    ...
+
+
 def is_flat_str_collection(obj: Any) -> bool:
     """Check if the given object is a :data:`CollectionL1[str]` type but not a
     string itself."""
@@ -271,6 +287,11 @@ Note: The ``CollectionL1[DensityTrace]`` type is equivalent to
 
 @overload
 def is_shallow_densities(obj: ShallowDensitiesT) -> Literal[True]:
+    ...
+
+
+@overload
+def is_shallow_densities(obj: Any) -> bool:
     ...
 
 
@@ -300,6 +321,11 @@ both type aliases for ``Collection[Collection[Numeric]]``.
 
 @overload
 def is_shallow_samples(obj: ShallowSamplesT) -> Literal[True]:
+    ...
+
+
+@overload
+def is_shallow_samples(obj: Any) -> bool:
     ...
 
 

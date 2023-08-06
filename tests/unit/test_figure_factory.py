@@ -1,11 +1,11 @@
 from itertools import product
-from typing import Callable, Iterable, TypeVar
+from typing import Callable, TypeVar
 
 import numpy as np
 import pytest
 
 from ridgeplot._figure_factory import get_xy_extrema
-from ridgeplot._types import DensitiesT
+from ridgeplot._types import DensitiesRowT, DensitiesT
 
 _X = TypeVar("_X")
 
@@ -28,26 +28,28 @@ class TestGetXYExtrema:
         with pytest.raises(ValueError, match=r"too many values to unpack \(expected 2\)"):
             get_xy_extrema(
                 densities=[
-                    [[(0, 0), (1, 1), (2, 2)]],  # valid 2D trace
-                    [[(3, 3, 3), (4, 4, 4)]],  # invalid 3D trace
+                    # valid 2D trace
+                    [[(0, 0), (1, 1), (2, 2)]],
+                    # invalid 3D trace
+                    [[(3, 3, 3), (4, 4, 4)]],  # type: ignore[list-item]
                 ]
             )
 
     @pytest.mark.parametrize(
-        ("iterable_type", "collection_type"),
+        ("densities_type", "rows_type"),
         product((id_func, tuple, list), (id_func, tuple, list, np.asarray)),
     )
     def test_expected_output(
         self,
-        iterable_type: Callable[[Iterable], Iterable],
-        collection_type: Callable[[DensitiesT], DensitiesT],
+        densities_type: Callable[[DensitiesT], DensitiesT],
+        rows_type: Callable[[DensitiesRowT], DensitiesRowT],
     ) -> None:
         """Test :func:`get_xy_extrema()` against a varied combination of
         possible input types."""
-        # This tuple contains a varied set of collection types.
-        # Which is to show that get_xy_extrema accepts any
-        # iterable of any valid `Densities` objects
-        densities: Iterable[DensitiesT] = [
+        # This list contains a varied set of collection types.
+        # Which is to show that `get_xy_extrema` accepts any
+        # iterable of a valid `Densities` object
+        densities: DensitiesT = [
             (
                 [
                     (1, 1),  # x_min -> 1
@@ -72,7 +74,7 @@ class TestGetXYExtrema:
                 ]
             ),
         ]
-        densities = iterable_type(collection_type(arr) for arr in densities)
+        densities = densities_type([rows_type(row) for row in densities])
         # The x-y extrema of the densities array above are:
         expected = (
             1,  # x_min
