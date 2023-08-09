@@ -1,4 +1,4 @@
-__all__ = ["load_probly"]
+from __future__ import annotations
 
 import sys
 from pathlib import Path
@@ -9,6 +9,11 @@ else:
     from typing_extensions import Literal
 
 import pandas as pd
+
+__all__ = [
+    "load_probly",
+    "load_lincoln_weather",
+]
 
 _DATA_DIR = Path(__file__).parent / "data"
 
@@ -55,7 +60,7 @@ def load_probly(
                * - Creator
                  - `zonination <https://github.com/zonination>`_
                * - Source
-                 - https://github.com/zonination/perceptions/blob/51207062aa173777264d3acce0131e1e2456d966/probly.csv
+                 - https://raw.githubusercontent.com/zonination/perceptions/51207062aa173777264d3acce0131e1e2456d966/probly.csv
                * - Accessed on
                  - 2023-06-24
 
@@ -74,7 +79,7 @@ def load_probly(
                  - Wade Fagen-Ulmschneider (`wadefagen
                    <https://github.com/wadefagen>`_)
                * - Source
-                 - https://github.com/wadefagen/datasets/blob/7e752937b72edc3126e3dd17e3cd97eb727af8f9/Perception-of-Probability-Words/survey-results.csv
+                 - https://raw.githubusercontent.com/wadefagen/datasets/7e752937b72edc3126e3dd17e3cd97eb727af8f9/Perception-of-Probability-Words/survey-results.csv
                * - Accessed on
                  - 2023-06-24
 
@@ -119,4 +124,45 @@ def load_probly(
             f"Valid versions are {list(versions.keys())}."
         )
     data = pd.read_csv(_DATA_DIR / versions[version])
+    return data
+
+
+def load_lincoln_weather() -> pd.DataFrame:
+    """Load the "Weather in Lincoln, Nebraska in 2016" dataset.
+
+    Returns
+    -------
+    :class:`pandas.DataFrame`
+        A dataframe containing the "Lincoln Weather" dataset.
+
+    Notes
+    -----
+    The version of the dataset included in this package is the same
+    version included in the `ggridges` R package [1]_. The dataset
+    contains weather information from Lincoln, Nebraska (2016).
+    The original data was taken from a blogpost by Austin Wehrwein
+    in 2017 [2]_.
+
+    .. collapse:: <i>Details...</i>
+
+        .. list-table::
+           :stub-columns: 1
+           :align: left
+
+           * - Source
+             - https://raw.githubusercontent.com/wilkelab/ggridges/543a092c601b92d7b62e630fb34d038f54485a29/data-raw/lincoln-weather.csv
+           * - Accessed on
+             - 2023-08-07
+
+    References
+    ----------
+    .. [1] ggridges. *"Weather in Lincoln, Nebraska in 2016"*.
+       https://wilkelab.org/ggridges/reference/lincoln_weather.html
+    .. [2] Austin Wehrwein. *"Plot inspiration via FiveThirtyEight"*.
+       https://austinwehrwein.com/data-visualization/plot-inspiration-via-fivethirtyeight/
+
+    .. # noqa: E501
+    """
+    data = pd.read_csv(_DATA_DIR / "lincoln-weather.csv", index_col="CST")
+    data.index = pd.to_datetime(data.index.to_list())
     return data

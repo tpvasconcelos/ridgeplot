@@ -56,7 +56,7 @@ def get_all_colorscale_names() -> Tuple[str, ...]:
 
     Returns
     -------
-    Tuple[str, ...]
+    tuple[str, ...]
         A tuple with all available colorscale names.
     """
     return tuple(_COLORSCALE_MAPPING.keys())

@@ -14,10 +14,10 @@ from typing import (
     Union,
 )
 
-from ridgeplot._types import NumericT
+from ridgeplot._types import Numeric
 
 
-def normalise_min_max(val: NumericT, min_: NumericT, max_: NumericT) -> float:
+def normalise_min_max(val: Numeric, min_: Numeric, max_: Numeric) -> float:
     if max_ <= min_:
         raise ValueError(
             f"max_ should be greater than min_. Got max_={max_} and min_={min_} instead."

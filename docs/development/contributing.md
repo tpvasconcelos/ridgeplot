@@ -20,6 +20,7 @@ The following is a set of (slightly opinionated) rules and general guidelines fo
 ridgeplot. Emphasis on **guidelines**, not _rules_. Use your best judgment, and feel free to propose
 changes to this document in a pull request.
 
+(Development-environment)=
 ## Development environment
 
 Here are some guidelines for setting up your development environment. Most of the steps have been

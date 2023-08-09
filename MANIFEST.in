@@ -27,6 +27,8 @@ include docs/robots.txt
 recursive-include docs *.md *.py *.rst
 recursive-include docs/_static *.ico
 recursive-include docs/_static/img *.png
+recursive-include docs/_static/css *.css
+recursive-include docs/_templates *.html
 prune docs/build
 
 # Misc

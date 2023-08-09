@@ -5,7 +5,7 @@ from typing import Optional, Union, cast
 
 import plotly.graph_objects as go
 
-from ridgeplot._figure_factory import RidgePlotFigureFactory
+from ridgeplot._figure_factory import Colormode, RidgePlotFigureFactory
 from ridgeplot._kde import estimate_densities
 from ridgeplot._types import (
     ColorScaleT,
@@ -23,6 +23,8 @@ from ridgeplot._types import (
     nest_shallow_collection,
 )
 
+_NOT_SET = object()
+
 
 def ridgeplot(
     samples: Union[SamplesT, ShallowSamplesT, None] = None,
@@ -31,53 +33,64 @@ def ridgeplot(
     bandwidth: KDEBandwidthT = "normal_reference",
     kde_points: KDEPointsT = 500,
     colorscale: Union[str, ColorScaleT] = "plasma",
-    colormode: str = "mean-means",
+    colormode: Colormode = "mean-minmax",
     coloralpha: Optional[float] = None,
     labels: Union[LabelsArray, ShallowLabelsArrayT, None] = None,
-    linewidth: float = 1.4,
+    linewidth: Union[float, int] = 1.0,
     spacing: float = 0.5,
-    show_annotations: bool = True,
+    show_annotations: bool = _NOT_SET,  # type: ignore
+    show_yticklabels: bool = True,
     xpad: float = 0.05,
 ) -> go.Figure:
-    r"""Return a beautiful ridgeline plot |~go.Figure|.
+    r"""Return an interactive ridgeline (Plotly) |~go.Figure|.
 
-    You have to specify either ``samples`` or ``densities``, but not both. See
-    ``samples`` and ``densities`` below for more information.
+    .. note::
+        You must pass either :paramref:`samples` or :paramref:`densities` to
+        this function, but not both. See descriptions below for more details.
 
     .. _bandwidths.py:
         https://www.statsmodels.org/stable/_modules/statsmodels/nonparametric/bandwidths.html
     .. _Plotly's built-in color-scales:
         https://plotly.com/python/builtin-colorscales/
+    .. _ragged:
+       https://en.wikipedia.org/wiki/Jagged_array
 
     Parameters
     ----------
-    samples
+    samples : SamplesT or ShallowSamplesT, optional
         If ``samples`` data is specified, Kernel Density Estimation (KDE) will
-        be computed. See ``kernel``, ``bandwidth``, and ``kde_points`` for more
-        details and KDE configuration options. The ``samples`` argument should
-        be a 3D array with shape :math:`(R, T, P_t)`, where:
+        be computed. See :paramref:`kernel`, :paramref:`bandwidth`, and
+        :paramref:`kde_points` for more details and KDE configuration options.
+        The ``samples`` argument should be an array of shape
+        :math:`(R, T_r, S_t)`. Note that we support irregular (`ragged`_)
+        arrays, where:
 
         - :math:`R` is the number of rows in the plot
-        - :math:`T` is the number of traces per row (this value can be different
-          for each row, *à la* awkward array)
-        - :math:`P_t` is the number of points per trace (this value can be also
-           different for each trace :math:`t \in T`)
+        - :math:`T_r` is the number of traces per row, where each row
+          :math:`r \in R` can have a different number of traces.
+        - :math:`S_t` is the number of samples per trace, where each trace
+          :math:`t \in T_r` can also have a different number of samples.
 
-        The KDE will be performed at the points :math:`P_t` for each trace
-        :math:`t \in T`. The resulting array will be a ``densities`` array with
-        shape :math:`(R, T, P_t, 2)` (see ``densities`` below).
-    densities
+        The KDE will be performed over the sample values :math:`S_t` for each
+        trace :math:`t \in T`. After the KDE, the resulting array will be a (4D)
+        `:paramref:`densities` array with shape :math:`(R, T_r, P_t, 2)`
+        (see :paramref:`densities` below for more details).
+
+    densities : DensitiesT or ShallowDensitiesT, optional
         If ``densities`` arrays are specified instead, the KDE step will be
         skipped and all associated arguments ignored. Each density array should
-        have shape :math:`(R, T, P_t, 2)` (4D), where:
+        have shape :math:`(R, T_r, P_t, 2)` (4D). Just like the
+        :paramref:`samples` argument, we also support irregular (`ragged`_)
+        ``densities`` arrays, where:
 
         - :math:`R` is the number of rows in the plot
-        - :math:`T` is the number of traces per row (this value can be different
-          for each row, *à la* awkward array)
-        - :math:`P_t` is the number of points per trace (this value can be also
-          different for each trace :math:`t \in T`)
+        - :math:`T_r` is the number of traces per row, where each row
+          :math:`r \in R` can have a different number of traces.
+        - :math:`P_t` is the number of points per trace, where each trace
+          :math:`t \in T_r` can also have a different number of points.
         - :math:`2` is the number of coordinates per point (x and y)
-    kernel
+
+    kernel : str
         The Kernel to be used during Kernel Density Estimation. The default is
         a Gaussian Kernel (``"gau"``). Choices are:
 
@@ -88,9 +101,10 @@ def ridgeplot(
         - ``"tri"`` for triangular
         - ``"triw"`` for triweight
         - ``"uni"`` for uniform
-    bandwidth
+
+    bandwidth : KDEBandwidthT
         The bandwidth to use during Kernel Density Estimation. The default is
-        ``normal_reference``. Choices are:
+        ``"normal_reference"``. Choices are:
 
         - ``"scott"`` - 1.059 * A * nobs ** (-1/5.), where A is
           ``min(std(x),IQR/1.34)``
@@ -106,21 +120,24 @@ def ridgeplot(
 
           - ``x``: the clipped input data
           - ``kern``: the kernel instance used
-    kde_points
+
+    kde_points : KDEPointsT
         This argument controls the points at which KDE is computed. If an
         ``int`` value is passed (default=500), the densities will be evaluated
         at ``kde_points`` evenly spaced points between the min and max of each
         set of samples. Optionally, you can also pass a custom 1D numerical
         array, which will be used for all traces.
-    colorscale
+
+    colorscale : str or ColorScaleT
         Any valid Plotly color-scale or a str with a valid named color-scale.
         Use :func:`~ridgeplot.get_all_colorscale_names()` to see which names
         are available or check out `Plotly's built-in color-scales`_.
+
     colormode
         This argument controls the logic for choosing the color filling of each
         ridgeline trace. Each option provides a different method for
-        calculating the ``colorscale`` midpoint of each trace. The default is
-        mode is ``"mean-means"``. Choices are:
+        calculating the :paramref:`colorscale` midpoint of each trace. The
+        default is mode is ``"mean-means"``. Choices are:
 
         - ``"row-index"`` - uses the row's index. e.g. if the ridgeplot has 3
           rows of traces, then the midpoints will be
@@ -136,24 +153,40 @@ def ridgeplot(
           each density to calculate the midpoints. The normalization min
           and max values are the minimum and maximum mean values from all
           densities, respectively.
-    coloralpha
+
+    coloralpha : float, optional
         If None (default), this argument will be ignored and the transparency
         values of the specifies color-scale will remain untouched. Otherwise,
         if a float value is passed, it will be used to overwrite the
         transparency (alpha) of the color-scale's colors.
-    labels
+
+    labels : LabelsArray or ShallowLabelsArrayT, optional
         A list of string labels for each trace. The default value is None,
         which will result in auto-generated labels of form "Trace n". If,
         instead, a list of labels is specified, it must be of the same
         size/length as the number of traces.
-    linewidth
+
+    linewidth : float
         The traces' line width (in px).
-    spacing
+
+    spacing : float
         The vertical spacing between density traces, which is defined in units
         of the highest distribution (i.e. the maximum y-value).
-    show_annotations
-        If True (default), it will show the label names as "y-tick-labels".
-    xpad
+
+    show_annotations : bool
+        Whether to show the tick labels on the y-axis. The default is True.
+
+        .. deprecated:: 0.1.21
+            This argument has been deprecated in favor of
+            :paramref:`show_yticklabels`.
+
+    show_yticklabels : bool
+        Whether to show the tick labels on the y-axis. The default is True.
+
+        .. versionadded:: 0.1.21
+            ``show_annotations`` was renamed to ``show_yticklabels``.
+
+    xpad : float
         Specifies the extra padding to use on the x-axis. It is defined in
         units of the range between the minimum and maximum x-values from all
         distributions.
@@ -168,8 +201,8 @@ def ridgeplot(
     Raises
     ------
     :exc:`ValueError`
-        If both ``samples`` and ``densities`` arguments are not None, or if
-        neither ``samples`` nor ``densities`` are specified.
+        If both :paramref:`samples` and :paramref:`densities` are specified, or
+        if neither of them is specified. i.e. you may only specify one of them.
 
     """
     has_samples = samples is not None
@@ -199,17 +232,27 @@ def ridgeplot(
         labels = cast(ShallowLabelsArrayT, labels)
         labels = cast(LabelsArray, nest_shallow_collection(labels))
 
-    if colormode == "index":
-        warnings.warn(
+    if colormode == "index":  # type: ignore
+        warnings.warn(  # type: ignore
             "The colormode='index' value has been deprecated in favor of "
             "colormode='row-index', which provides the same functionality but "
             "is more explicit and allows to distinguishing between the "
             "'row-index' and 'trace-index' modes. Support for the deprecated "
-            "colormode='index' value will be removed in a future version.",
+            "value will be removed in a future version.",
             DeprecationWarning,
             stacklevel=2,
         )
         colormode = "row-index"
+
+    if show_annotations is not _NOT_SET:
+        warnings.warn(
+            "The show_annotations argument has been deprecated in favor of "
+            "show_yticklabels. Support for the deprecated argument will be "
+            "removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        show_yticklabels = show_annotations
 
     ridgeplot_figure_factory = RidgePlotFigureFactory(
         densities=densities,
@@ -219,7 +262,7 @@ def ridgeplot(
         colormode=colormode,
         linewidth=linewidth,
         spacing=spacing,
-        show_annotations=show_annotations,
+        show_yticklabels=show_yticklabels,
         xpad=xpad,
     )
     fig = ridgeplot_figure_factory.make_figure()

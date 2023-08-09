@@ -49,9 +49,14 @@ def main() -> None:
     py_sys_platform = os.environ["PY_SYS_PLATFORM"]
 
     popen_args = [
-        'pip-compile-multi', '--upgrade', '--allow-unsafe', '--backtracking',
-        '--out-ext', f'{py_python_version}-{py_sys_platform}.txt',
-    ]  # fmt: skip
+        "pip-compile-multi",
+        "--upgrade",
+        f"--out-ext={py_python_version}-{py_sys_platform}.txt",
+        "--directory=requirements/",
+        "--autoresolve",
+        "--backtracking",
+        "--allow-unsafe",
+    ]
     _run_subprocess(popen_args)
 
     for reqs_txt in Path("requirements/").glob(f"*{py_python_version}-{py_sys_platform}.txt"):

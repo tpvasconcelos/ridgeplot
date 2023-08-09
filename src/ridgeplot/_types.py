@@ -56,12 +56,12 @@ Float = Union[float, np.floating]
 Int = Union[int, np.integer]
 """A :data:`~typing.TypeAlias` for an int type."""
 
-NumericT = Union[Int, Float]
+Numeric = Union[Int, Float]
 """A :data:`~typing.TypeAlias` for numeric types."""
 
 
 @overload
-def _is_numeric(obj: NumericT) -> Literal[True]:
+def _is_numeric(obj: Numeric) -> Literal[True]:
     ...
 
 
@@ -75,8 +75,8 @@ def _is_numeric(obj: Any) -> bool:
     return isinstance(obj, (int, float, np.number))
 
 
-KDEPointsT = Union[int, _CollectionL1[NumericT]]
-KDEBandwidthT = Union[str, float, Callable[[_CollectionL1[NumericT], StatsmodelsKernel], float]]
+KDEPointsT = Union[int, _CollectionL1[Numeric]]
+KDEBandwidthT = Union[str, float, Callable[[_CollectionL1[Numeric], StatsmodelsKernel], float]]
 
 ColorScaleT = Iterable[Tuple[float, str]]
 """A colorscale is an iterable of tuples of two elements:
@@ -139,7 +139,7 @@ For instance, the following is a valid :data:`MidpointsArray`:
 # ---  `Densities` type
 # ========================================================
 
-XYCoordinateT = Tuple[NumericT, NumericT]
+XYCoordinateT = Tuple[Numeric, Numeric]
 """A :data:`XYCoordinate` is a :class:`~typing.Tuple` of two numeric values
 representing a :math:`(x, y)` coordinate."""
 
@@ -154,8 +154,8 @@ instance, the following is a valid 2D line trace:
 """
 
 DensitiesRowT = _CollectionL1[DensityTraceT]
-"""A :data:`DensitiesRow` represents a set of :data:`DensityTrace`s that are to
-be plotted on the same row of a ridgeplot.
+r"""A :data:`DensitiesRow` represents a set of :data:`DensityTrace`\s that
+are to be plotted on the same row of a ridgeplot.
 
 For instance, the following is a valid ``DensitiesRow``:
 
@@ -167,13 +167,13 @@ For instance, the following is a valid ``DensitiesRow``:
 """
 
 DensitiesT = _CollectionL1[DensitiesRowT]
-"""The :data:`Densities` type aims at representing the traces that are to be
+r"""The :data:`Densities` type aims at representing the traces that are to be
 plotted on a ridgeplot.
 
 In a ridgeplot, several traces can be plotted on different rows. Each row is
 represented by a :data:`DensitiesRow` object which, in turn, is a collection of
-:data:`DensityTrace`s. Therefore, the :data:`Densities` type is a collection
-of :data:`DensitiesRow`s.
+:data:`DensityTrace`\s. Therefore, the :data:`Densities` type is a collection
+of :data:`DensitiesRow`\s.
 
 Note: The ``CollectionL1[DensitiesRow]`` type is equivalent to
 ``CollectionL3[XYCoordinate]``, which is a type alias for
@@ -198,7 +198,7 @@ For instance, the following is a valid ``Densities`` object:
 # --- `Samples` type
 # ========================================================
 
-SamplesTraceT = _CollectionL1[NumericT]
+SamplesTraceT = _CollectionL1[Numeric]
 """A :data:`SamplesTrace` is a collection of numeric values representing a
 set of samples from which a density trace can be estimated.
 
@@ -207,21 +207,21 @@ applying a kernel density estimation algorithm.
 """
 
 SamplesRowT = _CollectionL1[SamplesTraceT]
-"""A :data:`SamplesRow` represents a set of :data:`SamplesTrace`s that are to be
+r"""A :data:`SamplesRow` represents a set of :data:`SamplesTrace`\s that are to be
 plotted on the same row of a ridgeplot.
 
-i.e. a :data:`SamplesRow` is a collection of :data:`SamplesTrace`s and can be
+i.e. a :data:`SamplesRow` is a collection of :data:`SamplesTrace`\s and can be
 converted into a :data:`DensitiesRow` by applying a kernel density estimation
 algorithm to each trace.
 """
 
 SamplesT = _CollectionL1[SamplesRowT]
-"""The :data:`Samples` type aims at representing the samples that are to be
+r"""The :data:`Samples` type aims at representing the samples that are to be
 plotted on a ridgeplot.
 
-It is a collection of :data:`SamplesRow`s. Each row is represented by a
-:data:`SamplesRow` type which, in turn, is a collection of :data:`SamplesTrace`s
-which can be converted into :data:`DensityTrace`s by applying a kernel density
+It is a collection of :data:`SamplesRow` objects. Each row is represented by a
+:data:`SamplesRow` type which, in turn, is a collection of :data:`SamplesTrace`\s
+which can be converted into :data:`DensityTrace` 's by applying a kernel density
 estimation algorithm. Therefore, the :data:`Samples` type can also be converted
 into a :data:`Densities` type by applying a kernel density estimation algorithm
 to each trace.

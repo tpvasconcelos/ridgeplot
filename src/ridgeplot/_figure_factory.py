@@ -1,6 +1,12 @@
 from __future__ import annotations
 
+import sys
 from typing import Callable, Collection, Dict, List, Optional, Tuple, Union
+
+if sys.version_info >= (3, 8):
+    from typing import Literal
+else:
+    from typing_extensions import Literal
 
 from plotly import graph_objects as go
 
@@ -16,12 +22,12 @@ from ridgeplot._types import (
     DensitiesT,
     LabelsArray,
     MidpointsArrayT,
-    NumericT,
+    Numeric,
 )
 from ridgeplot._utils import normalise_min_max
 
 
-def get_xy_extrema(densities: DensitiesT) -> Tuple[NumericT, NumericT, NumericT, NumericT]:
+def get_xy_extrema(densities: DensitiesT) -> Tuple[Numeric, Numeric, Numeric, Numeric]:
     """Get the global x-y extrema (x_min, x_max, y_min, y_max) from all the
     :data:`~ridgeplot._types.DensityTrace`s in the
     :data:`~ridgeplot._types.Densities` array.
@@ -54,8 +60,8 @@ def get_xy_extrema(densities: DensitiesT) -> Tuple[NumericT, NumericT, NumericT,
     ... )
     (-2, 4, 0, 4)
     """
-    x_flat: List[NumericT] = []
-    y_flat: List[NumericT] = []
+    x_flat: List[Numeric] = []
+    y_flat: List[Numeric] = []
     for row in densities:
         for trace in row:
             for x, y in trace:
@@ -64,24 +70,27 @@ def get_xy_extrema(densities: DensitiesT) -> Tuple[NumericT, NumericT, NumericT,
     return min(x_flat), max(x_flat), min(y_flat), max(y_flat)
 
 
-def _mul(a: Tuple[NumericT, ...], b: Tuple[NumericT, ...]) -> Tuple[NumericT, ...]:
+def _mul(a: Tuple[Numeric, ...], b: Tuple[Numeric, ...]) -> Tuple[Numeric, ...]:
     """Multiply two tuples element-wise."""
     return tuple(a_i * b_i for a_i, b_i in zip(a, b))
 
 
+Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
+
+
 class RidgePlotFigureFactory:
-    """Refer to :func:`~ridgeplot.ridgeplot()`."""
+    """Refer to :func:`ridgeplot.ridgeplot()`."""
 
     def __init__(
         self,
         densities: DensitiesT,
         colorscale: Union[str, ColorScaleT],
         coloralpha: Optional[float],
-        colormode: str,
+        colormode: Colormode,
         labels: Optional[LabelsArray],
-        linewidth: float,
+        linewidth: Union[float, int],
         spacing: float,
-        show_annotations: bool,
+        show_yticklabels: bool,
         xpad: float,
     ) -> None:
         # ==============================================================
@@ -118,7 +127,7 @@ class RidgePlotFigureFactory:
         self.labels: LabelsArray = labels
         self.linewidth: float = float(linewidth)
         self.spacing: float = float(spacing)
-        self.show_annotations: bool = bool(show_annotations)
+        self.show_yticklabels: bool = bool(show_yticklabels)
         self.xpad: float = float(xpad)
 
         # ==============================================================
@@ -139,7 +148,7 @@ class RidgePlotFigureFactory:
             "mean-means": self._compute_midpoints_mean_means,
         }
 
-    def draw_base(self, x: Collection[NumericT], y_shifted: float) -> None:
+    def draw_base(self, x: Collection[Numeric], y_shifted: float) -> None:
         """Draw the base for a density trace.
 
         Adds an invisible trace at constant y that will serve as the fill-limit
@@ -158,8 +167,8 @@ class RidgePlotFigureFactory:
 
     def draw_density_trace(
         self,
-        x: Collection[NumericT],
-        y: Collection[NumericT],
+        x: Collection[Numeric],
+        y: Collection[Numeric],
         y_shifted: float,
         label: str,
         color: str,
@@ -198,7 +207,7 @@ class RidgePlotFigureFactory:
             showgrid=True,
         )
         self.fig.update_yaxes(
-            showticklabels=self.show_annotations,
+            showticklabels=self.show_yticklabels,
             tickvals=y_ticks,
             ticktext=self.labels,
             **axes_common,
@@ -289,6 +298,16 @@ class RidgePlotFigureFactory:
     def make_figure(self) -> go.Figure:
         y_ticks = []
         for i, (row, labels, colors) in enumerate(zip(self.densities, self.labels, self.colors)):
+            n_traces = len(row)
+            n_labels = len(labels)
+            if n_traces != n_labels:
+                if n_labels == 1:
+                    labels = list(labels) * n_traces
+                else:
+                    raise ValueError(
+                        f"Mismatch between number of traces ({n_traces}) and "
+                        f"number of labels ({n_labels}) for row {i}."
+                    )
             # y_shifted is the y-origin for the new trace
             y_shifted = -i * float(self.y_max * self.spacing)
             y_ticks.append(y_shifted)

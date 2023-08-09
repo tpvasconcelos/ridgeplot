@@ -34,11 +34,15 @@ repos:
     hooks:
       - id: validate-pyproject
 
+  # mdformat is not enabled by default, but can be run manually with:
+  #   pre-commit run mdformat --all-files --hook-stage manual
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.16
     hooks:
       - id: mdformat
+        stages: [ manual ]
         files: '^docs/.*\.md$'
+        args: [ --check ]
         additional_dependencies:
           - mdformat-gfm
           - mdformat-myst
@@ -72,8 +76,6 @@ repos:
     rev: 1.15.0
     hooks:
       - id: blacken-docs
-        additional_dependencies:
-          - black==22.12.0
 
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0

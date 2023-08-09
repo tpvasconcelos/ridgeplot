@@ -2,63 +2,70 @@
 title: beautiful ridgeline plots in Python
 ---
 
-<h1 id="ridgeplot" align="center">
-  ridgeplot: beautiful ridgeline plots in Python
-</h1>
+:::{div} centered
+# ridgeplot: beautiful ridgeline plots in Python
 
-<p align="center">
-  <!-- TODO: https://bestpractices.coreinfrastructure.org/en -->
-  <!-- TODO: https://www.gitpod.io/docs/getting-started -->
-  <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/v/ridgeplot" alt="PyPI - Latest Release"></a>
-  <a href="https://github.com/tpvasconcelos/ridgeplot/"><img src="https://img.shields.io/pypi/pyversions/ridgeplot" alt="PyPI - Python Versions"></a>
-  <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/status/ridgeplot.svg" alt="PyPI - Package Status"></a>
-  <a href="https://github.com/tpvasconcelos/ridgeplot/blob/main/LICENSE"><img src="https://img.shields.io/pypi/l/ridgeplot" alt="PyPI - License"></a>
-  <br>
-  <a href="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/"><img src="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/badge.svg" alt="GitHub CI"></a>
-  <a href="https://ridgeplot.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/ridgeplot/badge/?version=latest&style=flat" alt="Docs"></a>
-  <a href="https://codecov.io/gh/tpvasconcelos/ridgeplot"><img src="https://codecov.io/gh/tpvasconcelos/ridgeplot/branch/main/graph/badge.svg" alt="codecov"></a>
-  <a href="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot"><img src="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge" alt="CodeFactor"></a>
-  <a href="https://www.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpvasconcelos/ridgeplot&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021" alt="Codacy code quality"/></a>
-</p>
+[![PyPI - Latest Release](https://img.shields.io/pypi/v/ridgeplot)](https://pypi.org/project/ridgeplot/)
+[![PyPI - Python Versions](https://img.shields.io/pypi/pyversions/ridgeplot)](https://pypi.org/project/ridgeplot/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/ridgeplot)](https://pypi.org/project/ridgeplot/)
+[![PyPI - Package Status](https://img.shields.io/pypi/status/ridgeplot.svg)](https://pypi.org/project/ridgeplot/)
+[![PyPI - License](https://img.shields.io/pypi/l/ridgeplot)](https://github.com/tpvasconcelos/ridgeplot/blob/main/LICENSE)
+
+[![GitHub CI](https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/badge.svg)](https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/)
+[![Docs](https://readthedocs.org/projects/ridgeplot/badge/?version=latest&style=flat)](https://ridgeplot.readthedocs.io/en/latest/)
+[![codecov](https://codecov.io/gh/tpvasconcelos/ridgeplot/branch/main/graph/badge.svg)](https://codecov.io/gh/tpvasconcelos/ridgeplot)
+[![CodeFactor](https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge)](https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot)
+[![Codacy code quality](https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021)](https://www.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=github.com&utm_medium=referral&utm_content=tpvasconcelos/ridgeplot&utm_campaign=Badge_Grade)
+:::
 
 ______________________________________________________________________
 
-The `ridgeplot` python library aims at providing a simple API for plotting beautiful
-[ridgeline plots](https://www.data-to-viz.com/graph/ridgeline.html) within the extensive
-[Plotly](https://plotly.com/python/) interactive graphing environment.
+`ridgeplot` is a Python package that provides a simple interface for plotting beautiful and interactive [ridgeline plots](getting_started/getting_started.md) within the extensive [Plotly](https://plotly.com/python/) ecosystem.
 
-Bumper stickers:
+![ridgeplot - beautiful ridgeline plots in Python](_static/img/hero.png){align=center w=800px}
 
-- Do one thing, and do it well!
-- Use sensible defaults, but allow for extensive configuration!
+<h2>Installation</h2>
 
-<p align="center">
-  <img src="_static/img/hero.png" alt="ridgeplot - beautiful ridgeline plots in Python" width="800">
-</p>
+`ridgeplot` can be installed and updated from [PyPi](https://pypi.org/project/ridgeplot/) using [pip](https://pip.pypa.io/en/stable/quickstart/):
+
+```shell
+pip install -U ridgeplot
+```
+
+For more information, see the [installation guide](getting_started/installation.md).
+
+<h2>Getting started</h2>
+
+Take a look at the [getting started guide](getting_started/getting_started.md), which provides a quick introduction to the `ridgeplot` library.
 
 ```{toctree}
 ---
 caption: Getting started
 maxdepth: 1
+glob: true
+hidden: true
 ---
-installation
-getting_started
+getting_started/installation
+getting_started/getting_started
 ```
 
 ```{toctree}
 ---
 caption: Reference
 maxdepth: 1
+glob: true
+hidden: true
 ---
-reference/api
-reference/changelog
-reference/alternatives
+api/index.rst
+reference/*
 ```
 
 ```{toctree}
 ---
 caption: Development
 maxdepth: 1
+glob: true
+hidden: true
 ---
-development/contributing
+development/*
 ```
