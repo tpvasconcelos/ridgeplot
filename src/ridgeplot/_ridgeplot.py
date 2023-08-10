@@ -236,9 +236,9 @@ def ridgeplot(
         warnings.warn(  # type: ignore
             "The colormode='index' value has been deprecated in favor of "
             "colormode='row-index', which provides the same functionality but "
-            "is more explicit and allows to distinguishing between the "
-            "'row-index' and 'trace-index' modes. Support for the deprecated "
-            "value will be removed in a future version.",
+            "is more explicit and allows to distinguish between the "
+            "'row-index' and 'trace-index' modes. Support for the "
+            "deprecated value will be removed in a future version.",
             DeprecationWarning,
             stacklevel=2,
         )
