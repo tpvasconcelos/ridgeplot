@@ -6,7 +6,37 @@ the [commit logs](https://github.com/tpvasconcelos/ridgeplot/commits/).
 Unreleased changes
 ------------------
 
-- ...
+### Deprecations
+
+- 🚨 The `colormode='index'` value has been deprecated in favor of `colormode='row-index'`, which
+  provides the same functionality but  is more explicit and allows to distinguish between the
+  `'row-index'` and `'trace-index'` modes.
+  ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
+- 🚨 The `show_annotations` argument has been deprecated in favor of `show_yticklabels`.
+  ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
+
+### Features
+
+- 🔧 Add functionality to allow plotting of multiple traces per row.
+  ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
+- 🔧 Add `ridgeplot.datasets.load_lincoln_weather()` helper function to load the "Lincoln Weather"
+  toy dataset. ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
+- 🔧 Add more versions of the _probly_ dataset (`"wadefagen"` and `"illinois"`).
+  ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
+- 🔧 Add support for Python 3.11.
+
+### Documentation
+
+- 📝 Major update to the documentation, including more examples, interactive plots, script to
+  generate the HTML and WebP images from the example scripts, improved API reference, and more.
+  ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
+
+### Internal
+
+- 🔧 Remove `mdformat` from the automated CI checks. It can still be triggered manually.
+  ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
+- 🔧 Improved type annotations and type checking.
+  ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
 
 0.1.21
 ------
