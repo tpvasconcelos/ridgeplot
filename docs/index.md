@@ -32,11 +32,30 @@ ______________________________________________________________________
 pip install -U ridgeplot
 ```
 
-For more information, see the [installation guide](getting_started/installation.md).
+For more information, see the [installation guide](getting_started/installation).
 
 <h2>Getting started</h2>
 
-Take a look at the [getting started guide](getting_started/getting_started.md), which provides a quick introduction to the `ridgeplot` library.
+Take a look at the [getting started guide](getting_started/getting_started), which provides a quick introduction to the `ridgeplot` library.
+
+<h3>Basic example</h3>
+
+For those in a hurry, here's a very basic example on how to quickly get started with {py:func}`~ridgeplot.ridgeplot()`.
+
+```python
+import numpy as np
+from ridgeplot import ridgeplot
+
+my_samples = [np.random.normal(n / 1.2, size=600) for n in range(9, 0, -1)]
+fig = ridgeplot(samples=my_samples)
+fig.update_layout(height=500, width=800)
+fig.show()
+```
+
+```{raw} html
+<iframe src="/_static/charts/basic.html" height="500" width="100%" style="border:none;overflow:hidden;"></iframe>
+```
+
 
 ```{toctree}
 ---

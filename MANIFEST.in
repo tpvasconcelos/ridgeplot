@@ -24,10 +24,12 @@ recursive-include src/ridgeplot/datasets/data *.csv
 include docs/Makefile
 include docs/make.bat
 include docs/robots.txt
+include docs/_static/favicon.ico
 recursive-include docs *.md *.py *.rst
-recursive-include docs/_static *.ico
-recursive-include docs/_static/img *.png
+recursive-include docs/_static/charts *.js *.html *.webp
 recursive-include docs/_static/css *.css
+recursive-include docs/_static/img *.png
+recursive-include docs/_static/js *.js
 recursive-include docs/_templates *.html
 prune docs/build
 

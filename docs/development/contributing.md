@@ -184,7 +184,7 @@ formatting rules. These checks are triggered before creating any git commit. To 
 linting steps (i.e., all pre-commit hooks), run
 
 ```shell
-tox -e lint
+pre-commit run --all-files
 ```
 
 For more information on which hooks will run, have a look inside the {{

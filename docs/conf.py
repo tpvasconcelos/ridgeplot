@@ -89,13 +89,16 @@ exclude_patterns = [
 html_static_path = ["_static"]
 
 html_css_files = [
-    "css/overrides.css",
+    "css/misc_overrides.css",
+    "css/versionmodified_admonitions.css",
     # FontAwesome CSS for footer icons
     # https://fontawesome.com/search
     # "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css",
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.1/css/fontawesome.min.css",
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.1/css/brands.min.css",
 ]
+
+html_js_files = []
 
 
 # -- Options for HTML output -----------------------------------------------------------------------

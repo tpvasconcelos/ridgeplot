@@ -55,7 +55,7 @@ fig.update_layout(height=500, width=800)
 fig.show()
 ```
 
-![ridgeline plot example using the ridgeplot Python library](docs/_static/img/example_basic.png)
+![ridgeline plot example using the ridgeplot Python library](docs/_static/charts/basic.webp)
 
 ### Fully configurable
 
@@ -69,7 +69,7 @@ from ridgeplot.datasets import load_probly
 # Load the probly dataset
 df = load_probly()
 
-# Let's grab only the subset of columns displayed in the example
+# Let's grab only the subset of columns used in the example
 column_names = [
     "Almost Certainly",
     "Very Good Chance",
@@ -87,25 +87,81 @@ df = df[column_names]
 fig = ridgeplot(
     samples=df.values.T,
     bandwidth=4,
-    kde_points=np.linspace(-12.5, 112.5, 400),
+    kde_points=np.linspace(-12.5, 112.5, 500),
     colorscale="viridis",
     colormode="row-index",
-    coloralpha=0.6,
+    coloralpha=0.65,
     labels=column_names,
+    linewidth=2,
     spacing=5 / 9,
 )
 
-# And you can still update and extend the Figure using standard Plotly methods
+# And you can still update and extend the
+# final Figure using standard Plotly methods
 fig.update_layout(
-    title="What probability would you assign to the phrase <i>“Highly likely”</i>?",
-    height=650,
-    width=800,
+    height=760,
+    width=900,
+    font_size=16,
     plot_bgcolor="white",
+    xaxis_tickvals=[-12.5, 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100, 112.5],
+    xaxis_ticktext=["", "0", "", "25", "", "50", "", "75", "", "100", ""],
     xaxis_gridcolor="rgba(0, 0, 0, 0.1)",
     yaxis_gridcolor="rgba(0, 0, 0, 0.1)",
     yaxis_title="Assigned Probability (%)",
+    showlegend=False,
 )
 fig.show()
 ```
 
-![ridgeline plot of the probly dataset using the ridgeplot Python library](docs/_static/img/example_probly.png)
+![ridgeline plot of the probly dataset using the ridgeplot Python library](docs/_static/charts/probly.webp)
+
+### More examples
+
+For more examples, take a look at the [getting started guide](https://ridgeplot.readthedocs.io/en/stable/getting_started/getting_started.html). For instance, this example demonstrates how you can also draw [multiple traces](https://ridgeplot.readthedocs.io/en/stable/getting_started/getting_started.html#more-traces) per row in your ridgeline plot:
+
+```python
+import numpy as np
+from ridgeplot import ridgeplot
+from ridgeplot.datasets import load_lincoln_weather
+
+# Load test data
+df = load_lincoln_weather()
+
+# Transform the data into a 3D (ragged) array format of
+# daily min and max temperature samples per month
+months = df.index.month_name().unique()
+samples = [
+    [
+        df[df.index.month_name() == month]["Min Temperature [F]"],
+        df[df.index.month_name() == month]["Max Temperature [F]"],
+    ]
+    for month in months
+]
+
+# And finish by styling it up to your liking!
+fig = ridgeplot(
+    samples=samples,
+    labels=months,
+    coloralpha=0.98,
+    bandwidth=4,
+    kde_points=np.linspace(-25, 110, 400),
+    spacing=0.33,
+    linewidth=2,
+)
+fig.update_layout(
+    title="Minimum and maximum daily temperatures in Lincoln, NE (2016)",
+    height=650,
+    width=950,
+    font_size=14,
+    plot_bgcolor="rgb(245, 245, 245)",
+    xaxis_gridcolor="white",
+    yaxis_gridcolor="white",
+    xaxis_gridwidth=2,
+    yaxis_title="Month",
+    xaxis_title="Temperature [F]",
+    showlegend=False,
+)
+fig.show()
+```
+
+![ridgeline plot of the Lincoln Weather dataset using the ridgeplot Python library](docs/_static/charts/lincoln_weather.webp)

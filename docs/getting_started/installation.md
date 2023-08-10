@@ -12,7 +12,7 @@ pip install -U ridgeplot
 
 The source code for this project is hosted on GitHub at: <https://github.com/tpvasconcelos/ridgeplot>
 
-Take a look at the [contributing guide](../development/contributing.md) for instructions on how to build from the git source. Further, refer to the instructions on [creating a development environment](Development-environment) if you wish to create a local development environment, or wish to contribute to the project.
+Take a look at the [contributing guide](/development/contributing) for instructions on how to build from the git source. Further, refer to the instructions on [creating a development environment](Development-environment) if you wish to create a local development environment, or wish to contribute to the project.
 
 ## Dependencies
 

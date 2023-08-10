@@ -1,4 +1,7 @@
-def main() -> None:
+import plotly.graph_objects as go
+
+
+def main() -> go.Figure:
     import numpy as np
 
     from ridgeplot import ridgeplot
@@ -11,10 +14,12 @@ def main() -> None:
     fig = ridgeplot(samples=synthetic_samples)
 
     # The returned Plotly `Figure` is still fully customizable
-    fig.update_layout(height=500, width=800)
+    fig.update_layout(height=400, width=800)
 
     # show us the work!
     fig.show()
+
+    return fig
 
 
 if __name__ == "__main__":

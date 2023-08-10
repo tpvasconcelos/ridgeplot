@@ -1,4 +1,7 @@
-def main() -> None:
+import plotly.graph_objects as go
+
+
+def main() -> go.Figure:
     import numpy as np
 
     from ridgeplot import ridgeplot
@@ -7,7 +10,7 @@ def main() -> None:
     # Load the probly dataset
     df = load_probly()
 
-    # Let's grab only the subset of columns displayed in the example
+    # Let's grab only the subset of columns used in the example
     column_names = [
         "Almost Certainly",
         "Very Good Chance",
@@ -25,7 +28,7 @@ def main() -> None:
     fig = ridgeplot(
         samples=df.values.T,
         bandwidth=4,
-        kde_points=np.linspace(-12.5, 112.5, 4200),
+        kde_points=np.linspace(-12.5, 112.5, 500),
         colorscale="viridis",
         colormode="row-index",
         coloralpha=0.65,
@@ -34,7 +37,8 @@ def main() -> None:
         spacing=5 / 9,
     )
 
-    # And you can still update and extend the Figure using standard Plotly methods
+    # And you can still update and extend the
+    # final Figure using standard Plotly methods
     fig.update_layout(
         height=760,
         width=900,
@@ -48,6 +52,8 @@ def main() -> None:
         showlegend=False,
     )
     fig.show()
+
+    return fig
 
 
 if __name__ == "__main__":

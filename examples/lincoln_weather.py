@@ -1,4 +1,7 @@
-def main() -> None:
+import plotly.graph_objects as go
+
+
+def main() -> go.Figure:
     import numpy as np
 
     from ridgeplot import ridgeplot
@@ -24,7 +27,6 @@ def main() -> None:
         spacing=0.33,
         linewidth=2,
     )
-
     fig.update_layout(
         title="Minimum and maximum daily temperatures in Lincoln, NE (2016)",
         height=650,
@@ -39,6 +41,8 @@ def main() -> None:
         showlegend=False,
     )
     fig.show()
+
+    return fig
 
 
 if __name__ == "__main__":

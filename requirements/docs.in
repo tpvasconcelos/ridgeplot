@@ -1,19 +1,22 @@
 -e file:.
 
-Jinja2
-sphinx
+beautifulsoup4
 furo
+jinja2
+kaleido
+minify-html
 myst-parser>=0.19.0
+sphinx
 sphinx-autobuild
 sphinx-autodoc-typehints
 sphinx-copybutton
-sphinx_design
 sphinx-inline-tabs
 sphinx-notfound-page
 sphinx-paramlinks
 sphinx-remove-toctrees
 sphinx-sitemap
-sphinx_thebe
 sphinx-togglebutton
 sphinx-toolbox
+sphinx_design
+sphinx_thebe
 sphinxext-opengraph
