@@ -27,20 +27,20 @@ def normalise_min_max(val: Numeric, min_: Numeric, max_: Numeric) -> float:
     return float((val - min_) / (max_ - min_))
 
 
-def get_collection_array_shape(collection_array: Collection) -> Tuple[Union[int, Set[int]], ...]:
-    """Return the shape of a :class:`~Collection` array.
+def get_collection_array_shape(arr: Collection) -> Tuple[Union[int, Set[int]], ...]:
+    """Return the shape of a :class:`~typing.Collection` array.
 
     Parameters
     ----------
-    collection_array
-        Input :class:`~Collection` array.
+    arr
+        The :class:`~typing.Collection` array.
 
     Returns
     -------
     Tuple[Union[int, Set[int]], ...]
         The elements of the shape tuple give the lengths of the corresponding
         array dimensions. If the length of a dimension is variable, the
-        corresponding element is a :class:`~Set` of the variable lengths.
+        corresponding element is a :class:`~set` of the variable lengths.
         Otherwise, (if the length of a dimension is fixed), the corresponding
         element is an :class:`~int`.
 
@@ -49,19 +49,13 @@ def get_collection_array_shape(collection_array: Collection) -> Tuple[Union[int,
     >>> get_collection_array_shape([1, 2, 3])
     (3,)
 
-    >>> get_collection_array_shape(
-    ...     [
-    ...         [1, 2, 3],
-    ...         [4, 5],
-    ...     ]
-    ... )
+    >>> get_collection_array_shape([[1, 2, 3], [4, 5]])
     (2, {2, 3})
 
     >>> get_collection_array_shape(
     ...     [
     ...         [
-    ...             [1, 2, 3],
-    ...             [4, 5],
+    ...             [1, 2, 3], [4, 5]
     ...         ],
     ...         [
     ...             [6, 7, 8, 9],
@@ -73,9 +67,7 @@ def get_collection_array_shape(collection_array: Collection) -> Tuple[Union[int,
     >>> get_collection_array_shape(
     ...     [
     ...         [
-    ...             [1],
-    ...             [2, 3],
-    ...             [4, 5, 6],
+    ...             [1], [2, 3], [4, 5, 6],
     ...         ],
     ...         [
     ...             [7, 8, 9, 10, 11],
@@ -102,8 +94,7 @@ def get_collection_array_shape(collection_array: Collection) -> Tuple[Union[int,
     >>> get_collection_array_shape(
     ...     [
     ...         [
-    ...             ["a", "b", "c", "d"],
-    ...             ["e", "f"],
+    ...             ["a", "b", "c", "d"], ["e", "f"],
     ...         ],
     ...         [
     ...             ["h", "i", "j", "k", "l"],
@@ -111,7 +102,6 @@ def get_collection_array_shape(collection_array: Collection) -> Tuple[Union[int,
     ...     ]
     ... )
     (2, {1, 2}, {2, 4, 5})
-
     """
 
     def _get_dim_length(obj: Any) -> int:
@@ -120,14 +110,14 @@ def get_collection_array_shape(collection_array: Collection) -> Tuple[Union[int,
             raise TypeError(f"Expected a Collection. Got {type(obj)} instead.")
         return len(obj)
 
-    shape: List[Union[int, Set[int]]] = [_get_dim_length(collection_array)]
-    while isinstance(collection_array, Collection):
+    shape: List[Union[int, Set[int]]] = [_get_dim_length(arr)]
+    while isinstance(arr, Collection):
         try:
-            dim_lengths = set(map(_get_dim_length, collection_array))
+            dim_lengths = set(map(_get_dim_length, arr))
         except TypeError:
             break
         shape.append(dim_lengths.pop() if len(dim_lengths) == 1 else dim_lengths)
-        collection_array = [item for sublist in collection_array for item in sublist]
+        arr = [item for sublist in arr for item in sublist]
     return tuple(shape)
 
 
