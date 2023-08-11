@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import json
+import warnings
 from pathlib import Path
-from typing import Dict, Tuple, Union, cast
+from typing import Dict, List, Tuple, Union, cast
 
 from _plotly_utils.colors import validate_colors, validate_scale_values
 from plotly.colors import find_intermediate_color, hex_to_rgb, label_rgb
@@ -24,7 +25,7 @@ _COLORSCALE_MAPPING: LazyMapping[str, ColorScaleT] = LazyMapping(loader=_colorma
 
 
 def validate_colorscale(colorscale: ColorScaleT) -> None:
-    """Validate the structure, scale values, and colors of colorscale.
+    """Validate the structure, scale values, and colors of a colorscale.
 
     Adapted from :func:`_plotly_utils.colors.validate_colorscale`.
     """
@@ -34,6 +35,26 @@ def validate_colorscale(colorscale: ColorScaleT) -> None:
 
 
 def _any_to_rgb(color: Union[str, tuple]) -> str:
+    """Convert any color to an rgb string.
+
+    Parameters
+    ----------
+    color
+        A color. This can be a tuple of ``(r, g, b)`` values, a hex string,
+        or an rgb string.
+
+    Returns
+    -------
+    str
+        An rgb string.
+
+    Raises
+    ------
+    TypeError
+        If ``color`` is not a tuple or a string.
+    ValueError
+        If ``color`` is a string that does not represent a hex or rgb color.
+    """
     if not isinstance(color, (str, tuple)):
         raise TypeError(f"Expected str or tuple for color, got {type(color)} instead.")
     if isinstance(color, tuple):
@@ -41,7 +62,8 @@ def _any_to_rgb(color: Union[str, tuple]) -> str:
     elif color.startswith("#"):
         rgb = cast(str, label_rgb(hex_to_rgb(color)))
     elif color.startswith("rgb("):
-        rgb = str(color)
+        # Already an rgb string
+        rgb = color
     else:
         raise ValueError(
             f"color should be a tuple or a str representation "
@@ -51,15 +73,37 @@ def _any_to_rgb(color: Union[str, tuple]) -> str:
     return rgb
 
 
+def list_all_colorscale_names() -> List[str]:
+    """Get a list with all available colorscale names.
+
+    .. versionadded:: 0.1.21
+        Replaces the deprecated :func:`get_all_colorscale_names()`.
+
+    Returns
+    -------
+    list[str]
+        A list with all available colorscale names.
+    """
+    return sorted(_COLORSCALE_MAPPING.keys())
+
+
 def get_all_colorscale_names() -> Tuple[str, ...]:
     """Get a tuple with all available colorscale names.
+
+    .. deprecated:: 0.1.21
+        Use :func:`list_all_colorscale_names()` instead.
 
     Returns
     -------
     tuple[str, ...]
         A tuple with all available colorscale names.
     """
-    return tuple(_COLORSCALE_MAPPING.keys())
+    warnings.warn(
+        "get_all_colorscale_names() is deprecated in favor of list_all_colorscale_names().",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return tuple(list_all_colorscale_names())
 
 
 def get_colorscale(name: str) -> ColorScaleT:
@@ -74,7 +118,7 @@ def get_colorscale(name: str) -> ColorScaleT:
 
     Returns
     -------
-    :data:`ColorScaleT`
+    ColorScaleT
         A colorscale.
 
     Raises

@@ -14,6 +14,9 @@ Unreleased changes
   ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
 - 🚨 The `show_annotations` argument has been deprecated in favor of `show_yticklabels`.
   ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
+- The `get_all_colorscale_names()` function has been deprecated in favor of
+  `list_all_colorscale_names()`.
+  ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
 
 ### Features
 

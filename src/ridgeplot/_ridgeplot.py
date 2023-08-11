@@ -177,14 +177,13 @@ def ridgeplot(
         Whether to show the tick labels on the y-axis. The default is True.
 
         .. deprecated:: 0.1.21
-            This argument has been deprecated in favor of
-            :paramref:`show_yticklabels`.
+            Use :paramref:`show_yticklabels` instead.
 
     show_yticklabels : bool
         Whether to show the tick labels on the y-axis. The default is True.
 
         .. versionadded:: 0.1.21
-            ``show_annotations`` was renamed to ``show_yticklabels``.
+            Replaces the deprecated :paramref:`show_annotations` argument.
 
     xpad : float
         Specifies the extra padding to use on the x-axis. It is defined in
