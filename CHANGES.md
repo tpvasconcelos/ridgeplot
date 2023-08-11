@@ -6,6 +6,13 @@ the [commit logs](https://github.com/tpvasconcelos/ridgeplot/commits/).
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.1.23
+------
+
 - Fix the references to the interactive Plotly IFrames
   ([#129](https://github.com/tpvasconcelos/ridgeplot/pull/129))
 
