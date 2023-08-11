@@ -7,6 +7,9 @@ on:
   pull_request:
 
 jobs:
+  # * Run static code checks only for Ubuntu and Python 3.8
+  # * Run software tests with coverage only for Ubuntu (all Python versions)
+  # * Run software tests without coverage for macOS and Windows (all Python versions)
   static:
     name: Static code checks
     runs-on: ubuntu-latest
@@ -16,11 +19,11 @@ jobs:
         with:
           python-version: "3.8"
           requirements-prefix: tox
-      - name: Run CI checks with Tox
+      - name: Run static checks with Tox
         shell: bash
         run: ./bin/tox --parallel auto --parallel-no-spinner -m static
-  tests:
-    name: Software tests
+  tests-no-cov:
+    name: Software tests (without coverage)
     strategy:
       matrix:
         python-version:
@@ -30,7 +33,6 @@ jobs:
           - "3.10"
           - "3.11"
         os:
-          - ubuntu-latest
           - macos-latest
           - windows-latest
       fail-fast: true
@@ -41,7 +43,32 @@ jobs:
         with:
           python-version: "${{ matrix.python-version }}"
           requirements-prefix: tox
-      - name: Run CI checks with Tox
+      - name: Run tests with Tox (without coverage)
+        if: matrix.os != 'ubuntu-latest'
+        shell: bash
+        run: ./bin/tox --parallel auto --parallel-no-spinner -m tests -- --no-cov
+  tests-cov:
+    name: Software tests (with coverage)
+    strategy:
+      matrix:
+        python-version:
+          - "3.7"
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+        os:
+          - ubuntu-latest
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-python
+        with:
+          python-version: "${{ matrix.python-version }}"
+          requirements-prefix: tox
+      - name: Run tests with Tox (with coverage)
+        if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: ./bin/tox --parallel auto --parallel-no-spinner -m tests
       - name: Upload coverage to codecov

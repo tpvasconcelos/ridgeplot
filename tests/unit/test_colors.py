@@ -154,7 +154,8 @@ def test_any_to_rgb_fails_for_invalid_color(
 def test_any_to_rgb_bug_in_validation_incomplete(
     color: Any, expected_exception: Type[Exception], exception_match: Optional[str]
 ) -> None:
-    pytest.raises(expected_exception, _any_to_rgb, color=color).match(exception_match or "")
+    with pytest.raises(expected_exception, match=exception_match or ""):
+        _any_to_rgb(color=color)
 
 
 # ==============================================================
