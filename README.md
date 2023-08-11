@@ -57,7 +57,7 @@ fig.show()
 
 ![ridgeline plot example using the ridgeplot Python library](docs/_static/charts/basic.webp)
 
-### Fully configurable
+### Flexible configuration
 
 In this example, we will be replicating the first ridgeline plot example in this [_from Data to Viz_ post](https://www.data-to-viz.com/graph/ridgeline.html), which uses the _"Perception of Probability Words"_ dataset.
 
@@ -69,7 +69,7 @@ from ridgeplot.datasets import load_probly
 # Load the probly dataset
 df = load_probly()
 
-# Let's grab only the subset of columns used in the example
+# Let's grab the subset of columns used in the example
 column_names = [
     "Almost Certainly",
     "Very Good Chance",
@@ -96,8 +96,8 @@ fig = ridgeplot(
     spacing=5 / 9,
 )
 
-# And you can still update and extend the
-# final Figure using standard Plotly methods
+# And you can still update and extend the final
+# Plotly Figure using standard Plotly methods
 fig.update_layout(
     height=760,
     width=900,
@@ -110,6 +110,8 @@ fig.update_layout(
     yaxis_title="Assigned Probability (%)",
     showlegend=False,
 )
+
+# Show us the work!
 fig.show()
 ```
 

@@ -3,7 +3,9 @@ from runpy import run_path
 
 import pytest
 
-PATH_EXAMPLES = Path(__file__).parents[2].joinpath("examples")
+ROOT_DIR = Path(__file__).parents[2]
+assert ROOT_DIR.name == "ridgeplot"
+PATH_EXAMPLES = ROOT_DIR / "docs/_examples"
 
 
 @pytest.mark.parametrize("example_script", PATH_EXAMPLES.glob("*.py"))

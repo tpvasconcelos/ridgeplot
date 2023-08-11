@@ -19,5 +19,5 @@ Take a look at the [contributing guide](/development/contributing) for instructi
 We try to keep the number of dependencies to a minimum and only use common and well-established libraries in the scientific python ecosystem. Currently, we only depend on the following 3 Python packages:
 
 - [plotly](https://plotly.com/) - The interactive graphing backend that powers `ridgeplot`
-- [statsmodels](https://www.statsmodels.org/) - Used the Kernel Density Estimation (KDE)
+- [statsmodels](https://www.statsmodels.org/) - Used for Kernel Density Estimation (KDE)
 - [numpy](https://numpy.org/) - Supporting library for multidimensional array manipulations

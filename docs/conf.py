@@ -17,6 +17,12 @@ except ImportError:
 # https://myst-parser.readthedocs.io/en/latest/index.html
 
 
+# -- compile plotly example charts -----------------------------------------------------------------
+from compile_plotly_charts import compile_plotly_charts
+
+compile_plotly_charts()
+
+
 # -- Project information ---------------------------------------------------------------------------
 
 metadata = importlib_metadata.metadata("ridgeplot")

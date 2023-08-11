@@ -10,7 +10,7 @@ def main() -> go.Figure:
     # Load the probly dataset
     df = load_probly()
 
-    # Let's grab only the subset of columns used in the example
+    # Let's grab the subset of columns used in the example
     column_names = [
         "Almost Certainly",
         "Very Good Chance",
@@ -37,11 +37,11 @@ def main() -> go.Figure:
         spacing=5 / 9,
     )
 
-    # And you can still update and extend the
-    # final Figure using standard Plotly methods
+    # And you can still update and extend the final
+    # Plotly Figure using standard Plotly methods
     fig.update_layout(
-        height=760,
-        width=900,
+        height=600,
+        width=800,
         font_size=16,
         plot_bgcolor="white",
         xaxis_tickvals=[-12.5, 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100, 112.5],
@@ -51,6 +51,8 @@ def main() -> go.Figure:
         yaxis_title="Assigned Probability (%)",
         showlegend=False,
     )
+
+    # Show us the work!
     fig.show()
 
     return fig

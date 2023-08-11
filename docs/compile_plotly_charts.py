@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from importlib import import_module
 from pathlib import Path
 from typing import cast
 
@@ -9,12 +10,12 @@ from plotly.offline import get_plotlyjs
 
 from ridgeplot._testing import patch_plotly_show
 
-# isort: split
-from utils import import_pyscript_as_module
-
-PATH_ROOT = Path(__file__).parents[1]
-PATH_EXAMPLES = PATH_ROOT.joinpath("examples")
-PATH_CHARTS = PATH_ROOT.joinpath("docs/_static/charts")
+PATH_DOCS = Path(__file__).parent
+assert PATH_DOCS.exists()
+assert PATH_DOCS.is_dir()
+assert PATH_DOCS.name == "docs"
+PATH_EXAMPLES = PATH_DOCS / "_examples"
+PATH_CHARTS = PATH_DOCS / "_static/charts"
 
 RAW_HTML_IFRAME_RST_TEMPLATE = """
 ```{{raw}} html
@@ -24,8 +25,10 @@ RAW_HTML_IFRAME_RST_TEMPLATE = """
 
 
 def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
+    plot_id = example_script.stem
+
     print(f"Getting the Plotly Figure from: {example_script}...")
-    example_module = import_pyscript_as_module(example_script)
+    example_module = import_module(f"_examples.{plot_id}")
     main_func = example_module.main
     fig = cast(go.Figure, main_func())
 
@@ -39,7 +42,9 @@ def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
     if fig.layout.margin == go.layout.Margin():
         fig = fig.update_layout(margin=dict(l=0, r=0, t=40, b=0))
 
-    html_str = fig.to_html(include_plotlyjs="directory", full_html=True)
+    html_str = fig.to_html(
+        include_plotlyjs="directory", full_html=True, div_id=f"plotly-id-{plot_id}"
+    )
 
     # Edit the style of the <body> tag to remove the default margins
     # (these margin values can be inherited from user agent stylesheets)
@@ -51,11 +56,11 @@ def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
     if minify_html:
         html_str = minify(html_str, minify_js=True)
 
-    out_path = PATH_CHARTS / f"{example_script.stem}.html"
+    out_path = PATH_CHARTS / f"{plot_id}.html"
     print(f"Writing HTML artefact to {out_path}...")
     out_path.write_text(html_str, "utf-8")
 
-    out_image = PATH_CHARTS / f"{example_script.stem}.webp"
+    out_image = PATH_CHARTS / f"{plot_id}.webp"
     print(f"Writing WebP artefact to {out_image}...")
     fig.write_image(
         out_image,
@@ -66,7 +71,7 @@ def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
         engine="kaleido",
     )
 
-    src = out_path.relative_to(PATH_ROOT.joinpath("docs")).as_posix()
+    src = out_path.relative_to(PATH_DOCS).as_posix()
     raw_html_iframe_rst_snippet = RAW_HTML_IFRAME_RST_TEMPLATE.format(
         src=src,
         height=height,
@@ -86,13 +91,17 @@ def _write_plotlyjs_bundle() -> None:
     bundle_path.write_text(plotlyjs, encoding="utf-8")
 
 
-def main() -> None:
+def compile_plotly_charts() -> None:
     print("Writing Plotly.js bundle...")
     _write_plotlyjs_bundle()
     print("Patching `plotly.show()`...")
     patch_plotly_show()
     for example_script in PATH_EXAMPLES.glob("*.py"):
         _compile_plotly_fig(example_script)
+
+
+def main() -> None:
+    compile_plotly_charts()
 
 
 if __name__ == "__main__":
