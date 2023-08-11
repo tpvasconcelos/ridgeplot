@@ -1,4 +1,4 @@
-ridgeplot.datasets.load\_lincoln\_weather
+﻿ridgeplot.datasets.load\_lincoln\_weather
 =========================================
 
 .. currentmodule:: ridgeplot.datasets

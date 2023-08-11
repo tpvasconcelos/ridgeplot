@@ -18,7 +18,9 @@ repos:
       - id: destroyed-symlinks
       - id: detect-private-key
       - id: end-of-file-fixer
+        exclude: "^docs/api/public/.*$"
       - id: fix-byte-order-marker
+        exclude: "^docs/api/public/.*$"
       - id: pretty-format-json
         args: [ --autofix ]
       - id: trailing-whitespace

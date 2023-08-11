@@ -1,4 +1,4 @@
-ridgeplot.list\_all\_colorscale\_names
+﻿ridgeplot.list\_all\_colorscale\_names
 ======================================
 
 .. currentmodule:: ridgeplot
