@@ -139,10 +139,6 @@ class RidgePlotFigureFactory:
         # ==============================================================
         # ---  Get clean and validated input arguments
         # ==============================================================
-
-        # TODO: Validate the densities array
-        # densities = validate_densities(densities)
-
         n_rows = len(densities)
         n_traces = sum(len(row) for row in densities)
 

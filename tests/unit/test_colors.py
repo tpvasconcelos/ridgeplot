@@ -198,8 +198,7 @@ def test_get_color_midpoint_in_scale() -> None:
 
 
 def test_get_color_midpoint_not_in_scale() -> None:
-    # TODO: Refactor `get_color` to make this easier to test.
-    #       Currently just using a hard-coded value.
+    # Hard-coded test case.
     assert get_color(colorscale=VIRIDIS, midpoint=0.5) == "rgb(34.5, 144.0, 139.5)"
 
 

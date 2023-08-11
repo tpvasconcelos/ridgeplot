@@ -26,7 +26,7 @@ def plot_violin(
             line_width=1.5,
             points=False,
             name=name,
-            # TODO: manual line based on beta_mean
+            # Would be nice to add a vertical line based on beta_mean
             # meanline_visible=True,
             hoveron="violins",
             hoverinfo="x+y",

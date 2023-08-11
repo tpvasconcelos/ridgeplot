@@ -50,7 +50,6 @@ def estimate_density_trace(
                 f"one-dimensional array, got an array of shape {density_x.shape} instead."
             )
 
-    # TODO: use a different KDE implementation (e.g. scipy's alternative)
     # I decided to use statsmodels' KDEUnivariate for KDE. There are many
     # other supported alternatives in the python scientific computing
     # ecosystem. See, for instance, scipy's alternative - on which
