@@ -15,7 +15,7 @@ title: beautiful ridgeline plots in Python
 [![Docs](https://readthedocs.org/projects/ridgeplot/badge/?version=latest&style=flat)](https://ridgeplot.readthedocs.io/en/latest/)
 [![codecov](https://codecov.io/gh/tpvasconcelos/ridgeplot/branch/main/graph/badge.svg)](https://codecov.io/gh/tpvasconcelos/ridgeplot)
 [![CodeFactor](https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge)](https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot)
-[![Codacy code quality](https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021)](https://www.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=github.com&utm_medium=referral&utm_content=tpvasconcelos/ridgeplot&utm_campaign=Badge_Grade)
+[![Codacy code quality Badge](https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021)](https://app.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 :::
 
 ______________________________________________________________________
