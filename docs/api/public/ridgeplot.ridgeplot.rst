@@ -1,4 +1,4 @@
-﻿ridgeplot.ridgeplot
+ridgeplot.ridgeplot
 ===================
 
 .. currentmodule:: ridgeplot

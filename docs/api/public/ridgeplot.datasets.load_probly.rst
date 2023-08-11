@@ -1,4 +1,4 @@
-﻿ridgeplot.datasets.load\_probly
+ridgeplot.datasets.load\_probly
 ===============================
 
 .. currentmodule:: ridgeplot.datasets
