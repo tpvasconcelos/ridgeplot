@@ -1,3 +1,4 @@
+exclude: "^docs/_static/charts/.*$"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
@@ -28,7 +29,6 @@ repos:
     hooks:
       - id: codespell
         args: [ "-L", "probly" ]
-        exclude: "docs/_static/charts/.*"
 
   - repo: https://github.com/abravalheri/validate-pyproject
     rev: v0.13
