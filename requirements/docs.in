@@ -1,17 +1,22 @@
 -e file:.
 
-Jinja2
-sphinx
+beautifulsoup4
 furo
-myst_nb
+jinja2
+kaleido
+minify-html
+myst-parser>=0.19.0
+sphinx
+sphinx-autobuild
 sphinx-autodoc-typehints
 sphinx-copybutton
-sphinx_thebe
-sphinx_design
-sphinx-togglebutton
-sphinx-notfound-page
-sphinxext-opengraph
 sphinx-inline-tabs
-sphinx-autobuild
-sphinx-toolbox
+sphinx-notfound-page
+sphinx-paramlinks
+sphinx-remove-toctrees
 sphinx-sitemap
+sphinx-togglebutton
+sphinx-toolbox
+sphinx_design
+sphinx_thebe
+sphinxext-opengraph

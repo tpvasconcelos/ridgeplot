@@ -20,14 +20,13 @@ def plot_violin(
     ridgeplot = True
 
     for dist, name, color in zip(data, names, colors):
-
         defaults_violin = dict(
             fillcolor=color,
             line_color="black" if color else None,
             line_width=1.5,
             points=False,
             name=name,
-            # TODO: manual line based on beta_mean
+            # Would be nice to add a vertical line based on beta_mean
             # meanline_visible=True,
             hoveron="violins",
             hoverinfo="x+y",
@@ -48,7 +47,7 @@ def plot_violin(
         # legend_title="Legend Title",
         # xaxis_title=metric.upper() if ridgeplot else None,
         # yaxis_title=None if ridgeplot else metric.upper(),
-        xaxis_showticklabels=bool(ridgeplot),
+        xaxis_showticklabels=ridgeplot,
         yaxis_showticklabels=not ridgeplot,
         hovermode="y unified" if ridgeplot else "x unified",
         xaxis_showgrid=True,

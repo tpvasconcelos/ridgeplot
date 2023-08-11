@@ -59,12 +59,11 @@ install: .venv ## install all local development dependencies
 	@$(VENV_BIN)/pre-commit install --install-hooks
 
 
-.PHONY: init-jupyter
+.PHONY: jupyter-init
 jupyter-init: ## initialise a jupyterlab environment and install extensions
 	@echo "==> Setting up jupyterlab environment..."
-	@$(VENV_BIN)/python -m pip install --upgrade ipykernel jupyterlab
+	@$(VENV_BIN)/python -m pip install --upgrade ipykernel jupyter
 	@$(VENV_BIN)/python -m ipykernel install --user --name="ridgeplot"
-	@$(VENV_BIN)/python -m jupyter lab build
 
 
 # ==============================================================
@@ -79,33 +78,33 @@ clean-all: clean-ci clean-venv clean-build clean-pyc ## remove all artifacts
 .PHONY: clean-build
 clean-build: ## remove build artifacts
 	@echo "==> Removing build artifacts..."
-	@rm -fr build/
-	@rm -fr dist/
-	@rm -fr .eggs/
-	@find . -name '*.egg-info' -exec rm -fr {} +
-	@find . -name '*.egg' -exec rm -f {} +
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -f {} +
 
 
 .PHONY: clean-pyc
 clean-pyc: ## remove Python file artifacts
 	@echo "==> Removing python file artifacts..."
-	@find . -name '*.pyc' -exec rm -f {} +
-	@find . -name '*.pyo' -exec rm -f {} +
-	@find . -name '*~' -exec rm -f {} +
-	@find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
 
 
 .PHONY: clean-ci
 clean-ci: ## remove linting, testing, and coverage artifacts
 	@echo "==> Removing lint, test, and coverage artifacts..."
-	@rm -fr .tox/
-	@rm -fr .pytest_cache
-	@rm -fr .mypy_cache/
-	@find . -name 'coverage.xml' -exec rm -f {} +
-	@find . -name '.coverage' -exec rm -f {} +
+	rm -fr .tox/
+	rm -fr .pytest_cache/
+	rm -fr .mypy_cache/
+	find . -name 'coverage.xml' -exec rm -f {} +
+	find . -name '.coverage' -exec rm -f {} +
 
 
 .PHONY: clean-venv
 clean-venv: ## remove venv artifacts
 	@echo "==> Removing virtual environment..."
-	@rm -fr .venv
+	rm -fr .venv

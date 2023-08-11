@@ -11,6 +11,7 @@
   <!-- TODO: https://www.gitpod.io/docs/getting-started -->
   <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/v/ridgeplot" alt="PyPI - Latest Release"></a>
   <a href="https://github.com/tpvasconcelos/ridgeplot/"><img src="https://img.shields.io/pypi/pyversions/ridgeplot" alt="PyPI - Python Versions"></a>
+  <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/dm/ridgeplot" alt="PyPI - Downloads"></a>
   <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/status/ridgeplot.svg" alt="PyPI - Package Status"></a>
   <a href="https://github.com/tpvasconcelos/ridgeplot/blob/main/LICENSE"><img src="https://img.shields.io/pypi/l/ridgeplot" alt="PyPI - License"></a>
   <br>
@@ -20,72 +21,45 @@
   <a href="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot"><img src="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge" alt="CodeFactor"></a>
   <a href="https://www.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tpvasconcelos/ridgeplot&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021" alt="Codacy code quality"/></a>
 </p>
-
-<!-- <p align="center"><i>Beautiful ridgeline plots in python</i></p> -->
-
 ______________________________________________________________________
 
-The `ridgeplot` python library aims at providing a simple API for plotting beautiful
-[ridgeline plots](https://www.data-to-viz.com/graph/ridgeline.html) within the extensive
-[Plotly](https://plotly.com/python/) interactive graphing environment.
+`ridgeplot` is a Python package that provides a simple interface for plotting beautiful and interactive [ridgeline plots](https://www.data-to-viz.com/graph/ridgeline.html) within the extensive [Plotly](https://plotly.com/python/) ecosystem.
 
-Bumper stickers:
+## Installation
 
-- Do one thing, and do it well!
-- Use sensible defaults, but allow for extensive configuration!
-
-## How to get it?
-
-The source code is currently hosted on GitHub at: <https://github.com/tpvasconcelos/ridgeplot>
-
-Install and update using [pip](https://pip.pypa.io/en/stable/quickstart/):
+`ridgeplot` can be installed and updated from [PyPi](https://pypi.org/project/ridgeplot/) using [pip](https://pip.pypa.io/en/stable/quickstart/):
 
 ```shell
 pip install -U ridgeplot
 ```
 
-### Dependencies
+For more information, see the [installation guide](https://ridgeplot.readthedocs.io/en/stable/getting_started/installation.html).
 
-- [plotly](https://plotly.com/) - the interactive graphing backend that powers `ridgeplot`
-- [statsmodels](https://www.statsmodels.org/) - Used for Kernel Density Estimation (KDE)
-- [numpy](https://numpy.org/) - Supporting library for multi-dimensional array manipulations
+## Getting started
 
-## How to use it?
+Take a look at the [getting started guide](https://ridgeplot.readthedocs.io/en/stable/getting_started/getting_started.html), which provides a quick introduction to the `ridgeplot` library.
 
-The official docs can be found at: https://ridgeplot.readthedocs.io/en/stable/
+The full official documentation can be found at: https://ridgeplot.readthedocs.io/en/stable/
 
-### Sensible defaults
+### Basic example
+
+This basic example gets you started with a simple call to the `ridgeplot()` function.
 
 ```python
 import numpy as np
-
 from ridgeplot import ridgeplot
 
-# Put your real samples here...
-np.random.seed(0)
-synthetic_samples = [np.random.normal(n / 1.2, size=600) for n in range(9, 0, -1)]
-
-# Call the `ridgeplot()` helper, packed with sensible defaults
-fig = ridgeplot(samples=synthetic_samples)
-
-# The returned Plotly `Figure` is still fully customizable
+my_samples = [np.random.normal(n / 1.2, size=600) for n in range(9, 0, -1)]
+fig = ridgeplot(samples=my_samples)
 fig.update_layout(height=500, width=800)
-
-# show us the work!
 fig.show()
 ```
 
-![ridgeline plot example using the ridgeplot Python library](docs/_static/img/example_simple.png)
+![ridgeline plot example using the ridgeplot Python library](docs/_static/charts/basic.webp)
 
-### Fully configurable
+### Flexible configuration
 
-In this example, we will be replicating the first ridgeline plot example in
-[this _from Data to Viz_ post](https://www.data-to-viz.com/graph/ridgeline.html), which uses the
-_probly_ dataset. You can find the _plobly_ dataset on multiple sources like in the
-[bokeh](https://raw.githubusercontent.com/bokeh/bokeh/17a0b288052afac80ebcf0aa74e3915452fce3ca/src/bokeh/sampledata/_data/probly.csv)
-python interactive visualization library. I'll be using the
-[same source](https://raw.githubusercontent.com/zonination/perceptions/51207062aa173777264d3acce0131e1e2456d966/probly.csv)
-used in the original post.
+In this example, we will be replicating the first ridgeline plot example in this [_from Data to Viz_ post](https://www.data-to-viz.com/graph/ridgeline.html), which uses the _"Perception of Probability Words"_ dataset.
 
 ```python
 import numpy as np
@@ -95,11 +69,17 @@ from ridgeplot.datasets import load_probly
 # Load the probly dataset
 df = load_probly()
 
-# Let's grab only the subset of columns displayed in the example
+# Let's grab the subset of columns used in the example
 column_names = [
-    "Almost Certainly", "Very Good Chance", "We Believe", "Likely",
-    "About Even", "Little Chance", "Chances Are Slight", "Almost No Chance",
-]  # fmt: skip
+    "Almost Certainly",
+    "Very Good Chance",
+    "We Believe",
+    "Likely",
+    "About Even",
+    "Little Chance",
+    "Chances Are Slight",
+    "Almost No Chance",
+]
 df = df[column_names]
 
 # Not only does 'ridgeplot(...)' come configured with sensible defaults
@@ -107,25 +87,83 @@ df = df[column_names]
 fig = ridgeplot(
     samples=df.values.T,
     bandwidth=4,
-    kde_points=np.linspace(-12.5, 112.5, 400),
+    kde_points=np.linspace(-12.5, 112.5, 500),
     colorscale="viridis",
-    colormode="index",
-    coloralpha=0.6,
+    colormode="row-index",
+    coloralpha=0.65,
     labels=column_names,
+    linewidth=2,
     spacing=5 / 9,
 )
 
-# Again, update the figure layout to your liking here
+# And you can still update and extend the final
+# Plotly Figure using standard Plotly methods
 fig.update_layout(
-    title="What probability would you assign to the phrase <i>“Highly likely”</i>?",
-    height=650,
-    width=800,
-    plot_bgcolor="rgba(255, 255, 255, 0.0)",
+    height=760,
+    width=900,
+    font_size=16,
+    plot_bgcolor="white",
+    xaxis_tickvals=[-12.5, 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100, 112.5],
+    xaxis_ticktext=["", "0", "", "25", "", "50", "", "75", "", "100", ""],
     xaxis_gridcolor="rgba(0, 0, 0, 0.1)",
     yaxis_gridcolor="rgba(0, 0, 0, 0.1)",
     yaxis_title="Assigned Probability (%)",
+    showlegend=False,
+)
+
+# Show us the work!
+fig.show()
+```
+
+![ridgeline plot of the probly dataset using the ridgeplot Python library](docs/_static/charts/probly.webp)
+
+### More examples
+
+For more examples, take a look at the [getting started guide](https://ridgeplot.readthedocs.io/en/stable/getting_started/getting_started.html). For instance, this example demonstrates how you can also draw [multiple traces](https://ridgeplot.readthedocs.io/en/stable/getting_started/getting_started.html#more-traces) per row in your ridgeline plot:
+
+```python
+import numpy as np
+from ridgeplot import ridgeplot
+from ridgeplot.datasets import load_lincoln_weather
+
+# Load test data
+df = load_lincoln_weather()
+
+# Transform the data into a 3D (ragged) array format of
+# daily min and max temperature samples per month
+months = df.index.month_name().unique()
+samples = [
+    [
+        df[df.index.month_name() == month]["Min Temperature [F]"],
+        df[df.index.month_name() == month]["Max Temperature [F]"],
+    ]
+    for month in months
+]
+
+# And finish by styling it up to your liking!
+fig = ridgeplot(
+    samples=samples,
+    labels=months,
+    coloralpha=0.98,
+    bandwidth=4,
+    kde_points=np.linspace(-25, 110, 400),
+    spacing=0.33,
+    linewidth=2,
+)
+fig.update_layout(
+    title="Minimum and maximum daily temperatures in Lincoln, NE (2016)",
+    height=650,
+    width=950,
+    font_size=14,
+    plot_bgcolor="rgb(245, 245, 245)",
+    xaxis_gridcolor="white",
+    yaxis_gridcolor="white",
+    xaxis_gridwidth=2,
+    yaxis_title="Month",
+    xaxis_title="Temperature [F]",
+    showlegend=False,
 )
 fig.show()
 ```
 
-![ridgeline plot of the probly dataset using the ridgeplot Python library](docs/_static/img/example_probly.png)
+![ridgeline plot of the Lincoln Weather dataset using the ridgeplot Python library](docs/_static/charts/lincoln_weather.webp)

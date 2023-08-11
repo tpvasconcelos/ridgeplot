@@ -5,15 +5,15 @@ from _plotly_utils.exceptions import PlotlyError
 
 from ridgeplot._colors import (
     _COLORSCALE_MAPPING,
+    ColorScale,
     _any_to_rgb,
     _colormap_loader,
     apply_alpha,
-    get_all_colorscale_names,
     get_color,
     get_colorscale,
+    list_all_colorscale_names,
     validate_colorscale,
 )
-from ridgeplot._types import ColorScaleType
 from ridgeplot._utils import LazyMapping
 
 VIRIDIS = (
@@ -40,7 +40,7 @@ def test_colormap_loader() -> None:
 
 
 # ==============================================================
-# ---  _PLOTLY_COLORSCALE_MAPPING
+# ---  _COLORSCALE_MAPPING
 # ==============================================================
 
 
@@ -73,7 +73,7 @@ def test_plotly_colorscale_mapping() -> None:
         ],
     ],
 )
-def test_validate_colorscale(colorscale: ColorScaleType) -> None:
+def test_validate_colorscale(colorscale: ColorScale) -> None:
     validate_colorscale(colorscale=colorscale)
 
 
@@ -154,16 +154,17 @@ def test_any_to_rgb_fails_for_invalid_color(
 def test_any_to_rgb_bug_in_validation_incomplete(
     color: Any, expected_exception: Type[Exception], exception_match: Optional[str]
 ) -> None:
-    pytest.raises(expected_exception, _any_to_rgb, color=color).match(exception_match or "")
+    with pytest.raises(expected_exception, match=exception_match or ""):
+        _any_to_rgb(color=color)
 
 
 # ==============================================================
-# --- get_all_colorscale_names()
+# --- list_all_colorscale_names()
 # ==============================================================
 
 
-def test_get_all_colorscale_names() -> None:
-    all_colorscale_names = get_all_colorscale_names()
+def test_list_all_colorscale_names() -> None:
+    all_colorscale_names = list_all_colorscale_names()
     assert all(isinstance(name, str) for name in all_colorscale_names)
     assert "viridis" in all_colorscale_names
     for name in all_colorscale_names:
@@ -183,7 +184,7 @@ def test_get_colorscale() -> None:
 
 def test_get_colorscale_fails_for_unknown_colorscale_name() -> None:
     with pytest.raises(ValueError, match="Unknown colorscale name"):
-        get_colorscale(name="this colorscale doesnt exist")
+        get_colorscale(name="this colorscale doesn't exist")
 
 
 # ==============================================================
@@ -197,15 +198,14 @@ def test_get_color_midpoint_in_scale() -> None:
 
 
 def test_get_color_midpoint_not_in_scale() -> None:
-    # TODO: Refactor `get_color` to make this easier to test.
-    #       Currently just using a hard-coded value.
+    # Hard-coded test case.
     assert get_color(colorscale=VIRIDIS, midpoint=0.5) == "rgb(34.5, 144.0, 139.5)"
 
 
 @pytest.mark.parametrize("midpoint", [-10.0, -1.3, 1.9, 100.0])
 def test_get_color_fails_for_midpoint_out_of_bounds(midpoint: float) -> None:
     with pytest.raises(ValueError, match="should be a float value between 0 and 1"):
-        get_color(colorscale=..., midpoint=midpoint)
+        get_color(colorscale=..., midpoint=midpoint)  # type: ignore
 
 
 # ==============================================================
