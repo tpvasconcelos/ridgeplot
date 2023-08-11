@@ -20,4 +20,4 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 livehtml:
-	sphinx-autobuild --open-browser --delay=0 --watch=../src/ridgeplot --ignore='_static/charts/*' "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	sphinx-autobuild --open-browser --delay=0 --watch=../src/ridgeplot --re-ignore '_static/charts/.*' "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

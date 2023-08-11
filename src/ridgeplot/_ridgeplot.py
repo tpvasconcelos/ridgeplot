@@ -212,9 +212,11 @@ def ridgeplot(
     elif not has_samples and not has_densities:
         raise ValueError("You have to specify one of: `samples` or `densities`")
 
-    if has_densities and is_shallow_densities(densities):
-        densities = cast(ShallowDensities, densities)
-        densities = cast(Densities, nest_shallow_collection(densities))
+    if has_densities:
+        if is_shallow_densities(densities):
+            densities = cast(ShallowDensities, densities)
+            densities = nest_shallow_collection(densities)
+        densities = cast(Densities, densities)
     else:
         if is_shallow_samples(samples):
             samples = cast(ShallowSamples, samples)

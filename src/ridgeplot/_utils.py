@@ -105,7 +105,7 @@ def get_collection_array_shape(arr: Collection) -> Tuple[Union[int, Set[int]], .
     """
 
     def _get_dim_length(obj: Any) -> int:
-        """Return the length of a dimension of a :class:`~Collection` array."""
+        """Return the length of a dimension of a :class:`~typing.Collection` array."""
         if not isinstance(obj, Collection) or isinstance(obj, str):
             raise TypeError(f"Expected a Collection. Got {type(obj)} instead.")
         return len(obj)

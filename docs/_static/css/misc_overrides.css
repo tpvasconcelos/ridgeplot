@@ -22,6 +22,6 @@ div.autosummary table {
 }
 
 /* Allow long sidebar names to overflow */
-/*.sidebar-tree .reference {*/
-/*    overflow-wrap: unset;*/
-/*}*/
+.sidebar-tree .toctree-l2 .reference {
+    overflow-wrap: unset;
+}

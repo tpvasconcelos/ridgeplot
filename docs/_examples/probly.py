@@ -40,7 +40,7 @@ def main() -> go.Figure:
     # And you can still update and extend the final
     # Plotly Figure using standard Plotly methods
     fig.update_layout(
-        height=600,
+        height=550,
         width=800,
         font_size=16,
         plot_bgcolor="white",

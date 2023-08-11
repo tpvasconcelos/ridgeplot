@@ -29,7 +29,7 @@ recursive-include docs *.md *.py *.rst
 recursive-include docs/_examples *.py
 recursive-include docs/_static/charts *.js *.html *.webp
 recursive-include docs/_static/css *.css
-recursive-include docs/_static/img *.png
+recursive-include docs/_static/img *.png *.webp *.svg *.gif
 recursive-include docs/_static/js *.js
 recursive-include docs/_templates *.html
 prune docs/build

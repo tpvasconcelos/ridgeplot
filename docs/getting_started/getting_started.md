@@ -89,7 +89,7 @@ fig.show()
 
 :::{tab-item} Interactive output
 ```{raw} html
-<iframe src="/_static/charts/probly.html" height="760" width="100%" style="border:none;overflow:hidden;"></iframe>
+<iframe src="/_static/charts/probly.html" height="550" width="100%" style="border:none;overflow:hidden;"></iframe>
 ```
 :::
 
