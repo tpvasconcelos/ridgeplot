@@ -6,10 +6,10 @@ on:
       - main
   pull_request:
 
+# * Run static code checks only for Ubuntu and Python 3.8
+# * Run software tests with coverage only for Ubuntu (all Python versions)
+# * Run software tests without coverage for macOS and Windows (all Python versions)
 jobs:
-  # * Run static code checks only for Ubuntu and Python 3.8
-  # * Run software tests with coverage only for Ubuntu (all Python versions)
-  # * Run software tests without coverage for macOS and Windows (all Python versions)
   static:
     name: Static code checks
     runs-on: ubuntu-latest
