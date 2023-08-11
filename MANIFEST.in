@@ -39,7 +39,7 @@ recursive-include .github *.yaml
 recursive-include examples *.py *.ipynb
 recursive-include misc *.py *.ipynb
 recursive-include requirements *.txt *.in *.md
-recursive-include scripts *.py
+recursive-include bin *.py
 recursive-include tests *.py
 
 # Globally excluded patterns

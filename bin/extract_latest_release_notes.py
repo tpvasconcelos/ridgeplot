@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Extract the latest release notes
 
 Execution steps:

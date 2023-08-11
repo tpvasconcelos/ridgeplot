@@ -6,5 +6,6 @@
 mypy
 
 # Third-party stubs
+types-beautifulsoup4
 types-pytz
 pandas-stubs

@@ -7,7 +7,10 @@ from bs4 import BeautifulSoup
 from minify_html import minify
 from plotly.offline import get_plotlyjs
 
-from ridgeplot._testing import import_pyscript_as_module, patch_plotly_show
+from ridgeplot._testing import patch_plotly_show
+
+# isort: split
+from utils import import_pyscript_as_module
 
 PATH_ROOT = Path(__file__).parents[1]
 PATH_EXAMPLES = PATH_ROOT.joinpath("examples")
@@ -41,8 +44,8 @@ def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
     # Edit the style of the <body> tag to remove the default margins
     # (these margin values can be inherited from user agent stylesheets)
     soup = BeautifulSoup(html_str, "html.parser")
-    assert soup.body.style is None
-    soup.body["style"] = "margin: 0; padding: 0;"
+    assert soup.body.style is None  # type: ignore
+    soup.body["style"] = "margin: 0; padding: 0;"  # type: ignore
     html_str = str(soup)
 
     if minify_html:
@@ -77,13 +80,13 @@ def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
     print()
 
 
-def _write_plotlyjs_bundle():
+def _write_plotlyjs_bundle() -> None:
     bundle_path = PATH_CHARTS / "plotly.min.js"
     plotlyjs = get_plotlyjs()
     bundle_path.write_text(plotlyjs, encoding="utf-8")
 
 
-def main():
+def main() -> None:
     print("Writing Plotly.js bundle...")
     _write_plotlyjs_bundle()
     print("Patching `plotly.show()`...")
