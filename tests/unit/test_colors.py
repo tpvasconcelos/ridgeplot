@@ -8,9 +8,9 @@ from ridgeplot._colors import (
     _any_to_rgb,
     _colormap_loader,
     apply_alpha,
-    get_all_colorscale_names,
     get_color,
     get_colorscale,
+    list_all_colorscale_names,
     validate_colorscale,
 )
 from ridgeplot._types import ColorScaleT
@@ -158,12 +158,12 @@ def test_any_to_rgb_bug_in_validation_incomplete(
 
 
 # ==============================================================
-# --- get_all_colorscale_names()
+# --- list_all_colorscale_names()
 # ==============================================================
 
 
-def test_get_all_colorscale_names() -> None:
-    all_colorscale_names = get_all_colorscale_names()
+def test_list_all_colorscale_names() -> None:
+    all_colorscale_names = list_all_colorscale_names()
     assert all(isinstance(name, str) for name in all_colorscale_names)
     assert "viridis" in all_colorscale_names
     for name in all_colorscale_names:

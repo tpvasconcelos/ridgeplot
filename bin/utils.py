@@ -47,13 +47,13 @@ def import_pyscript_as_module(path: Union[str, Path]) -> ModuleType:
 
 
 def import_attrs_from_pyscript(path: Union[str, Path], *attributes: str) -> Tuple[Any, ...]:
-    """Import attributes from a Python script.
+    r"""Import attributes from a Python script.
 
     Parameters
     ----------
     path
         The path to the Python file to import.
-    *attributes : tuple[str]
+    \*attributes
         The attributes to import from the module.
 
     Returns
@@ -63,15 +63,14 @@ def import_attrs_from_pyscript(path: Union[str, Path], *attributes: str) -> Tupl
 
     Examples
     --------
-    So, instead of doing:
+    So, instead of doing
 
-        >>> from path.to.script import Foo, bar
+    >>> from path.to.script import Foo, bar
 
     You can instead do:
 
-        >>> Foo, bar = import_attrs_from_pyscript("path/to/script.py", "Foo", "bar")
+    >>> Foo, bar = import_attrs_from_pyscript("path/to/script.py", "Foo", "bar")
 
-    .. # noqa: RST213
     """
     module = import_pyscript_as_module(path)
     return tuple(getattr(module, attr) for attr in attributes)

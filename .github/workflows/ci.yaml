@@ -7,7 +7,20 @@ on:
   pull_request:
 
 jobs:
-  ci-checks:
+  static:
+    name: Static code checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-python
+        with:
+          python-version: "3.8"
+          requirements-prefix: tox
+      - name: Run CI checks with Tox
+        shell: bash
+        run: ./bin/tox --parallel auto -m static
+  tests:
+    name: Software tests
     strategy:
       matrix:
         python-version:
@@ -30,7 +43,7 @@ jobs:
           requirements-prefix: tox
       - name: Run CI checks with Tox
         shell: bash
-        run: ./bin/tox
+        run: ./bin/tox --parallel auto -m tests
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3
         env:

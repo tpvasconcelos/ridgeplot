@@ -78,33 +78,33 @@ clean-all: clean-ci clean-venv clean-build clean-pyc ## remove all artifacts
 .PHONY: clean-build
 clean-build: ## remove build artifacts
 	@echo "==> Removing build artifacts..."
-	@rm -frv build/
-	@rm -frv dist/
-	@rm -frv .eggs/
-	@find . -name '*.egg-info' -exec rm -frv {} +
-	@find . -name '*.egg' -exec rm -fv {} +
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -f {} +
 
 
 .PHONY: clean-pyc
 clean-pyc: ## remove Python file artifacts
 	@echo "==> Removing python file artifacts..."
-	@find . -name '*.pyc' -exec rm -fv {} +
-	@find . -name '*.pyo' -exec rm -fv {} +
-	@find . -name '*~' -exec rm -fv {} +
-	@find . -name '__pycache__' -exec rm -frv {} +
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
 
 
 .PHONY: clean-ci
 clean-ci: ## remove linting, testing, and coverage artifacts
 	@echo "==> Removing lint, test, and coverage artifacts..."
-	@rm -frv .tox/
-	@rm -frv .pytest_cache/
-	@rm -frv .mypy_cache/
-	@find . -name 'coverage.xml' -exec rm -fv {} +
-	@find . -name '.coverage' -exec rm -fv {} +
+	rm -fr .tox/
+	rm -fr .pytest_cache/
+	rm -fr .mypy_cache/
+	find . -name 'coverage.xml' -exec rm -f {} +
+	find . -name '.coverage' -exec rm -f {} +
 
 
 .PHONY: clean-venv
 clean-venv: ## remove venv artifacts
 	@echo "==> Removing virtual environment..."
-	@rm -frv .venv
+	rm -fr .venv

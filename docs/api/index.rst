@@ -16,7 +16,7 @@ Color utilities
    :toctree: public/
    :nosignatures:
 
-   ridgeplot.get_all_colorscale_names
+   ridgeplot.list_all_colorscale_names
 
 
 Data loading utilities

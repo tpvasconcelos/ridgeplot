@@ -150,10 +150,10 @@ scans.
 
 Our tool of choice to configure and reliably run all integration approval steps is
 [Tox](https://github.com/tox-dev/tox), which allows us to run each step in reproducible isolated
-virtual environments. To trigger all checks, simply run
+virtual environments. To trigger all checks in parallel, simply run
 
 ```shell
-tox
+./bin/tox --parallel auto -m static tests
 ```
 
 It's that simple 🙌 !! Note only that this will take a while the first time you run the command,
@@ -169,13 +169,10 @@ We use [pytest](https://github.com/pytest-dev/pytest) as our testing framework, 
 can find all configuration details in {{ repo_file('tox.ini') }}. To trigger all tests, simply run
 
 ```shell
-tox -e py
+./bin/tox --parallel auto -m tests
 ```
 
-You can also run your tests against any other supported python versions (e.g., `tox -e py38`). If
-you need more control over which tests are running, or which flags are being passed to pytest, you
-can also invoke `pytest` directly which will run on your current virtual environment. Configuration
-details can be found in {{ repo_file('tox.ini') }}.
+If you need more control over which tests are running, or which flags are being passed to pytest, you can also invoke `pytest` directly which will run on your current virtual environment. Configuration details can be found in {{ repo_file('tox.ini') }}.
 
 #### Linting
 
