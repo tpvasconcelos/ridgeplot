@@ -55,7 +55,7 @@ fig.show()
 ::::{tab-set}
 :::{tab-item} Interactive output
 ```{raw} html
-<iframe src="/_static/charts/basic.html" height="400" width="100%" style="border:none;overflow:hidden;"></iframe>
+<iframe src="_static/charts/basic.html" height="400" width="100%" style="border:none;overflow:hidden;"></iframe>
 ```
 :::
 :::{tab-item} Static image output
