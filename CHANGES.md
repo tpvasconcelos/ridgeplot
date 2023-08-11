@@ -6,6 +6,13 @@ the [commit logs](https://github.com/tpvasconcelos/ridgeplot/commits/).
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.1.22
+------
+
 ### Deprecations
 
 - The `colormode='index'` value has been deprecated in favor of `colormode='row-index'`, which
