@@ -19,7 +19,7 @@ PATH_CHARTS = PATH_DOCS / "_static/charts"
 
 RAW_HTML_IFRAME_RST_TEMPLATE = """
 ```{{raw}} html
-<iframe src="/{src}" height="{height}" width="{width}" style="{style}"></iframe>
+<iframe src="{src}" height="{height}" width="{width}" style="{style}"></iframe>
 ```
 """
 

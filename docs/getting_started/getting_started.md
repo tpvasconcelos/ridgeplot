@@ -19,7 +19,7 @@ fig.show()
 ::::{tab-set}
 :::{tab-item} Interactive output
 ```{raw} html
-<iframe src="/_static/charts/basic.html" height="400" width="100%" style="border:none;overflow:hidden;"></iframe>
+<iframe src="../_static/charts/basic.html" height="400" width="100%" style="border:none;overflow:hidden;"></iframe>
 ```
 :::
 :::{tab-item} Static image output
@@ -89,7 +89,7 @@ fig.show()
 
 :::{tab-item} Interactive output
 ```{raw} html
-<iframe src="/_static/charts/probly.html" height="550" width="100%" style="border:none;overflow:hidden;"></iframe>
+<iframe src="../_static/charts/probly.html" height="550" width="100%" style="border:none;overflow:hidden;"></iframe>
 ```
 :::
 
@@ -117,7 +117,7 @@ For the ones in a hurry, we are including the entire final code-block and result
 
 :::{tab-item} Interactive output
 ```{raw} html
-<iframe src="/_static/charts/lincoln_weather.html" height="650" width="100%" style="border:none;overflow:hidden;"></iframe>
+<iframe src="../_static/charts/lincoln_weather.html" height="650" width="100%" style="border:none;overflow:hidden;"></iframe>
 ```
 :::
 
@@ -265,7 +265,7 @@ fig.show()
 ::::{tab-set}
 :::{tab-item} Interactive output
 ```{raw} html
-<iframe src="/_static/charts/lincoln_weather.html" height="650" width="100%" style="border:none;overflow:hidden;"></iframe>
+<iframe src="../_static/charts/lincoln_weather.html" height="650" width="100%" style="border:none;overflow:hidden;"></iframe>
 ```
 :::
 :::{tab-item} Static image output
