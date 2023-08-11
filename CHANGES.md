@@ -7,7 +7,7 @@ Unreleased changes
 ------------------
 
 - Fix the references to the interactive Plotly IFrames
-  ([#115)(https://github.com/tpvasconcelos/ridgeplot/pull/115))
+  ([#129](https://github.com/tpvasconcelos/ridgeplot/pull/129))
 
 ---
 
