@@ -5,18 +5,19 @@ from typing import Optional, Union, cast
 
 import plotly.graph_objects as go
 
-from ridgeplot._figure_factory import Colormode, RidgePlotFigureFactory
-from ridgeplot._kde import estimate_densities
-from ridgeplot._types import (
-    ColorScaleT,
-    DensitiesT,
-    KDEBandwidthT,
-    KDEPointsT,
+from ridgeplot._colors import ColorScale
+from ridgeplot._figure_factory import (
+    Colormode,
     LabelsArray,
-    SamplesT,
-    ShallowDensitiesT,
-    ShallowLabelsArrayT,
-    ShallowSamplesT,
+    RidgePlotFigureFactory,
+    ShallowLabelsArray,
+)
+from ridgeplot._kde import KDEBandwidth, KDEPoints, estimate_densities
+from ridgeplot._types import (
+    Densities,
+    Samples,
+    ShallowDensities,
+    ShallowSamples,
     is_flat_str_collection,
     is_shallow_densities,
     is_shallow_samples,
@@ -27,15 +28,15 @@ _NOT_SET = object()
 
 
 def ridgeplot(
-    samples: Union[SamplesT, ShallowSamplesT, None] = None,
-    densities: Union[DensitiesT, ShallowDensitiesT, None] = None,
+    samples: Union[Samples, ShallowSamples, None] = None,
+    densities: Union[Densities, ShallowDensities, None] = None,
     kernel: str = "gau",
-    bandwidth: KDEBandwidthT = "normal_reference",
-    kde_points: KDEPointsT = 500,
-    colorscale: Union[str, ColorScaleT] = "plasma",
+    bandwidth: KDEBandwidth = "normal_reference",
+    kde_points: KDEPoints = 500,
+    colorscale: Union[str, ColorScale] = "plasma",
     colormode: Colormode = "mean-minmax",
     coloralpha: Optional[float] = None,
-    labels: Union[LabelsArray, ShallowLabelsArrayT, None] = None,
+    labels: Union[LabelsArray, ShallowLabelsArray, None] = None,
     linewidth: Union[float, int] = 1.0,
     spacing: float = 0.5,
     show_annotations: bool = _NOT_SET,  # type: ignore
@@ -57,7 +58,7 @@ def ridgeplot(
 
     Parameters
     ----------
-    samples : SamplesT or ShallowSamplesT, optional
+    samples : Samples or ShallowSamples, optional
         If ``samples`` data is specified, Kernel Density Estimation (KDE) will
         be computed. See :paramref:`kernel`, :paramref:`bandwidth`, and
         :paramref:`kde_points` for more details and KDE configuration options.
@@ -76,7 +77,7 @@ def ridgeplot(
         `:paramref:`densities` array with shape :math:`(R, T_r, P_t, 2)`
         (see :paramref:`densities` below for more details).
 
-    densities : DensitiesT or ShallowDensitiesT, optional
+    densities : Densities or ShallowDensities, optional
         If ``densities`` arrays are specified instead, the KDE step will be
         skipped and all associated arguments ignored. Each density array should
         have shape :math:`(R, T_r, P_t, 2)` (4D). Just like the
@@ -102,7 +103,7 @@ def ridgeplot(
         - ``"triw"`` for triweight
         - ``"uni"`` for uniform
 
-    bandwidth : KDEBandwidthT
+    bandwidth : KDEBandwidth
         The bandwidth to use during Kernel Density Estimation. The default is
         ``"normal_reference"``. Choices are:
 
@@ -121,14 +122,14 @@ def ridgeplot(
           - ``x``: the clipped input data
           - ``kern``: the kernel instance used
 
-    kde_points : KDEPointsT
+    kde_points : KDEPoints
         This argument controls the points at which KDE is computed. If an
         ``int`` value is passed (default=500), the densities will be evaluated
         at ``kde_points`` evenly spaced points between the min and max of each
         set of samples. Optionally, you can also pass a custom 1D numerical
         array, which will be used for all traces.
 
-    colorscale : str or ColorScaleT
+    colorscale : str or ColorScale
         Any valid Plotly color-scale or a str with a valid named color-scale.
         Use :func:`~ridgeplot.get_all_colorscale_names()` to see which names
         are available or check out `Plotly's built-in color-scales`_.
@@ -160,7 +161,7 @@ def ridgeplot(
         if a float value is passed, it will be used to overwrite the
         transparency (alpha) of the color-scale's colors.
 
-    labels : LabelsArray or ShallowLabelsArrayT, optional
+    labels : LabelsArray or ShallowLabelsArray, optional
         A list of string labels for each trace. The default value is None,
         which will result in auto-generated labels of form "Trace n". If,
         instead, a list of labels is specified, it must be of the same
@@ -212,13 +213,13 @@ def ridgeplot(
         raise ValueError("You have to specify one of: `samples` or `densities`")
 
     if has_densities and is_shallow_densities(densities):
-        densities = cast(ShallowDensitiesT, densities)
-        densities = cast(DensitiesT, nest_shallow_collection(densities))
+        densities = cast(ShallowDensities, densities)
+        densities = cast(Densities, nest_shallow_collection(densities))
     else:
         if is_shallow_samples(samples):
-            samples = cast(ShallowSamplesT, samples)
+            samples = cast(ShallowSamples, samples)
             samples = nest_shallow_collection(samples)
-        samples = cast(SamplesT, samples)
+        samples = cast(Samples, samples)
         # Convert samples to densities
         densities = estimate_densities(
             samples=samples,
@@ -228,7 +229,7 @@ def ridgeplot(
         )
 
     if is_flat_str_collection(labels):
-        labels = cast(ShallowLabelsArrayT, labels)
+        labels = cast(ShallowLabelsArray, labels)
         labels = cast(LabelsArray, nest_shallow_collection(labels))
 
     if colormode == "index":  # type: ignore

@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from ridgeplot._figure_factory import get_xy_extrema
-from ridgeplot._types import DensitiesRowT, DensitiesT
+from ridgeplot._types import Densities, DensitiesRow
 
 _X = TypeVar("_X")
 
@@ -41,15 +41,15 @@ class TestGetXYExtrema:
     )
     def test_expected_output(
         self,
-        densities_type: Callable[[DensitiesT], DensitiesT],
-        rows_type: Callable[[DensitiesRowT], DensitiesRowT],
+        densities_type: Callable[[Densities], Densities],
+        rows_type: Callable[[DensitiesRow], DensitiesRow],
     ) -> None:
         """Test :func:`get_xy_extrema()` against a varied combination of
         possible input types."""
         # This list contains a varied set of collection types.
         # Which is to show that `get_xy_extrema` accepts any
         # iterable of a valid `Densities` object
-        densities: DensitiesT = [
+        densities: Densities = [
             (
                 [
                     (1, 1),  # x_min -> 1

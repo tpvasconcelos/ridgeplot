@@ -1,26 +1,32 @@
 from __future__ import annotations
 
 from functools import partial
+from typing import Callable, List, Union
 
 import numpy as np
 import statsmodels.api as sm
+from statsmodels.sandbox.nonparametric.kernels import CustomKernel as StatsmodelsKernel
 
 from ridgeplot._types import (
-    DensitiesT,
-    DensityTraceT,
-    KDEBandwidthT,
-    KDEPointsT,
-    SamplesT,
-    SamplesTraceT,
+    CollectionL1,
+    Densities,
+    Numeric,
+    Samples,
+    SamplesTrace,
+    XYCoordinate,
 )
+
+KDEPoints = Union[int, CollectionL1[Numeric]]
+
+KDEBandwidth = Union[str, float, Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]]
 
 
 def estimate_density_trace(
-    trace_samples: SamplesTraceT,
-    points: KDEPointsT,
+    trace_samples: SamplesTrace,
+    points: KDEPoints,
     kernel: str,
-    bandwidth: KDEBandwidthT,
-) -> DensityTraceT:
+    bandwidth: KDEBandwidth,
+) -> List[XYCoordinate[float]]:
     """Estimates a density trace from a set of samples.
 
     For a given set of sample values, computes the kernel densities (KDE) at
@@ -77,11 +83,11 @@ def estimate_density_trace(
 
 
 def estimate_densities(
-    samples: SamplesT,
-    points: KDEPointsT,
+    samples: Samples,
+    points: KDEPoints,
     kernel: str,
-    bandwidth: KDEBandwidthT,
-) -> DensitiesT:
+    bandwidth: KDEBandwidth,
+) -> Densities:
     """Perform KDE for a set of samples."""
     kde = partial(estimate_density_trace, points=points, kernel=kernel, bandwidth=bandwidth)
     return [[kde(trace_samples) for trace_samples in row] for row in samples]

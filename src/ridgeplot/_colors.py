@@ -3,28 +3,50 @@ from __future__ import annotations
 import json
 import warnings
 from pathlib import Path
-from typing import Dict, List, Tuple, Union, cast
+from typing import Dict, Iterable, List, Tuple, Union, cast
 
 from _plotly_utils.colors import validate_colors, validate_scale_values
 from plotly.colors import find_intermediate_color, hex_to_rgb, label_rgb
 
-from ridgeplot._types import ColorScaleT
 from ridgeplot._utils import LazyMapping, normalise_min_max
 
 _PATH_TO_COLORS_JSON = Path(__file__).parent.joinpath("colors.json")
 
+ColorScale = Iterable[Tuple[float, str]]
+"""A colorscale is an iterable of tuples of two elements:
 
-def _colormap_loader() -> Dict[str, ColorScaleT]:
+0. the first element (a *scale value*) is a float bounded to the
+   interval ``[0, 1]``
+1. the second element (a *color*) is a string representation of a color parsable
+   by Plotly
+
+For instance, the Viridis colorscale would be defined as
+
+>>> get_colorscale("viridis")
+((0.0, 'rgb(68, 1, 84)'),
+ (0.1111111111111111, 'rgb(72, 40, 120)'),
+ (0.2222222222222222, 'rgb(62, 73, 137)'),
+ (0.3333333333333333, 'rgb(49, 104, 142)'),
+ (0.4444444444444444, 'rgb(38, 130, 142)'),
+ (0.5555555555555556, 'rgb(31, 158, 137)'),
+ (0.6666666666666666, 'rgb(53, 183, 121)'),
+ (0.7777777777777777, 'rgb(110, 206, 88)'),
+ (0.8888888888888888, 'rgb(181, 222, 43)'),
+ (1.0, 'rgb(253, 231, 37)'))
+"""
+
+
+def _colormap_loader() -> Dict[str, ColorScale]:
     colors: dict = json.loads(_PATH_TO_COLORS_JSON.read_text())
     for name, colorscale in colors.items():
         colors[name] = tuple(tuple(entry) for entry in colorscale)
     return colors
 
 
-_COLORSCALE_MAPPING: LazyMapping[str, ColorScaleT] = LazyMapping(loader=_colormap_loader)
+_COLORSCALE_MAPPING: LazyMapping[str, ColorScale] = LazyMapping(loader=_colormap_loader)
 
 
-def validate_colorscale(colorscale: ColorScaleT) -> None:
+def validate_colorscale(colorscale: ColorScale) -> None:
     """Validate the structure, scale values, and colors of a colorscale.
 
     Adapted from :func:`_plotly_utils.colors.validate_colorscale`.
@@ -106,7 +128,7 @@ def get_all_colorscale_names() -> Tuple[str, ...]:
     return tuple(list_all_colorscale_names())
 
 
-def get_colorscale(name: str) -> ColorScaleT:
+def get_colorscale(name: str) -> ColorScale:
     """Get a colorscale by name.
 
     Parameters
@@ -118,7 +140,7 @@ def get_colorscale(name: str) -> ColorScaleT:
 
     Returns
     -------
-    ColorScaleT
+    ColorScale
         A colorscale.
 
     Raises
@@ -135,7 +157,7 @@ def get_colorscale(name: str) -> ColorScaleT:
     return _COLORSCALE_MAPPING[name]
 
 
-def get_color(colorscale: ColorScaleT, midpoint: float) -> str:
+def get_color(colorscale: ColorScale, midpoint: float) -> str:
     """Get a color from a colorscale at a given midpoint.
 
     Given a colorscale, it interpolates the expected color at a given midpoint,

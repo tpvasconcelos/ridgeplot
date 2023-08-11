@@ -11,23 +11,69 @@ else:
 from plotly import graph_objects as go
 
 from ridgeplot._colors import (
+    ColorScale,
     apply_alpha,
     get_color,
     get_colorscale,
     validate_colorscale,
 )
-from ridgeplot._types import (
-    ColorsArrayT,
-    ColorScaleT,
-    DensitiesT,
-    LabelsArray,
-    MidpointsArrayT,
-    Numeric,
-)
+from ridgeplot._types import CollectionL1, CollectionL2, Densities, Numeric
 from ridgeplot._utils import normalise_min_max
 
+LabelsArray = CollectionL2[str]
+"""A :data:`LabelsArray` represents the labels of traces in a ridgeplot.
 
-def get_xy_extrema(densities: DensitiesT) -> Tuple[Numeric, Numeric, Numeric, Numeric]:
+For instance, the following is a valid :data:`LabelsArray`:
+
+>>> labels_array: LabelsArray = [
+...     ["trace 1", "trace 2", "trace 3"],
+...     ["trace 4", "trace 5"],
+... ]
+"""
+
+ShallowLabelsArray = CollectionL1[str]
+"""Shallow type for :data:`LabelsArray`.
+
+Example:
+
+>>> labels_array: ShallowLabelsArray = ["trace 1", "trace 2", "trace 3"]
+"""
+
+ColorsArray = CollectionL2[str]
+"""A :data:`ColorsArray` represents the colors of traces in a ridgeplot.
+
+For instance, the following is a valid :data:`ColorsArray`:
+
+>>> colors_array: ColorsArray = [
+...     ["red", "blue", "green"],
+...     ["orange", "purple"],
+... ]
+"""
+
+ShallowColorsArray = CollectionL1[str]
+"""Shallow type for :data:`ColorsArray`.
+
+Example:
+
+>>> colors_array: ShallowColorsArray = ["red", "blue", "green"]
+"""
+
+MidpointsArray = CollectionL2[float]
+"""A :data:`MidpointsArray` represents the midpoints of colorscales in a
+ridgeplot.
+
+For instance, the following is a valid :data:`MidpointsArray`:
+
+>>> midpoints_array: MidpointsArray = [
+...     [0.2, 0.5, 1],
+...     [0.3, 0.7],
+... ]
+"""
+
+Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
+
+
+def get_xy_extrema(densities: Densities) -> Tuple[Numeric, Numeric, Numeric, Numeric]:
     """Get the global x-y extrema (x_min, x_max, y_min, y_max) from all the
     :data:`~ridgeplot._types.DensityTrace`s in the
     :data:`~ridgeplot._types.Densities` array.
@@ -75,16 +121,13 @@ def _mul(a: Tuple[Numeric, ...], b: Tuple[Numeric, ...]) -> Tuple[Numeric, ...]:
     return tuple(a_i * b_i for a_i, b_i in zip(a, b))
 
 
-Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
-
-
 class RidgePlotFigureFactory:
     """Refer to :func:`ridgeplot.ridgeplot()`."""
 
     def __init__(
         self,
-        densities: DensitiesT,
-        colorscale: Union[str, ColorScaleT],
+        densities: Densities,
+        colorscale: Union[str, ColorScale],
         coloralpha: Optional[float],
         colormode: Colormode,
         labels: Optional[LabelsArray],
@@ -120,8 +163,8 @@ class RidgePlotFigureFactory:
             ids = iter(range(1, n_traces + 1))
             labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
 
-        self.densities: DensitiesT = densities
-        self.colorscale: ColorScaleT = colorscale
+        self.densities: Densities = densities
+        self.colorscale: ColorScale = colorscale
         self.coloralpha: Optional[float] = coloralpha
         self.colormode = colormode
         self.labels: LabelsArray = labels
@@ -137,10 +180,10 @@ class RidgePlotFigureFactory:
         self.n_traces: int = n_traces
         self.x_min, self.x_max, _, self.y_max = get_xy_extrema(densities=self.densities)
         self.fig: go.Figure = go.Figure()
-        self.colors: ColorsArrayT = self.pre_compute_colors()
+        self.colors: ColorsArray = self.pre_compute_colors()
 
     @property
-    def colormode_maps(self) -> Dict[str, Callable[[], MidpointsArrayT]]:
+    def colormode_maps(self) -> Dict[str, Callable[[], MidpointsArray]]:
         return {
             "row-index": self._compute_midpoints_row_index,
             "trace-index": self._compute_midpoints_trace_index,
@@ -219,7 +262,7 @@ class RidgePlotFigureFactory:
             **axes_common,
         )
 
-    def _compute_midpoints_row_index(self) -> MidpointsArrayT:
+    def _compute_midpoints_row_index(self) -> MidpointsArray:
         """colormode='row-index'
 
         Uses the row's index. e.g. if the ridgeplot has 3 rows of traces, then
@@ -230,7 +273,7 @@ class RidgePlotFigureFactory:
             for ith_row, row in enumerate(self.densities)
         ]
 
-    def _compute_midpoints_trace_index(self) -> MidpointsArrayT:
+    def _compute_midpoints_trace_index(self) -> MidpointsArray:
         """colormode='trace-index'
 
         Uses the trace's index. e.g. if the ridgeplot has a total of 3 traces
@@ -247,7 +290,7 @@ class RidgePlotFigureFactory:
             midpoints.append(midpoints_row)
         return midpoints
 
-    def _compute_midpoints_mean_minmax(self) -> MidpointsArrayT:
+    def _compute_midpoints_mean_minmax(self) -> MidpointsArray:
         """colormode='mean-minmax'
 
         Uses the min-max normalized (weighted) mean of each density to calculate
@@ -265,7 +308,7 @@ class RidgePlotFigureFactory:
             midpoints.append(midpoints_row)
         return midpoints
 
-    def _compute_midpoints_mean_means(self) -> MidpointsArrayT:
+    def _compute_midpoints_mean_means(self) -> MidpointsArray:
         """colormode='mean-means'
 
         Uses the min-max normalized (weighted) mean of each density to calculate
@@ -285,7 +328,7 @@ class RidgePlotFigureFactory:
             [normalise_min_max(mean, min_=min_mean, max_=max_mean) for mean in row] for row in means
         ]
 
-    def pre_compute_colors(self) -> ColorsArrayT:
+    def pre_compute_colors(self) -> ColorsArray:
         def _get_color(mp: float) -> str:
             color = get_color(self.colorscale, midpoint=mp)
             if self.coloralpha is not None:

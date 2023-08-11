@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import sys
-from typing import Any, Callable, Collection, Iterable, Tuple, TypeVar, Union, overload
-
-from statsmodels.sandbox.nonparametric.kernels import CustomKernel as StatsmodelsKernel
+from typing import Any, Collection, Tuple, TypeVar, Union, overload
 
 if sys.version_info >= (3, 8):
     from typing import Literal
@@ -13,13 +11,13 @@ else:
 import numpy as np
 
 # ========================================================
-# ---  Internal base Collection types
+# ---  Base nested Collection types (ragged arrays)
 # ========================================================
 
 _T = TypeVar("_T")
 
-_CollectionL1 = Collection[_T]
-"""A :data:`~typing.TypeAlias` for a (standard) shallow :class:`~Collection`
+CollectionL1 = Collection[_T]
+"""A :data:`~typing.TypeAlias` for a standard :class:`~Collection`
 (1 level).
 
 Example:
@@ -27,7 +25,7 @@ Example:
 >>> c: CollectionL1[int] = [1, 2, 3]
 """
 
-_CollectionL2 = Collection[Collection[_T]]
+CollectionL2 = Collection[Collection[_T]]
 """A :data:`~typing.TypeAlias` for a 2-level-deep :class:`~Collection`.
 
 Example:
@@ -35,7 +33,7 @@ Example:
 >>> c: CollectionL2[int] = [[1, 2, 3], [4, 5, 6]]
 """
 
-_CollectionL3 = Collection[Collection[Collection[_T]]]
+CollectionL3 = Collection[Collection[Collection[_T]]]
 """A :data:`~typing.TypeAlias` for a 3-level-deep :class:`~Collection`.
 
 Example:
@@ -47,7 +45,7 @@ Example:
 """
 
 # ========================================================
-# ---  Basic types
+# ---  Numeric types
 # ========================================================
 
 Float = Union[float, np.floating]
@@ -58,6 +56,8 @@ Int = Union[int, np.integer]
 
 Numeric = Union[Int, Float]
 """A :data:`~typing.TypeAlias` for numeric types."""
+
+NumericT = TypeVar("NumericT", bound=Numeric)
 
 
 @overload
@@ -75,75 +75,15 @@ def _is_numeric(obj: Any) -> bool:
     return isinstance(obj, (int, float, np.number))
 
 
-KDEPointsT = Union[int, _CollectionL1[Numeric]]
-KDEBandwidthT = Union[str, float, Callable[[_CollectionL1[Numeric], StatsmodelsKernel], float]]
-
-ColorScaleT = Iterable[Tuple[float, str]]
-"""A colorscale is an iterable of tuples of two elements:
-
-0. the first element (a *scale value*) is a float bounded to the
-   interval ``[0, 1]``
-1. the second element (a *color*) is a string representation of a color parsable
-   by Plotly
-
-For instance, the Viridis colorscale would be defined as
-
->>> get_colorscale("viridis")
-((0.0, 'rgb(68, 1, 84)'),
- (0.1111111111111111, 'rgb(72, 40, 120)'),
- (0.2222222222222222, 'rgb(62, 73, 137)'),
- (0.3333333333333333, 'rgb(49, 104, 142)'),
- (0.4444444444444444, 'rgb(38, 130, 142)'),
- (0.5555555555555556, 'rgb(31, 158, 137)'),
- (0.6666666666666666, 'rgb(53, 183, 121)'),
- (0.7777777777777777, 'rgb(110, 206, 88)'),
- (0.8888888888888888, 'rgb(181, 222, 43)'),
- (1.0, 'rgb(253, 231, 37)'))
-"""
-
-LabelsArray = _CollectionL2[str]
-"""A :data:`LabelsArray` represents the labels of traces in a ridgeplot.
-
-For instance, the following is a valid :data:`LabelsArray`:
-
->>> labels_array: LabelsArray = [
-...     ["trace 1", "trace 2", "trace 3"],
-...     ["trace 4", "trace 5"],
-... ]
-"""
-
-ColorsArrayT = _CollectionL2[str]
-"""A :data:`ColorsArray` represents the colors of traces in a ridgeplot.
-
-For instance, the following is a valid :data:`ColorsArray`:
-
->>> colors_array: ColorsArray = [
-...     ["red", "blue", "green"],
-...     ["orange", "purple"],
-... ]
-"""
-
-MidpointsArrayT = _CollectionL2[float]
-"""A :data:`MidpointsArray` represents the midpoints of colorscales in a
-ridgeplot.
-
-For instance, the following is a valid :data:`MidpointsArray`:
-
->>> midpoints_array: MidpointsArray = [
-...     [0.2, 0.5, 1],
-...     [0.3, 0.7],
-... ]
-"""
-
 # ========================================================
-# ---  `Densities` type
+# ---  `Densities` array
 # ========================================================
 
-XYCoordinateT = Tuple[Numeric, Numeric]
+XYCoordinate = Tuple[NumericT, NumericT]
 """A :data:`XYCoordinate` is a :class:`~typing.Tuple` of two numeric values
 representing a :math:`(x, y)` coordinate."""
 
-DensityTraceT = _CollectionL1[XYCoordinateT]
+DensityTrace = CollectionL1[XYCoordinate]
 """A 2D line trace is a collection of :math:`(x, y)` tuples
 (:data:`XYCoordinate`).
 
@@ -153,7 +93,7 @@ instance, the following is a valid 2D line trace:
 >>> density_trace: DensityTrace = [(0, 0), (1, 1), (2, 2), (3, 3)]
 """
 
-DensitiesRowT = _CollectionL1[DensityTraceT]
+DensitiesRow = CollectionL1[DensityTrace]
 r"""A :data:`DensitiesRow` represents a set of :data:`DensityTrace`\s that
 are to be plotted on the same row of a ridgeplot.
 
@@ -166,7 +106,7 @@ For instance, the following is a valid ``DensitiesRow``:
 ... ]
 """
 
-DensitiesT = _CollectionL1[DensitiesRowT]
+Densities = CollectionL1[DensitiesRow]
 r"""The :data:`Densities` type aims at representing the traces that are to be
 plotted on a ridgeplot.
 
@@ -194,90 +134,10 @@ For instance, the following is a valid ``Densities`` object:
 ... ]
 """
 
-# ========================================================
-# --- `Samples` type
-# ========================================================
 
-SamplesTraceT = _CollectionL1[Numeric]
-"""A :data:`SamplesTrace` is a collection of numeric values representing a
-set of samples from which a density trace can be estimated.
-
-i.e. a :data:`SamplesTrace` can be converted into a :data:`DensityTrace` by
-applying a kernel density estimation algorithm.
-"""
-
-SamplesRowT = _CollectionL1[SamplesTraceT]
-r"""A :data:`SamplesRow` represents a set of :data:`SamplesTrace`\s that are to be
-plotted on the same row of a ridgeplot.
-
-i.e. a :data:`SamplesRow` is a collection of :data:`SamplesTrace`\s and can be
-converted into a :data:`DensitiesRow` by applying a kernel density estimation
-algorithm to each trace.
-"""
-
-SamplesT = _CollectionL1[SamplesRowT]
-r"""The :data:`Samples` type aims at representing the samples that are to be
-plotted on a ridgeplot.
-
-It is a collection of :data:`SamplesRow` objects. Each row is represented by a
-:data:`SamplesRow` type which, in turn, is a collection of :data:`SamplesTrace`\s
-which can be converted into :data:`DensityTrace` 's by applying a kernel density
-estimation algorithm. Therefore, the :data:`Samples` type can also be converted
-into a :data:`Densities` type by applying a kernel density estimation algorithm
-to each trace.
-
-See :data:`Densities` for more details.
-
-Note: The ``CollectionL1[SamplesRow]`` type is equivalent to
-``CollectionL3[Numeric]`` or ``CollectionL2[Collection[Numeric]]``, which are
-both type aliases for ``Collection[Collection[Collection[Numeric]]]``.
-"""
-
-# ========================================================
-# ---  Deprecated shallow types
-# ========================================================
-
-
-ShallowLabelsArrayT = _CollectionL1[str]
-"""Deprecated shallow type for :data:`LabelsArray`.
-
-Example:
-
->>> labels_array: ShallowLabelsArray = ["trace 1", "trace 2", "trace 3"]
-"""
-
-ShallowColorsArrayT = _CollectionL1[str]
-"""Deprecated shallow type for :data:`ColorsArray`.
-
-Example:
-
->>> colors_array: ShallowColorsArray = ["red", "blue", "green"]
-"""
-
-
-@overload
-def is_flat_str_collection(obj: Collection[str]) -> Literal[True]:
-    ...
-
-
-@overload
-def is_flat_str_collection(obj: Any) -> bool:
-    ...
-
-
-def is_flat_str_collection(obj: Any) -> bool:
-    """Check if the given object is a :data:`CollectionL1[str]` type but not a
-    string itself."""
-    if isinstance(obj, str):
-        # Catch edge case where the obj is actually a
-        # str collection, but it is a string itself
-        return False
-    return isinstance(obj, Collection) and all(map(lambda x: isinstance(x, str), obj))
-
-
-ShallowDensitiesT = _CollectionL1[DensityTraceT]
-"""Deprecated shallow type for :data:`Densities` where each row of the ridgeplot
-contains only a single trace.
+ShallowDensities = CollectionL1[DensityTrace]
+"""Shallow type for :data:`Densities` where each row of the ridgeplot contains
+only a single trace.
 
 Note: The ``CollectionL1[DensityTrace]`` type is equivalent to
 ``CollectionL2[XYCoordinate]``, which is a type alias for
@@ -286,7 +146,7 @@ Note: The ``CollectionL1[DensityTrace]`` type is equivalent to
 
 
 @overload
-def is_shallow_densities(obj: ShallowDensitiesT) -> Literal[True]:
+def is_shallow_densities(obj: ShallowDensities) -> Literal[True]:
     ...
 
 
@@ -309,9 +169,48 @@ def is_shallow_densities(obj: Any) -> bool:
     return isinstance(obj, Collection) and all(map(is_density_trace, obj))
 
 
-ShallowSamplesT = _CollectionL1[SamplesTraceT]
-"""Deprecated shallow type for :data:`Samples` where each row of the ridgeplot
-contains only a single trace.
+# ========================================================
+# --- `Samples` array
+# ========================================================
+
+SamplesTrace = CollectionL1[Numeric]
+"""A :data:`SamplesTrace` is a collection of numeric values representing a
+set of samples from which a density trace can be estimated.
+
+i.e. a :data:`SamplesTrace` can be converted into a :data:`DensityTrace` by
+applying a kernel density estimation algorithm.
+"""
+
+SamplesRow = CollectionL1[SamplesTrace]
+r"""A :data:`SamplesRow` represents a set of :data:`SamplesTrace`\s that are to be
+plotted on the same row of a ridgeplot.
+
+i.e. a :data:`SamplesRow` is a collection of :data:`SamplesTrace`\s and can be
+converted into a :data:`DensitiesRow` by applying a kernel density estimation
+algorithm to each trace.
+"""
+
+Samples = CollectionL1[SamplesRow]
+r"""The :data:`Samples` type aims at representing the samples that are to be
+plotted on a ridgeplot.
+
+It is a collection of :data:`SamplesRow` objects. Each row is represented by a
+:data:`SamplesRow` type which, in turn, is a collection of :data:`SamplesTrace`\s
+which can be converted into :data:`DensityTrace` 's by applying a kernel density
+estimation algorithm. Therefore, the :data:`Samples` type can also be converted
+into a :data:`Densities` type by applying a kernel density estimation algorithm
+to each trace.
+
+See :data:`Densities` for more details.
+
+Note: The ``CollectionL1[SamplesRow]`` type is equivalent to
+``CollectionL3[Numeric]`` or ``CollectionL2[Collection[Numeric]]``, which are
+both type aliases for ``Collection[Collection[Collection[Numeric]]]``.
+"""
+
+ShallowSamples = CollectionL1[SamplesTrace]
+"""Shallow type for :data:`Samples` where each row of the ridgeplot contains
+only a single trace.
 
 Note: The ``CollectionL1[SamplesTrace]`` type is equivalent to
 ``CollectionL2[Numeric]`` or ``CollectionL1[Collection[Numeric]]``, which are
@@ -320,7 +219,7 @@ both type aliases for ``Collection[Collection[Numeric]]``.
 
 
 @overload
-def is_shallow_samples(obj: ShallowSamplesT) -> Literal[True]:
+def is_shallow_samples(obj: ShallowSamples) -> Literal[True]:
     ...
 
 
@@ -339,7 +238,32 @@ def is_shallow_samples(obj: Any) -> bool:
     return isinstance(obj, Collection) and all(map(is_trace_samples, obj))
 
 
-def nest_shallow_collection(shallow_collection: _CollectionL2[_T]) -> _CollectionL3[_T]:
+# ========================================================
+# ---  Shallow types
+# ========================================================
+
+
+@overload
+def is_flat_str_collection(obj: Collection[str]) -> Literal[True]:
+    ...
+
+
+@overload
+def is_flat_str_collection(obj: Any) -> bool:
+    ...
+
+
+def is_flat_str_collection(obj: Any) -> bool:
+    """Check if the given object is a :data:`CollectionL1[str]` type but not a
+    string itself."""
+    if isinstance(obj, str):
+        # Catch edge case where the obj is actually a
+        # str collection, but it is a string itself
+        return False
+    return isinstance(obj, Collection) and all(map(lambda x: isinstance(x, str), obj))
+
+
+def nest_shallow_collection(shallow_collection: CollectionL2[_T]) -> CollectionL3[_T]:
     """Internal helper to convert a shallow collection type into a deep
     collection type.
 

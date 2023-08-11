@@ -5,6 +5,7 @@ from _plotly_utils.exceptions import PlotlyError
 
 from ridgeplot._colors import (
     _COLORSCALE_MAPPING,
+    ColorScale,
     _any_to_rgb,
     _colormap_loader,
     apply_alpha,
@@ -13,7 +14,6 @@ from ridgeplot._colors import (
     list_all_colorscale_names,
     validate_colorscale,
 )
-from ridgeplot._types import ColorScaleT
 from ridgeplot._utils import LazyMapping
 
 VIRIDIS = (
@@ -73,7 +73,7 @@ def test_plotly_colorscale_mapping() -> None:
         ],
     ],
 )
-def test_validate_colorscale(colorscale: ColorScaleT) -> None:
+def test_validate_colorscale(colorscale: ColorScale) -> None:
     validate_colorscale(colorscale=colorscale)
 
 
