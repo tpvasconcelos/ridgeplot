@@ -26,6 +26,7 @@ include docs/make.bat
 include docs/robots.txt
 include docs/_static/favicon.ico
 recursive-include docs *.md *.py *.rst
+recursive-include docs/_examples *.py
 recursive-include docs/_static/charts *.js *.html *.webp
 recursive-include docs/_static/css *.css
 recursive-include docs/_static/img *.png
@@ -36,7 +37,6 @@ prune docs/build
 # Misc
 include bin/tox
 recursive-include .github *.yaml
-recursive-include examples *.py *.ipynb
 recursive-include misc *.py *.ipynb
 recursive-include requirements *.txt *.in *.md
 recursive-include bin *.py
