@@ -153,7 +153,7 @@ Our tool of choice to configure and reliably run all integration approval steps 
 virtual environments. To trigger all checks in parallel, simply run
 
 ```shell
-./bin/tox --parallel auto -m static tests
+./bin/tox --parallel -m static tests
 ```
 
 It's that simple 🙌 !! Note only that this will take a while the first time you run the command,
@@ -169,7 +169,7 @@ We use [pytest](https://github.com/pytest-dev/pytest) as our testing framework, 
 can find all configuration details in {{ repo_file('tox.ini') }}. To trigger all tests, simply run
 
 ```shell
-./bin/tox --parallel auto -m tests
+./bin/tox --parallel -m tests
 ```
 
 If you need more control over which tests are running, or which flags are being passed to pytest, you can also invoke `pytest` directly which will run on your current virtual environment. Configuration details can be found in {{ repo_file('tox.ini') }}.
