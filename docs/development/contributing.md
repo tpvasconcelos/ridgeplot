@@ -143,8 +143,8 @@ We use [GitHub Actions](https://github.com/features/actions) to automatically ru
 
 Here is a quick overview of all CI tools and software in use, some of which have already been discussed in the sections above.
 
-| Tool                                                                       | Category        | config files                                 | Details                                                                                                                                                                                             |
-| -------------------------------------------------------------------------- | --------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tool                                                                       | Category         | config files                                 | Details                                                                                                                                                                                             |
+|----------------------------------------------------------------------------|------------------|----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [Tox](https://github.com/tox-dev/tox)                                      | 🔧 Orchestration | {{ repo_file('tox.ini') }}                   | We use Tox to reliably run all integration approval steps in reproducible isolated virtual environments.                                                                                            |
 | [GitHub Actions](https://github.com/features/actions)                      | 🔧 Orchestration | {{ repo_file('.github/workflows/ci.yaml') }} | Workflow automation for GitHub. We use it to automatically run all integration approval steps defined with Tox on every push or pull request event.                                                 |
 | [Git](https://git-scm.com/)                                                | 🕰 VCS           | {{ repo_file('.gitignore') }}                | Projects version control system software of choice.                                                                                                                                                 |
@@ -206,15 +206,15 @@ You need push access to the project's repository to make releases. The following
    git push && git push --tags
    ```
 5. At this point a couple of GitHub Actions workflows will be triggered:
-   1. `.github/workflows/ci.yaml`: Runs all CI checks with Tox against the new changes pushed to `main`.
-   2. `.github/workflows/release.yaml`: Issues a new GitHub release triggered by the new git tag pushed in the previous step.
-   3. `.github/workflows/publish-pypi.yaml`: Builds, packages, and uploads the source and wheel package to PyPI (and test PyPI). This is triggered by the new GitHub release created in the previous step.
+    1. `.github/workflows/ci.yaml`: Runs all CI checks with Tox against the new changes pushed to `main`.
+    2. `.github/workflows/release.yaml`: Issues a new GitHub release triggered by the new git tag pushed in the previous step.
+    3. `.github/workflows/publish-pypi.yaml`: Builds, packages, and uploads the source and wheel package to PyPI (and test PyPI). This is triggered by the new GitHub release created in the previous step.
 6. **Trust but verify!**
-   1. Verify that all three workflows passed successfully: <https://github.com/tpvasconcelos/ridgeplot/actions>
-   2. Verify that the new git tag is present in the remote repository: <https://github.com/tpvasconcelos/ridgeplot/tags>
-   3. Verify that the new release is present in the remote repository and that the release notes were correctly parsed: <https://github.com/tpvasconcelos/ridgeplot/releases>
-   4. Verify that the new package is available in PyPI: <https://pypi.org/project/ridgeplot/>
-   5. Verify that the docs were updated and published to <https://ridgeplot.readthedocs.io/en/stable/>
+    1. Verify that all three workflows passed successfully: <https://github.com/tpvasconcelos/ridgeplot/actions>
+    2. Verify that the new git tag is present in the remote repository: <https://github.com/tpvasconcelos/ridgeplot/tags>
+    3. Verify that the new release is present in the remote repository and that the release notes were correctly parsed: <https://github.com/tpvasconcelos/ridgeplot/releases>
+    4. Verify that the new package is available in PyPI: <https://pypi.org/project/ridgeplot/>
+    5. Verify that the docs were updated and published to <https://ridgeplot.readthedocs.io/en/stable/>
 
 ## Code of Conduct
 
