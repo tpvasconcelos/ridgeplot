@@ -45,7 +45,7 @@ def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
 
     # Wrap the Plotly HTML in a <div> tag with a .plotly-graph-wrapper class
     soup = BeautifulSoup(html_str, "html.parser")
-    soup.div["class"] = "plotly-graph-wrapper"
+    soup.div["class"] = "plotly-graph-wrapper"  # type: ignore
     html_str = str(soup)
 
     if minify_html:
