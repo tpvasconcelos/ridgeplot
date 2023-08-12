@@ -29,8 +29,8 @@ def main() -> go.Figure:
     )
     fig.update_layout(
         title="Minimum and maximum daily temperatures in Lincoln, NE (2016)",
-        height=650,
-        width=950,
+        height=600,
+        width=800,
         font_size=14,
         plot_bgcolor="rgb(245, 245, 245)",
         xaxis_gridcolor="white",

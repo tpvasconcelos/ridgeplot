@@ -101,7 +101,9 @@ html_css_files = [
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.1/css/brands.min.css",
 ]
 
-html_js_files = []
+html_js_files = [
+    "js/plotly.min.js",
+]
 
 # -- Options for HTML output -----------------------------------------------------------------------
 

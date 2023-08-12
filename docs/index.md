@@ -52,16 +52,9 @@ fig.update_layout(height=500, width=800)
 fig.show()
 ```
 
-::::{tab-set}
-:::{tab-item} Interactive output
 ```{raw} html
-<iframe src="_static/charts/basic.html" height="400" width="100%" style="border:none;overflow:hidden;"></iframe>
+:file: _static/charts/basic.html
 ```
-:::
-:::{tab-item} Static image output
-![ridgeline plot example using the ridgeplot Python library](/_static/charts/basic.webp)
-:::
-::::
 
 ```{toctree}
 ---
