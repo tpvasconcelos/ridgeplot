@@ -183,10 +183,11 @@ The goal will be to plot the KDEs for the minimum and maximum daily temperatures
 The {paramref}`~ridgeplot.ridgeplot.samples` argument in the {py:func}`~ridgeplot.ridgeplot()` function expects a 3D array of shape {math}`(R, T_r, S_t)`, where {math}`R` is the number of rows, {math}`T_r` is the number of traces per row, and {math}`S_t` is the number of samples per trace, with:
 
 ```{list-table}
-:header-rows: 1
-:align: left
-:widths: 4 8
-
+---
+header-rows: 1
+align: left
+widths: 4 8
+---
 * - Dimension values
   - Description
 * - {math}`R=12`
