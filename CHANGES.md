@@ -23,7 +23,7 @@ Unreleased changes
 
 ### Deprecations
 
-- The `colormode='index'` value has been deprecated in favor of `colormode='row-index'`, which  provides the same functionality but  is more explicit and allows to distinguish between the `'row-index'` and `'trace-index'` modes. ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
+- The `colormode='index'` value has been deprecated in favor of `colormode='row-index'`, which provides the same functionality but is more explicit and allows to distinguish between the `'row-index'` and `'trace-index'` modes. ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
 - The `show_annotations` argument has been deprecated in favor of `show_yticklabels`. ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
 - The `get_all_colorscale_names()` function has been deprecated in favor of `list_all_colorscale_names()`. ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
 
@@ -36,7 +36,7 @@ Unreleased changes
 
 ### Documentation
 
-- Major update to the documentation, including more examples, interactive plots, script to  generate the HTML and WebP images from the example scripts, improved API reference, and more. ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
+- Major update to the documentation, including more examples, interactive plots, script to generate the HTML and WebP images from the example scripts, improved API reference, and more. ([#114](https://github.com/tpvasconcelos/ridgeplot/pull/114))
 
 ### Internal
 
@@ -72,7 +72,7 @@ Unreleased changes
 0.1.17
 ------
 
-- Automate the release process. See .github/workflows/release.yaml, which issues a new GitHub  release whenever a new git tag is pushed to the main branch by extracting the release notes from  the changelog.
+- Automate the release process. See .github/workflows/release.yaml, which issues a new GitHub release whenever a new git tag is pushed to the main branch by extracting the release notes from the changelog.
 - Fix automated release process to PyPI. ([#27](https://github.com/tpvasconcelos/ridgeplot/pull/27))
 
 ---
