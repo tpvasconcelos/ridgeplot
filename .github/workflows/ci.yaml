@@ -3,37 +3,80 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 
+# * Run static code checks only for Ubuntu and Python 3.8
+# * Run software tests with coverage only for Ubuntu (all Python versions)
+# * Run software tests without coverage for macOS and Windows (all Python versions)
 jobs:
-  ci-checks:
-    runs-on: ${{ matrix.os }}
+  static:
+    name: Static code checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-python
+        with:
+          python-version: "3.8"
+          requirements-prefix: tox
+      - name: Run static checks with Tox
+        shell: bash
+        run: ./bin/tox --parallel --parallel-no-spinner -m static
+  tests-no-cov:
+    name: Software tests (without coverage)
     strategy:
       matrix:
         python-version:
           - "3.7"
-          #- "3.8"
-          #- "3.9"
+          - "3.8"
+          - "3.9"
           - "3.10"
+          - "3.11"
         os:
-          - "ubuntu-latest"
-          #- "macos-latest"
-          #- "windows-latest"
+          - macos-latest
+          # FIXME: Re-enable Windows tests
+          # - windows-latest
       fail-fast: true
-    env:
-      OS: "${{ matrix.os }}"
-      PYTHON: "${{ matrix.python-version }}"
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-python
         with:
           python-version: "${{ matrix.python-version }}"
-          requirements-path: requirements/tox.txt
-      - name: Run CI checks with Tox
-        run: tox
+          requirements-prefix: tox
+      - name: Run tests with Tox (without coverage)
+        if: matrix.os != 'ubuntu-latest'
+        shell: bash
+        run: ./bin/tox --parallel --parallel-no-spinner -m tests -- --no-cov
+  tests-cov:
+    name: Software tests (with coverage)
+    strategy:
+      matrix:
+        python-version:
+          - "3.7"
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+        os:
+          - ubuntu-latest
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-python
+        with:
+          python-version: "${{ matrix.python-version }}"
+          requirements-prefix: tox
+      - name: Run tests with Tox (with coverage)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: ./bin/tox --parallel --parallel-no-spinner -m tests
       - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
+        env:
+          OS: "${{ matrix.os }}"
+          PYTHON: "${{ matrix.python-version }}"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml

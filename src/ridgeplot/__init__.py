@@ -23,12 +23,15 @@ environment.
   fig.show()
 
 """
-from ridgeplot._colors import get_all_colorscale_names
+from __future__ import annotations
+
+from ridgeplot._colors import get_all_colorscale_names, list_all_colorscale_names
 from ridgeplot._ridgeplot import ridgeplot
 from ridgeplot._version import __version__
 
 __all__ = [
     "ridgeplot",
     "get_all_colorscale_names",
+    "list_all_colorscale_names",
     "__version__",
 ]

@@ -3,7 +3,7 @@ name: Publish to PyPI
 on:
   release:
     types:
-      - created
+      - published
 
 jobs:
   build-and-publish:
@@ -12,13 +12,13 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-python
         with:
-          python-version: "3.7"
-          requirements-path: requirements/tox.txt
+          python-version: "3.8"
+          requirements-prefix: tox
       - name: Package and upload a release to test PyPI
         env:
           TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN_TEST }}"
-        run: tox -e build,publish-pypi-test
+        run: ./bin/tox -e build,publish-pypi-test
       - name: Package and upload a release prod PyPI
         env:
           TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN }}"
-        run: tox -e build,publish-pypi
+        run: ./bin/tox -e build,publish-pypi-prod

@@ -1,14 +1,22 @@
 -e file:.
 
-Jinja2
-sphinx==4.*
-sphinx-book-theme==0.*
-myst_nb
-sphinx-copybutton
-sphinx_thebe
-sphinx_design
-sphinx-togglebutton
-sphinxext-opengraph
-sphinx-inline-tabs
+beautifulsoup4
+furo
+jinja2
+kaleido
+minify-html
+myst-parser>=0.19.0
+sphinx
 sphinx-autobuild
-numpydoc
+sphinx-autodoc-typehints
+sphinx-copybutton
+sphinx-inline-tabs
+sphinx-notfound-page
+sphinx-paramlinks
+sphinx-remove-toctrees
+sphinx-sitemap
+sphinx-togglebutton
+sphinx-toolbox
+sphinx_design
+sphinx_thebe
+sphinxext-opengraph

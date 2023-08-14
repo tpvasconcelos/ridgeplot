@@ -1,8 +1,9 @@
 # GitHub workflows
 
-| Workflow                 | Description                                                                                                                  |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| ci.yaml                  | Run all CI checks with Tox on all pushes to master or pull-request updates.                                                  |
-| release.yaml             | Issues a new GitHub release whenever a new git tag is pushed.                                                                |
-| publish-pypi.yaml        | Builds, packages, and uploads the source and wheel package to pypi (and test pypi) whenever a new GitHub release is created. |
-| check-release-notes.yaml | **\[Experimental\]** Checks whether the user remembered to update the changelog. See source for more details.                |
+| Workflow                 | Description                                                                                                                                                                                                                              |
+| ------------------------ |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ci.yaml                  | Run all CI checks with Tox on all pushes to the main branch or pull-request updates.                                                                                                                                                                |
+| release.yaml             | Issues a new GitHub release whenever a new git tag is pushed.                                                                                                                                                                            |
+| publish-pypi.yaml        | Builds, packages, and uploads the source and wheel package to pypi (and test pypi) whenever a new GitHub release is created.                                                                                                             |
+| check-release-notes.yaml | **\[Experimental\]** Checks whether the user remembered to update the changelog. See source for more details.                                                                                                                            |
+| upgrade-deps.yaml        | Upgrades and locks all dependencies from a target branch and opens a pull requests with the changes. It is scheduled to run every Monday at midnight against the `main` branch but can also be triggered manually through the GitHub UI. |

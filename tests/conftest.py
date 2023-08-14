@@ -1,37 +1,20 @@
-from typing import Any, Dict
+import pytest
 
-from pytest import Session
-
-
-def _patch_plotly_show() -> None:
-    """Monkey patch ``plotly.io.show`` as to not perform any rendering and,
-    instead, simply call ``plotly.io._utils.validate_coerce_fig_to_dict``"""
-    from typing import Union
-
-    import plotly.io
-    from plotly.graph_objs import Figure
-    from plotly.io._utils import validate_coerce_fig_to_dict  # noqa
-
-    def wrapped(
-        fig: Union[Figure, dict],
-        renderer: str = None,
-        validate: bool = True,
-        **kwargs: Dict[str, Any],
-    ) -> None:
-        validate_coerce_fig_to_dict(fig, validate)
-
-    plotly.io.show = wrapped
+from ridgeplot._testing import patch_plotly_show
 
 
-def pytest_sessionstart(session: Session) -> None:
-    """Called after the :py:class:`pytest.Session` object has been created and
+def pytest_sessionstart(session: pytest.Session) -> None:
+    """Called after the :class:`~pytest.Session` object has been created and
     before performing collection and entering the run test loop.
 
-    Args:
-        session
-            The pytest :py:class:`~pytest.Session` object.
+    Parameters
+    ----------
+    session
+        The pytest :class:`~pytest.Session` object.
 
-    References:
-    - https://docs.pytest.org/en/6.2.x/reference.html#initialization-hooks
-    """
-    _patch_plotly_show()
+    References
+    ----------
+    https://docs.pytest.org/en/stable/reference.html#initialization-hooks
+
+    """  # noqa: D401
+    patch_plotly_show()

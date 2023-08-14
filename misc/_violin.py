@@ -1,4 +1,5 @@
 from itertools import repeat
+from typing import Optional
 
 import plotly.graph_objects as go
 
@@ -7,8 +8,8 @@ def plot_violin(
     data,
     names=None,
     colors=None,
-    violin_kwargs: dict = None,
-    layout_kwargs: dict = None,
+    violin_kwargs: Optional[dict] = None,
+    layout_kwargs: Optional[dict] = None,
 ):
     names = names if names is not None else repeat(None)
     colors = colors if colors is not None else repeat(None)
@@ -20,14 +21,13 @@ def plot_violin(
     ridgeplot = True
 
     for dist, name, color in zip(data, names, colors):
-
         defaults_violin = dict(
             fillcolor=color,
             line_color="black" if color else None,
             line_width=1.5,
             points=False,
             name=name,
-            # TODO: manual line based on beta_mean
+            # Would be nice to add a vertical line based on beta_mean
             # meanline_visible=True,
             hoveron="violins",
             hoverinfo="x+y",
@@ -48,8 +48,8 @@ def plot_violin(
         # legend_title="Legend Title",
         # xaxis_title=metric.upper() if ridgeplot else None,
         # yaxis_title=None if ridgeplot else metric.upper(),
-        xaxis_showticklabels=True if ridgeplot else False,
-        yaxis_showticklabels=False if ridgeplot else True,
+        xaxis_showticklabels=ridgeplot,
+        yaxis_showticklabels=not ridgeplot,
         hovermode="y unified" if ridgeplot else "x unified",
         xaxis_showgrid=True,
         xaxis_zeroline=False,

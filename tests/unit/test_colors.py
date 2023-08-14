@@ -3,20 +3,17 @@ from typing import Any, Optional, Type, Union
 import pytest
 from _plotly_utils.exceptions import PlotlyError
 
-# noinspection PyProtectedMember
 from ridgeplot._colors import (
     _COLORSCALE_MAPPING,
-    ColorScaleType,
+    ColorScale,
     _any_to_rgb,
     _colormap_loader,
     apply_alpha,
-    get_all_colorscale_names,
     get_color,
     get_colorscale,
+    list_all_colorscale_names,
     validate_colorscale,
 )
-
-# noinspection PyProtectedMember
 from ridgeplot._utils import LazyMapping
 
 VIRIDIS = (
@@ -43,7 +40,7 @@ def test_colormap_loader() -> None:
 
 
 # ==============================================================
-# ---  _PLOTLY_COLORSCALE_MAPPING
+# ---  _COLORSCALE_MAPPING
 # ==============================================================
 
 
@@ -61,7 +58,7 @@ def test_plotly_colorscale_mapping() -> None:
 
 @pytest.mark.parametrize(
     "colorscale",
-    (
+    [
         # tuple of tuples of rgb colors
         (
             (0.0, "rgb(68, 1, 84)"),
@@ -74,15 +71,15 @@ def test_plotly_colorscale_mapping() -> None:
             [0.5019607843137255, "#21918c"],
             [1, "#fde725"],
         ],
-    ),
+    ],
 )
-def test_validate_colorscale(colorscale: ColorScaleType) -> None:
+def test_validate_colorscale(colorscale: ColorScale) -> None:
     validate_colorscale(colorscale=colorscale)
 
 
 @pytest.mark.parametrize(
-    "colorscale,expected_exception",
-    (
+    ("colorscale", "expected_exception"),
+    [
         # is not iterable
         (1, TypeError),
         # is not iterable of iterables
@@ -94,7 +91,7 @@ def test_validate_colorscale(colorscale: ColorScaleType) -> None:
         ((("a", 1), ("b", 2)), PlotlyError),
         (((1, "a"), (2, "b")), PlotlyError),
         (((1, "a"), (0, "a")), PlotlyError),
-    ),
+    ],
 )
 def test_validate_colorscale_fails_for_invalid_colorscale(
     colorscale: Any,
@@ -109,20 +106,20 @@ def test_validate_colorscale_fails_for_invalid_colorscale(
 
 
 @pytest.mark.parametrize(
-    "color,expected",
-    (
+    ("color", "expected"),
+    [
         ("#000000", "rgb(0, 0, 0)"),  # valid hex string
         ("rgb(1, 2, 3)", "rgb(1, 2, 3)"),  # valid rgb string
         ((4, 5, 6), "rgb(4, 5, 6)"),  # valid tuple
-    ),
+    ],
 )
 def test_any_to_rgb(color: Union[str, tuple], expected: str) -> None:
     assert _any_to_rgb(color=color) == expected
 
 
 @pytest.mark.parametrize(
-    "color,expected_exception,exception_match",
-    (
+    ("color", "expected_exception", "exception_match"),
+    [
         # invalid types
         (1, TypeError, None),
         ([1, 2, 3], TypeError, None),
@@ -135,7 +132,7 @@ def test_any_to_rgb(color: Union[str, tuple], expected: str) -> None:
         ("rgb(0,0,999)", PlotlyError, r"rgb colors tuples cannot exceed 255"),
         # invalid tuple
         ((1, 2), IndexError, None),
-    ),
+    ],
 )
 def test_any_to_rgb_fails_for_invalid_color(
     color: Any, expected_exception: Type[Exception], exception_match: Optional[str]
@@ -145,28 +142,29 @@ def test_any_to_rgb_fails_for_invalid_color(
 
 @pytest.mark.xfail(reason="Incomplete implementation of RGB string validation from Plotly.")
 @pytest.mark.parametrize(
-    "color,expected_exception,exception_match",
-    (
+    ("color", "expected_exception", "exception_match"),
+    [
         # invalid rgb string
         ("rgb(1,2,3,4,5)", PlotlyError, None),
         ("rgb(0,0,-2)", PlotlyError, r"rgb colors tuples cannot exceed 255"),
         # invalid tuple
         ((1, 2, 3, 4), PlotlyError, None),
-    ),
+    ],
 )
 def test_any_to_rgb_bug_in_validation_incomplete(
     color: Any, expected_exception: Type[Exception], exception_match: Optional[str]
 ) -> None:
-    pytest.raises(expected_exception, _any_to_rgb, color=color).match(exception_match or "")
+    with pytest.raises(expected_exception, match=exception_match or ""):
+        _any_to_rgb(color=color)
 
 
 # ==============================================================
-# --- get_all_colorscale_names()
+# --- list_all_colorscale_names()
 # ==============================================================
 
 
-def test_get_all_colorscale_names() -> None:
-    all_colorscale_names = get_all_colorscale_names()
+def test_list_all_colorscale_names() -> None:
+    all_colorscale_names = list_all_colorscale_names()
     assert all(isinstance(name, str) for name in all_colorscale_names)
     assert "viridis" in all_colorscale_names
     for name in all_colorscale_names:
@@ -180,12 +178,13 @@ def test_get_all_colorscale_names() -> None:
 
 def test_get_colorscale() -> None:
     assert get_colorscale(name="Viridis") == VIRIDIS
-    # assert that `name` is case insensitive
+    # assert that `name` is case-insensitive
     assert get_colorscale(name="viridis") == VIRIDIS
 
 
 def test_get_colorscale_fails_for_unknown_colorscale_name() -> None:
-    pytest.raises(ValueError, get_colorscale, name="this colorscale doesnt exist")
+    with pytest.raises(ValueError, match="Unknown colorscale name"):
+        get_colorscale(name="this colorscale doesn't exist")
 
 
 # ==============================================================
@@ -199,14 +198,14 @@ def test_get_color_midpoint_in_scale() -> None:
 
 
 def test_get_color_midpoint_not_in_scale() -> None:
-    # TODO: Refactor `get_color` to make this easier to test.
-    #       Currently just using a hard-coded value.
+    # Hard-coded test case.
     assert get_color(colorscale=VIRIDIS, midpoint=0.5) == "rgb(34.5, 144.0, 139.5)"
 
 
-@pytest.mark.parametrize("midpoint", (-10.0, -1.3, 1.9, 100.0))
+@pytest.mark.parametrize("midpoint", [-10.0, -1.3, 1.9, 100.0])
 def test_get_color_fails_for_midpoint_out_of_bounds(midpoint: float) -> None:
-    pytest.raises(ValueError, get_color, colorscale=..., midpoint=midpoint)
+    with pytest.raises(ValueError, match="should be a float value between 0 and 1"):
+        get_color(colorscale=..., midpoint=midpoint)  # type: ignore[arg-type]
 
 
 # ==============================================================
@@ -215,12 +214,12 @@ def test_get_color_fails_for_midpoint_out_of_bounds(midpoint: float) -> None:
 
 
 @pytest.mark.parametrize(
-    "color,alpha,expected",
-    (
+    ("color", "alpha", "expected"),
+    [
         ("#000000", 0, "rgba(0, 0, 0, 0)"),
         ("rgb(1, 2, 3)", 0.2, "rgba(1, 2, 3, 0.2)"),
         ((4, 5, 6), 1.0, "rgba(4, 5, 6, 1.0)"),
-    ),
+    ],
 )
 def test_apply_alpha(color: Union[tuple, str], alpha: float, expected: str) -> None:
     assert apply_alpha(color=color, alpha=alpha) == expected
