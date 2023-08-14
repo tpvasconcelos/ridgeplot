@@ -71,8 +71,6 @@ ignore = [
     # pylint
     "PLR0913", # Too many arguments to function call ({x} > 5)
     "PLR2004", # Magic value used in comparison, consider replacing {x} with a constant variable
-    # flake8-return
-    "RET504", # Unnecessary variable assignment before `return` statement
     # tryceratops
     "TRY003", # Avoid specifying long messages outside the exception class
     # pep8-naming

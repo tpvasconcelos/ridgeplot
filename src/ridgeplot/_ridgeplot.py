@@ -269,5 +269,4 @@ def ridgeplot(
         show_yticklabels=show_yticklabels,
         xpad=xpad,
     )
-    fig = ridgeplot_figure_factory.make_figure()
-    return fig
+    return ridgeplot_figure_factory.make_figure()

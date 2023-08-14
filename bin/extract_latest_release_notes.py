@@ -18,13 +18,20 @@ PATH_TO_CHANGES = PATH_TO_TOP_LEVEL.joinpath("CHANGES.md")
 PATH_TO_LATEST_RELEASE_NOTES = PATH_TO_TOP_LEVEL.joinpath("LATEST_RELEASE_NOTES.md")
 
 
+def _remove_heading(tokens: List[Token]) -> List[Token]:
+    if tokens[0].type != "heading_open":
+        raise ValueError("Expected first token to be a 'heading_open'")
+    if tokens[2].type != "heading_close":
+        raise ValueError("Expected third token to be a 'heading_close'")
+    return tokens[3:]
+
+
 def get_tokens_latest_release() -> List[Token]:
     md_parser = MarkdownIt()
     tokens = md_parser.parse(src=PATH_TO_CHANGES.read_text())
 
     count_h2 = 0
     tokens_latest_release: List[Token] = []
-
     for token in tokens:
         is_h2 = token.type == "heading_open" and token.tag == "h2"
         count_h2 += is_h2
@@ -33,14 +40,7 @@ def get_tokens_latest_release() -> List[Token]:
         elif count_h2 > 2:
             break
 
-    # Remove title
-    if tokens_latest_release[0].type != "heading_open":
-        raise ValueError("Expected first token to be a 'heading_open'")
-    if tokens_latest_release[2].type != "heading_close":
-        raise ValueError("Expected third token to be a 'heading_close'")
-    tokens_latest_release = tokens_latest_release[3:]
-
-    return tokens_latest_release
+    return _remove_heading(tokens_latest_release)
 
 
 def render_md_tokens(tokens: Sequence[Token]) -> str:

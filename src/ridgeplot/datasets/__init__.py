@@ -125,8 +125,7 @@ def load_probly(
             f"Unknown version {version!r} for the probly dataset. "
             f"Valid versions are {list(versions.keys())}."
         )
-    data = pd.read_csv(_DATA_DIR / versions[version])
-    return data
+    return pd.read_csv(_DATA_DIR / versions[version])
 
 
 def load_lincoln_weather() -> pd.DataFrame:

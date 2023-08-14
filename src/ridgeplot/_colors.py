@@ -177,7 +177,7 @@ def get_color(colorscale: ColorScale, midpoint: float) -> str:
     ceil = min(filter(lambda s: s > midpoint, scale))
     floor = max(filter(lambda s: s < midpoint, scale))
     midpoint_normalised = normalise_min_max(midpoint, min_=floor, max_=ceil)
-    color = cast(
+    return cast(
         str,
         find_intermediate_color(
             lowcolor=colors[scale.index(floor)],
@@ -186,7 +186,6 @@ def get_color(colorscale: ColorScale, midpoint: float) -> str:
             colortype="rgb",
         ),
     )
-    return color
 
 
 def apply_alpha(color: Union[tuple, str], alpha: float) -> str:

@@ -76,8 +76,7 @@ def estimate_density_trace(
             msg += " Try setting kernel='gau' (the default kernel)."
         raise RuntimeError(msg)
 
-    density_trace = [(x, y) for x, y in zip(density_x, density_y)]
-    return density_trace
+    return [(x, y) for x, y in zip(density_x, density_y)]
 
 
 def estimate_densities(
