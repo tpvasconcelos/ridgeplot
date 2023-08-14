@@ -1,18 +1,10 @@
 from __future__ import annotations
 
 import warnings
-from typing import Optional, Union, cast
+from typing import TYPE_CHECKING, cast
 
-import plotly.graph_objects as go
-
-from ridgeplot._colors import ColorScale
-from ridgeplot._figure_factory import (
-    Colormode,
-    LabelsArray,
-    RidgePlotFigureFactory,
-    ShallowLabelsArray,
-)
-from ridgeplot._kde import KDEBandwidth, KDEPoints, estimate_densities
+from ridgeplot._figure_factory import LabelsArray, RidgePlotFigureFactory, ShallowLabelsArray
+from ridgeplot._kde import estimate_densities
 from ridgeplot._types import (
     Densities,
     Samples,
@@ -23,6 +15,16 @@ from ridgeplot._types import (
     is_shallow_samples,
     nest_shallow_collection,
 )
+
+if TYPE_CHECKING:
+    from typing import Optional, Union
+
+    import plotly.graph_objects as go
+
+    from ridgeplot._colors import ColorScale
+    from ridgeplot._figure_factory import Colormode
+    from ridgeplot._kde import KDEBandwidth, KDEPoints
+
 
 _NOT_SET = object()
 
@@ -37,9 +39,9 @@ def ridgeplot(
     colormode: Colormode = "mean-minmax",
     coloralpha: Optional[float] = None,
     labels: Union[LabelsArray, ShallowLabelsArray, None] = None,
-    linewidth: Union[float, int] = 1.0,
+    linewidth: float = 1.0,
     spacing: float = 0.5,
-    show_annotations: bool = _NOT_SET,  # type: ignore
+    show_annotations: bool = _NOT_SET,  # type: ignore[assignment]
     show_yticklabels: bool = True,
     xpad: float = 0.05,
 ) -> go.Figure:
@@ -209,7 +211,7 @@ def ridgeplot(
     has_densities = densities is not None
     if has_samples and has_densities:
         raise ValueError("You may not specify both `samples` and `densities` arguments!")
-    elif not has_samples and not has_densities:
+    if not has_samples and not has_densities:
         raise ValueError("You have to specify one of: `samples` or `densities`")
 
     if has_densities:
@@ -234,8 +236,8 @@ def ridgeplot(
         labels = cast(ShallowLabelsArray, labels)
         labels = cast(LabelsArray, nest_shallow_collection(labels))
 
-    if colormode == "index":  # type: ignore
-        warnings.warn(  # type: ignore
+    if colormode == "index":  # type: ignore[comparison-overlap]
+        warnings.warn(  # type: ignore[unreachable]
             "The colormode='index' value has been deprecated in favor of "
             "colormode='row-index', which provides the same functionality but "
             "is more explicit and allows to distinguish between the "
@@ -267,5 +269,4 @@ def ridgeplot(
         show_yticklabels=show_yticklabels,
         xpad=xpad,
     )
-    fig = ridgeplot_figure_factory.make_figure()
-    return fig
+    return ridgeplot_figure_factory.make_figure()

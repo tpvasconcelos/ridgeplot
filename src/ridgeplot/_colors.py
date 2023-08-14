@@ -3,12 +3,16 @@ from __future__ import annotations
 import json
 import warnings
 from pathlib import Path
-from typing import Dict, Iterable, List, Tuple, Union, cast
+from typing import TYPE_CHECKING, Iterable, Tuple, cast
 
 from _plotly_utils.colors import validate_colors, validate_scale_values
 from plotly.colors import find_intermediate_color, hex_to_rgb, label_rgb
 
 from ridgeplot._utils import LazyMapping, normalise_min_max
+
+if TYPE_CHECKING:
+    from typing import Dict, List, Union
+
 
 _PATH_TO_COLORS_JSON = Path(__file__).parent.joinpath("colors.json")
 
@@ -173,7 +177,7 @@ def get_color(colorscale: ColorScale, midpoint: float) -> str:
     ceil = min(filter(lambda s: s > midpoint, scale))
     floor = max(filter(lambda s: s < midpoint, scale))
     midpoint_normalised = normalise_min_max(midpoint, min_=floor, max_=ceil)
-    color = cast(
+    return cast(
         str,
         find_intermediate_color(
             lowcolor=colors[scale.index(floor)],
@@ -182,7 +186,6 @@ def get_color(colorscale: ColorScale, midpoint: float) -> str:
             colortype="rgb",
         ),
     )
-    return color
 
 
 def apply_alpha(color: Union[tuple, str], alpha: float) -> str:

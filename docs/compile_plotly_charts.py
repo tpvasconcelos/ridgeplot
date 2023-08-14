@@ -45,7 +45,7 @@ def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
 
     # Wrap the Plotly HTML in a <div> tag with a .plotly-graph-wrapper class
     soup = BeautifulSoup(html_str, "html.parser")
-    soup.div["class"] = "plotly-graph-wrapper"  # type: ignore
+    soup.div["class"] = "plotly-graph-wrapper"  # type: ignore[index]
     html_str = str(soup)
 
     if minify_html:
@@ -74,8 +74,8 @@ def _write_plotlyjs_bundle() -> None:
 
 
 def compile_plotly_charts() -> None:
-    print("Writing Plotly.js bundle...")
-    _write_plotlyjs_bundle()
+    # print("Writing Plotly.js bundle...")
+    # _write_plotlyjs_bundle()
     print("Patching `plotly.show()`...")
     patch_plotly_show()
     for example_script in PATH_EXAMPLES.glob("*.py"):

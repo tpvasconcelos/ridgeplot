@@ -49,9 +49,9 @@ This basic example gets you started with a simple call to the `ridgeplot()` func
 import numpy as np
 from ridgeplot import ridgeplot
 
-my_samples = [np.random.normal(n / 1.2, size=600) for n in range(9, 0, -1)]
+my_samples = [np.random.normal(n / 1.2, size=600) for n in range(8, 0, -1)]
 fig = ridgeplot(samples=my_samples)
-fig.update_layout(height=500, width=800)
+fig.update_layout(height=450, width=800)
 fig.show()
 ```
 
@@ -85,7 +85,7 @@ df = df[column_names]
 # Not only does 'ridgeplot(...)' come configured with sensible defaults
 # but is also fully configurable to your own style and preference!
 fig = ridgeplot(
-    samples=df.values.T,
+    samples=df.to_numpy().T,
     bandwidth=4,
     kde_points=np.linspace(-12.5, 112.5, 500),
     colorscale="viridis",

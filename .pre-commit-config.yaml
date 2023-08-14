@@ -54,13 +54,6 @@ repos:
       - id: check-manifest
         args: [ --no-build-isolation ]
 
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.10.1
-    hooks:
-      - id: pyupgrade
-        args: [ --py36-plus, --keep-runtime-typing ]
-        description: Automatically upgrade syntax for newer versions of the python language.
-
   # TODO: Add this back in once we can reconcile the different locked files into a single one
   # - repo: https://github.com/peterdemin/pip-compile-multi
   #   rev: v2.4.6
@@ -78,21 +71,8 @@ repos:
     hooks:
       - id: blacken-docs
 
-  - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.284
     hooks:
-      - id: isort
-
-  - repo: https://github.com/pycqa/flake8
-    rev: 6.1.0
-    hooks:
-      - id: flake8
-        additional_dependencies:
-          - flake8-bugbear
-          - flake8-docstrings
-          - flake8-implicit-str-concat
-          - flake8-pytest-style
-          - flake8-typing-imports
-          - flake8-rst-docstrings
-          - flake8-simplify
-          - pep8-naming
+      - id: ruff
+        args: [ --fix, --exit-non-zero-on-fix ]

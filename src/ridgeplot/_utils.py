@@ -1,20 +1,25 @@
 from __future__ import annotations
 
 from typing import (
-    Any,
-    Callable,
+    TYPE_CHECKING,
     Collection,
-    Iterator,
-    List,
     Mapping,
-    Optional,
-    Set,
-    Tuple,
     TypeVar,
-    Union,
 )
 
-from ridgeplot._types import Numeric
+if TYPE_CHECKING:
+    from typing import (
+        Any,
+        Callable,
+        Iterator,
+        List,
+        Optional,
+        Set,
+        Tuple,
+        Union,
+    )
+
+    from ridgeplot._types import Numeric
 
 
 def normalise_min_max(val: Numeric, min_: Numeric, max_: Numeric) -> float:

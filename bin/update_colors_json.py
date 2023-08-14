@@ -23,22 +23,24 @@ def main() -> None:
 
     # add all sequential color-scales
     for name, color_list in vars(sequential).items():
-        if name.startswith("_") or name.startswith("swatches"):
+        if name.startswith(("_", "swatches")):
             continue
         all_colorscales_raw[name] = make_colorscale(color_list)
 
-    all_colorscales_clean = {}
+    all_colorscales_rgb = {}
     for name, colorscale in all_colorscales_raw.items():
         # convert all color-scales to 'rgb(r, g, b)' format
         if colorscale[0][1].startswith("#"):
-            colorscale = [[s, label_rgb(hex_to_rgb(c))] for s, c in colorscale]
+            colorscale_rgb = [[s, label_rgb(hex_to_rgb(c))] for s, c in colorscale]
+        else:
+            colorscale_rgb = colorscale
         # validate the color-scale as a sanity check and
         # use lower-case convention for all color-scales
-        validate_colorscale(colorscale)
-        all_colorscales_clean[name.lower()] = colorscale
+        validate_colorscale(colorscale_rgb)
+        all_colorscales_rgb[name.lower()] = colorscale_rgb
 
     with _PATH_TO_COLORS_JSON.open(mode="w") as _colors_json:
-        json.dump(all_colorscales_clean, _colors_json, indent=2)
+        json.dump(all_colorscales_rgb, _colors_json, indent=2)
 
 
 if __name__ == "__main__":

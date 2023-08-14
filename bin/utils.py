@@ -8,8 +8,11 @@ from importlib.abc import Loader
 from importlib.machinery import ModuleSpec
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
-from types import ModuleType
-from typing import Any, List, Tuple, Union, cast
+from typing import TYPE_CHECKING, cast
+
+if TYPE_CHECKING:
+    from types import ModuleType
+    from typing import Any, List, Tuple, Union
 
 
 def import_pyscript_as_module(path: Union[str, Path]) -> ModuleType:
@@ -132,6 +135,6 @@ def _fail(exit_code: int, print_err_message: bool = True) -> None:
 def run_subprocess(popen_args: List[str], print_err_message: bool = True) -> None:
     print(f"Running: {' '.join(popen_args)}")
     try:
-        subprocess.run(popen_args, check=True)
+        subprocess.run(popen_args, check=True)  # noqa: S603
     except subprocess.CalledProcessError as exc:
         _fail(exc.returncode, print_err_message=print_err_message)

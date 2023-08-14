@@ -6,17 +6,10 @@ def main() -> go.Figure:
 
     from ridgeplot import ridgeplot
 
-    # Put your real samples here...
-    np.random.seed(0)
-    synthetic_samples = [np.random.normal(n / 1.2, size=600) for n in range(8, 0, -1)]
-
-    # Call the `ridgeplot()` helper, packed with sensible defaults
-    fig = ridgeplot(samples=synthetic_samples)
-
-    # The returned Plotly `Figure` is still fully customizable
+    rng = np.random.default_rng(42)
+    my_samples = [rng.normal(n / 1.2, size=600) for n in range(8, 0, -1)]
+    fig = ridgeplot(samples=my_samples)
     fig.update_layout(height=450, width=800)
-
-    # show us the work!
     fig.show()
 
     return fig

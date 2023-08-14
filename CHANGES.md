@@ -11,6 +11,10 @@ Unreleased changes
 - Small adjustments to the example plots in the documentation. ([#132](https://github.com/tpvasconcelos/ridgeplot/pull/132))
 - Reformat markdown files, removing all line breaks. ([#132](https://github.com/tpvasconcelos/ridgeplot/pull/132))
 
+### CI/CD
+
+- Replace `isort`, `flake8`, and `pyupgrade` with `ruff`. ([#131](https://github.com/tpvasconcelos/ridgeplot/pull/131))
+
 ---
 
 0.1.23

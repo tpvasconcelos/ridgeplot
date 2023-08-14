@@ -205,7 +205,7 @@ def test_get_color_midpoint_not_in_scale() -> None:
 @pytest.mark.parametrize("midpoint", [-10.0, -1.3, 1.9, 100.0])
 def test_get_color_fails_for_midpoint_out_of_bounds(midpoint: float) -> None:
     with pytest.raises(ValueError, match="should be a float value between 0 and 1"):
-        get_color(colorscale=..., midpoint=midpoint)  # type: ignore
+        get_color(colorscale=..., midpoint=midpoint)  # type: ignore[arg-type]
 
 
 # ==============================================================

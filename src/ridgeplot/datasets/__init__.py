@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-if sys.version_info >= (3, 8):
-    from typing import Literal
-else:
-    from typing_extensions import Literal
+if TYPE_CHECKING:
+    import sys
+
+    if sys.version_info >= (3, 8):
+        from typing import Literal
+    else:
+        from typing_extensions import Literal
 
 import pandas as pd
 
@@ -111,7 +114,6 @@ def load_probly(
        https://discovery.cs.illinois.edu/dataset/words/
     .. _/u/zonination: https://www.reddit.com/user/zonination
 
-    .. # noqa: E501
     """
     versions = {
         "zonination": "probly-zonination.csv",
@@ -123,8 +125,7 @@ def load_probly(
             f"Unknown version {version!r} for the probly dataset. "
             f"Valid versions are {list(versions.keys())}."
         )
-    data = pd.read_csv(_DATA_DIR / versions[version])
-    return data
+    return pd.read_csv(_DATA_DIR / versions[version])
 
 
 def load_lincoln_weather() -> pd.DataFrame:
@@ -161,7 +162,6 @@ def load_lincoln_weather() -> pd.DataFrame:
     .. [2] Austin Wehrwein. *"Plot inspiration via FiveThirtyEight"*.
        https://austinwehrwein.com/data-visualization/plot-inspiration-via-fivethirtyeight/
 
-    .. # noqa: E501
     """
     data = pd.read_csv(_DATA_DIR / "lincoln-weather.csv", index_col="CST")
     data.index = pd.to_datetime(data.index.to_list())
