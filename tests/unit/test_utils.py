@@ -13,19 +13,15 @@ class TestNormaliseMinMax:
         """Assert :func:`normalise_min_max()` fails for ``max_ <= min_`` or when ``val``
         is not in range."""
         # max_ <= min_
-        pytest.raises(ValueError, normalise_min_max, val=0.0, min_=3.0, max_=2.9).match(
-            r"max_ should be greater than min_"
-        )
-        pytest.raises(ValueError, normalise_min_max, val=0.0, min_=3.0, max_=3.0).match(
-            r"max_ should be greater than min_"
-        )
+        with pytest.raises(ValueError, match=r"max_ should be greater than min_"):
+            normalise_min_max(val=0.0, min_=3.0, max_=2.9)
+        with pytest.raises(ValueError, match=r"max_ should be greater than min_"):
+            normalise_min_max(val=0.0, min_=3.0, max_=3.0)
         # val is not in range
-        pytest.raises(ValueError, normalise_min_max, val=1.0, min_=2.0, max_=3.0).match(
-            r"val (.*) is out of bounds"
-        )
-        pytest.raises(ValueError, normalise_min_max, val=5.0, min_=2.0, max_=3.0).match(
-            r"val (.*) is out of bounds"
-        )
+        with pytest.raises(ValueError, match=r"val (.*) is out of bounds"):
+            normalise_min_max(val=1.0, min_=2.0, max_=3.0)
+        with pytest.raises(ValueError, match=r"val (.*) is out of bounds"):
+            normalise_min_max(val=5.0, min_=2.0, max_=3.0)
 
     @pytest.mark.parametrize("val", [0.0, 0.5, 1.0])
     def test_same_val_unchanged_for_range_0_to_1(self, val: float) -> None:

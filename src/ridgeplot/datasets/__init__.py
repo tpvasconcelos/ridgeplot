@@ -114,7 +114,6 @@ def load_probly(
        https://discovery.cs.illinois.edu/dataset/words/
     .. _/u/zonination: https://www.reddit.com/user/zonination
 
-    .. # noqa: E501
     """
     versions = {
         "zonination": "probly-zonination.csv",
@@ -164,7 +163,6 @@ def load_lincoln_weather() -> pd.DataFrame:
     .. [2] Austin Wehrwein. *"Plot inspiration via FiveThirtyEight"*.
        https://austinwehrwein.com/data-visualization/plot-inspiration-via-fivethirtyeight/
 
-    .. # noqa: E501
     """
     data = pd.read_csv(_DATA_DIR / "lincoln-weather.csv", index_col="CST")
     data.index = pd.to_datetime(data.index.to_list())
