@@ -68,25 +68,15 @@ ignore = [
     "D209", # Multi-line docstring closing quotes should be on a separate line
     "D400", # First line should end with a period
     "D415", # First line should end with a period, question mark, or exclamation point
-    # pandas-vet
-    # "PD015", # Use `.merge` method instead of `pd.merge` function. They have equivalent functionality.
-    # "PD901", # `df` is a bad variable name. Be kinder to your future self.
     # pylint
     "PLR0913", # Too many arguments to function call ({x} > 5)
     "PLR2004", # Magic value used in comparison, consider replacing {x} with a constant variable
     # flake8-return
     "RET504", # Unnecessary variable assignment before `return` statement
-    # flake8-bandit
-    "S314", # Using `xml` to parse untrusted data is known to be vulnerable to XML attacks; use `defusedxml` equivalents
-    "S320", # Using `xml` to parse untrusted data is known to be vulnerable to XML attacks; use `defusedxml` equivalents
-    "S603", # `subprocess` call: check for execution of untrusted input
-    "S605", # Starting a process with a shell, possible injection detected
-    "S607", # Starting a process with a partial executable path
-    "S608", # Possible SQL injection vector
     # tryceratops
     "TRY003", # Avoid specifying long messages outside the exception class
     # pep8-naming
-    # Allow for sklearn's naming convention for uppercase `X`
+    # (allow for sklearn's naming convention for uppercase `X`)
     "N803", # Argument name should be lowercase
     "N806", # Variable in function should be lowercase
 ]
