@@ -9,11 +9,11 @@ def main() -> go.Figure:
 
     df = load_lincoln_weather()
 
-    months = df.index.month_name().unique()  # type: ignore
+    months = df.index.month_name().unique()  # type: ignore[attr-defined]
     samples = [
         [
-            df[df.index.month_name() == month]["Min Temperature [F]"],  # type: ignore
-            df[df.index.month_name() == month]["Max Temperature [F]"],  # type: ignore
+            df[df.index.month_name() == month]["Min Temperature [F]"],  # type: ignore[attr-defined]
+            df[df.index.month_name() == month]["Max Temperature [F]"],  # type: ignore[attr-defined]
         ]
         for month in months
     ]

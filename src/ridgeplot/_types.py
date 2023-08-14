@@ -430,12 +430,11 @@ def is_flat_str_collection(obj: Any) -> bool:
         # Catch edge case where the obj is actually a
         # str collection, but it is a string itself
         return False
-    return isinstance(obj, Collection) and all(map(lambda x: isinstance(x, str), obj))
+    return isinstance(obj, Collection) and all(isinstance(x, str) for x in obj)
 
 
 def nest_shallow_collection(shallow_collection: CollectionL2[_T]) -> CollectionL3[_T]:
-    """Internal helper to convert a shallow collection type into a deep
-    collection type.
+    """Convert a *shallow* collection type into a *deep* collection type.
 
     This function should really only be used in the :mod:`ridgeplot._ridgeplot`
     module to normalize user input.

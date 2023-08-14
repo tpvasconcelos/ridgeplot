@@ -27,12 +27,11 @@ def get_tokens_latest_release() -> List[Token]:
 
     for token in tokens:
         is_h2 = token.type == "heading_open" and token.tag == "h2"
-        if is_h2:
-            count_h2 += 1
-        if count_h2 > 2:
-            break
-        elif count_h2 == 2:
+        count_h2 += is_h2
+        if count_h2 == 2:
             tokens_latest_release.append(token)
+        elif count_h2 > 2:
+            break
 
     # Remove title
     if tokens_latest_release[0].type != "heading_open":

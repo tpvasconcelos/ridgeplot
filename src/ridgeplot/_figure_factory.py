@@ -131,7 +131,7 @@ class RidgePlotFigureFactory:
         coloralpha: Optional[float],
         colormode: Colormode,
         labels: Optional[LabelsArray],
-        linewidth: Union[float, int],
+        linewidth: float,
         spacing: float,
         show_yticklabels: bool,
         xpad: float,
@@ -146,7 +146,7 @@ class RidgePlotFigureFactory:
             colorscale = get_colorscale(name=colorscale)
         validate_colorscale(colorscale)
 
-        if colormode not in self.colormode_maps.keys():
+        if colormode not in self.colormode_maps:
             raise ValueError(
                 f"The colormode argument should be one of "
                 f"{tuple(self.colormode_maps.keys())}, got {colormode} instead."
@@ -340,8 +340,9 @@ class RidgePlotFigureFactory:
             n_traces = len(row)
             n_labels = len(labels)
             if n_traces != n_labels:
+                # TODO: This should be handled upstream
                 if n_labels == 1:
-                    labels = list(labels) * n_traces
+                    labels = list(labels) * n_traces  # noqa: PLW2901
                 else:
                     raise ValueError(
                         f"Mismatch between number of traces ({n_traces}) and "

@@ -46,7 +46,7 @@ def test_estimate_densities() -> None:
     assert len(densities) == 2
     for densities_row in densities:
         assert len(densities_row) == 1
-        density_trace = tuple(densities_row)[0]
+        density_trace = next(iter(densities_row))
         x, y = zip(*density_trace)
         assert x == tuple(range(7))
         assert np.argmax(y) == 3

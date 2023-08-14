@@ -101,7 +101,7 @@ class TestLazyMapping:
         lm = LazyMapping(loader=lambda: target_mapping)
         assert lm.items() == target_mapping.items()
         # test: __getitem__
-        for k in target_mapping.keys():
+        for k in target_mapping:
             assert lm[k] == target_mapping[k]
         # test: __iter__
         assert tuple(lm) == tuple(target_mapping)

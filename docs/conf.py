@@ -6,7 +6,7 @@ from pprint import pformat
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata  # type: ignore
+    import importlib_metadata  # type: ignore[import, no-redef]
 
 from compile_plotly_charts import compile_plotly_charts
 
@@ -28,7 +28,7 @@ project = project_name = metadata["name"]
 author = metadata["author"]
 release = metadata["version"]
 version = ".".join(release.split(".")[:2])
-project_copyright = f"2021 - {datetime.today().year}, {author}"
+project_copyright = f"2021 - {datetime.today().year}, {author}"  # noqa: DTZ002
 
 master_doc = "index"
 language = "en"
@@ -123,8 +123,8 @@ meta_project_urls = metadata.get_all("project-url")
 if not meta_project_urls:
     raise RuntimeError("No project URLs found in the project metadata")
 project_urls = [(n[:-1], url) for n, url in map(str.split, meta_project_urls)]
-repo_url = [url for n, url in project_urls if n == "Source"][0]
-docs_url = [url for n, url in project_urls if n == "Documentation"][0]
+repo_url = next(url for n, url in project_urls if n == "Source")
+docs_url = next(url for n, url in project_urls if n == "Documentation")
 
 html_theme_options = {
     "sidebar_hide_name": True,
@@ -299,7 +299,7 @@ def register_jinja_functions() -> None:
     Use it in your docs like this:
     This is a Markdown block rendered at time={{ now() }}
     """
-    from jinja2.defaults import DEFAULT_NAMESPACE  # type: ignore # noqa: E402
+    from jinja2.defaults import DEFAULT_NAMESPACE  # type: ignore[import]
 
     def repo_file(file_name: str) -> str:
         return f"[{file_name}]({repo_url}/blob/main/{file_name})"
@@ -310,7 +310,7 @@ def register_jinja_functions() -> None:
     DEFAULT_NAMESPACE.update({"repo_file": repo_file, "repo_dir": repo_dir})
 
 
-def setup(app) -> None:  # type: ignore
+def setup(app) -> None:  # type: ignore[no-untyped-def]
     compile_plotly_charts()
     register_jinja_functions()
     # app.connect("html-page-context", register_jinja_functions)

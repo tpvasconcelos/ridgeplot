@@ -8,7 +8,7 @@ def patch_plotly_show() -> None:
     instead, simply call :func:`plotly.io._utils.validate_coerce_fig_to_dict()`."""
     import plotly.io
     from plotly.graph_objs import Figure
-    from plotly.io._utils import validate_coerce_fig_to_dict  # noqa
+    from plotly.io._utils import validate_coerce_fig_to_dict
 
     def wrapped(
         fig: Union[Figure, dict],
