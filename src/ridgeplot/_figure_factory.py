@@ -1,24 +1,25 @@
 from __future__ import annotations
 
 import sys
-from typing import Callable, Collection, Dict, List, Optional, Tuple, Union
 
 if sys.version_info >= (3, 8):
     from typing import Literal
 else:
     from typing_extensions import Literal
+from typing import TYPE_CHECKING
 
 from plotly import graph_objects as go
 
-from ridgeplot._colors import (
-    ColorScale,
-    apply_alpha,
-    get_color,
-    get_colorscale,
-    validate_colorscale,
-)
-from ridgeplot._types import CollectionL1, CollectionL2, Densities, Numeric
+from ridgeplot._colors import apply_alpha, get_color, get_colorscale, validate_colorscale
+from ridgeplot._types import CollectionL1, CollectionL2
 from ridgeplot._utils import normalise_min_max
+
+if TYPE_CHECKING:
+    from typing import Callable, Collection, Dict, List, Optional, Tuple, Union
+
+    from ridgeplot._colors import ColorScale
+    from ridgeplot._types import Densities, Numeric
+
 
 LabelsArray = CollectionL2[str]
 """A :data:`LabelsArray` represents the labels of traces in a ridgeplot.

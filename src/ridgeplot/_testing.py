@@ -1,13 +1,17 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Any, Dict, Optional, Union
+
+    from plotly.graph_objs import Figure
 
 
 def patch_plotly_show() -> None:
     """Patch the :func:`plotly.io.show()` function to skip any rendering steps and,
     instead, simply call :func:`plotly.io._utils.validate_coerce_fig_to_dict()`."""
     import plotly.io
-    from plotly.graph_objs import Figure
     from plotly.io._utils import validate_coerce_fig_to_dict
 
     def wrapped(

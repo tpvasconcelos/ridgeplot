@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-if sys.version_info >= (3, 8):
-    from typing import Literal
-else:
-    from typing_extensions import Literal
+if TYPE_CHECKING:
+    import sys
+
+    if sys.version_info >= (3, 8):
+        from typing import Literal
+    else:
+        from typing_extensions import Literal
 
 import pandas as pd
 

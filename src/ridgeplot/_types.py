@@ -1,14 +1,18 @@
 from __future__ import annotations
 
-import sys
-from typing import Any, Collection, Tuple, TypeVar, Union, overload
-
-if sys.version_info >= (3, 8):
-    from typing import Literal
-else:
-    from typing_extensions import Literal
+from typing import TYPE_CHECKING, Collection, Tuple, TypeVar, Union, overload
 
 import numpy as np
+
+if TYPE_CHECKING:
+    import sys
+    from typing import Any
+
+    if sys.version_info >= (3, 8):
+        from typing import Literal
+    else:
+        from typing_extensions import Literal
+
 
 # Snippet used to generate and store the image artefacts:
 # >>> def save_fig(fig, name):

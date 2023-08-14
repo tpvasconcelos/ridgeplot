@@ -1,18 +1,10 @@
 from __future__ import annotations
 
 import warnings
-from typing import Optional, Union, cast
+from typing import TYPE_CHECKING, cast
 
-import plotly.graph_objects as go
-
-from ridgeplot._colors import ColorScale
-from ridgeplot._figure_factory import (
-    Colormode,
-    LabelsArray,
-    RidgePlotFigureFactory,
-    ShallowLabelsArray,
-)
-from ridgeplot._kde import KDEBandwidth, KDEPoints, estimate_densities
+from ridgeplot._figure_factory import LabelsArray, RidgePlotFigureFactory, ShallowLabelsArray
+from ridgeplot._kde import estimate_densities
 from ridgeplot._types import (
     Densities,
     Samples,
@@ -23,6 +15,16 @@ from ridgeplot._types import (
     is_shallow_samples,
     nest_shallow_collection,
 )
+
+if TYPE_CHECKING:
+    from typing import Optional, Union
+
+    import plotly.graph_objects as go
+
+    from ridgeplot._colors import ColorScale
+    from ridgeplot._figure_factory import Colormode
+    from ridgeplot._kde import KDEBandwidth, KDEPoints
+
 
 _NOT_SET = object()
 

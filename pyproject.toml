@@ -31,7 +31,7 @@ select = [
     "EXE", # flake8-executable
     "ISC", # flake8-implicit-str-concat
     "ICN", # flake8-import-conventions
-    # "G", # flake8-logging-format
+    "G", # flake8-logging-format
     'PIE', # flake8-pie
     "T20", # flake8-print
     "PYI", # flake8-pyi
@@ -42,7 +42,7 @@ select = [
     "SLF", # flake8-self
     "SIM", # flake8-simplify
     "TID", # flake8-tidy-imports
-    # "TCH", # flake8-type-checking
+    "TCH", # flake8-type-checking
     "INT", # flake8-gettext
     # "ARG", # flake8-unused-arguments
     "PTH", # flake8-use-pathlib

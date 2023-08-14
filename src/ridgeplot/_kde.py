@@ -1,20 +1,19 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Callable, List, Union
+from typing import TYPE_CHECKING, Callable, Union
 
 import numpy as np
 import statsmodels.api as sm
 from statsmodels.sandbox.nonparametric.kernels import CustomKernel as StatsmodelsKernel
 
-from ridgeplot._types import (
-    CollectionL1,
-    Densities,
-    Numeric,
-    Samples,
-    SamplesTrace,
-    XYCoordinate,
-)
+from ridgeplot._types import CollectionL1, Numeric
+
+if TYPE_CHECKING:
+    from typing import List
+
+    from ridgeplot._types import Densities, Samples, SamplesTrace, XYCoordinate
+
 
 KDEPoints = Union[int, CollectionL1[Numeric]]
 

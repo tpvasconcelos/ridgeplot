@@ -48,7 +48,7 @@ df = df[column_names]
 # Not only does 'ridgeplot(...)' come configured with sensible defaults
 # but is also fully configurable to your own style and preference!
 fig = ridgeplot(
-    samples=df.values.T,
+    samples=df.to_numpy().T,
     bandwidth=4,
     kde_points=np.linspace(-12.5, 112.5, 500),
     colorscale="viridis",
