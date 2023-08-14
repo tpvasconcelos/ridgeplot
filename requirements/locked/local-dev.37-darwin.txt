@@ -65,7 +65,7 @@ pip-tools==6.14.0
     #   pip-compile-multi
 pipdeptree==2.9.6
     # via -r requirements/local-dev.in
-plotly==5.15.0
+plotly==5.16.0
     # via ridgeplot
 pre-commit==2.21.0
     # via -r requirements/local-dev.in
@@ -97,7 +97,7 @@ six==1.16.0
     #   python-dateutil
 statsmodels==0.13.5
     # via ridgeplot
-tenacity==8.2.2
+tenacity==8.2.3
     # via plotly
 toposort==1.10
     # via pip-compile-multi

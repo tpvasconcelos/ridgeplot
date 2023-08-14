@@ -33,7 +33,7 @@ tomli==2.0.1
     # via
     #   pyproject-api
     #   tox
-tox==4.7.0
+tox==4.8.0
     # via -r requirements\tox.in
-virtualenv==20.24.2
+virtualenv==20.24.3
     # via tox
