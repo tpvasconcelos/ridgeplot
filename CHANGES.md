@@ -7,9 +7,9 @@ Unreleased changes
 
 ### Documentation
 
-- Use the `{raw} html :file: _static/charts/<PLOT-ID>.html` directive to load the interactive Plotly graphs in the generated Sphinx docs. The generated HTML artefacts only include a `<div>` wrapper block now and the plotly.min.js is now vendored and automatically loaded via the `html_js_files` Sphinx config. ((#132)[https://github.com/tpvasconcelos/ridgeplot/pull/132])
-- Small adjustments to the example plots in the documentation. ((#132)[https://github.com/tpvasconcelos/ridgeplot/pull/132])
-- Reformat markdown files, removing all line breaks. ((#132)[https://github.com/tpvasconcelos/ridgeplot/pull/132])
+- Use the `{raw} html :file: _static/charts/<PLOT-ID>.html` directive to load the interactive Plotly graphs in the generated Sphinx docs. The generated HTML artefacts only include a `<div>` wrapper block now and the plotly.min.js is now vendored and automatically loaded via the `html_js_files` Sphinx config. ([#132](https://github.com/tpvasconcelos/ridgeplot/pull/132))
+- Small adjustments to the example plots in the documentation. ([#132](https://github.com/tpvasconcelos/ridgeplot/pull/132))
+- Reformat markdown files, removing all line breaks. ([#132](https://github.com/tpvasconcelos/ridgeplot/pull/132))
 
 ---
 
