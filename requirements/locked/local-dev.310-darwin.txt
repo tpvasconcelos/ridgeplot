@@ -22,7 +22,7 @@ bump2version==1.0.1
     # via bumpversion
 bumpversion==0.6.0
     # via -r requirements/local-dev.in
-cfgv==3.3.1
+cfgv==3.4.0
     # via pre-commit
 click==8.1.6
     # via
@@ -69,7 +69,7 @@ pip-tools==7.3.0
     #   pip-compile-multi
 pipdeptree==2.12.0
     # via -r requirements/local-dev.in
-plotly==5.15.0
+plotly==5.16.0
     # via ridgeplot
 pre-commit==3.3.3
     # via -r requirements/local-dev.in

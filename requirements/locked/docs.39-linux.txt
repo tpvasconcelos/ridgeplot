@@ -42,6 +42,7 @@ docutils==0.18.1
     # via
     #   myst-parser
     #   sphinx
+    #   sphinx-paramlinks
     #   sphinx-prompt
     #   sphinx-tabs
     #   sphinx-togglebutton
@@ -129,7 +130,7 @@ pillow==10.0.0
     # via matplotlib
 platformdirs==3.10.0
     # via apeye
-plotly==5.15.0
+plotly==5.16.0
     # via ridgeplot
 pygments==2.16.1
     # via
@@ -181,6 +182,7 @@ sphinx==7.1.2
     #   sphinx-design
     #   sphinx-inline-tabs
     #   sphinx-notfound-page
+    #   sphinx-paramlinks
     #   sphinx-prompt
     #   sphinx-remove-toctrees
     #   sphinx-sitemap
@@ -212,7 +214,7 @@ sphinx-jinja2-compat==0.2.0
     # via sphinx-toolbox
 sphinx-notfound-page==0.8.3
     # via -r requirements/docs.in
-sphinx-paramlinks==0.5.4
+sphinx-paramlinks==0.6.0
     # via -r requirements/docs.in
 sphinx-prompt==1.7.0
     # via sphinx-toolbox
@@ -248,7 +250,7 @@ tabulate==0.9.0
     # via sphinx-toolbox
 tenacity==8.2.2
     # via plotly
-tornado==6.3.2
+tornado==6.3.3
     # via livereload
 typing-extensions==4.7.1
     # via
