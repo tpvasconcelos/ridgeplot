@@ -17,12 +17,6 @@ assert PATH_DOCS.name == "docs"
 PATH_EXAMPLES = PATH_DOCS / "_examples"
 PATH_CHARTS = PATH_DOCS / "_static/charts"
 
-RAW_HTML_IFRAME_RST_TEMPLATE = """
-```{{raw}} html
-<iframe src="{src}" height="{height}" width="{width}" style="{style}"></iframe>
-```
-"""
-
 
 def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
     plot_id = example_script.stem
@@ -40,17 +34,18 @@ def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
     # Reduce the figure's margins to more tightly fit the chart
     # (only if the user hasn't already customized the margins!)
     if fig.layout.margin == go.layout.Margin():
-        fig = fig.update_layout(margin=dict(l=0, r=0, t=40, b=0))
+        t = None if fig.layout.title.text else 40
+        fig = fig.update_layout(margin=dict(l=0, r=0, t=t, b=40))
 
     html_str = fig.to_html(
-        include_plotlyjs="directory", full_html=True, div_id=f"plotly-id-{plot_id}"
+        include_plotlyjs="/_static/js/plotly.min.js",
+        full_html=False,
+        div_id=f"plotly-id-{plot_id}",
     )
 
-    # Edit the style of the <body> tag to remove the default margins
-    # (these margin values can be inherited from user agent stylesheets)
+    # Wrap the Plotly HTML in a <div> tag with a .plotly-graph-wrapper class
     soup = BeautifulSoup(html_str, "html.parser")
-    assert soup.body.style is None  # type: ignore
-    soup.body["style"] = "margin: 0; padding: 0;"  # type: ignore
+    soup.div["class"] = "plotly-graph-wrapper"  # type: ignore
     html_str = str(soup)
 
     if minify_html:
@@ -71,22 +66,9 @@ def _compile_plotly_fig(example_script: Path, minify_html: bool = True) -> None:
         engine="kaleido",
     )
 
-    src = out_path.relative_to(PATH_DOCS).as_posix()
-    raw_html_iframe_rst_snippet = RAW_HTML_IFRAME_RST_TEMPLATE.format(
-        src=src,
-        height=height,
-        width="100%",
-        style="border:none;overflow:hidden;",
-    )
-    print("Success! Copy and past the following MyST snippet to include the chart in the docs:")
-    print("=" * 80)
-    print(raw_html_iframe_rst_snippet)
-    print("=" * 80)
-    print()
-
 
 def _write_plotlyjs_bundle() -> None:
-    bundle_path = PATH_CHARTS / "plotly.min.js"
+    bundle_path = PATH_DOCS / "_static/js/plotly.min.js"
     plotlyjs = get_plotlyjs()
     bundle_path.write_text(plotlyjs, encoding="utf-8")
 

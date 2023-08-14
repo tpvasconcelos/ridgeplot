@@ -25,3 +25,10 @@ div.autosummary table {
 .sidebar-tree .toctree-l2 .reference {
     overflow-wrap: unset;
 }
+
+/* Style Plotly graphs container */
+.plotly-graph-wrapper {
+    margin: 0 auto;
+    width: 100%;
+    overflow: scroll;
+}

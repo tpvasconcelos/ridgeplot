@@ -6,7 +6,7 @@ from pprint import pformat
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata
+    import importlib_metadata  # type: ignore
 
 from compile_plotly_charts import compile_plotly_charts
 
@@ -101,7 +101,9 @@ html_css_files = [
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.1/css/brands.min.css",
 ]
 
-html_js_files = []
+html_js_files = [
+    "js/plotly.min.js",
+]
 
 # -- Options for HTML output -----------------------------------------------------------------------
 
@@ -117,7 +119,10 @@ html_logo = "_static/img/logo-wide.png"
 html_sourcelink_suffix = ""
 html_last_updated_fmt = ""
 
-project_urls = [(n[:-1], url) for n, url in map(str.split, metadata.get_all("project-url"))]
+meta_project_urls = metadata.get_all("project-url")
+if not meta_project_urls:
+    raise RuntimeError("No project URLs found in the project metadata")
+project_urls = [(n[:-1], url) for n, url in map(str.split, meta_project_urls)]
 repo_url = [url for n, url in project_urls if n == "Source"][0]
 docs_url = [url for n, url in project_urls if n == "Documentation"][0]
 
@@ -282,7 +287,7 @@ myst_substitutions = {"some_jinja2_key": "value"}
 # -- custom setup steps ------------------------------------------------------------
 
 
-def register_jinja_functions():
+def register_jinja_functions() -> None:
     """Add custom functions to the jinja context
     For example, you can define the following function:
     >>> def now() -> str:
@@ -294,18 +299,18 @@ def register_jinja_functions():
     Use it in your docs like this:
     This is a Markdown block rendered at time={{ now() }}
     """
-    from jinja2.defaults import DEFAULT_NAMESPACE  # noqa: E402
+    from jinja2.defaults import DEFAULT_NAMESPACE  # type: ignore # noqa: E402
 
-    def repo_file(file_name):
+    def repo_file(file_name: str) -> str:
         return f"[{file_name}]({repo_url}/blob/main/{file_name})"
 
-    def repo_dir(dir_name):
+    def repo_dir(dir_name: str) -> str:
         return f"[{dir_name}]({repo_url}/tree/main/{dir_name})"
 
     DEFAULT_NAMESPACE.update({"repo_file": repo_file, "repo_dir": repo_dir})
 
 
-def setup(app):
+def setup(app) -> None:  # type: ignore
     compile_plotly_charts()
     register_jinja_functions()
     # app.connect("html-page-context", register_jinja_functions)
