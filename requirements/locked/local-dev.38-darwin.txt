@@ -22,9 +22,9 @@ bump2version==1.0.1
     # via bumpversion
 bumpversion==0.6.0
     # via -r requirements/local-dev.in
-cfgv==3.3.1
+cfgv==3.4.0
     # via pre-commit
-click==8.1.6
+click==8.1.7
     # via
     #   pip-compile-multi
     #   pip-tools
@@ -67,9 +67,9 @@ pip-tools==7.3.0
     # via
     #   -r requirements/local-dev.in
     #   pip-compile-multi
-pipdeptree==2.12.0
+pipdeptree==2.13.0
     # via -r requirements/local-dev.in
-plotly==5.15.0
+plotly==5.16.1
     # via ridgeplot
 pre-commit==3.3.3
     # via -r requirements/local-dev.in
@@ -106,7 +106,7 @@ stack-data==0.6.2
     # via ipython
 statsmodels==0.14.0
     # via ridgeplot
-tenacity==8.2.2
+tenacity==8.2.3
     # via plotly
 toposort==1.10
     # via pip-compile-multi
@@ -126,7 +126,7 @@ wheel==0.41.1
 # The following packages are considered to be unsafe in a requirements file:
 pip==23.2.1
     # via pip-tools
-setuptools==68.0.0
+setuptools==68.1.2
     # via
     #   nodeenv
     #   pip-tools
