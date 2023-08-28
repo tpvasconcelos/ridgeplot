@@ -47,7 +47,7 @@ pyproject-hooks==1.0.0
     # via build
 pywin32-ctypes==0.2.2
     # via keyring
-readme-renderer==40.0
+readme-renderer==41.0
     # via twine
 requests==2.31.0
     # via
