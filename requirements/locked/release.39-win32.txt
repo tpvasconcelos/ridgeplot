@@ -7,7 +7,7 @@
 #
 bleach==6.0.0
     # via readme-renderer
-build==0.10.0
+build==1.0.0
     # via -r requirements\release.in
 certifi==2023.7.22
     # via requests
@@ -21,6 +21,7 @@ idna==3.4
     # via requests
 importlib-metadata==6.8.0
     # via
+    #   build
     #   keyring
     #   twine
 jaraco-classes==3.3.0
@@ -45,7 +46,7 @@ pyproject-hooks==1.0.0
     # via build
 pywin32-ctypes==0.2.2
     # via keyring
-readme-renderer==40.0
+readme-renderer==41.0
     # via twine
 requests==2.31.0
     # via

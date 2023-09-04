@@ -10,19 +10,19 @@
     # via -r requirements/local-dev.in
 appdirs==1.4.4
     # via ptpython
-asttokens==2.2.1
+asttokens==2.3.0
     # via stack-data
 backcall==0.2.0
     # via ipython
-build==0.10.0
+build==1.0.0
     # via pip-tools
 bump2version==1.0.1
     # via bumpversion
 bumpversion==0.6.0
     # via -r requirements/local-dev.in
-cfgv==3.3.1
+cfgv==3.4.0
     # via pre-commit
-click==8.1.6
+click==8.1.7
     # via
     #   pip-compile-multi
     #   pip-tools
@@ -30,8 +30,10 @@ decorator==5.1.1
     # via ipython
 executing==1.2.0
     # via stack-data
-identify==2.5.26
+identify==2.5.27
     # via pre-commit
+importlib-metadata==6.8.0
+    # via build
 ipython==8.12.2
     # via -r requirements/local-dev.in
 jedi==0.19.0
@@ -65,11 +67,11 @@ pip-tools==7.3.0
     # via
     #   -r requirements/local-dev.in
     #   pip-compile-multi
-pipdeptree==2.12.0
+pipdeptree==2.13.0
     # via -r requirements/local-dev.in
-plotly==5.15.0
+plotly==5.16.1
     # via ridgeplot
-pre-commit==3.3.3
+pre-commit==3.4.0
     # via -r requirements/local-dev.in
 prompt-toolkit==3.0.39
     # via
@@ -104,7 +106,7 @@ stack-data==0.6.2
     # via ipython
 statsmodels==0.14.0
     # via ridgeplot
-tenacity==8.2.2
+tenacity==8.2.3
     # via plotly
 toposort==1.10
     # via pip-compile-multi
@@ -112,19 +114,19 @@ traitlets==5.9.0
     # via
     #   ipython
     #   matplotlib-inline
-typing-extensions==4.7.1
-    # via ipython
 tzdata==2023.3
     # via pandas
 wcwidth==0.2.6
     # via prompt-toolkit
-wheel==0.41.1
+wheel==0.41.2
     # via pip-tools
+zipp==3.16.2
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 pip==23.2.1
     # via pip-tools
-setuptools==68.0.0
+setuptools==68.1.2
     # via
     #   nodeenv
     #   pip-tools
