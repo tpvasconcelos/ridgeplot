@@ -37,7 +37,7 @@ prune docs/build
 # Misc
 include bin/tox
 recursive-include .github *.yaml
-recursive-include misc *.py *.ipynb
+recursive-include misc *.py *.ipynb *.txt
 recursive-include requirements *.txt *.in *.md
 recursive-include bin *.py
 recursive-include tests *.py
