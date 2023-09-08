@@ -40,7 +40,8 @@ def main() -> None:
         all_colorscales_rgb[name.lower()] = colorscale_rgb
 
     with _PATH_TO_COLORS_JSON.open(mode="w") as _colors_json:
-        json.dump(all_colorscales_rgb, _colors_json, indent=2)
+        json.dump(all_colorscales_rgb, _colors_json, indent=2, sort_keys=True)
+        _colors_json.write("\n")
 
 
 if __name__ == "__main__":
