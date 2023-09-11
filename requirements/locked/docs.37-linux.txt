@@ -9,7 +9,7 @@
     # via -r requirements/docs.in
 alabaster==0.7.13
     # via sphinx
-apeye==1.4.0
+apeye==1.4.1
     # via sphinx-toolbox
 apeye-core==1.1.4
     # via apeye
@@ -40,6 +40,7 @@ docutils==0.18.1
     # via
     #   myst-parser
     #   sphinx
+    #   sphinx-paramlinks
     #   sphinx-tabs
     #   sphinx-togglebutton
     #   sphinx-toolbox
@@ -78,7 +79,7 @@ jinja2==3.1.2
     #   sphinx-jinja2-compat
 kaleido==0.2.1
     # via -r requirements/docs.in
-kiwisolver==1.4.4
+kiwisolver==1.4.5
     # via matplotlib
 livereload==2.6.3
     # via sphinx-autobuild
@@ -128,7 +129,7 @@ pillow==9.5.0
     # via matplotlib
 platformdirs==3.10.0
     # via apeye
-plotly==5.15.0
+plotly==5.16.1
     # via ridgeplot
 pygments==2.16.1
     # via
@@ -142,7 +143,7 @@ python-dateutil==2.8.2
     # via
     #   matplotlib
     #   pandas
-pytz==2023.3
+pytz==2023.3.post1
     # via
     #   babel
     #   pandas
@@ -182,6 +183,7 @@ sphinx==5.3.0
     #   sphinx-design
     #   sphinx-inline-tabs
     #   sphinx-notfound-page
+    #   sphinx-paramlinks
     #   sphinx-prompt
     #   sphinx-remove-toctrees
     #   sphinx-sitemap
@@ -208,13 +210,13 @@ sphinx-jinja2-compat==0.2.0
     # via sphinx-toolbox
 sphinx-notfound-page==0.8.3
     # via -r requirements/docs.in
-sphinx-paramlinks==0.5.4
+sphinx-paramlinks==0.6.0
     # via -r requirements/docs.in
 sphinx-prompt==1.5.0
     # via sphinx-toolbox
 sphinx-remove-toctrees==0.0.3
     # via -r requirements/docs.in
-sphinx-sitemap==2.5.0
+sphinx-sitemap==2.5.1
     # via -r requirements/docs.in
 sphinx-tabs==3.4.1
     # via sphinx-toolbox
@@ -242,7 +244,7 @@ statsmodels==0.13.5
     # via ridgeplot
 tabulate==0.9.0
     # via sphinx-toolbox
-tenacity==8.2.2
+tenacity==8.2.3
     # via plotly
 tornado==6.2
     # via livereload
@@ -262,7 +264,7 @@ urllib3==2.0.4
     # via requests
 webencodings==0.5.1
     # via html5lib
-wheel==0.41.1
+wheel==0.41.2
     # via sphinx-togglebutton
 zipp==3.15.0
     # via importlib-metadata
