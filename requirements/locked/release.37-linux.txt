@@ -7,7 +7,7 @@
 #
 bleach==6.0.0
     # via readme-renderer
-build==0.10.0
+build==1.0.3
     # via -r requirements/release.in
 certifi==2023.7.22
     # via requests
@@ -64,7 +64,7 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.5.2
+rich==13.5.3
     # via twine
 secretstorage==3.3.3
     # via keyring

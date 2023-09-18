@@ -5,9 +5,7 @@
 #
 #    pip-compile-multi
 #
-bleach==6.0.0
-    # via readme-renderer
-build==0.10.0
+build==1.0.3
     # via -r requirements/release.in
 certifi==2023.7.22
     # via requests
@@ -23,6 +21,7 @@ idna==3.4
     # via requests
 importlib-metadata==6.8.0
     # via
+    #   build
     #   keyring
     #   twine
 importlib-resources==6.0.1
@@ -41,6 +40,8 @@ mdurl==0.1.2
     # via markdown-it-py
 more-itertools==10.1.0
     # via jaraco-classes
+nh3==0.2.14
+    # via readme-renderer
 packaging==23.1
     # via build
 pkginfo==1.9.6
@@ -53,7 +54,7 @@ pygments==2.16.1
     #   rich
 pyproject-hooks==1.0.0
     # via build
-readme-renderer==40.0
+readme-renderer==42.0
     # via twine
 requests==2.31.0
     # via
@@ -63,12 +64,10 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.5.2
+rich==13.5.3
     # via twine
 secretstorage==3.3.3
     # via keyring
-six==1.16.0
-    # via bleach
 tomli==2.0.1
     # via
     #   build
@@ -81,8 +80,6 @@ urllib3==2.0.4
     # via
     #   requests
     #   twine
-webencodings==0.5.1
-    # via bleach
 zipp==3.16.2
     # via
     #   importlib-metadata
