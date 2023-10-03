@@ -73,7 +73,7 @@ tomli==2.0.1
     #   pyproject-hooks
 twine==4.0.2
     # via -r requirements/release.in
-urllib3==2.0.4
+urllib3==2.0.6
     # via
     #   requests
     #   twine

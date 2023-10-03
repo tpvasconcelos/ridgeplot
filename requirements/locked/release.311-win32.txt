@@ -61,7 +61,7 @@ six==1.16.0
     # via bleach
 twine==4.0.2
     # via -r requirements\release.in
-urllib3==2.0.4
+urllib3==2.0.6
     # via
     #   requests
     #   twine
