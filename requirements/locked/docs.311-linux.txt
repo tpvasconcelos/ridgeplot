@@ -120,7 +120,7 @@ pandas==2.0.3
     # via statsmodels
 patsy==0.5.3
     # via statsmodels
-pillow==10.0.0
+pillow==10.0.1
     # via matplotlib
 platformdirs==3.10.0
     # via apeye
