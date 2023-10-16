@@ -16,9 +16,9 @@ pandas-stubs==1.2.0.62
     # via -r requirements\mypy.in
 typed-ast==1.5.5
     # via mypy
-types-beautifulsoup4==4.12.0.5
+types-beautifulsoup4==4.12.0.6
     # via -r requirements\mypy.in
 types-html5lib==1.1.11.15
     # via types-beautifulsoup4
-types-pytz==2023.3.0.0
+types-pytz==2023.3.1.1
     # via -r requirements\mypy.in
