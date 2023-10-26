@@ -235,7 +235,7 @@ class RidgePlotFigureFactory:
             ),
         )
 
-    def update_layout(self, y_ticks: list) -> None:
+    def update_layout(self, y_ticks: List[float]) -> None:
         """Update figure's layout."""
         # TODO: Fix hover information
         self.fig.update_layout(

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import platform
 import subprocess
 import sys
@@ -89,25 +90,43 @@ def get_sys_platform() -> str:
     return sys.platform
 
 
-@dataclass
-class ToxEnvMarkers:
-    """Set the environment markers used in tox.ini to determine which locked
-    requirements file to use.
+def get_cibw_platform() -> str:
+    """Get the platform name used by cibuildwheel.
 
-    Take a look at the tox.ini file to see how these are used.
+    This is used by the cibuildwheel package to determine which wheels to build.
+    """
+    if sys.platform.startswith("linux"):
+        return "linux"
+    elif sys.platform == "darwin":
+        return "macos"
+    elif sys.platform == "win32":
+        return "windows"
+    else:
+        raise ValueError(f"Unsupported platform: {platform!r}")
+
+
+@dataclass
+class ToxEnvVariables:
+    """Set the environment variables used in tox.ini.
+
+    PY_PYTHON_VERSION and PY_SYS_PLATFORM are used to determine which locked
+    requirements file to use, while CIBW_PLATFORM is used by cibuildwheel to
+    determine which wheels to build.
+
+    Take a look inside tox.ini for more details.
     """
 
     PY_PYTHON_VERSION: str = field(default_factory=get_py_version)
     PY_SYS_PLATFORM: str = field(default_factory=get_sys_platform)
+    CIBW_PLATFORM: str = field(default_factory=get_cibw_platform)
 
     def set_env(self) -> None:
-        import os
-
-        env_markers = (
+        env_vars = (
             ("PY_PYTHON_VERSION", self.PY_PYTHON_VERSION),
             ("PY_SYS_PLATFORM", self.PY_SYS_PLATFORM),
+            ("CIBW_PLATFORM", self.CIBW_PLATFORM),
         )
-        for name, value in env_markers:
+        for name, value in env_vars:
             if name in os.environ:
                 print(
                     f"Not setting {name} to {value!r}, as it is already set to {os.environ[name]!r}"
@@ -117,8 +136,8 @@ class ToxEnvMarkers:
             os.environ[name] = value
 
 
-def set_tox_env_markers() -> None:
-    ToxEnvMarkers().set_env()
+def set_tox_env_variables() -> None:
+    ToxEnvVariables().set_env()
 
 
 ANSI_RED = "\033[31m"

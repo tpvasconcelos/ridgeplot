@@ -2,11 +2,11 @@
 import sys
 
 # isort: split
-from utils import run_subprocess, set_tox_env_markers
+from utils import run_subprocess, set_tox_env_variables
 
 
 def main() -> None:
-    set_tox_env_markers()
+    set_tox_env_variables()
     run_subprocess(popen_args=["tox", *sys.argv[1:]])
 
 

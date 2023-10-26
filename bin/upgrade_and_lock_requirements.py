@@ -2,12 +2,18 @@
 from pathlib import Path
 
 # isort: split
-from utils import ToxEnvMarkers, run_subprocess
+from utils import ToxEnvVariables, run_subprocess
+
+
+def get_env_tag() -> str:
+    tox_env_vars = ToxEnvVariables()
+    py_version = tox_env_vars.PY_PYTHON_VERSION
+    sys_platform = tox_env_vars.PY_SYS_PLATFORM
+    return f"{py_version}-{sys_platform}"
 
 
 def main() -> None:
-    tems = ToxEnvMarkers()
-    env_tag = f"{tems.PY_PYTHON_VERSION}-{tems.PY_SYS_PLATFORM}"
+    env_tag = get_env_tag()
     popen_args = [
         "pip-compile-multi",
         "--upgrade",

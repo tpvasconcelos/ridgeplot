@@ -16,6 +16,9 @@ include CONTRIBUTING.md
 # Stubs
 recursive-include src py.typed *.pyi
 
+# Cython
+recursive-include src *.pyx *.pxd
+
 # Data files
 include src/ridgeplot/colors.json
 recursive-include src/ridgeplot/datasets/data *.csv

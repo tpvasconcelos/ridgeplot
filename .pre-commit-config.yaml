@@ -1,10 +1,12 @@
+default_language_version:
+    python: python3.7
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
       - id: check-added-large-files
         args: [ '--maxkb=500' ]
-      - id: check-ast
       - id: check-executables-have-shebangs
       - id: check-json
       - id: check-merge-conflict
@@ -13,13 +15,18 @@ repos:
       - id: check-toml
       - id: check-vcs-permalinks
       - id: check-yaml
-      - id: debug-statements
       - id: destroyed-symlinks
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: fix-byte-order-marker
       - id: pretty-format-json
-        args: [ --autofix ]
+        args: [ --autofix, --no-sort-keys ]
+        # ignore all jupyter notebooks
+        exclude: ^.*\.ipynb$
+      - id: pretty-format-json
+        args: [ --autofix, --no-sort-keys, --indent=1, --no-ensure-ascii ]
+        # only jupyter notebooks
+        files: ^.*\.ipynb$
       - id: trailing-whitespace
         exclude: .bumpversion.cfg
 
@@ -30,15 +37,15 @@ repos:
         args: [ "-L", "probly" ]
         exclude: "^docs/_static/.*.js$"
 
-  - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.13
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.6
     hooks:
-      - id: validate-pyproject
+      - id: shellcheck
 
   # mdformat is not enabled by default, but can be run manually with:
   #   pre-commit run mdformat --all-files --hook-stage manual
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.16
+    rev: 0.7.17
     hooks:
       - id: mdformat
         stages: [ manual ]
@@ -48,11 +55,17 @@ repos:
           - mdformat-gfm
           - mdformat-myst
 
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.14
+    hooks:
+      - id: validate-pyproject
+
   - repo: https://github.com/mgedmin/check-manifest
     rev: "0.49"
     hooks:
       - id: check-manifest
         args: [ --no-build-isolation ]
+        additional_dependencies: [ Cython ]
 
   # TODO: Add this back in once we can reconcile the different locked files into a single one
   # - repo: https://github.com/peterdemin/pip-compile-multi
@@ -61,18 +74,26 @@ repos:
   #     - id: pip-compile-multi-verify
   #       args: [ --backtracking, --out-ext, 38-darwin.txt ]
 
-  - repo: https://github.com/psf/black
-    rev: 23.7.0
+  - repo: https://github.com/MarcoGorelli/cython-lint
+    rev: v0.15.0
     hooks:
-      - id: black
+      - id: cython-lint
+      - id: double-quote-cython-strings
 
   - repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.15.0
+    rev: 1.16.0
     hooks:
       - id: blacken-docs
 
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 23.9.1
+    hooks:
+      - id: black
+      - id: black-jupyter
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.284
+    rev: v0.0.290
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]
+        types_or: [ python, pyi, jupyter ]
