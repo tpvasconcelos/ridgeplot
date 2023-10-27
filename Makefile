@@ -2,7 +2,7 @@
 # >>>  Variables
 # ==============================================================
 
-BASE_PYTHON ?= python3.7
+BASE_PYTHON ?= python3.8
 
 VENV_PATH := .venv
 VENV_BIN  := $(VENV_PATH)/bin

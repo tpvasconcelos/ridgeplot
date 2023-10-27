@@ -36,10 +36,10 @@ The following command will 1) create a new virtual environment (under `.venv`), 
 make init
 ```
 
-The default and **recommended** base python is `python3.7` . You can change this by exporting the `BASE_PYTHON` environment variable. For instance, if you are having issues installing scientific packages on macOS for python 3.7, you can try python 3.8 instead:
+The default and **recommended** base python is `python3.8`. You can change this by exporting the `BASE_PYTHON` environment variable:
 
 ```shell
-BASE_PYTHON=python3.8 make init
+BASE_PYTHON=python3.12 make init
 ```
 
 If you need to use jupyter-lab, you can install all extra requirements, as well as set up the environment and jupyter kernel with
