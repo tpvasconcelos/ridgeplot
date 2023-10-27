@@ -2139,7 +2139,7 @@ static const char __pyx_k_asyncio_coroutines[] = "asyncio.coroutines";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_ridgeplot__missing[] = "ridgeplot._missing";
 static const char __pyx_k_src_ridgeplot__missing_pyx[] = "src/ridgeplot/_missing.pyx";
-static const char __pyx_k_This_implementation_was_mainly[] = "\n    This implementation was mainly inspired by the discussions on the\n    `typing #236`_ and `pandas #40397`_ issues, and on the current\n    implementation of `pandas._libs.lib._NoDefault`_.\n\n    For reference, here are other discussions and implementation options that\n    were considered:\n\n    - `numpy #7844`_\n    - `numpy #16241`_\n    - `numpy._globals._NoValueType`_\n    - `dataclasses.MISSING`_\n\n    References\n    ----------\n    .. _typing #236: https://github.com/python/typing/issues/236\n    .. _pandas #40397: https://github.com/pandas-dev/pandas/issues/40397\n    .. _pandas._libs.lib._NoDefault: https://github.com/pandas-dev/pandas/blob/faeedade7966d6f2a5b601c26205a71362913c47/pandas/_libs/lib.pyx#L2817-L2829\n    .. _numpy #7844: https://github.com/numpy/numpy/issues/7844\n    .. _numpy #16241: https://github.com/numpy/numpy/pull/16241\n    .. _numpy._globals._NoValueType: https://github.com/numpy/numpy/blob/57e80500f3998d62e2da459e487f8682bffa9454/numpy/_globals.py\n    .. _dataclasses.MISSING: https://github.com/python/cpython/blob/403ab1306a6e9860197bce57eadcb83418966f21/Lib/dataclasses.py#L182-L186\n    ";
+static const char __pyx_k_A_singleton_class_that_represen[] = "\n    A singleton class that represents a missing value.\n\n    This implementation was mainly inspired by the discussions in\n    `#236 (typing)`_ and `#40397 (pandas)`_, and on the current\n    implementation of `pandas._libs.lib._NoDefault`_.\n\n    For reference, here are other discussions and implementations that\n    were also considered:\n\n    - `PEP 484 - Support for singleton types in unions`_\n    - `#7844 (numpy)`_\n    - `#16241 (numpy)`_\n    - `numpy._globals._NoValueType`_\n    - `dataclasses.MISSING`_\n\n    .. _#236 (typing): https://github.com/python/typing/issues/236\n    .. _#40397 (pandas): https://github.com/pandas-dev/pandas/issues/40397\n    .. _pandas._libs.lib._NoDefault: https://github.com/pandas-dev/pandas/blob/faeedade7966d6f2a5b601c26205a71362913c47/pandas/_libs/lib.pyx#L2817-L2829  # no-cython-lint\n    .. _PEP 484 - Support for singleton types in unions: https://peps.python.org/pep-0484/#support-for-singleton-types-in-unions  # no-cython-lint\n    .. _#7844 (numpy): https://github.com/numpy/numpy/issues/7844\n    .. _#16241 (numpy): https://github.com/numpy/numpy/pull/16241\n    .. _numpy._globals._NoValueType: https://github.com/numpy/numpy/blob/57e80500f3998d62e2da459e487f8682bffa9454/numpy/_globals.py  # no-cython-lint\n    .. _dataclasses.MISSING: https://github.com/python/cpython/blob/403ab1306a6e9860197bce57eadcb83418966f21/Lib/dataclasses.py#L182-L186  # no-cython-lint\n    ";
 /* #### Code section: decls ### */
 static PyObject *__pyx_pf_9ridgeplot_8_missing_8_Missing___repr__(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_self); /* proto */
 /* #### Code section: late_includes ### */
@@ -2172,6 +2172,7 @@ typedef struct {
   #if CYTHON_USE_MODULE_STATE
   #endif
   PyObject *__pyx_n_s_;
+  PyObject *__pyx_kp_s_A_singleton_class_that_represen;
   PyObject *__pyx_n_s_Enum;
   PyObject *__pyx_n_s_Literal;
   PyObject *__pyx_kp_s_MISSING;
@@ -2179,7 +2180,6 @@ typedef struct {
   PyObject *__pyx_n_s_Missing;
   PyObject *__pyx_n_s_MissingType;
   PyObject *__pyx_n_s_Missing___repr;
-  PyObject *__pyx_kp_s_This_implementation_was_mainly;
   PyObject *__pyx_kp_u__2;
   PyObject *__pyx_n_s__6;
   PyObject *__pyx_n_s_asyncio_coroutines;
@@ -2261,6 +2261,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_FusedFunctionType);
   #endif
   Py_CLEAR(clear_module_state->__pyx_n_s_);
+  Py_CLEAR(clear_module_state->__pyx_kp_s_A_singleton_class_that_represen);
   Py_CLEAR(clear_module_state->__pyx_n_s_Enum);
   Py_CLEAR(clear_module_state->__pyx_n_s_Literal);
   Py_CLEAR(clear_module_state->__pyx_kp_s_MISSING);
@@ -2268,7 +2269,6 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_Missing);
   Py_CLEAR(clear_module_state->__pyx_n_s_MissingType);
   Py_CLEAR(clear_module_state->__pyx_n_s_Missing___repr);
-  Py_CLEAR(clear_module_state->__pyx_kp_s_This_implementation_was_mainly);
   Py_CLEAR(clear_module_state->__pyx_kp_u__2);
   Py_CLEAR(clear_module_state->__pyx_n_s__6);
   Py_CLEAR(clear_module_state->__pyx_n_s_asyncio_coroutines);
@@ -2328,6 +2328,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_FusedFunctionType);
   #endif
   Py_VISIT(traverse_module_state->__pyx_n_s_);
+  Py_VISIT(traverse_module_state->__pyx_kp_s_A_singleton_class_that_represen);
   Py_VISIT(traverse_module_state->__pyx_n_s_Enum);
   Py_VISIT(traverse_module_state->__pyx_n_s_Literal);
   Py_VISIT(traverse_module_state->__pyx_kp_s_MISSING);
@@ -2335,7 +2336,6 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_Missing);
   Py_VISIT(traverse_module_state->__pyx_n_s_MissingType);
   Py_VISIT(traverse_module_state->__pyx_n_s_Missing___repr);
-  Py_VISIT(traverse_module_state->__pyx_kp_s_This_implementation_was_mainly);
   Py_VISIT(traverse_module_state->__pyx_kp_u__2);
   Py_VISIT(traverse_module_state->__pyx_n_s__6);
   Py_VISIT(traverse_module_state->__pyx_n_s_asyncio_coroutines);
@@ -2405,6 +2405,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #if CYTHON_USE_MODULE_STATE
 #endif
 #define __pyx_n_s_ __pyx_mstate_global->__pyx_n_s_
+#define __pyx_kp_s_A_singleton_class_that_represen __pyx_mstate_global->__pyx_kp_s_A_singleton_class_that_represen
 #define __pyx_n_s_Enum __pyx_mstate_global->__pyx_n_s_Enum
 #define __pyx_n_s_Literal __pyx_mstate_global->__pyx_n_s_Literal
 #define __pyx_kp_s_MISSING __pyx_mstate_global->__pyx_kp_s_MISSING
@@ -2412,7 +2413,6 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_Missing __pyx_mstate_global->__pyx_n_s_Missing
 #define __pyx_n_s_MissingType __pyx_mstate_global->__pyx_n_s_MissingType
 #define __pyx_n_s_Missing___repr __pyx_mstate_global->__pyx_n_s_Missing___repr
-#define __pyx_kp_s_This_implementation_was_mainly __pyx_mstate_global->__pyx_kp_s_This_implementation_was_mainly
 #define __pyx_kp_u__2 __pyx_mstate_global->__pyx_kp_u__2
 #define __pyx_n_s__6 __pyx_mstate_global->__pyx_n_s__6
 #define __pyx_n_s_asyncio_coroutines __pyx_mstate_global->__pyx_n_s_asyncio_coroutines
@@ -2453,7 +2453,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_codeobj__5 __pyx_mstate_global->__pyx_codeobj__5
 /* #### Code section: module_code ### */
 
-/* "ridgeplot/_missing.pyx":39
+/* "ridgeplot/_missing.pyx":41
  *     MISSING = "MISSING"
  *
  *     def __repr__(self) -> str:             # <<<<<<<<<<<<<<
@@ -2514,12 +2514,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 39, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "__repr__") < 0)) __PYX_ERR(0, 39, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "__repr__") < 0)) __PYX_ERR(0, 41, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
@@ -2530,7 +2530,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__repr__", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 39, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__repr__", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 41, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -2562,7 +2562,7 @@ static PyObject *__pyx_pf_9ridgeplot_8_missing_8_Missing___repr__(CYTHON_UNUSED 
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__repr__", 1);
 
-  /* "ridgeplot/_missing.pyx":40
+  /* "ridgeplot/_missing.pyx":42
  *
  *     def __repr__(self) -> str:
  *         return "<MISSING>"             # <<<<<<<<<<<<<<
@@ -2574,7 +2574,7 @@ static PyObject *__pyx_pf_9ridgeplot_8_missing_8_Missing___repr__(CYTHON_UNUSED 
   __pyx_r = __pyx_kp_s_MISSING;
   goto __pyx_L0;
 
-  /* "ridgeplot/_missing.pyx":39
+  /* "ridgeplot/_missing.pyx":41
  *     MISSING = "MISSING"
  *
  *     def __repr__(self) -> str:             # <<<<<<<<<<<<<<
@@ -2606,6 +2606,7 @@ static PyMethodDef __pyx_methods[] = {
 static int __Pyx_CreateStringTabAndInitStrings(void) {
   __Pyx_StringTabEntry __pyx_string_tab[] = {
     {&__pyx_n_s_, __pyx_k_, sizeof(__pyx_k_), 0, 0, 1, 1},
+    {&__pyx_kp_s_A_singleton_class_that_represen, __pyx_k_A_singleton_class_that_represen, sizeof(__pyx_k_A_singleton_class_that_represen), 0, 0, 1, 0},
     {&__pyx_n_s_Enum, __pyx_k_Enum, sizeof(__pyx_k_Enum), 0, 0, 1, 1},
     {&__pyx_n_s_Literal, __pyx_k_Literal, sizeof(__pyx_k_Literal), 0, 0, 1, 1},
     {&__pyx_kp_s_MISSING, __pyx_k_MISSING, sizeof(__pyx_k_MISSING), 0, 0, 1, 0},
@@ -2613,7 +2614,6 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_Missing, __pyx_k_Missing, sizeof(__pyx_k_Missing), 0, 0, 1, 1},
     {&__pyx_n_s_MissingType, __pyx_k_MissingType, sizeof(__pyx_k_MissingType), 0, 0, 1, 1},
     {&__pyx_n_s_Missing___repr, __pyx_k_Missing___repr, sizeof(__pyx_k_Missing___repr), 0, 0, 1, 1},
-    {&__pyx_kp_s_This_implementation_was_mainly, __pyx_k_This_implementation_was_mainly, sizeof(__pyx_k_This_implementation_was_mainly), 0, 0, 1, 0},
     {&__pyx_kp_u__2, __pyx_k__2, sizeof(__pyx_k__2), 0, 1, 0, 0},
     {&__pyx_n_s__6, __pyx_k__6, sizeof(__pyx_k__6), 0, 0, 1, 1},
     {&__pyx_n_s_asyncio_coroutines, __pyx_k_asyncio_coroutines, sizeof(__pyx_k_asyncio_coroutines), 0, 0, 1, 1},
@@ -2672,17 +2672,17 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "ridgeplot/_missing.pyx":39
+  /* "ridgeplot/_missing.pyx":41
  *     MISSING = "MISSING"
  *
  *     def __repr__(self) -> str:             # <<<<<<<<<<<<<<
  *         return "<MISSING>"
  *
  */
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
-  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_ridgeplot__missing_pyx, __pyx_n_s_repr, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_ridgeplot__missing_pyx, __pyx_n_s_repr, 41, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -3166,7 +3166,7 @@ if (!__Pyx_RefNanny) {
  *
  * class _Missing(Enum):             # <<<<<<<<<<<<<<
  *     """
- *     This implementation was mainly inspired by the discussions on the
+ *     A singleton class that represents a missing value.
  */
   __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Enum); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
@@ -3179,37 +3179,37 @@ if (!__Pyx_RefNanny) {
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_5 = __Pyx_CalculateMetaclass(NULL, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_Py3MetaclassPrepare(__pyx_t_5, __pyx_t_3, __pyx_n_s_Missing, __pyx_n_s_Missing, (PyObject *) NULL, __pyx_n_s_ridgeplot__missing, __pyx_kp_s_This_implementation_was_mainly); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 12, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_Py3MetaclassPrepare(__pyx_t_5, __pyx_t_3, __pyx_n_s_Missing, __pyx_n_s_Missing, (PyObject *) NULL, __pyx_n_s_ridgeplot__missing, __pyx_kp_s_A_singleton_class_that_represen); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   if (__pyx_t_3 != __pyx_t_2) {
     if (unlikely((PyDict_SetItemString(__pyx_t_6, "__orig_bases__", __pyx_t_2) < 0))) __PYX_ERR(0, 12, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "ridgeplot/_missing.pyx":37
+  /* "ridgeplot/_missing.pyx":39
  *     """
  *
  *     MISSING = "MISSING"             # <<<<<<<<<<<<<<
  *
  *     def __repr__(self) -> str:
  */
-  if (__Pyx_SetNameInClass(__pyx_t_6, __pyx_n_s_MISSING_2, __pyx_n_s_MISSING_2) < 0) __PYX_ERR(0, 37, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_6, __pyx_n_s_MISSING_2, __pyx_n_s_MISSING_2) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
 
-  /* "ridgeplot/_missing.pyx":39
+  /* "ridgeplot/_missing.pyx":41
  *     MISSING = "MISSING"
  *
  *     def __repr__(self) -> str:             # <<<<<<<<<<<<<<
  *         return "<MISSING>"
  *
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_return, __pyx_n_s_str) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_9ridgeplot_8_missing_8_Missing_1__repr__, 0, __pyx_n_s_Missing___repr, NULL, __pyx_n_s_ridgeplot__missing, __pyx_d, ((PyObject *)__pyx_codeobj__5)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 39, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_return, __pyx_n_s_str) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_9ridgeplot_8_missing_8_Missing_1__repr__, 0, __pyx_n_s_Missing___repr, NULL, __pyx_n_s_ridgeplot__missing, __pyx_d, ((PyObject *)__pyx_codeobj__5)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_7, __pyx_t_2);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_6, __pyx_n_s_repr, __pyx_t_7) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_6, __pyx_n_s_repr, __pyx_t_7) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "ridgeplot/_missing.pyx":12
@@ -3217,7 +3217,7 @@ if (!__Pyx_RefNanny) {
  *
  * class _Missing(Enum):             # <<<<<<<<<<<<<<
  *     """
- *     This implementation was mainly inspired by the discussions on the
+ *     A singleton class that represents a missing value.
  */
   __pyx_t_7 = __Pyx_Py3ClassCreate(__pyx_t_5, __pyx_n_s_Missing, __pyx_t_3, __pyx_t_6, NULL, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
@@ -3227,37 +3227,37 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "ridgeplot/_missing.pyx":43
+  /* "ridgeplot/_missing.pyx":45
  *
  *
  * MISSING = _Missing.MISSING             # <<<<<<<<<<<<<<
  * MissingType = Literal[_Missing.MISSING]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Missing); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 43, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Missing); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_MISSING_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 43, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_MISSING_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_MISSING_2, __pyx_t_5) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_MISSING_2, __pyx_t_5) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "ridgeplot/_missing.pyx":44
+  /* "ridgeplot/_missing.pyx":46
  *
  * MISSING = _Missing.MISSING
  * MissingType = Literal[_Missing.MISSING]             # <<<<<<<<<<<<<<
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_Literal); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_Literal); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Missing); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_Missing); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_MISSING_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_MISSING_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_MissingType, __pyx_t_3) < 0) __PYX_ERR(0, 44, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_MissingType, __pyx_t_3) < 0) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
   /* "ridgeplot/_missing.pyx":1
