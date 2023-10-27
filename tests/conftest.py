@@ -1,6 +1,11 @@
-import pytest
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from ridgeplot._testing import patch_plotly_show
+
+if TYPE_CHECKING:
+    import pytest
 
 
 def pytest_sessionstart(session: pytest.Session) -> None:

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import numpy as np
 
 from ridgeplot._kde import estimate_densities, estimate_density_trace

@@ -96,13 +96,14 @@ def get_cibw_platform() -> str:
     This is used by the cibuildwheel package to determine which wheels to build.
     """
     if sys.platform.startswith("linux"):
-        return "linux"
+        cibw_platform = "linux"
     elif sys.platform == "darwin":
-        return "macos"
+        cibw_platform = "macos"
     elif sys.platform == "win32":
-        return "windows"
+        cibw_platform = "windows"
     else:
         raise ValueError(f"Unsupported platform: {platform!r}")
+    return cibw_platform
 
 
 @dataclass

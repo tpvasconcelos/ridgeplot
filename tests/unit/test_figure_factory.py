@@ -1,11 +1,15 @@
+from __future__ import annotations
+
 from itertools import product
-from typing import Callable, TypeVar
+from typing import TYPE_CHECKING, Callable, TypeVar
 
 import numpy as np
 import pytest
 
 from ridgeplot._figure_factory import get_xy_extrema
-from ridgeplot._types import Densities, DensitiesRow
+
+if TYPE_CHECKING:
+    from ridgeplot._types import Densities, DensitiesRow
 
 _X = TypeVar("_X")
 

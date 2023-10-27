@@ -4,7 +4,7 @@ import pickle
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 if TYPE_CHECKING:
-    from typing import Dict, Optional, Union
+    from typing import Optional, Union
 
     from plotly.graph_objs import Figure
 

@@ -1,17 +1,12 @@
 # Top-level dir files not included by default
-include .bumpversion.cfg
+include Makefile
 include .coveragerc
 include .editorconfig
-include .mdformat.toml
-include .pre-commit-config.yaml
-include .readthedocs.yaml
-include Makefile
-include mypy.ini
-include pytest.ini
-include tox.ini
-include CHANGES.md
-include CODE_OF_CONDUCT.md
-include CONTRIBUTING.md
+include *.cfg
+include *.ini
+include *.md
+include *.toml
+include *.yaml
 
 # Stubs
 recursive-include src py.typed *.pyi

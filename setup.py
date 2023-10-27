@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from __future__ import annotations
+
 import os
 
 from Cython.Build import cythonize
@@ -11,7 +13,6 @@ def get_n_processes() -> int:
     if cpu_count in (None, 0, 1, 2):
         return 0
     return cpu_count - 1
-
 
 
 if __name__ == "__main__":

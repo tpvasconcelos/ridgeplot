@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pickle
 from importlib import reload
 from typing import Any
