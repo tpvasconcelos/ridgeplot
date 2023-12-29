@@ -22,6 +22,7 @@ jobs:
       - name: Run static checks with Tox
         shell: bash
         run: ./bin/tox --parallel --parallel-no-spinner -m static
+
   tests-no-cov:
     name: Software tests (without coverage)
     strategy:
@@ -47,6 +48,7 @@ jobs:
         if: matrix.os != 'ubuntu-latest'
         shell: bash
         run: ./bin/tox --parallel --parallel-no-spinner -m tests -- --no-cov
+
   tests-cov:
     name: Software tests (with coverage)
     strategy:
