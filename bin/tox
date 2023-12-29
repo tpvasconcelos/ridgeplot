@@ -1,15 +1,38 @@
 #!/usr/bin/env python
 from __future__ import annotations
 
+import os
 import sys
 
 # isort: split
-from utils import run_subprocess, set_tox_env_variables
+from utils import get_cibw_platform, get_py_version, get_sys_platform, run_subprocess
+
+
+def set_tox_env_variables() -> None:
+    """Set the environment variables used in the tox.ini file.
+
+    `PY_PYTHON_VERSION` and `PY_SYS_PLATFORM` are used to determine which
+    locked requirements file to use, while `CIBW_PLATFORM` is used by
+    cibuildwheel to determine which wheels to build.
+
+    Take a look inside tox.ini for more details.
+    """
+    env_vars = (
+        ("PY_PYTHON_VERSION", get_py_version()),
+        ("PY_SYS_PLATFORM", get_sys_platform()),
+        ("CIBW_PLATFORM", get_cibw_platform()),
+    )
+    for name, value in env_vars:
+        if name in os.environ:
+            print(f"Not setting {name} to {value!r}, as it is already set to {os.environ[name]!r}")
+            continue
+        print(f"Setting {name} to {value!r}")
+        os.environ[name] = value
 
 
 def main() -> None:
     set_tox_env_variables()
-    run_subprocess(popen_args=["tox", *sys.argv[1:]])
+    run_subprocess(["tox", *sys.argv[1:]])
 
 
 if __name__ == "__main__":

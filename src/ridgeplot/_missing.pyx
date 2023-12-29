@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-import sys
 from enum import Enum
-
-if sys.version_info >= (3, 8):
-    from typing import Literal
-else:
-    from typing_extensions import Literal
+from typing import Literal
 
 
 class _Missing(Enum):

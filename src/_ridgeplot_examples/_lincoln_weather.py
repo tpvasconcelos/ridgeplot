@@ -45,10 +45,10 @@ def main() -> go.Figure:
         xaxis_title="Temperature [F]",
         showlegend=False,
     )
-    fig.show()
 
     return fig
 
 
 if __name__ == "__main__":
-    main()
+    fig = main()
+    fig.show()

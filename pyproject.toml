@@ -3,6 +3,7 @@ requires = ["setuptools", "wheel", "Cython"]
 build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
+build-verbosity = 1
 test-command = "pytest {project}/tests/unit/test_missing.py --no-cov"
 
 [tool.black]

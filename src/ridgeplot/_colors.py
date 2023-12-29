@@ -113,7 +113,7 @@ def list_all_colorscale_names() -> List[str]:
     return sorted(_COLORSCALE_MAPPING.keys())
 
 
-def get_all_colorscale_names() -> Tuple[str, ...]:
+def get_all_colorscale_names() -> Tuple[str, ...]:  # pragma: no cover
     """Get a tuple with all available colorscale names.
 
     .. deprecated:: 0.1.21

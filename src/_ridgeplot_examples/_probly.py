@@ -57,11 +57,11 @@ def main() -> go.Figure:
         showlegend=False,
     )
 
-    # Show us the work!
-    fig.show()
-
     return fig
 
 
 if __name__ == "__main__":
-    main()
+    fig = main()
+
+    # Show us the work!
+    fig.show()

@@ -75,7 +75,7 @@ repos:
   #       args: [ --backtracking, --out-ext, 38-darwin.txt ]
 
   - repo: https://github.com/MarcoGorelli/cython-lint
-    rev: v0.15.0
+    rev: v0.16.0
     hooks:
       - id: cython-lint
       - id: double-quote-cython-strings
@@ -86,13 +86,13 @@ repos:
       - id: blacken-docs
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 23.10.1
+    rev: 23.12.1
     hooks:
       - id: black
       - id: black-jupyter
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.3
+    rev: v0.1.9
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]

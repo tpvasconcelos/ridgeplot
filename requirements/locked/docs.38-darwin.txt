@@ -15,7 +15,7 @@ apeye-core==1.1.4
     # via apeye
 autodocsumm==0.2.11
     # via sphinx-toolbox
-babel==2.13.1
+babel==2.14.0
     # via sphinx
 beautifulsoup4==4.12.2
     # via
@@ -24,15 +24,15 @@ beautifulsoup4==4.12.2
     #   sphinx-toolbox
 cachecontrol[filecache]==0.13.1
     # via sphinx-toolbox
-certifi==2023.7.22
+certifi==2023.11.17
     # via requests
-charset-normalizer==3.3.1
+charset-normalizer==3.3.2
     # via requests
 colorama==0.4.6
     # via sphinx-autobuild
 cssutils==2.9.0
     # via dict2css
-dict2css==0.3.0
+dict2css==0.3.0.post1
     # via sphinx-toolbox
 docutils==0.18.1
     # via
@@ -43,13 +43,13 @@ docutils==0.18.1
     #   sphinx-tabs
     #   sphinx-togglebutton
     #   sphinx-toolbox
-domdf-python-tools==3.7.0
+domdf-python-tools==3.8.0.post2
     # via
     #   apeye
     #   apeye-core
     #   dict2css
     #   sphinx-toolbox
-filelock==3.13.0
+filelock==3.13.1
     # via
     #   cachecontrol
     #   sphinx-toolbox
@@ -57,13 +57,13 @@ furo==2023.9.10
     # via -r requirements/docs.in
 html5lib==1.1
     # via sphinx-toolbox
-idna==3.4
+idna==3.6
     # via
     #   apeye-core
     #   requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==6.8.0
+importlib-metadata==7.0.1
     # via
     #   domdf-python-tools
     #   sphinx
@@ -89,7 +89,7 @@ mdit-py-plugins==0.4.0
     # via myst-parser
 mdurl==0.1.2
     # via markdown-it-py
-minify-html==0.11.1
+minify-html==0.15.0
     # via -r requirements/docs.in
 msgpack==1.0.7
     # via cachecontrol
@@ -111,13 +111,13 @@ packaging==23.2
     #   statsmodels
 pandas==2.0.3
     # via statsmodels
-patsy==0.5.3
+patsy==0.5.5
     # via statsmodels
-platformdirs==3.11.0
+platformdirs==4.1.0
     # via apeye
 plotly==5.18.0
     # via ridgeplot
-pygments==2.16.1
+pygments==2.17.2
     # via
     #   furo
     #   sphinx
@@ -136,7 +136,7 @@ requests==2.31.0
     #   apeye
     #   cachecontrol
     #   sphinx
-ruamel-yaml==0.18.2
+ruamel-yaml==0.18.5
     # via sphinx-toolbox
 ruamel-yaml-clib==0.2.8
     # via ruamel-yaml
@@ -176,7 +176,7 @@ sphinx==7.1.2
     #   sphinxext-opengraph
 sphinx-autobuild==2021.3.14
     # via -r requirements/docs.in
-sphinx-autodoc-typehints==1.24.0
+sphinx-autodoc-typehints==1.25.2
     # via
     #   -r requirements/docs.in
     #   sphinx-toolbox
@@ -188,7 +188,7 @@ sphinx-design==0.5.0
     # via -r requirements/docs.in
 sphinx-inline-tabs==2023.4.21
     # via -r requirements/docs.in
-sphinx-jinja2-compat==0.2.0
+sphinx-jinja2-compat==0.2.0.post1
     # via sphinx-toolbox
 sphinx-notfound-page==1.0.0
     # via -r requirements/docs.in
@@ -202,7 +202,7 @@ sphinx-sitemap==2.5.1
     # via -r requirements/docs.in
 sphinx-tabs==3.4.4
     # via sphinx-toolbox
-sphinx-thebe==0.0.9
+sphinx-thebe==0.3.0
     # via -r requirements/docs.in
 sphinx-togglebutton==0.3.2
     # via -r requirements/docs.in
@@ -220,31 +220,31 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-sphinxext-opengraph==0.9.0
+sphinxext-opengraph==0.9.1
     # via -r requirements/docs.in
-statsmodels==0.14.0
+statsmodels==0.14.1
     # via ridgeplot
 tabulate==0.9.0
     # via sphinx-toolbox
 tenacity==8.2.3
     # via plotly
-tornado==6.3.3
+tornado==6.4
     # via livereload
-typing-extensions==4.8.0
+typing-extensions==4.9.0
     # via
     #   domdf-python-tools
     #   sphinx-toolbox
 tzdata==2023.3
     # via pandas
-urllib3==2.0.7
+urllib3==2.1.0
     # via requests
 webencodings==0.5.1
     # via html5lib
-wheel==0.41.2
+wheel==0.42.0
     # via sphinx-togglebutton
 zipp==3.17.0
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==68.2.2
+setuptools==69.0.3
     # via sphinx-togglebutton

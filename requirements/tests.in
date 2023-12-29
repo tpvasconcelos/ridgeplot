@@ -1,5 +1,7 @@
 -e file:.
 
+covdefaults
 pytest
 pytest-cov
 pytest-socket
+kaleido
