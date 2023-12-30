@@ -66,5 +66,5 @@ tomli==2.0.1
     # via
     #   coverage
     #   pytest
-tzdata==2023.3
+tzdata==2023.4
     # via pandas
