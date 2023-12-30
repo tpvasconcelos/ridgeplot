@@ -118,7 +118,7 @@ traitlets==5.14.0
     #   matplotlib-inline
 typing-extensions==4.9.0
     # via ipython
-tzdata==2023.3
+tzdata==2023.4
     # via pandas
 wcwidth==0.2.12
     # via prompt-toolkit
