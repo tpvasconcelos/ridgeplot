@@ -13,6 +13,7 @@ recursive-include src py.typed *.pyi
 
 # Cython
 recursive-include src *.pyx *.pxd
+exclude src/ridgeplot/_missing.c
 
 # Data files
 include src/ridgeplot/colors.json
