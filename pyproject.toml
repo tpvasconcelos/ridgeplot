@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
 build-verbosity = 1
-before-test = "pip install -r {project}/requirements/tests.in"
+before-test = "CC=gcc CXX=g++ pip install -r {project}/requirements/tests.in"
 test-command = "pytest {project}/tests/unit/test_missing.py --no-cov"
 
 [tool.black]
