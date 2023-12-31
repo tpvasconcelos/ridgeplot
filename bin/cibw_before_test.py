@@ -8,7 +8,7 @@ from utils import get_py_version, get_sys_platform, run_subprocess
 def main() -> None:
     py_version = get_py_version()
     sys_platform = get_sys_platform()
-    test_req = f"requirements/locked/test.{py_version}-{sys_platform}.txt"
+    test_req = f"requirements/locked/tests.{py_version}-{sys_platform}.txt"
     run_subprocess(["pip", "install", "-r", test_req])
 
 
