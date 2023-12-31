@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [tool.cibuildwheel]
 skip = "cp36-* cp37-* cp38-* pp* *_ppc64le *_i686 *_s390x"
 build-verbosity = 3
-before-test = "CC=gcc CXX=g++ pip install -r {project}/requirements/tests.in"
+before-test = "bash {project}/bin/cibw_before_test.py"
 test-command = "pytest {project}/tests/unit/test_missing.py --no-cov"
 
 [tool.black]

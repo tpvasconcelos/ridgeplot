@@ -7,14 +7,10 @@ from pathlib import Path
 from utils import get_py_version, get_sys_platform, run_subprocess
 
 
-def get_out_ext() -> str:
+def main() -> None:
     py_version = get_py_version()
     sys_platform = get_sys_platform()
-    return f"{py_version}-{sys_platform}.txt"
-
-
-def main() -> None:
-    out_ext = get_out_ext()
+    out_ext = f"{py_version}-{sys_platform}.txt"
     run_subprocess(
         [
             "pip-compile-multi",
