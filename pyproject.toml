@@ -1,12 +1,6 @@
 [build-system]
-requires = ["setuptools", "wheel", "Cython"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
-
-[tool.cibuildwheel]
-skip = "cp36-* cp37-* cp38-* pp* *_ppc64le *_i686 *_s390x"
-build-verbosity = 3
-before-test = "python {project}/bin/cibw_before_test.py"
-test-command = "pytest {project}/tests/unit/test_missing.py --no-cov"
 
 [tool.black]
 line-length = 100

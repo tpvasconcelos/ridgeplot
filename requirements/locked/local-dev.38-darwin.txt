@@ -117,7 +117,9 @@ traitlets==5.14.0
     #   ipython
     #   matplotlib-inline
 typing-extensions==4.9.0
-    # via ipython
+    # via
+    #   ipython
+    #   ridgeplot
 tzdata==2023.4
     # via pandas
 wcwidth==0.2.12

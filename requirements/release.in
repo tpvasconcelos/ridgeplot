@@ -1,5 +1,3 @@
 # Requirements for building the `ridgeplot` package
-Cython
-cibuildwheel
 build
 twine

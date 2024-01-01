@@ -65,7 +65,6 @@ repos:
     hooks:
       - id: check-manifest
         args: [ --no-build-isolation ]
-        additional_dependencies: [ Cython ]
 
   # TODO: Add this back in once we can reconcile the different locked files into a single one
   # - repo: https://github.com/peterdemin/pip-compile-multi
@@ -73,12 +72,6 @@ repos:
   #   hooks:
   #     - id: pip-compile-multi-verify
   #       args: [ --backtracking, --out-ext, 38-darwin.txt ]
-
-  - repo: https://github.com/MarcoGorelli/cython-lint
-    rev: v0.16.0
-    hooks:
-      - id: cython-lint
-      - id: double-quote-cython-strings
 
   - repo: https://github.com/adamchainz/blacken-docs
     rev: 1.16.0
@@ -88,7 +81,6 @@ repos:
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 23.12.1
     hooks:
-      - id: black
       - id: black-jupyter
 
   - repo: https://github.com/astral-sh/ruff-pre-commit

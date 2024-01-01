@@ -19,22 +19,6 @@ def get_sys_platform() -> str:
     return sys.platform
 
 
-def get_cibw_platform() -> str:
-    """Get the platform name used by `cibuildwheel`.
-
-    This is used by the cibuildwheel package to determine which wheels to build.
-    """
-    if sys.platform.startswith("linux"):
-        cibw_platform = "linux"
-    elif sys.platform == "darwin":
-        cibw_platform = "macos"
-    elif sys.platform == "win32":
-        cibw_platform = "windows"
-    else:
-        raise ValueError(f"Unsupported platform: {platform!r}")
-    return cibw_platform
-
-
 ANSI_RED = "\033[31m"
 ANSI_RESET = "\033[0m"
 
