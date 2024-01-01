@@ -234,6 +234,7 @@ tornado==6.4
 typing-extensions==4.9.0
     # via
     #   domdf-python-tools
+    #   ridgeplot
     #   sphinx-toolbox
 tzdata==2023.4
     # via pandas
