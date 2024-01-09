@@ -1,4 +1,9 @@
-import plotly.graph_objects as go
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import plotly.graph_objects as go
 
 
 def main() -> go.Figure:
@@ -40,10 +45,10 @@ def main() -> go.Figure:
         xaxis_title="Temperature [F]",
         showlegend=False,
     )
-    fig.show()
 
     return fig
 
 
 if __name__ == "__main__":
-    main()
+    fig = main()
+    fig.show()

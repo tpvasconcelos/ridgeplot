@@ -1,4 +1,9 @@
-import plotly.graph_objects as go
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import plotly.graph_objects as go
 
 
 def main() -> go.Figure:
@@ -10,10 +15,10 @@ def main() -> go.Figure:
     my_samples = [rng.normal(n / 1.2, size=600) for n in range(8, 0, -1)]
     fig = ridgeplot(samples=my_samples)
     fig.update_layout(height=450, width=800)
-    fig.show()
 
     return fig
 
 
 if __name__ == "__main__":
-    main()
+    fig = main()
+    fig.show()

@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, cast
 
 from ridgeplot._figure_factory import LabelsArray, RidgePlotFigureFactory, ShallowLabelsArray
 from ridgeplot._kde import estimate_densities
+from ridgeplot._missing import MISSING, MissingType
 from ridgeplot._types import (
     Densities,
     Samples,
@@ -26,9 +27,6 @@ if TYPE_CHECKING:
     from ridgeplot._kde import KDEBandwidth, KDEPoints
 
 
-_NOT_SET = object()
-
-
 def ridgeplot(
     samples: Union[Samples, ShallowSamples, None] = None,
     densities: Union[Densities, ShallowDensities, None] = None,
@@ -41,7 +39,7 @@ def ridgeplot(
     labels: Union[LabelsArray, ShallowLabelsArray, None] = None,
     linewidth: float = 1.0,
     spacing: float = 0.5,
-    show_annotations: bool = _NOT_SET,  # type: ignore[assignment]
+    show_annotations: Union[bool, MissingType] = MISSING,
     show_yticklabels: bool = True,
     xpad: float = 0.05,
 ) -> go.Figure:
@@ -248,7 +246,7 @@ def ridgeplot(
         )
         colormode = "row-index"
 
-    if show_annotations is not _NOT_SET:
+    if show_annotations is not MISSING:
         warnings.warn(
             "The show_annotations argument has been deprecated in favor of "
             "show_yticklabels. Support for the deprecated argument will be "

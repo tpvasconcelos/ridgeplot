@@ -1,19 +1,39 @@
 [run]
-source = src/ridgeplot
 branch = True
+source =
+    ${COVERAGE_HOME-.}/src/ridgeplot
 
 [report]
 show_missing = true
+#fail_under = 100
 precision = 2
 exclude_lines =
-    pragma: no cover
-    raise AssertionError
-    raise NotImplementedError
-    if 0:
-    if False:
-    if __name__ == .__main__.:
-    if self\.debug
-    if __debug__
-    if TYPE_CHECKING:
-    @overload
-    if sys.version_info
+    # a more strict default pragma
+    \# pragma: no cover\b
+
+    # allow defensive code
+    ^\s*raise AssertionError\b
+    ^\s*raise NotImplementedError\b
+    ^\s*return NotImplemented\b
+    ^\s*raise$
+
+    # typing-related code
+    ^\s*if (False|TYPE_CHECKING):
+    : \.\.\.(\s*#.*)?$
+    ^ +\.\.\.$
+    -> ['"]?NoReturn['"]?:
+
+    # non-runnable code
+    if __name__ == ['"]__main__['"]:$
+
+    # additional platform related pragmas (see below)
+    # additional version related pragmas (see below)
+partial_branches =
+    # a more strict default pragma
+    \# pragma: no cover\b
+
+    # out platform pragmas
+    \# pragma: (nt|posix|cygwin|darwin|linux|msys|win32|cpython|pypy) (no )?cover\b
+
+    # our version pragmas
+    \# pragma: (>=?|<=?|==|!=)\d+\.\d+ cover\b

@@ -7,5 +7,9 @@ mypy
 
 # Third-party stubs
 types-beautifulsoup4
+types-python-dateutil
 types-pytz
+types-PyYAML
+types-requests
+types-tqdm
 pandas-stubs

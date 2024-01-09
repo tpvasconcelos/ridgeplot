@@ -2,7 +2,7 @@
 # >>>  Variables
 # ==============================================================
 
-BASE_PYTHON ?= python3.7
+BASE_PYTHON ?= python3.8
 
 VENV_PATH := .venv
 VENV_BIN  := $(VENV_PATH)/bin
@@ -81,17 +81,13 @@ clean-build: ## remove build artifacts
 	rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
-	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
+	find . -name '*.egg-info' -o -name '*.egg' -exec rm -fr {} +
 
 
 .PHONY: clean-pyc
 clean-pyc: ## remove Python file artifacts
 	@echo "==> Removing python file artifacts..."
-	find . -name '*.pyc' -exec rm -f {} +
-	find . -name '*.pyo' -exec rm -f {} +
-	find . -name '*~' -exec rm -f {} +
-	find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '*.pyc' -o -name '*.pyo' -o -name '*~' -o -name '__pycache__' -exec rm -fr {} +
 
 
 .PHONY: clean-ci
@@ -100,8 +96,7 @@ clean-ci: ## remove linting, testing, and coverage artifacts
 	rm -fr .tox/
 	rm -fr .pytest_cache/
 	rm -fr .mypy_cache/
-	find . -name 'coverage.xml' -exec rm -f {} +
-	find . -name '.coverage' -exec rm -f {} +
+	find . -name 'coverage.xml' -o -name '.coverage' -exec rm -fr {} +
 
 
 .PHONY: clean-venv

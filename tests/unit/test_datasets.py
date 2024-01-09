@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from ridgeplot.datasets import _DATA_DIR, load_probly
 
 

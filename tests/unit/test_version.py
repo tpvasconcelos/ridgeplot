@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def test_version() -> None:
     from ridgeplot import __version__ as v_public
     from ridgeplot._version import __version__ as v_private

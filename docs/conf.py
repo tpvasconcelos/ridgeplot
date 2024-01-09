@@ -6,7 +6,7 @@ from pprint import pformat
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata  # type: ignore[import, no-redef]
+    import importlib_metadata  # type: ignore[import-not-found, no-redef]
 
 from compile_plotly_charts import compile_plotly_charts
 
@@ -299,7 +299,7 @@ def register_jinja_functions() -> None:
     Use it in your docs like this:
     This is a Markdown block rendered at time={{ now() }}
     """
-    from jinja2.defaults import DEFAULT_NAMESPACE  # type: ignore[import]
+    from jinja2.defaults import DEFAULT_NAMESPACE  # type: ignore[import-not-found]
 
     def repo_file(file_name: str) -> str:
         return f"[{file_name}]({repo_url}/blob/main/{file_name})"
