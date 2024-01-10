@@ -5,3 +5,7 @@ pytest
 pytest-cov
 pytest-socket
 kaleido
+
+# extras/_compile_plotly_charts.py
+beautifulsoup4
+minify-html

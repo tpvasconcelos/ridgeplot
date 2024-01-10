@@ -3,8 +3,7 @@ from __future__ import annotations
 from typing import Generator
 
 import pytest
-
-from ridgeplot._testing import patch_plotly_show
+from _test_helpers import patch_plotly_show
 
 
 @pytest.fixture(autouse=True)

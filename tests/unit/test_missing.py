@@ -5,8 +5,7 @@ from importlib import reload
 from typing import Any
 
 import pytest
-
-from ridgeplot._testing import round_trip_pickle
+from _test_helpers import round_trip_pickle
 
 
 def test_repr() -> None:

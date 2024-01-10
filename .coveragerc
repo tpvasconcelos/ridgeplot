@@ -8,6 +8,9 @@ show_missing = true
 #fail_under = 100
 precision = 2
 exclude_lines =
+    # Some missing ones
+    ^\s*if sys\.version_info (>=?|<=?|==|!=) .*:$
+
     # a more strict default pragma
     \# pragma: no cover\b
 

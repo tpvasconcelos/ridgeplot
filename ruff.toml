@@ -72,6 +72,9 @@ line-length = 100
 "bin/*" = [
     "T201", # `print` found
 ]
+"extras/*" = [
+    "T201", # `print` found
+]
 "docs/*" = [
     "S101", # Use of assert detected
     "T201", # `print` found
@@ -83,7 +86,7 @@ line-length = 100
 
 [isort]
 combine-as-imports = true
-known-first-party = ["ridgeplot"]
+known-first-party = ["ridgeplot", "_ridgeplot_examples", "extras"]
 required-imports = ["from __future__ import annotations"]
 
 [pydocstyle]

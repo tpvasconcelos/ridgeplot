@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Callable
 
 import pytest
+
 from _ridgeplot_examples import ALL_EXAMPLES, normalize
 
 if TYPE_CHECKING:

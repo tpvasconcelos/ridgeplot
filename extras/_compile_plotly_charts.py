@@ -4,19 +4,17 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable
 
-from _ridgeplot_examples import ALL_EXAMPLES, normalize
 from bs4 import BeautifulSoup
 from minify_html import minify
 from plotly.offline import get_plotlyjs
+
+from _ridgeplot_examples import ALL_EXAMPLES, normalize
 
 if TYPE_CHECKING:
     import plotly.graph_objects as go
 
 
-PATH_DOCS = Path(__file__).parent
-assert PATH_DOCS.exists()
-assert PATH_DOCS.is_dir()
-assert PATH_DOCS.name == "docs"
+PATH_DOCS = Path(__file__).parent.parent / "docs"
 
 
 def _compile_plotly_fig(
@@ -68,11 +66,3 @@ def compile_plotly_charts() -> None:
     _write_plotlyjs_bundle()
     for plot_id, example_loader in ALL_EXAMPLES:
         _compile_plotly_fig(plot_id=plot_id, example_loader=example_loader)
-
-
-def main() -> None:
-    compile_plotly_charts()
-
-
-if __name__ == "__main__":
-    main()
