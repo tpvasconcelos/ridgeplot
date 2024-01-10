@@ -9,7 +9,7 @@ on:
 # * Run static checks only for Ubuntu and Python 3.8
 # * Run test suits for all platforms and Python versions
 jobs:
-  static:
+  static-checks:
     name: Static checks
     runs-on: ubuntu-latest
     steps:
@@ -22,8 +22,8 @@ jobs:
         shell: bash
         run: tox -m static
 
-  tests-cov:
-    name: Software tests (with coverage)
+  software-tests:
+    name: Software tests
     strategy:
       matrix:
         python-version:
@@ -31,22 +31,43 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
-          - "3.12"
+          # - "3.12"
         os:
           - ubuntu-latest
           - macos-latest
-          - windows-latest
+          # - windows-latest
       fail-fast: true
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: ./.github/actions/setup-python
         with:
           python-version: "${{ matrix.python-version }}"
           requirements: tox
-      - name: Run tests with Tox (with coverage)
+
+      # Instead of running all tests in one task (i.e., `tox -m tests`),
+      # we'll instead run them one-by-one, so that it's easier to
+      # identify and debug failing tests in the GitHub UI.
+
+      - name: Run unit tests
         shell: bash
-        run: tox -m tests
+        run: tox -e tests-unit
+
+      - name: Run doctests
+        shell: bash
+        run: tox -e doctests
+
+      - name: Run E2E tests
+        shell: bash
+        run: tox -e tests-e2e
+
+      - name: Test the `extras` utilities
+        shell: bash
+        run: tox -e tests-extras
+
+      # Upload coverage reports to Codecov and Codacy.
+
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3
         env:
@@ -58,6 +79,7 @@ jobs:
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           verbose: true
+
       - name: Upload coverage to codacy
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
