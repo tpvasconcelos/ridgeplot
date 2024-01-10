@@ -1,8 +1,7 @@
 # Install python package in editable mode
 -e file:.
 
-# Install other other requirement groups
--r tox.in
+tox
 
 # pre-commit and dependency management
 pre-commit

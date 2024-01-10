@@ -7,9 +7,6 @@ BASE_PYTHON ?= python3.8
 VENV_PATH := .venv
 VENV_BIN  := $(VENV_PATH)/bin
 
-PY_PYTHON_VERSION = $(shell $(VENV_BIN)/python -c 'import platform; print("".join(platform.python_version_tuple()[:2]))')
-PY_SYS_PLATFORM   = $(shell $(VENV_BIN)/python -c 'import sys; print(sys.platform)')
-
 
 # ==============================================================
 # >>>  Help (default goal)
@@ -54,7 +51,7 @@ init: clean-all install ## initialise development environment
 .PHONY: install
 install: .venv ## install all local development dependencies
 	@echo "==> Installing local development requirements..."
-	@$(VENV_BIN)/python -m pip install -r requirements/locked/local-dev.$(PY_PYTHON_VERSION)-$(PY_SYS_PLATFORM).txt
+	@$(VENV_BIN)/python -m pip install -r requirements/local-dev.txt
 	@echo "==> Installing pre-commit hooks..."
 	@$(VENV_BIN)/pre-commit install --install-hooks
 

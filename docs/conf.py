@@ -299,7 +299,7 @@ def register_jinja_functions() -> None:
     Use it in your docs like this:
     This is a Markdown block rendered at time={{ now() }}
     """
-    from jinja2.defaults import DEFAULT_NAMESPACE  # type: ignore[import-not-found]
+    from jinja2.defaults import DEFAULT_NAMESPACE
 
     def repo_file(file_name: str) -> str:
         return f"[{file_name}]({repo_url}/blob/main/{file_name})"
