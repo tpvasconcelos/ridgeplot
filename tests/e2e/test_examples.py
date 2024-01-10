@@ -28,13 +28,14 @@ def test_examples_width_height_set(plot_id: str, example_loader: Callable[[], go
     assert isinstance(fig.layout.height, int), msg
 
 
-@pytest.mark.xfail(
+@pytest.mark.skipif(
     # TODO: Fix this (i.e. re-enable these tests)!
+    condition=os.getenv("CI") is not None,
     reason=(
         "Currently breaking in CI, probably due to small "
-        "differences in output between environments."
+        "differences in output between environments. "
+        "ref: https://github.com/tpvasconcelos/ridgeplot/issues/159"
     ),
-    condition=os.getenv("CI") is not None,
 )
 @pytest.mark.parametrize(("plot_id", "example_loader"), ALL_EXAMPLES)
 def test_regressions(plot_id: str, example_loader: Callable[[], go.Figure]) -> None:
