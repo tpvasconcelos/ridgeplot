@@ -1,5 +1,3 @@
--e file:.
-
 furo
 jinja2
 kaleido
@@ -18,7 +16,6 @@ sphinx-toolbox
 sphinx_design
 sphinx_thebe
 sphinxext-opengraph
-
 # extras/_compile_plotly_charts.py
 beautifulsoup4
 minify-html

@@ -29,12 +29,11 @@ recursive-include docs/_templates *.html
 prune docs/build
 
 # Misc
-include bin/tox
 recursive-include .github *.yaml
 recursive-include bin *.py
 recursive-include extras README.md *.py
 recursive-include misc *.py *.ipynb
-recursive-include requirements *.txt *.in *.md
+recursive-include requirements *.txt
 recursive-include tests *.py
 
 # Globally excluded patterns
