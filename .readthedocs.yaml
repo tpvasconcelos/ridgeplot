@@ -10,7 +10,7 @@ build:
 
 python:
   install:
-    - requirements: requirements/locked/docs.310-linux.txt
+    - requirements: requirements/docs.txt
 
 sphinx:
   configuration: docs/conf.py
