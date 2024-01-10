@@ -7,13 +7,13 @@
 #
 -e file:.
     # via -r requirements/docs.in
-alabaster==0.7.13
+alabaster==0.7.16
     # via sphinx
 apeye==1.4.1
     # via sphinx-toolbox
 apeye-core==1.1.4
     # via apeye
-autodocsumm==0.2.11
+autodocsumm==0.2.12
     # via sphinx-toolbox
 babel==2.14.0
     # via sphinx
@@ -95,7 +95,7 @@ myst-parser==2.0.0
     # via -r requirements/docs.in
 natsort==8.4.0
     # via domdf-python-tools
-numpy==1.26.2
+numpy==1.26.3
     # via
     #   pandas
     #   patsy
@@ -109,7 +109,7 @@ packaging==23.2
     #   statsmodels
 pandas==2.1.4
     # via statsmodels
-patsy==0.5.5
+patsy==0.5.6
     # via statsmodels
 platformdirs==4.1.0
     # via apeye

@@ -210,7 +210,7 @@ def ridgeplot(
     if has_samples and has_densities:
         raise ValueError("You may not specify both `samples` and `densities` arguments!")
     if not has_samples and not has_densities:
-        raise ValueError("You have to specify one of: `samples` or `densities`")
+        raise ValueError("You must specify either `samples` or `densities`")
 
     if has_densities:
         if is_shallow_densities(densities):

@@ -8,7 +8,7 @@ try:
 except ImportError:
     import importlib_metadata  # type: ignore[import-not-found, no-redef]
 
-from compile_plotly_charts import compile_plotly_charts
+from _compile_plotly_charts import compile_plotly_charts
 
 # Configuration file for the Sphinx documentation builder.
 #

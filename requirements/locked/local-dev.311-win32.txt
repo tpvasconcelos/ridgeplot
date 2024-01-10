@@ -30,7 +30,7 @@ executing==2.0.1
     # via stack-data
 identify==2.5.33
     # via pre-commit
-ipython==8.19.0
+ipython==8.20.0
     # via -r requirements\local-dev.in
 jedi==0.19.1
     # via
@@ -40,7 +40,7 @@ matplotlib-inline==0.1.6
     # via ipython
 nodeenv==1.8.0
     # via pre-commit
-numpy==1.26.2
+numpy==1.26.3
     # via
     #   pandas
     #   patsy
@@ -51,7 +51,7 @@ pandas==2.1.4
     # via statsmodels
 parso==0.8.3
     # via jedi
-patsy==0.5.5
+patsy==0.5.6
     # via statsmodels
 pip-compile-multi==2.6.3
     # via -r requirements\local-dev.in
@@ -100,13 +100,13 @@ tenacity==8.2.3
     # via plotly
 toposort==1.10
     # via pip-compile-multi
-traitlets==5.14.0
+traitlets==5.14.1
     # via
     #   ipython
     #   matplotlib-inline
 tzdata==2023.4
     # via pandas
-wcwidth==0.2.12
+wcwidth==0.2.13
     # via prompt-toolkit
 wheel==0.42.0
     # via pip-tools

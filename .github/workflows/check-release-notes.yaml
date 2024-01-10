@@ -13,6 +13,6 @@ jobs:
       - name: Grep CHANGES.md for PR number
         if: contains(github.event.pull_request.labels.*.name, 'skip news') != true
         run: |
-          grep "(\[#${{ github.event.pull_request.number }}\](https://github.com/tpvasconcelos/ridgeplot/pull/${{ github.event.pull_request.number }}))" CHANGES.md || \
+          grep "\[#${{ github.event.pull_request.number }}\](https://github.com/tpvasconcelos/ridgeplot/pull/${{ github.event.pull_request.number }})" CHANGES.md || \
           (echo "Entry for PR #${{ github.event.pull_request.number }} missing from CHANGES.md" && \
           exit 1)

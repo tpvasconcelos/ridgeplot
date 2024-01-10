@@ -5,7 +5,7 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-### Major changes
+### Breaking changes
 
 - Dropped support for Python 3.7. ([#154](https://github.com/tpvasconcelos/ridgeplot/pull/154))
 
@@ -18,7 +18,7 @@ Unreleased changes
 ### Internals
 
 - Define a `ridgeplot._missing.MISSING` sentinel object for internal use (this replaces the multiple module-level `_MISSING = object()` sentinels). ([#154](https://github.com/tpvasconcelos/ridgeplot/pull/154))
-- Add an internal `_ridgeplot_examples` package to help with E2E testing and generating plots for the public docs. ([#154](https://github.com/tpvasconcelos/ridgeplot/pull/154))
+- Add an internal `extras/` directory to place helper modules and packages used in different CI tasks. ([#154](https://github.com/tpvasconcelos/ridgeplot/pull/154) and [#161](https://github.com/tpvasconcelos/ridgeplot/pull/161))
 
 ### CI/CD
 
