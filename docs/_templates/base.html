@@ -1,0 +1,15 @@
+{% extends "furo/base.html" %}
+
+
+{% block extrahead -%}
+  {{ super() }}
+  {#
+    The 'furo' theme places the JS files in `html_js_files` at the bottom of
+    the page. This is not ideal for Plotly.js, which needs to be loaded before
+    the Plotly charts are rendered. The workaround is to inject Plotly.js into
+    the `extrahead` Sphinx block, which is placed at the bottom of the head
+    section at the top of the page.
+  #}
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+{%- endblock extrahead %}
+git

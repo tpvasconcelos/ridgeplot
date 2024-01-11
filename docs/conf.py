@@ -109,14 +109,14 @@ html_css_files = [
     "css/versionmodified_admonitions.css",
     # FontAwesome CSS for footer icons
     # https://fontawesome.com/search
-    # "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css",
-    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.1/css/fontawesome.min.css",
-    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.1/css/brands.min.css",
+    # "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css",
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css",
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/brands.min.css",
 ]
 
-html_js_files = [
-    "js/plotly.min.js",
-]
+# NOTE: When using the 'furo' theme, the `html_js_files` will be placed at
+#       the bottom of the page. See `_templates/base.html` for details.
+# html_js_files = []
 
 # -- Options for HTML output -----------------------------------------------------------------------
 
@@ -327,12 +327,3 @@ def setup(app: Sphinx) -> None:
     compile_plotly_charts()
     register_jinja_functions()
     # app.connect("html-page-context", register_jinja_functions)
-
-    # The `html_css_files` and `html_js_files` configuration options
-    # don't seem to be working consistently between environments.
-    # The workaround here is to explicitly add all the CSS
-    # and JS files under the `_static/` directory.
-    for css_path in Path("_static/css").glob("*.css"):
-        app.add_css_file(css_path.relative_to("_static").as_posix())
-    for js_path in Path("_static/js").glob("*.js"):
-        app.add_js_file(js_path.relative_to("_static").as_posix())

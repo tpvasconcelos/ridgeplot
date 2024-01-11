@@ -26,7 +26,8 @@ def _compile_plotly_fig(
     fig = normalize(fig)
 
     html_str = fig.to_html(
-        include_plotlyjs="/_static/js/plotly.min.js",
+        # Plotly.js is already included elsewhere
+        include_plotlyjs=False,
         full_html=False,
         div_id=f"plotly-id-{plot_id}",
     )
@@ -62,8 +63,8 @@ def _write_plotlyjs_bundle() -> None:
 
 
 def compile_plotly_charts() -> None:
-    print("Writing Plotly.js bundle...")
-    _write_plotlyjs_bundle()
+    # print("Writing Plotly.js bundle...")
+    # _write_plotlyjs_bundle()
     for plot_id, example_loader in ALL_EXAMPLES:
         _compile_plotly_fig(plot_id=plot_id, example_loader=example_loader)
 
