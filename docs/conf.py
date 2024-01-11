@@ -4,11 +4,12 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from pprint import pformat
+from typing import TYPE_CHECKING
 
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata  # type: ignore[import-not-found, no-redef]
+    import importlib_metadata  # type: ignore[no-redef]
 
 try:
     from _compile_plotly_charts import compile_plotly_charts
@@ -18,6 +19,9 @@ except ModuleNotFoundError:
     # because the `extras` dir is not in the PYTHONPATH.
     sys.path.append((Path(__file__).parents[1] / "extras").resolve().as_posix())
     from _compile_plotly_charts import compile_plotly_charts
+
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -319,7 +323,16 @@ def register_jinja_functions() -> None:
     DEFAULT_NAMESPACE.update({"repo_file": repo_file, "repo_dir": repo_dir})
 
 
-def setup(app) -> None:  # type: ignore[no-untyped-def]
+def setup(app: Sphinx) -> None:
     compile_plotly_charts()
     register_jinja_functions()
     # app.connect("html-page-context", register_jinja_functions)
+
+    # The `html_css_files` and `html_js_files` configuration options
+    # don't seem to be working consistently between environments.
+    # The workaround here is to explicitly add all the CSS
+    # and JS files under the `_static/` directory.
+    for css_path in Path("_static/css").glob("*.css"):
+        app.add_css_file(css_path.relative_to("_static").as_posix())
+    for js_path in Path("_static/js").glob("*.js"):
+        app.add_js_file(js_path.relative_to("_static").as_posix())
