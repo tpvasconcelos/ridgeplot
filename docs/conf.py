@@ -8,7 +8,13 @@ try:
 except ImportError:
     import importlib_metadata  # type: ignore[import-not-found, no-redef]
 
-from _compile_plotly_charts import compile_plotly_charts
+try:
+    from _compile_plotly_charts import compile_plotly_charts
+except ModuleNotFoundError:
+    # The readthedocs runners run Sphinx via:
+    # $ python -m sphinx (...)
+    # which automatically adds ./ to the Python path (sys.path)
+    from docs._compile_plotly_charts import _compile_plotly_charts
 
 # Configuration file for the Sphinx documentation builder.
 #
