@@ -6,9 +6,20 @@ on:
       - main
   pull_request:
 
-# * Run static checks only for Ubuntu and Python 3.8
-# * Run test suits for all platforms and Python versions
+permissions:
+  pull-requests: write
+
 jobs:
+  # Build the docs and update the PR description w/ a link to readthedocs
+  # https://github.com/readthedocs/actions/tree/main/preview
+  documentation-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: readthedocs/actions/preview@v1
+        with:
+          project-slug: "readthedocs-preview"
+
+  # Run static checks only for Ubuntu and Python 3.8
   static-checks:
     name: Static checks
     runs-on: ubuntu-latest
@@ -28,6 +39,7 @@ jobs:
         shell: bash
         run: tox -e mypy
 
+  # Run test suits for all platforms and Python versions
   software-tests:
     name: Software tests
     strategy:
