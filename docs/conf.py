@@ -15,8 +15,8 @@ except ModuleNotFoundError:
     # $ python -m sphinx (...)
     # which automatically adds ./ to the Python path (sys.path)
     # So, we'll fallback to explicitly importing from the extras directory
-    from extras._compile_plotly_charts import (
-        compile_plotly_charts,  # type: ignore[import-not-found,no-redef]
+    from extras._compile_plotly_charts import (  # type: ignore[import-not-found]
+        compile_plotly_charts,  # type: ignore[no-redef]
     )
 
 # Configuration file for the Sphinx documentation builder.
