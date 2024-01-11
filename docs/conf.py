@@ -11,10 +11,11 @@ except ImportError:
 try:
     from _compile_plotly_charts import compile_plotly_charts
 except ModuleNotFoundError:
-    # The readthedocs runners run Sphinx via:
+    # bit of a hacky solution, but the readthedocs runners run Sphinx via:
     # $ python -m sphinx (...)
     # which automatically adds ./ to the Python path (sys.path)
-    from docs._compile_plotly_charts import _compile_plotly_charts
+    # So, we'll fallback to explicitly importing from the extras directory
+    from extras._compile_plotly_charts import _compile_plotly_charts
 
 # Configuration file for the Sphinx documentation builder.
 #
