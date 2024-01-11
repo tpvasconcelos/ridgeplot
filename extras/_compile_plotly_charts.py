@@ -66,3 +66,7 @@ def compile_plotly_charts() -> None:
     _write_plotlyjs_bundle()
     for plot_id, example_loader in ALL_EXAMPLES:
         _compile_plotly_fig(plot_id=plot_id, example_loader=example_loader)
+
+
+if __name__ == "__main__":
+    compile_plotly_charts()
