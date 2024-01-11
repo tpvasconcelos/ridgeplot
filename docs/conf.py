@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import sys
 from datetime import datetime
+from pathlib import Path
 from pprint import pformat
 
 try:
@@ -11,13 +13,11 @@ except ImportError:
 try:
     from _compile_plotly_charts import compile_plotly_charts
 except ModuleNotFoundError:
-    # bit of a hacky solution, but the readthedocs runners run Sphinx via:
-    # $ python -m sphinx (...)
-    # which automatically adds ./ to the Python path (sys.path)
-    # So, we'll fallback to explicitly importing from the extras directory
-    from extras._compile_plotly_charts import (  # type: ignore[import-not-found,no-redef]
-        compile_plotly_charts,
-    )
+    # When this module is run from the readthedocs build server,
+    # the _compile_plotly_charts module will not be available
+    # because the `extras` dir is not in the PYTHONPATH.
+    sys.path.append((Path(__file__).parents[1] / "extras").resolve().as_posix())
+    from _compile_plotly_charts import compile_plotly_charts
 
 # Configuration file for the Sphinx documentation builder.
 #
