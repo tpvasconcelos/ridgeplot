@@ -1,17 +1,12 @@
 # Top-level dir files not included by default
-include .bumpversion.cfg
+include Makefile
 include .coveragerc
 include .editorconfig
-include .mdformat.toml
-include .pre-commit-config.yaml
-include .readthedocs.yaml
-include Makefile
-include mypy.ini
-include pytest.ini
-include tox.ini
-include CHANGES.md
-include CODE_OF_CONDUCT.md
-include CONTRIBUTING.md
+include *.cfg
+include *.ini
+include *.md
+include *.toml
+include *.yaml
 
 # Stubs
 recursive-include src py.typed *.pyi
@@ -24,20 +19,22 @@ recursive-include src/ridgeplot/datasets/data *.csv
 include docs/Makefile
 include docs/make.bat
 include docs/robots.txt
+include docs/_static/favicon.ico
 recursive-include docs *.md *.py *.rst
-recursive-include docs/_static *.ico
+recursive-include docs/_static/charts *.html *.webp
 recursive-include docs/_static/css *.css
-recursive-include docs/_static/img *.png
+recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpg
+recursive-include docs/_static/js *.js
+recursive-include docs/_templates *.html
 recursive-include docs/examples_gallery_out *.html *.png *.md5 *.pickle *.ipynb
 prune docs/build
 
 # Misc
-include bin/tox
 recursive-include .github *.yaml
-recursive-include examples *.py *.ipynb
+recursive-include bin *.py
+recursive-include extras README.md *.py
 recursive-include misc *.py *.ipynb
-recursive-include requirements *.txt *.in *.md
-recursive-include scripts *.py tox
+recursive-include requirements *.txt
 recursive-include tests *.py
 
 # Globally excluded patterns

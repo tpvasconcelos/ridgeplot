@@ -2,13 +2,10 @@
 # >>>  Variables
 # ==============================================================
 
-BASE_PYTHON ?= python3.7
+BASE_PYTHON ?= python3.8
 
 VENV_PATH := .venv
 VENV_BIN  := $(VENV_PATH)/bin
-
-PY_PYTHON_VERSION = $(shell $(VENV_BIN)/python -c 'import platform; print("".join(platform.python_version_tuple()[:2]))')
-PY_SYS_PLATFORM   = $(shell $(VENV_BIN)/python -c 'import sys; print(sys.platform)')
 
 
 # ==============================================================
@@ -54,17 +51,16 @@ init: clean-all install ## initialise development environment
 .PHONY: install
 install: .venv ## install all local development dependencies
 	@echo "==> Installing local development requirements..."
-	@$(VENV_BIN)/python -m pip install -r requirements/locked/local-dev.$(PY_PYTHON_VERSION)-$(PY_SYS_PLATFORM).txt
+	@$(VENV_BIN)/python -m pip install -r requirements/local-dev.txt
 	@echo "==> Installing pre-commit hooks..."
 	@$(VENV_BIN)/pre-commit install --install-hooks
 
 
-.PHONY: init-jupyter
+.PHONY: jupyter-init
 jupyter-init: ## initialise a jupyterlab environment and install extensions
 	@echo "==> Setting up jupyterlab environment..."
-	@$(VENV_BIN)/python -m pip install --upgrade ipykernel jupyterlab
+	@$(VENV_BIN)/python -m pip install --upgrade ipykernel jupyter
 	@$(VENV_BIN)/python -m ipykernel install --user --name="ridgeplot"
-	@$(VENV_BIN)/python -m jupyter lab build
 
 
 # ==============================================================
@@ -79,33 +75,28 @@ clean-all: clean-ci clean-venv clean-build clean-pyc ## remove all artifacts
 .PHONY: clean-build
 clean-build: ## remove build artifacts
 	@echo "==> Removing build artifacts..."
-	@rm -fr build/
-	@rm -fr dist/
-	@rm -fr .eggs/
-	@find . -name '*.egg-info' -exec rm -fr {} +
-	@find . -name '*.egg' -exec rm -f {} +
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	find . -name '*.egg-info' -o -name '*.egg' -exec rm -fr {} +
 
 
 .PHONY: clean-pyc
 clean-pyc: ## remove Python file artifacts
 	@echo "==> Removing python file artifacts..."
-	@find . -name '*.pyc' -exec rm -f {} +
-	@find . -name '*.pyo' -exec rm -f {} +
-	@find . -name '*~' -exec rm -f {} +
-	@find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '*.pyc' -o -name '*.pyo' -o -name '*~' -o -name '__pycache__' -exec rm -fr {} +
 
 
 .PHONY: clean-ci
 clean-ci: ## remove linting, testing, and coverage artifacts
 	@echo "==> Removing lint, test, and coverage artifacts..."
-	@rm -fr .tox/
-	@rm -fr .pytest_cache
-	@rm -fr .mypy_cache/
-	@find . -name 'coverage.xml' -exec rm -f {} +
-	@find . -name '.coverage' -exec rm -f {} +
+	rm -fr .tox/
+	rm -fr .pytest_cache/
+	rm -fr .mypy_cache/
+	find . -name 'coverage.xml' -o -name '.coverage' -exec rm -fr {} +
 
 
 .PHONY: clean-venv
 clean-venv: ## remove venv artifacts
 	@echo "==> Removing virtual environment..."
-	@rm -fr .venv
+	rm -fr .venv

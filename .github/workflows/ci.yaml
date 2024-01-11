@@ -6,30 +6,88 @@ on:
       - main
   pull_request:
 
+permissions:
+  pull-requests: write
+
 jobs:
-  ci-checks:
+  # Build the docs and update the PR description w/ a link to readthedocs
+  # https://github.com/readthedocs/actions/tree/main/preview
+  documentation-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: readthedocs/actions/preview@v1
+        with:
+          project-slug: "ridgeplot"
+
+  # Run static checks only for Ubuntu and Python 3.8
+  static-checks:
+    name: Static checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-python
+        with:
+          python-version: "3.8"
+          requirements: tox
+      # Instead of running all checks in one task (i.e., `tox -m static`),
+      # we'll instead run them one-by-one, so that it's easier to
+      # identify and debug failing tests in the GitHub UI.
+      - name: Run static checks with pre-commit
+        shell: bash
+        run: tox -e pre-commit
+      - name: Run type checks with mypy
+        shell: bash
+        run: tox -e mypy
+
+  # Run test suits for all platforms and Python versions
+  software-tests:
+    name: Software tests
     strategy:
       matrix:
         python-version:
-          - "3.7"
           - "3.8"
           - "3.9"
           - "3.10"
+          - "3.11"
+          # - "3.12"
         os:
           - ubuntu-latest
           - macos-latest
-          - windows-latest
+          # - windows-latest
       fail-fast: true
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - uses: ./.github/actions/setup-python
         with:
           python-version: "${{ matrix.python-version }}"
-          requirements-prefix: tox
-      - name: Run CI checks with Tox
+          requirements: tox
+
+      # Instead of running all tests in one task (i.e., `tox -m tests`),
+      # we'll instead run them one-by-one, so that it's easier to
+      # identify and debug failing tests in the GitHub UI.
+
+      - name: Run unit tests
         shell: bash
-        run: ./bin/tox
+        run: tox -e tests-unit
+        env:
+          DIFF_AGAINST: HEAD
+
+      - name: Run doctests
+        shell: bash
+        run: tox -e doctests
+
+      - name: Run E2E tests
+        shell: bash
+        run: tox -e tests-e2e
+
+      - name: Test the `extras` utilities
+        shell: bash
+        run: tox -e tests-extras
+
+      # Upload coverage reports to Codecov and Codacy.
+
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3
         env:
@@ -38,10 +96,10 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
-          flags: unittests
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           verbose: true
+
       - name: Upload coverage to codacy
         uses: codacy/codacy-coverage-reporter-action@v1
         with:

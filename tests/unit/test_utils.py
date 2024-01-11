@@ -1,81 +1,11 @@
-from itertools import product
-from typing import Callable, Iterable, Mapping
+from __future__ import annotations
+
+from typing import Mapping
 from unittest import mock
 
-import numpy as np
 import pytest
 
-from ridgeplot._testing import id_func
-from ridgeplot._types import NestedNumericSequence
-from ridgeplot._utils import LazyMapping, get_xy_extrema, normalise_min_max
-
-
-class TestGetXYExtrema:
-    """Tests for the :func:`ridgeplot._utils.get_xy_extrema` function"""
-
-    def test_raise_for_empty_sequence(self) -> None:
-        # Fails for empty sequence
-        with pytest.raises(ValueError, match="Cannot get extrema of empty array sequence."):
-            get_xy_extrema(arrays=[])
-
-    def test_raise_for_empty_array(self) -> None:
-        # Fails if one of the arrays is empty
-        with pytest.raises(ValueError, match="Cannot get extrema of an empty array."):
-            get_xy_extrema(
-                arrays=[
-                    [[1, 2], [3, 4]],  # valid (non-empty) 2D array
-                    [[], []],  # invalid (empty) 2D array
-                ]
-            )
-
-    def test_raise_for_non_2d_array(self) -> None:
-        # Fails if one of the arrays is not 2D
-        with pytest.raises(ValueError, match="Expected 2D array, got 3D array instead."):
-            get_xy_extrema(
-                arrays=[
-                    [[1, 2], [3, 4]],  # valid 2D array
-                    [[1, 2], [3, 4], [5, 6]],  # invalid 3D array
-                ]
-            )
-
-    @pytest.mark.parametrize(
-        ("iterable_type", "array_like_type"),
-        product((id_func, tuple, list), (id_func, tuple, list, np.asarray)),
-    )
-    def test_expected_output(
-        self,
-        iterable_type: Callable[[Iterable], Iterable],
-        array_like_type: Callable[[NestedNumericSequence], NestedNumericSequence],
-    ) -> None:
-        """Test :func:`get_xy_extrema()` against a varied combination of
-        possible input types."""
-        # This tuple contains a varied set of array-like objects. Which is to show
-        # that get_xy_extrema accepts any iterable of any valid array-like objects
-        arrays: Iterable[NestedNumericSequence] = [
-            (
-                [1, 2, 3, 4],  # x_min -> 1
-                [1, 2, 3, 4],
-            ),
-            [
-                (2, 36, 4),  # x_max -> 36
-                (2, 3, 62),  # y_max -> 62
-            ],
-            np.asarray(
-                [
-                    [2, 3],
-                    [0, 1],  # y_min -> 0
-                ]
-            ),
-        ]
-        arrays = iterable_type(array_like_type(arr) for arr in arrays)
-        # The x-y extrema of the array above are:
-        expected = (
-            1,  # x_min
-            36,  # x_max
-            0,  # y_min
-            62,  # y_max
-        )
-        assert get_xy_extrema(arrays) == expected
+from ridgeplot._utils import LazyMapping, normalise_min_max
 
 
 class TestNormaliseMinMax:
@@ -85,19 +15,15 @@ class TestNormaliseMinMax:
         """Assert :func:`normalise_min_max()` fails for ``max_ <= min_`` or when ``val``
         is not in range."""
         # max_ <= min_
-        pytest.raises(ValueError, normalise_min_max, val=0.0, min_=3.0, max_=2.9).match(
-            r"max_ should be greater than min_"
-        )
-        pytest.raises(ValueError, normalise_min_max, val=0.0, min_=3.0, max_=3.0).match(
-            r"max_ should be greater than min_"
-        )
+        with pytest.raises(ValueError, match=r"max_ should be greater than min_"):
+            normalise_min_max(val=0.0, min_=3.0, max_=2.9)
+        with pytest.raises(ValueError, match=r"max_ should be greater than min_"):
+            normalise_min_max(val=0.0, min_=3.0, max_=3.0)
         # val is not in range
-        pytest.raises(ValueError, normalise_min_max, val=1.0, min_=2.0, max_=3.0).match(
-            r"val (.*) is out of bounds"
-        )
-        pytest.raises(ValueError, normalise_min_max, val=5.0, min_=2.0, max_=3.0).match(
-            r"val (.*) is out of bounds"
-        )
+        with pytest.raises(ValueError, match=r"val (.*) is out of bounds"):
+            normalise_min_max(val=1.0, min_=2.0, max_=3.0)
+        with pytest.raises(ValueError, match=r"val (.*) is out of bounds"):
+            normalise_min_max(val=5.0, min_=2.0, max_=3.0)
 
     @pytest.mark.parametrize("val", [0.0, 0.5, 1.0])
     def test_same_val_unchanged_for_range_0_to_1(self, val: float) -> None:
@@ -173,7 +99,7 @@ class TestLazyMapping:
         lm = LazyMapping(loader=lambda: target_mapping)
         assert lm.items() == target_mapping.items()
         # test: __getitem__
-        for k in target_mapping.keys():
+        for k in target_mapping:
             assert lm[k] == target_mapping[k]
         # test: __iter__
         assert tuple(lm) == tuple(target_mapping)

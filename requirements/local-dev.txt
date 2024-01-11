@@ -1,0 +1,18 @@
+# Install python package in editable mode
+-e file:.
+
+tox
+
+# pre-commit and dependency management
+pre-commit
+pip-compile-multi
+
+# Releases are still a manual process that
+# requires the use of bumpversion locally
+bumpversion
+
+# Various useful utilities for local development
+ipython
+pip-tools
+pipdeptree
+ptpython

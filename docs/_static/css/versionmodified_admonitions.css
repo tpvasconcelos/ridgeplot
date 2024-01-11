@@ -1,0 +1,99 @@
+/*
+CSS for versionmodified admonitions:
+- versionadded
+- versionchanged
+- deprecated
+*/
+div.deprecated, div.versionadded, div.versionchanged {
+    background-color: var(--color-background-primary);
+    border-left: 0.2rem solid;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, .05), 0 0 0.0625rem rgba(0, 0, 0, .1) !important;
+    margin: 0.75em auto 1em;
+    overflow: hidden;
+    padding: 0 0.6rem;
+    page-break-inside: avoid;
+    position: relative;
+    transition: color .25s, background-color .25s, border-color .25s;
+    vertical-align: middle;
+}
+
+div.deprecated {
+    border-color: var(--color-admonition-title--danger);
+}
+
+div.versionadded {
+    border-color: var(--color-admonition-title--tip);
+}
+
+div.versionchanged {
+    border-color: var(--color-admonition-title--warning);
+}
+
+div.deprecated > p, div.versionadded > p, div.versionchanged > p {
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    font-style: normal;
+}
+
+
+div.deprecated > p:before, div.versionadded > p:before, div.versionchanged > p:before {
+    content: "";
+    height: 100%;
+    left: 0;
+    opacity: .1;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+div.deprecated p:before {
+    background-color: var(--color-admonition-title-background--danger);
+}
+
+div.versionadded p:before {
+    background-color: var(--color-admonition-title-background--tip);
+}
+
+div.versionchanged p:before {
+    background-color: var(--color-admonition-title-background--warning);
+}
+
+span.versionmodified {
+    padding-left: 1.6rem;
+    font-weight: 600;
+    position: relative;
+}
+
+span.versionmodified:before {
+    background-color: var(--color-admonition-title--info);
+    -webkit-mask-image: var(--icon-info);
+    mask-image: var(--icon-info);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    content: "";
+    aspect-ratio: 1;
+    height: 19px;
+    left: 0;
+    top: 0;
+    position: absolute;
+}
+
+span.versionmodified.deprecated:before {
+    background-color: var(--color-admonition-title--danger);
+    mask-image: var(--icon-warning);
+    -webkit-mask-image: var(--icon-warning);
+}
+
+span.versionmodified.added:before {
+    background-color: var(--color-admonition-title--tip);
+    /*-webkit-mask-image: var(--icon-pencil);*/
+    /*mask-image: var(--icon-pencil);*/
+}
+
+span.versionmodified.changed:before {
+    background-color: var(--color-admonition-title--warning);
+    /*mask-image: var(--icon-warning);*/
+    /*-webkit-mask-image: var(--icon-warning);*/
+}

@@ -1,0 +1,31 @@
+furo
+jinja2
+myst-parser>=0.19.0
+sphinx
+sphinx-autobuild
+sphinx-autodoc-typehints
+sphinx-copybutton
+sphinx-inline-tabs
+sphinx-notfound-page
+sphinx-paramlinks
+sphinx-remove-toctrees
+sphinx-sitemap
+sphinx-togglebutton
+sphinx-toolbox
+sphinx_design
+sphinx_thebe
+sphinxext-opengraph
+# extras/_compile_plotly_charts.py
+beautifulsoup4
+minify-html
+
+# --- sphinx-gallery --- #
+sphinx-gallery
+# kaleido is used to export static images from plotly
+# figures, which is used by sphinx-gallery to generate
+# thumbnails for the examples gallery
+kaleido
+# matplotlib is an implicit dependency of sphinx-gallery.
+# although we don't need it for this project, we still
+# need to declare the dependency here.
+matplotlib
