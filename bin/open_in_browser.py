@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from __future__ import annotations
+
 import sys
 import webbrowser
 from pathlib import Path

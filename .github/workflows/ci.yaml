@@ -6,72 +6,88 @@ on:
       - main
   pull_request:
 
-# * Run static code checks only for Ubuntu and Python 3.8
-# * Run software tests with coverage only for Ubuntu (all Python versions)
-# * Run software tests without coverage for macOS and Windows (all Python versions)
+permissions:
+  pull-requests: write
+
 jobs:
-  static:
-    name: Static code checks
+  # Build the docs and update the PR description w/ a link to readthedocs
+  # https://github.com/readthedocs/actions/tree/main/preview
+  documentation-links:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: readthedocs/actions/preview@v1
+        with:
+          project-slug: "ridgeplot"
+
+  # Run static checks only for Ubuntu and Python 3.8
+  static-checks:
+    name: Static checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-python
         with:
           python-version: "3.8"
-          requirements-prefix: tox
-      - name: Run static checks with Tox
+          requirements: tox
+      # Instead of running all checks in one task (i.e., `tox -m static`),
+      # we'll instead run them one-by-one, so that it's easier to
+      # identify and debug failing tests in the GitHub UI.
+      - name: Run static checks with pre-commit
         shell: bash
-        run: ./bin/tox --parallel --parallel-no-spinner -m static
-  tests-no-cov:
-    name: Software tests (without coverage)
+        run: tox -e pre-commit
+      - name: Run type checks with mypy
+        shell: bash
+        run: tox -e mypy
+
+  # Run test suits for all platforms and Python versions
+  software-tests:
+    name: Software tests
     strategy:
       matrix:
         python-version:
-          - "3.7"
           - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
+          # - "3.12"
         os:
+          - ubuntu-latest
           - macos-latest
-          # FIXME: Re-enable Windows tests
           # - windows-latest
       fail-fast: true
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - uses: ./.github/actions/setup-python
         with:
           python-version: "${{ matrix.python-version }}"
-          requirements-prefix: tox
-      - name: Run tests with Tox (without coverage)
-        if: matrix.os != 'ubuntu-latest'
+          requirements: tox
+
+      # Instead of running all tests in one task (i.e., `tox -m tests`),
+      # we'll instead run them one-by-one, so that it's easier to
+      # identify and debug failing tests in the GitHub UI.
+
+      - name: Run unit tests
         shell: bash
-        run: ./bin/tox --parallel --parallel-no-spinner -m tests -- --no-cov
-  tests-cov:
-    name: Software tests (with coverage)
-    strategy:
-      matrix:
-        python-version:
-          - "3.7"
-          - "3.8"
-          - "3.9"
-          - "3.10"
-          - "3.11"
-        os:
-          - ubuntu-latest
-      fail-fast: true
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/setup-python
-        with:
-          python-version: "${{ matrix.python-version }}"
-          requirements-prefix: tox
-      - name: Run tests with Tox (with coverage)
-        if: matrix.os == 'ubuntu-latest'
+        run: tox -e tests-unit
+        env:
+          DIFF_AGAINST: HEAD
+
+      - name: Run doctests
         shell: bash
-        run: ./bin/tox --parallel --parallel-no-spinner -m tests
+        run: tox -e doctests
+
+      - name: Run E2E tests
+        shell: bash
+        run: tox -e tests-e2e
+
+      - name: Test the `extras` utilities
+        shell: bash
+        run: tox -e tests-extras
+
+      # Upload coverage reports to Codecov and Codacy.
+
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3
         env:
@@ -80,10 +96,10 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
-          flags: unittests
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           verbose: true
+
       - name: Upload coverage to codacy
         uses: codacy/codacy-coverage-reporter-action@v1
         with:

@@ -1,5 +1,0 @@
--e file:.
-
-pytest
-pytest-cov
-pytest-socket

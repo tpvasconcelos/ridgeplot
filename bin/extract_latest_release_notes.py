@@ -6,12 +6,16 @@ Execution steps:
 - The output is written to the `LATEST_RELEASE_NOTES.md` file.
 - The body of this file is then used as the body of the GitHub release.
 """
+from __future__ import annotations
+
 from pathlib import Path
-from typing import List, Sequence, cast
+from typing import TYPE_CHECKING, List, Sequence, cast
 
 from markdown_it import MarkdownIt
-from markdown_it.token import Token
 from mdformat.renderer import MDRenderer
+
+if TYPE_CHECKING:
+    from markdown_it.token import Token
 
 PATH_TO_TOP_LEVEL = Path(__file__).parent.parent
 PATH_TO_CHANGES = PATH_TO_TOP_LEVEL.joinpath("CHANGES.md")

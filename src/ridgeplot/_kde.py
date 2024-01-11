@@ -12,6 +12,8 @@ from ridgeplot._types import CollectionL1, Numeric
 if TYPE_CHECKING:
     from typing import List
 
+    import numpy.typing as npt
+
     from ridgeplot._types import Densities, Samples, SamplesTrace, XYCoordinate
 
 
@@ -31,6 +33,8 @@ def estimate_density_trace(
     For a given set of sample values, computes the kernel densities (KDE) at
     the given points.
     """
+    if not np.isfinite(trace_samples).all():  # type: ignore[call-overload]
+        raise ValueError("The samples array should not contain any infs or NaNs.")
     if isinstance(points, int):
         # By default, we'll use a 'hard' KDE span. That is, we'll
         # evaluate the densities and N equally spaced points
@@ -62,7 +66,14 @@ def estimate_density_trace(
     # using the unoptimised version (with fft = False).
     dens.fit(kernel=kernel, fft=kernel == "gau", bw=bandwidth)
     density_y = dens.evaluate(density_x)
+    _validate_densities(x=density_x, y=density_y, kernel=kernel)
 
+    return list(zip(density_x, density_y))
+
+
+def _validate_densities(
+    x: npt.NDArray[np.floating], y: npt.NDArray[np.floating], kernel: str
+) -> None:
     # I haven't investigated the root of this issue yet
     # but statsmodels' KDEUnivariate implementation
     # can return a `float('NaN')` if something goes
@@ -70,13 +81,14 @@ def estimate_density_trace(
     # further down the pipeline, I decided
     # to check whether the correct object
     # (and shape) are being returned.
-    if not isinstance(density_y, np.ndarray) or density_y.shape != density_x.shape:
+    wrong_return_type = not isinstance(y, np.ndarray)
+    wrong_return_shape = y.shape != x.shape
+    not_finite = ~np.isfinite(y).all()
+    if wrong_return_type or wrong_return_shape or not_finite:
         msg = f"statsmodels failed to evaluate densities using the {kernel!r} kernel."
         if kernel != "gau":
             msg += " Try setting kernel='gau' (the default kernel)."
         raise RuntimeError(msg)
-
-    return [(x, y) for x, y in zip(density_x, density_y)]
 
 
 def estimate_densities(

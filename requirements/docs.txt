@@ -1,0 +1,21 @@
+furo
+jinja2
+kaleido
+myst-parser>=0.19.0
+sphinx
+sphinx-autobuild
+sphinx-autodoc-typehints
+sphinx-copybutton
+sphinx-inline-tabs
+sphinx-notfound-page
+sphinx-paramlinks
+sphinx-remove-toctrees
+sphinx-sitemap
+sphinx-togglebutton
+sphinx-toolbox
+sphinx_design
+sphinx_thebe
+sphinxext-opengraph
+# extras/_compile_plotly_charts.py
+beautifulsoup4
+minify-html

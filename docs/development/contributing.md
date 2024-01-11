@@ -36,10 +36,10 @@ The following command will 1) create a new virtual environment (under `.venv`), 
 make init
 ```
 
-The default and **recommended** base python is `python3.7` . You can change this by exporting the `BASE_PYTHON` environment variable. For instance, if you are having issues installing scientific packages on macOS for python 3.7, you can try python 3.8 instead:
+The default and **recommended** base python is `python3.8`. You can change this by exporting the `BASE_PYTHON` environment variable:
 
 ```shell
-BASE_PYTHON=python3.8 make init
+BASE_PYTHON=python3.12 make init
 ```
 
 If you need to use jupyter-lab, you can install all extra requirements, as well as set up the environment and jupyter kernel with
@@ -108,7 +108,7 @@ On top of this, we also run a series of integration approval steps that allow us
 Our tool of choice to configure and reliably run all integration approval steps is [Tox](https://github.com/tox-dev/tox), which allows us to run each step in reproducible isolated virtual environments. To trigger all checks in parallel, simply run:
 
 ```shell
-./bin/tox --parallel -m static tests
+tox -p -m static tests
 ```
 
 It's that simple 🙌 !! Note only that this will take a while the first time you run the command, since it will have to create all the required virtual environments (along with their dependencies) for each CI step.
@@ -120,7 +120,7 @@ The configuration for Tox can be found in {{ repo_file('tox.ini') }}.
 We use [pytest](https://github.com/pytest-dev/pytest) as our testing framework, and [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/) to track and measure code coverage. You can find all configuration details in {{ repo_file('tox.ini') }}. To trigger all tests, simply run
 
 ```shell
-./bin/tox --parallel -m tests
+tox -p -m tests
 ```
 
 If you need more control over which tests are running, or which flags are being passed to pytest, you can also invoke `pytest` directly which will run on your current virtual environment. Configuration details can be found in {{ repo_file('tox.ini') }}.

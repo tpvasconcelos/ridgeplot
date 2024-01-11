@@ -1,14 +1,23 @@
 from __future__ import annotations
 
+import sys
 from datetime import datetime
+from pathlib import Path
 from pprint import pformat
 
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata  # type: ignore[import, no-redef]
+    import importlib_metadata  # type: ignore[import-not-found, no-redef]
 
-from compile_plotly_charts import compile_plotly_charts
+try:
+    from _compile_plotly_charts import compile_plotly_charts
+except ModuleNotFoundError:
+    # When this module is run from the readthedocs build server,
+    # the _compile_plotly_charts module will not be available
+    # because the `extras` dir is not in the PYTHONPATH.
+    sys.path.append((Path(__file__).parents[1] / "extras").resolve().as_posix())
+    from _compile_plotly_charts import compile_plotly_charts
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -299,7 +308,7 @@ def register_jinja_functions() -> None:
     Use it in your docs like this:
     This is a Markdown block rendered at time={{ now() }}
     """
-    from jinja2.defaults import DEFAULT_NAMESPACE  # type: ignore[import]
+    from jinja2.defaults import DEFAULT_NAMESPACE
 
     def repo_file(file_name: str) -> str:
         return f"[{file_name}]({repo_url}/blob/main/{file_name})"

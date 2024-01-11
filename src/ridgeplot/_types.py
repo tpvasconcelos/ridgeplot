@@ -5,13 +5,7 @@ from typing import TYPE_CHECKING, Collection, Tuple, TypeVar, Union, overload
 import numpy as np
 
 if TYPE_CHECKING:
-    import sys
-    from typing import Any
-
-    if sys.version_info >= (3, 8):
-        from typing import Literal
-    else:
-        from typing_extensions import Literal
+    from typing import Any, Literal
 
 
 # Snippet used to generate and store the image artefacts:
@@ -437,7 +431,7 @@ def is_flat_str_collection(obj: Any) -> bool:
     return isinstance(obj, Collection) and all(isinstance(x, str) for x in obj)
 
 
-def nest_shallow_collection(shallow_collection: CollectionL2[_T]) -> CollectionL3[_T]:
+def nest_shallow_collection(shallow_collection: Collection[_T]) -> Collection[Collection[_T]]:
     """Convert a *shallow* collection type into a *deep* collection type.
 
     This function should really only be used in the :mod:`ridgeplot._ridgeplot`

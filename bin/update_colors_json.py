@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from __future__ import annotations
+
 import json
 
 from plotly.colors import (
@@ -15,13 +17,13 @@ from ridgeplot._colors import _PATH_TO_COLORS_JSON
 
 
 def main() -> None:
-    # start off by getting all named color-scales defined in PLOTLY_SCALES
+    # Start off by getting all named color-scales defined in PLOTLY_SCALES
     all_colorscales_raw = PLOTLY_SCALES.copy()
 
-    # turn plotly's default colors into the default color-scale
+    # Turn plotly's default colors into the default color-scale
     all_colorscales_raw["default"] = make_colorscale(DEFAULT_PLOTLY_COLORS)
 
-    # add all sequential color-scales
+    # Add all sequential color-scales
     for name, color_list in vars(sequential).items():
         if name.startswith(("_", "swatches")):
             continue
@@ -29,18 +31,17 @@ def main() -> None:
 
     all_colorscales_rgb = {}
     for name, colorscale in all_colorscales_raw.items():
-        # convert all color-scales to 'rgb(r, g, b)' format
+        # Convert all color-scales to 'rgb(r, g, b)' format
         if colorscale[0][1].startswith("#"):
             colorscale_rgb = [[s, label_rgb(hex_to_rgb(c))] for s, c in colorscale]
         else:
             colorscale_rgb = colorscale
-        # validate the color-scale as a sanity check and
-        # use lower-case convention for all color-scales
         validate_colorscale(colorscale_rgb)
         all_colorscales_rgb[name.lower()] = colorscale_rgb
 
     with _PATH_TO_COLORS_JSON.open(mode="w") as _colors_json:
-        json.dump(all_colorscales_rgb, _colors_json, indent=2)
+        json.dump(all_colorscales_rgb, _colors_json, indent=2, sort_keys=True)
+        _colors_json.write("\n")
 
 
 if __name__ == "__main__":

@@ -2,13 +2,10 @@
 # >>>  Variables
 # ==============================================================
 
-BASE_PYTHON ?= python3.7
+BASE_PYTHON ?= python3.8
 
 VENV_PATH := .venv
 VENV_BIN  := $(VENV_PATH)/bin
-
-PY_PYTHON_VERSION = $(shell $(VENV_BIN)/python -c 'import platform; print("".join(platform.python_version_tuple()[:2]))')
-PY_SYS_PLATFORM   = $(shell $(VENV_BIN)/python -c 'import sys; print(sys.platform)')
 
 
 # ==============================================================
@@ -54,7 +51,7 @@ init: clean-all install ## initialise development environment
 .PHONY: install
 install: .venv ## install all local development dependencies
 	@echo "==> Installing local development requirements..."
-	@$(VENV_BIN)/python -m pip install -r requirements/locked/local-dev.$(PY_PYTHON_VERSION)-$(PY_SYS_PLATFORM).txt
+	@$(VENV_BIN)/python -m pip install -r requirements/local-dev.txt
 	@echo "==> Installing pre-commit hooks..."
 	@$(VENV_BIN)/pre-commit install --install-hooks
 
@@ -81,17 +78,13 @@ clean-build: ## remove build artifacts
 	rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
-	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
+	find . -name '*.egg-info' -o -name '*.egg' -exec rm -fr {} +
 
 
 .PHONY: clean-pyc
 clean-pyc: ## remove Python file artifacts
 	@echo "==> Removing python file artifacts..."
-	find . -name '*.pyc' -exec rm -f {} +
-	find . -name '*.pyo' -exec rm -f {} +
-	find . -name '*~' -exec rm -f {} +
-	find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '*.pyc' -o -name '*.pyo' -o -name '*~' -o -name '__pycache__' -exec rm -fr {} +
 
 
 .PHONY: clean-ci
@@ -100,8 +93,7 @@ clean-ci: ## remove linting, testing, and coverage artifacts
 	rm -fr .tox/
 	rm -fr .pytest_cache/
 	rm -fr .mypy_cache/
-	find . -name 'coverage.xml' -exec rm -f {} +
-	find . -name '.coverage' -exec rm -f {} +
+	find . -name 'coverage.xml' -o -name '.coverage' -exec rm -fr {} +
 
 
 .PHONY: clean-venv
