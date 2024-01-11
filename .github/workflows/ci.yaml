@@ -18,9 +18,15 @@ jobs:
         with:
           python-version: "3.8"
           requirements: tox
-      - name: Run static checks with Tox
+      # Instead of running all checks in one task (i.e., `tox -m static`),
+      # we'll instead run them one-by-one, so that it's easier to
+      # identify and debug failing tests in the GitHub UI.
+      - name: Run static checks with pre-commit
         shell: bash
-        run: tox -m static
+        run: tox -e pre-commit
+      - name: Run type checks with mypy
+        shell: bash
+        run: tox -e mypy
 
   software-tests:
     name: Software tests
