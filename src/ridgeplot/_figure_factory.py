@@ -182,7 +182,7 @@ class RidgePlotFigureFactory:
             "mean-means": self._compute_midpoints_mean_means,
         }
 
-    def draw_base(self, x: Collection[Numeric], y_shifted: float) -> None:
+    def draw_base(self, x: Collection[Numeric], y_shift: float) -> None:
         """Draw the base for a density trace.
 
         Adds an invisible trace at constant y that will serve as the fill-limit
@@ -191,11 +191,12 @@ class RidgePlotFigureFactory:
         self.fig.add_trace(
             go.Scatter(
                 x=x,
-                y=[y_shifted] * len(x),
+                y=[y_shift] * len(x),
                 # make trace 'invisible'
                 # Note: visible=False does not work with fill="tonexty"
                 line=dict(color="rgba(0,0,0,0)", width=0),
                 showlegend=False,
+                hoverinfo="skip",
             )
         )
 
@@ -203,7 +204,7 @@ class RidgePlotFigureFactory:
         self,
         x: Collection[Numeric],
         y: Collection[Numeric],
-        y_shifted: float,
+        y_shift: float,
         label: str,
         color: str,
     ) -> None:
@@ -213,11 +214,11 @@ class RidgePlotFigureFactory:
         fills the trace until the previously drawn trace (see
         :meth:`draw_base`). This is why the base trace must be drawn first.
         """
-        self.draw_base(x=x, y_shifted=y_shifted)
+        self.draw_base(x=x, y_shift=y_shift)
         self.fig.add_trace(
             go.Scatter(
                 x=x,
-                y=[y_i + y_shifted for y_i in y],
+                y=[y_i + y_shift for y_i in y],
                 fillcolor=color,
                 name=label,
                 fill="tonexty",
@@ -226,14 +227,15 @@ class RidgePlotFigureFactory:
                     color="rgba(0,0,0,0.6)" if color is not None else None,
                     width=self.linewidth,
                 ),
+                # Hover information
+                customdata=[[y_i] for y_i in y],
+                hovertemplate=("(%{x:.7}, %{y:.7})<br><extra>%{fullData.name}</extra>"),
             ),
         )
 
     def update_layout(self, y_ticks: List[float]) -> None:
         """Update figure's layout."""
-        # TODO: Fix hover information
         self.fig.update_layout(
-            hovermode=False,
             legend=dict(traceorder="normal"),
         )
         axes_common = dict(
@@ -343,11 +345,11 @@ class RidgePlotFigureFactory:
                         f"Mismatch between number of traces ({n_traces}) and "
                         f"number of labels ({n_labels}) for row {i}."
                     )
-            # y_shifted is the y-origin for the new trace
-            y_shifted = -i * float(self.y_max * self.spacing)
-            y_ticks.append(y_shifted)
+            # y_shift is the y-origin for the new trace
+            y_shift = -i * float(self.y_max * self.spacing)
+            y_ticks.append(y_shift)
             for trace, label, color in zip(row, labels, colors):
                 x, y = zip(*trace)
-                self.draw_density_trace(x=x, y=y, y_shifted=y_shifted, label=label, color=color)
+                self.draw_density_trace(x=x, y=y, y_shift=y_shift, label=label, color=color)
         self.update_layout(y_ticks=y_ticks)
         return self.fig
