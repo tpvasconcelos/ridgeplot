@@ -38,7 +38,14 @@ def _compile_plotly_fig(
     html_str = str(soup)
 
     if minify_html:
-        html_str = minify(html_str, minify_js=True)
+        html_str = minify(
+            html_str,
+            # Need to set `minify_js` to False to avoid breaking
+            # the inner HTML set in the `hovertemplate` attribute
+            # TODO: Investigate if this is still necessary or find a workaround
+            #       (reason: minify_js seems to make a significant difference)
+            minify_js=False,
+        )
 
     out_path = PATH_DOCS / f"_static/charts/{plot_id}.html"
     print(f"Writing HTML artefact to {out_path}...")
