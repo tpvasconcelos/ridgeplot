@@ -230,7 +230,11 @@ class RidgePlotFigureFactory:
                 ),
                 # Hover information
                 customdata=[[y_i] for y_i in y],
-                hovertemplate=f"(%{{x{hf}}}, %{{y{hf}}})<br><extra>%{{fullData.name}}</extra>",
+                hovertemplate=(
+                    f"(%{{x{hf}}}, %{{y{hf}}})"
+                    "<br>"
+                    "<extra>%{fullData.name}</extra>"
+                ),  # fmt: skip
             ),
         )
 
