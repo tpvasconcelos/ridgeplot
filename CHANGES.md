@@ -9,6 +9,10 @@ Unreleased changes
 
 - Dropped support for Python 3.7. ([#154](https://github.com/tpvasconcelos/ridgeplot/pull/154))
 
+### Features
+
+- Add hoverinfo by default to the Plotly traces. ([#174](https://github.com/tpvasconcelos/ridgeplot/pull/174))
+
 ### Documentation
 
 - Use the `{raw} html :file: _static/charts/<PLOT-ID>.html` directive to load the interactive Plotly graphs in the generated Sphinx docs. The generated HTML artefacts only include a `<div>` wrapper block now and the plotly.min.js is now vendored and automatically loaded via the `html_js_files` Sphinx config. ([#132](https://github.com/tpvasconcelos/ridgeplot/pull/132))
