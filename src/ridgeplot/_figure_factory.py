@@ -215,6 +215,7 @@ class RidgePlotFigureFactory:
         :meth:`draw_base`). This is why the base trace must be drawn first.
         """
         self.draw_base(x=x, y_shift=y_shift)
+        hf = ":.7~r"  # hover format
         self.fig.add_trace(
             go.Scatter(
                 x=x,
@@ -229,7 +230,7 @@ class RidgePlotFigureFactory:
                 ),
                 # Hover information
                 customdata=[[y_i] for y_i in y],
-                hovertemplate=("(%{x:.7}, %{y:.7})<br><extra>%{fullData.name}</extra>"),
+                hovertemplate=f"(%{{x{hf}}}, %{{y{hf}}})<br><extra>%{{fullData.name}}</extra>",
             ),
         )
 
