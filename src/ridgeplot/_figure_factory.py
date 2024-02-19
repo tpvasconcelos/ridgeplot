@@ -67,6 +67,21 @@ For instance, the following is a valid :data:`MidpointsArray`:
 
 Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
 
+_D3HF = ":.7~r"
+"""Hover format
+
+After trying to read through the plotly.py source code, I couldn't find a
+simple way to replicate the default hover format using the d3-format syntax
+in Plotly's 'hovertemplate' parameter. The closest I got was by using the
+string below, but it's not quite the same...
+"""
+
+_DEFAULT_HOVERTEMPLATE = (
+    f"(%{{x{_D3HF}}}, %{{y{_D3HF}}})"
+    "<br>"
+    "<extra>%{fullData.name}</extra>"
+)  # fmt: skip
+
 
 def get_xy_extrema(densities: Densities) -> Tuple[Numeric, Numeric, Numeric, Numeric]:
     """Get the global x-y extrema (x_min, x_max, y_min, y_max) from all the
@@ -215,7 +230,6 @@ class RidgePlotFigureFactory:
         :meth:`draw_base`). This is why the base trace must be drawn first.
         """
         self.draw_base(x=x, y_shifted=y_shifted)
-        hf = ":.7~r"  # hover format
         self.fig.add_trace(
             go.Scatter(
                 x=x,
@@ -230,11 +244,7 @@ class RidgePlotFigureFactory:
                 ),
                 # Hover information
                 customdata=[[y_i] for y_i in y],
-                hovertemplate=(
-                    f"(%{{x{hf}}}, %{{y{hf}}})"
-                    "<br>"
-                    "<extra>%{fullData.name}</extra>"
-                ),  # fmt: skip
+                hovertemplate=_DEFAULT_HOVERTEMPLATE,
             ),
         )
 
