@@ -182,7 +182,7 @@ class RidgePlotFigureFactory:
             "mean-means": self._compute_midpoints_mean_means,
         }
 
-    def draw_base(self, x: Collection[Numeric], y_shift: float) -> None:
+    def draw_base(self, x: Collection[Numeric], y_shifted: float) -> None:
         """Draw the base for a density trace.
 
         Adds an invisible trace at constant y that will serve as the fill-limit
@@ -191,7 +191,7 @@ class RidgePlotFigureFactory:
         self.fig.add_trace(
             go.Scatter(
                 x=x,
-                y=[y_shift] * len(x),
+                y=[y_shifted] * len(x),
                 # make trace 'invisible'
                 # Note: visible=False does not work with fill="tonexty"
                 line=dict(color="rgba(0,0,0,0)", width=0),
@@ -204,7 +204,7 @@ class RidgePlotFigureFactory:
         self,
         x: Collection[Numeric],
         y: Collection[Numeric],
-        y_shift: float,
+        y_shifted: float,
         label: str,
         color: str,
     ) -> None:
@@ -214,12 +214,12 @@ class RidgePlotFigureFactory:
         fills the trace until the previously drawn trace (see
         :meth:`draw_base`). This is why the base trace must be drawn first.
         """
-        self.draw_base(x=x, y_shift=y_shift)
+        self.draw_base(x=x, y_shifted=y_shifted)
         hf = ":.7~r"  # hover format
         self.fig.add_trace(
             go.Scatter(
                 x=x,
-                y=[y_i + y_shift for y_i in y],
+                y=[y_i + y_shifted for y_i in y],
                 fillcolor=color,
                 name=label,
                 fill="tonexty",
@@ -350,11 +350,11 @@ class RidgePlotFigureFactory:
                         f"Mismatch between number of traces ({n_traces}) and "
                         f"number of labels ({n_labels}) for row {i}."
                     )
-            # y_shift is the y-origin for the new trace
-            y_shift = -i * float(self.y_max * self.spacing)
-            y_ticks.append(y_shift)
+            # y_shifted is the y-origin for the new trace
+            y_shifted = -i * float(self.y_max * self.spacing)
+            y_ticks.append(y_shifted)
             for trace, label, color in zip(row, labels, colors):
                 x, y = zip(*trace)
-                self.draw_density_trace(x=x, y=y, y_shift=y_shift, label=label, color=color)
+                self.draw_density_trace(x=x, y=y, y_shifted=y_shifted, label=label, color=color)
         self.update_layout(y_ticks=y_ticks)
         return self.fig
