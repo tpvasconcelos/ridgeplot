@@ -67,17 +67,17 @@ For instance, the following is a valid :data:`MidpointsArray`:
 
 Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
 
-_D3HF = ":.7~r"
+_D3HF = ".7"
 """Hover format
 
 After trying to read through the plotly.py source code, I couldn't find a
 simple way to replicate the default hover format using the d3-format syntax
 in Plotly's 'hovertemplate' parameter. The closest I got was by using the
-string below, but it's not quite the same...
+string below, but it's not quite the same... (see '.7~r' as well)
 """
 
 _DEFAULT_HOVERTEMPLATE = (
-    f"(%{{x{_D3HF}}}, %{{y{_D3HF}}})"
+    f"(%{{x:{_D3HF}}}, %{{customdata[0]:{_D3HF}}})"
     "<br>"
     "<extra>%{fullData.name}</extra>"
 )  # fmt: skip
