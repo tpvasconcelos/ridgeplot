@@ -30,11 +30,11 @@ jobs:
         with:
           python-version: "3.8"
           requirements: tox
-      - name: Package and upload a release to test PyPI
+      - name: Build and publish a release to TestPyPI
         env:
           TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN_TEST }}"
-        run: tox -e build,publish-pypi-test
-      - name: Package and upload a release prod PyPI
+        run: tox -e publish-pypi-test
+      - name: Build and publish a release PyPI
         env:
           TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN }}"
-        run: tox -e build,publish-pypi-prod
+        run: tox -e publish-pypi-prod
