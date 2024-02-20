@@ -5,6 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.1.24
+------
+
 ### Breaking changes
 
 - Dropped support for Python 3.7. ([#154](https://github.com/tpvasconcelos/ridgeplot/pull/154))
