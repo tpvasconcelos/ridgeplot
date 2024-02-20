@@ -4,11 +4,12 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from pprint import pformat
+from typing import TYPE_CHECKING
 
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata  # type: ignore[import-not-found, no-redef]
+    import importlib_metadata  # type: ignore[no-redef]
 
 try:
     from _compile_plotly_charts import compile_plotly_charts
@@ -18,6 +19,9 @@ except ModuleNotFoundError:
     # because the `extras` dir is not in the PYTHONPATH.
     sys.path.append((Path(__file__).parents[1] / "extras").resolve().as_posix())
     from _compile_plotly_charts import compile_plotly_charts
+
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -105,14 +109,14 @@ html_css_files = [
     "css/versionmodified_admonitions.css",
     # FontAwesome CSS for footer icons
     # https://fontawesome.com/search
-    # "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css",
-    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.1/css/fontawesome.min.css",
-    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.1/css/brands.min.css",
+    # "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css",
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css",
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/brands.min.css",
 ]
 
-html_js_files = [
-    "js/plotly.min.js",
-]
+# NOTE: When using the 'furo' theme, the `html_js_files` will be placed at
+#       the bottom of the page. See `_templates/base.html` for details.
+# html_js_files = []
 
 # -- Options for HTML output -----------------------------------------------------------------------
 
@@ -319,7 +323,7 @@ def register_jinja_functions() -> None:
     DEFAULT_NAMESPACE.update({"repo_file": repo_file, "repo_dir": repo_dir})
 
 
-def setup(app) -> None:  # type: ignore[no-untyped-def]
+def setup(app: Sphinx) -> None:
     compile_plotly_charts()
     register_jinja_functions()
     # app.connect("html-page-context", register_jinja_functions)
