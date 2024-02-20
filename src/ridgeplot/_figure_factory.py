@@ -67,6 +67,21 @@ For instance, the following is a valid :data:`MidpointsArray`:
 
 Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
 
+_D3HF = ".7"
+"""Hover format
+
+After trying to read through the plotly.py source code, I couldn't find a
+simple way to replicate the default hover format using the d3-format syntax
+in Plotly's 'hovertemplate' parameter. The closest I got was by using the
+string below, but it's not quite the same... (see '.7~r' as well)
+"""
+
+_DEFAULT_HOVERTEMPLATE = (
+    f"(%{{x:{_D3HF}}}, %{{customdata[0]:{_D3HF}}})"
+    "<br>"
+    "<extra>%{fullData.name}</extra>"
+)  # fmt: skip
+
 
 def get_xy_extrema(densities: Densities) -> Tuple[Numeric, Numeric, Numeric, Numeric]:
     """Get the global x-y extrema (x_min, x_max, y_min, y_max) from all the
@@ -196,6 +211,7 @@ class RidgePlotFigureFactory:
                 # Note: visible=False does not work with fill="tonexty"
                 line=dict(color="rgba(0,0,0,0)", width=0),
                 showlegend=False,
+                hoverinfo="skip",
             )
         )
 
@@ -226,14 +242,15 @@ class RidgePlotFigureFactory:
                     color="rgba(0,0,0,0.6)" if color is not None else None,
                     width=self.linewidth,
                 ),
+                # Hover information
+                customdata=[[y_i] for y_i in y],
+                hovertemplate=_DEFAULT_HOVERTEMPLATE,
             ),
         )
 
     def update_layout(self, y_ticks: List[float]) -> None:
         """Update figure's layout."""
-        # TODO: Fix hover information
         self.fig.update_layout(
-            hovermode=False,
             legend=dict(traceorder="normal"),
         )
         axes_common = dict(
