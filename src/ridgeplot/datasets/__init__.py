@@ -1,7 +1,12 @@
 from __future__ import annotations
 
-from pathlib import Path
+import sys
 from typing import TYPE_CHECKING
+
+if sys.version_info >= (3, 10):
+    from importlib.resources import files
+else:
+    from importlib_resources import files
 
 if TYPE_CHECKING:
     from typing import Literal
@@ -13,9 +18,8 @@ __all__ = [
     "load_lincoln_weather",
 ]
 
-# TODO: Update the way files are accessed at runtime
-#       https://setuptools.pypa.io/en/latest/userguide/datafiles.html#accessing-data-files-at-runtime
-_DATA_DIR = Path(__file__).parent / "data"
+
+_DATA_DIR = files("ridgeplot.datasets.data")
 
 
 def load_probly(

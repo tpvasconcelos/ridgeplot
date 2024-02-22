@@ -3,10 +3,6 @@ from __future__ import annotations
 from ridgeplot.datasets import _DATA_DIR, load_probly
 
 
-def test_data_dir_exists() -> None:
-    assert _DATA_DIR.exists()
-
-
 def test_data_dir_not_empty() -> None:
     assert len(list(_DATA_DIR.iterdir())) > 0
 

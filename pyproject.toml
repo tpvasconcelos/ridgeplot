@@ -42,6 +42,7 @@ dependencies = [
     "plotly>=4",
     "statsmodels>=0.12",
     'typing-extensions; python_version<"3.10"',
+    'importlib-resources; python_version<"3.10"',
 ]
 
 [project.urls]
