@@ -13,6 +13,8 @@ __all__ = [
     "load_lincoln_weather",
 ]
 
+# TODO: Update the way files are accessed at runtime
+#       https://setuptools.pypa.io/en/latest/userguide/datafiles.html#accessing-data-files-at-runtime
 _DATA_DIR = Path(__file__).parent / "data"
 
 
