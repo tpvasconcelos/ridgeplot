@@ -3,6 +3,15 @@ from __future__ import annotations
 from ridgeplot.datasets import _DATA_DIR, load_probly
 
 
+def test_data_dir_contains_data_files() -> None:
+    allowed_extensions = (".csv",)
+    all_files = list(_DATA_DIR.iterdir())
+    assert len(all_files) > 0
+    for file in all_files:
+        assert file.is_file()
+        assert file.name.endswith(allowed_extensions)
+
+
 def test_data_dir_not_empty() -> None:
     assert len(list(_DATA_DIR.iterdir())) > 0
 
