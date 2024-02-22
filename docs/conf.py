@@ -132,12 +132,9 @@ html_logo = "_static/img/logo-wide.png"
 html_sourcelink_suffix = ""
 html_last_updated_fmt = ""
 
-meta_project_urls = metadata.get_all("project-url")
-if not meta_project_urls:
-    raise RuntimeError("No project URLs found in the project metadata")
-project_urls = [(n[:-1], url) for n, url in map(str.split, meta_project_urls)]
-repo_url = next(url for n, url in project_urls if n == "Source")
-docs_url = next(url for n, url in project_urls if n == "Documentation")
+project_urls = dict(url.split(", ") for url in metadata.get_all("project-url"))  # type: ignore[union-attr]
+repo_url = project_urls["Source code"]
+docs_url = project_urls["Documentation"]
 
 html_theme_options = {
     "sidebar_hide_name": True,
