@@ -9,7 +9,7 @@ Execution steps:
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Sequence, cast
+from typing import TYPE_CHECKING, Sequence, cast
 
 from markdown_it import MarkdownIt
 from mdformat.renderer import MDRenderer
@@ -22,7 +22,7 @@ PATH_TO_CHANGES = PATH_TO_TOP_LEVEL.joinpath("CHANGES.md")
 PATH_TO_LATEST_RELEASE_NOTES = PATH_TO_TOP_LEVEL.joinpath("LATEST_RELEASE_NOTES.md")
 
 
-def _remove_heading(tokens: List[Token]) -> List[Token]:
+def _remove_heading(tokens: list[Token]) -> list[Token]:
     if tokens[0].type != "heading_open":
         raise ValueError("Expected first token to be a 'heading_open'")
     if tokens[2].type != "heading_close":
@@ -30,12 +30,12 @@ def _remove_heading(tokens: List[Token]) -> List[Token]:
     return tokens[3:]
 
 
-def get_tokens_latest_release() -> List[Token]:
+def get_tokens_latest_release() -> list[Token]:
     md_parser = MarkdownIt()
     tokens = md_parser.parse(src=PATH_TO_CHANGES.read_text())
 
     count_h2 = 0
-    tokens_latest_release: List[Token] = []
+    tokens_latest_release: list[Token] = []
     for token in tokens:
         is_h2 = token.type == "heading_open" and token.tag == "h2"
         count_h2 += is_h2

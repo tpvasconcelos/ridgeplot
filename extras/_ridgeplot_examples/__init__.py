@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, List, Tuple
+from typing import Callable
 
 import plotly.graph_objects as go
 
@@ -33,7 +33,7 @@ def load_probly() -> go.Figure:
     return main()
 
 
-ALL_EXAMPLES: List[Tuple[str, Callable[[], go.Figure]]] = [
+ALL_EXAMPLES: list[tuple[str, Callable[[], go.Figure]]] = [
     ("basic", load_basic),
     ("lincoln_weather", load_lincoln_weather),
     ("probly", load_probly),

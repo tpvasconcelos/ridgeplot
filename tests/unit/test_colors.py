@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Optional, Type
+from typing import Any
 
 import pytest
 from _plotly_utils.exceptions import PlotlyError
@@ -98,7 +98,7 @@ def test_validate_colorscale(colorscale: ColorScale) -> None:
 )
 def test_validate_colorscale_fails_for_invalid_colorscale(
     colorscale: Any,
-    expected_exception: Type[Exception],
+    expected_exception: type[Exception],
 ) -> None:
     pytest.raises(expected_exception, validate_colorscale, colorscale=colorscale)
 
@@ -138,7 +138,7 @@ def test_any_to_rgb(color: _Color, expected: str) -> None:
     ],
 )
 def test_any_to_rgb_fails_for_invalid_color(
-    color: Any, expected_exception: Type[Exception], exception_match: Optional[str]
+    color: Any, expected_exception: type[Exception], exception_match: str | None
 ) -> None:
     pytest.raises(expected_exception, _any_to_rgb, color=color).match(exception_match or "")
 
@@ -155,7 +155,7 @@ def test_any_to_rgb_fails_for_invalid_color(
     ],
 )
 def test_any_to_rgb_bug_in_validation_incomplete(
-    color: Any, expected_exception: Type[Exception], exception_match: Optional[str]
+    color: Any, expected_exception: type[Exception], exception_match: str | None
 ) -> None:
     with pytest.raises(expected_exception, match=exception_match or ""):
         _any_to_rgb(color=color)
