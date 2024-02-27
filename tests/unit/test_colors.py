@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Optional, Type, Union
+from typing import Any, Optional, Tuple, Type, Union
 
 import pytest
 from _plotly_utils.exceptions import PlotlyError
@@ -115,7 +115,7 @@ def test_validate_colorscale_fails_for_invalid_colorscale(
         ((4, 5, 6), "rgb(4, 5, 6)"),  # valid tuple
     ],
 )
-def test_any_to_rgb(color: Union[str, tuple], expected: str) -> None:
+def test_any_to_rgb(color: Union[str, Tuple[float, float, float]], expected: str) -> None:
     assert _any_to_rgb(color=color) == expected
 
 
@@ -223,5 +223,7 @@ def test_get_color_fails_for_midpoint_out_of_bounds(midpoint: float) -> None:
         ((4, 5, 6), 1.0, "rgba(4, 5, 6, 1.0)"),
     ],
 )
-def test_apply_alpha(color: Union[tuple, str], alpha: float, expected: str) -> None:
+def test_apply_alpha(
+    color: Union[Tuple[float, float, float], str], alpha: float, expected: str
+) -> None:
     assert apply_alpha(color=color, alpha=alpha) == expected

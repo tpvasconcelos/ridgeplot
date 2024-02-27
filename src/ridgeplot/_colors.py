@@ -60,7 +60,7 @@ def validate_colorscale(colorscale: ColorScale) -> None:
     validate_colors(colors=colors)
 
 
-def _any_to_rgb(color: Union[str, tuple]) -> str:
+def _any_to_rgb(color: Union[str, Tuple[float, float, float]]) -> str:
     """Convert any color to an rgb string.
 
     Parameters
