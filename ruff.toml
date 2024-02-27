@@ -18,6 +18,9 @@ docstring-code-format = true
 [lint]
 select = ["ALL"]
 ignore = [
+    # Ignored groups:
+    "FBT", # flake8-boolean-trap
+
     # flake8-comprehensions
     "C408", # Unnecessary `dict` call (rewrite as a literal)
 
@@ -63,6 +66,7 @@ ignore = [
     "T201", # `print` found
 ]
 "docs/*" = [
+    "ERA001", # Found commented-out code
     "S101", # Use of assert detected
     "T201", # `print` found
 ]

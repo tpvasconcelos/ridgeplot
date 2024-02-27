@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from __future__ import annotations
 
 import sys
@@ -320,7 +321,7 @@ def register_jinja_functions() -> None:
     DEFAULT_NAMESPACE.update({"repo_file": repo_file, "repo_dir": repo_dir})
 
 
-def setup(app: Sphinx) -> None:
+def setup(app: Sphinx) -> None:  # noqa: ARG001
     compile_plotly_charts()
     register_jinja_functions()
     # app.connect("html-page-context", register_jinja_functions)
