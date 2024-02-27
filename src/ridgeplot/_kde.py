@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import TYPE_CHECKING, Callable, Union
+from typing import TYPE_CHECKING, Any, Callable, Union
 
 import numpy as np
 import statsmodels.api as sm
@@ -72,7 +72,7 @@ def estimate_density_trace(
 
 
 def _validate_densities(
-    x: npt.NDArray[np.floating], y: npt.NDArray[np.floating], kernel: str
+    x: npt.NDArray[np.floating[Any]], y: npt.NDArray[np.floating[Any]], kernel: str
 ) -> None:
     # I haven't investigated the root of this issue yet
     # but statsmodels' KDEUnivariate implementation
