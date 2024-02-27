@@ -9,6 +9,7 @@ Unreleased changes
 
 - Migrate from `setup.cfg` from `pyproject.toml` ([#176](https://github.com/tpvasconcelos/ridgeplot/pull/176))
 - Use `importlib.resources` to load data assets from within the package - to be PEP-302 compliant ([#176](https://github.com/tpvasconcelos/ridgeplot/pull/176))
+- Enforce "strict" mypy mode (mostly improved type annotations for generic types) ([#177](https://github.com/tpvasconcelos/ridgeplot/pull/177))
 
 ---
 

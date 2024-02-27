@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Mapping
+from typing import Any, Mapping
 from unittest import mock
 
 import pytest
@@ -53,7 +53,7 @@ class TestLazyMapping:
     """Tests for the :func:`ridgeplot._utils.LazyMapping` class"""
 
     @pytest.mark.parametrize("target_mapping", [{}, {"a": 1, "b": 2, "c": 3}])
-    def test_mapping(self, target_mapping: Mapping) -> None:
+    def test_mapping(self, target_mapping: Mapping[Any, Any]) -> None:
         """Test the part of the implantation of the ``_mapping`` property.
 
         This test should assert that `._inner_mapping` is not defined before
@@ -72,7 +72,7 @@ class TestLazyMapping:
         assert lm._inner_mapping is m
 
     @pytest.mark.parametrize("target_mapping", [{}, {"a": 1, "b": 2, "c": 3}])
-    def test_loader_called_only_once(self, target_mapping: Mapping) -> None:
+    def test_loader_called_only_once(self, target_mapping: Mapping[Any, Any]) -> None:
         """Check that ``LazyMapping`` only calls ``._loader()`` once."""
         lm = LazyMapping(loader=lambda: target_mapping)
         with mock.patch.object(lm, "_loader") as loader:
@@ -89,7 +89,9 @@ class TestLazyMapping:
             assert loader.call_count == 2
 
     @pytest.mark.parametrize("target_mapping", [{}, {"a": 1, "b": 2, "c": 3}])
-    def test_mapping_mirrors_mapping_returned_by_loader(self, target_mapping: Mapping) -> None:
+    def test_mapping_mirrors_mapping_returned_by_loader(
+        self, target_mapping: Mapping[Any, Any]
+    ) -> None:
         """Test that LazyMapping behaves just like the mapping returned by the
         ``loader`` callable argument.
 

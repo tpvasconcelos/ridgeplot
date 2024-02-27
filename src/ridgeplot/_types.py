@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Collection, Tuple, TypeVar, Union, overload
+from typing import TYPE_CHECKING, Any, Collection, Tuple, TypeVar, Union, overload
 
 import numpy as np
 
 if TYPE_CHECKING:
-    from typing import Any, Literal
+    from typing import Literal
 
 
 # Snippet used to generate and store the image artefacts:
@@ -67,10 +67,10 @@ Example:
 # ---  Numeric types
 # ========================================================
 
-Float = Union[float, np.floating]
+Float = Union[float, "np.floating[Any]"]
 """A :data:`~typing.TypeAlias` for float types."""
 
-Int = Union[int, np.integer]
+Int = Union[int, "np.integer[Any]"]
 """A :data:`~typing.TypeAlias` for a int types."""
 
 Numeric = Union[Int, Float]
@@ -108,7 +108,7 @@ Example:
 >>> xy_coord = (1, 2)
 """
 
-DensityTrace = CollectionL1[XYCoordinate]
+DensityTrace = CollectionL1[XYCoordinate[Any]]
 r"""A 2D line/trace represented as a collection of :math:`(x, y)` coordinates
 (i.e. :data:`XYCoordinate`\s).
 

@@ -32,7 +32,7 @@ def normalise_min_max(val: Numeric, min_: Numeric, max_: Numeric) -> float:
     return float((val - min_) / (max_ - min_))
 
 
-def get_collection_array_shape(arr: Collection) -> Tuple[Union[int, Set[int]], ...]:
+def get_collection_array_shape(arr: Collection[Any]) -> Tuple[Union[int, Set[int]], ...]:
     """Return the shape of a :class:`~typing.Collection` array.
 
     Parameters
