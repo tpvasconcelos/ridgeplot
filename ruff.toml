@@ -20,6 +20,7 @@ select = ["ALL"]
 ignore = [
     # Ignored groups:
     "FBT", # flake8-boolean-trap
+    "FIX", # flake8-fixme
 
     # flake8-comprehensions
     "C408", # Unnecessary `dict` call (rewrite as a literal)
@@ -36,6 +37,12 @@ ignore = [
     "D209", # Multi-line docstring closing quotes should be on a separate line
     "D400", # First line should end with a period
     "D415", # First line should end with a period, question mark, or exclamation point
+
+    # flake8-return
+    "RET504", # Unnecessary variable assignment before `return` statement
+
+    # eradicate (ERA)
+    "ERA001", # Found commented-out code
 
     # pylint
     "PLR0913", # Too many arguments to function call ({x} > 5)
@@ -56,6 +63,16 @@ ignore = [
     # (allow for sklearn's naming convention for uppercase `X`)
     "N803", # Argument name should be lowercase
     "N806", # Variable in function should be lowercase
+
+    # flake8-todos (TD)
+    "TD001", # Invalid TODO tag: `FIXME`
+    "TD002", # Missing author in [...]
+    "TD003", # Missing issue link on the line following this TODO
+
+    # flake8-annotations (ANN)
+    "ANN101", # Missing type annotation for `self` in method
+    "ANN102", # Missing type annotation for `cls` in classmethod
+    "ANN401", # Dynamically typed expressions (typing.Any) are disallowed in {name}
 ]
 
 [lint.per-file-ignores]
@@ -66,12 +83,13 @@ ignore = [
     "T201", # `print` found
 ]
 "docs/*" = [
-    "ERA001", # Found commented-out code
-    "S101", # Use of assert detected
-    "T201", # `print` found
+    "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
+    "S101",   # Use of assert detected
+    "T201",   # `print` found
 ]
 "tests/*" = [
-    "S101", # Use of assert detected
+    "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
+    "S101",   # Use of assert detected
     "SLF001", # Private member accessed: `_X`
 ]
 

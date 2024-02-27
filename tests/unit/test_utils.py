@@ -100,14 +100,14 @@ class TestLazyMapping:
         """
         lm = LazyMapping(loader=lambda: target_mapping)
         assert lm.items() == target_mapping.items()
-        # test: __getitem__
+        # test __getitem__
         for k in target_mapping:
             assert lm[k] == target_mapping[k]
-        # test: __iter__
+        # test __iter__
         assert tuple(lm) == tuple(target_mapping)
-        # test: __len__
+        # test __len__
         assert len(lm) == len(target_mapping)
-        # test: __str__
+        # test __str__
         assert str(lm) == str(target_mapping)
-        # test: __repr__
+        # test __repr__
         assert repr(lm) == repr(target_mapping)

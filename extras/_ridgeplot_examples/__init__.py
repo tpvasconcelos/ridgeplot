@@ -5,13 +5,18 @@ from typing import Callable
 import plotly.graph_objects as go
 
 
-def normalize(fig: go.Figure) -> go.Figure:
-    # Reduce the figure's margins to more tightly fit the chart
-    # (only if the user hasn't already customized the margins!)
-    if fig.layout.margin == go.layout.Margin():
-        t = None if fig.layout.title.text else 40
-        fig = fig.update_layout(margin=dict(l=0, r=0, t=t, b=40))
-
+def tighten_margins(fig: go.Figure) -> go.Figure:
+    """Tighten the margins of a Plotly figure."""
+    if fig.layout.margin != go.layout.Margin():
+        # If the Figure's margins are different from the default values,
+        # we'll assume that the user has set these values intentionally
+        return fig
+    # If the Figure has a title, we'll leave 40px of space at the top
+    # None that this might not work well for all titles. E.g., if the
+    # title has multiple lines, or if the font size is larger, etc.
+    fig_has_title = fig.layout.title.text != ""
+    margin_top = None if fig_has_title else 40
+    fig = fig.update_layout(margin=dict(l=0, r=0, t=margin_top, b=40))
     return fig
 
 
