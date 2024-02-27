@@ -81,13 +81,11 @@ NumericT = TypeVar("NumericT", bound=Numeric)
 
 
 @overload
-def _is_numeric(obj: Numeric) -> Literal[True]:
-    ...
+def _is_numeric(obj: Numeric) -> Literal[True]: ...
 
 
 @overload
-def _is_numeric(obj: Any) -> bool:
-    ...
+def _is_numeric(obj: Any) -> bool: ...
 
 
 def _is_numeric(obj: Any) -> bool:
@@ -246,13 +244,11 @@ Example:
 
 
 @overload
-def is_shallow_densities(obj: ShallowDensities) -> Literal[True]:
-    ...
+def is_shallow_densities(obj: ShallowDensities) -> Literal[True]: ...
 
 
 @overload
-def is_shallow_densities(obj: Any) -> bool:
-    ...
+def is_shallow_densities(obj: Any) -> bool: ...
 
 
 def is_shallow_densities(obj: Any) -> bool:
@@ -387,13 +383,11 @@ Example:
 
 
 @overload
-def is_shallow_samples(obj: ShallowSamples) -> Literal[True]:
-    ...
+def is_shallow_samples(obj: ShallowSamples) -> Literal[True]: ...
 
 
 @overload
-def is_shallow_samples(obj: Any) -> bool:
-    ...
+def is_shallow_samples(obj: Any) -> bool: ...
 
 
 def is_shallow_samples(obj: Any) -> bool:
@@ -412,13 +406,11 @@ def is_shallow_samples(obj: Any) -> bool:
 
 
 @overload
-def is_flat_str_collection(obj: Collection[str]) -> Literal[True]:
-    ...
+def is_flat_str_collection(obj: Collection[str]) -> Literal[True]: ...
 
 
 @overload
-def is_flat_str_collection(obj: Any) -> bool:
-    ...
+def is_flat_str_collection(obj: Any) -> bool: ...
 
 
 def is_flat_str_collection(obj: Any) -> bool:

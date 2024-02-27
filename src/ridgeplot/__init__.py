@@ -23,6 +23,7 @@ environment.
   fig.show()
 
 """
+
 from __future__ import annotations
 
 from ridgeplot._colors import get_all_colorscale_names, list_all_colorscale_names
