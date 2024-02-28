@@ -84,6 +84,7 @@ ignore = [
     "T201", # `print` found
 ]
 "extras/*" = [
+    "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
     "T201", # `print` found
 ]
 "docs/*" = [
