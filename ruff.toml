@@ -44,6 +44,10 @@ ignore = [
     # eradicate (ERA)
     "ERA001", # Found commented-out code
 
+    # pandas-vet
+    "PD015", # Use `.merge` method instead of `pd.merge` function. They have equivalent functionality.
+    "PD901", # `df` is a bad variable name. Be kinder to your future self.
+
     # pylint
     "PLR0913", # Too many arguments to function call ({x} > 5)
     "PLR2004", # Magic value used in comparison, consider replacing {x} with a constant variable
@@ -110,7 +114,7 @@ required-imports = ["from __future__ import annotations"]
 known-first-party = ["ridgeplot", "_ridgeplot_examples", "extras"]
 
 [lint.mccabe]
-max-complexity = 8
+max-complexity = 10
 
 [lint.pycodestyle]
 max-doc-length = 100

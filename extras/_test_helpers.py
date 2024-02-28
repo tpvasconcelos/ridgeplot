@@ -27,9 +27,9 @@ def patch_plotly_show() -> Iterator[None]:
 
     def patched(
         fig: Figure | dict[str, Any],
-        renderer: str | None = None,
+        renderer: str | None = None,  # noqa: ARG001
         validate: bool = True,
-        **kwargs: Any,
+        **kwargs: Any,  # noqa: ARG001
     ) -> None:
         validate_coerce_fig_to_dict(fig, validate)
 
