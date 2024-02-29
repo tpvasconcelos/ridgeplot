@@ -115,7 +115,11 @@ html_css_files = [
 ]
 
 # NOTE: When using the 'furo' theme, the `html_js_files` will be placed at
-#       the bottom of the page. See `_templates/base.html` for details.
+#       the bottom of the page.
+#       See: https://github.com/pradyunsg/furo/blob/01887051504bbec32e241af9cebcf5cd10f656d1/src/furo/theme/furo/base.html#L91-L96
+#       If you want to place the JS files at the top of the page, you can use
+#       extend the `_templates/base.html` file and place the JS files in the
+#       `extrahead` block (which should be included in the <head> tab).
 # html_js_files = []
 
 # -- Options for HTML output -----------------------------------------------------------------------
@@ -320,7 +324,7 @@ def register_jinja_functions() -> None:
     DEFAULT_NAMESPACE.update({"repo_file": repo_file, "repo_dir": repo_dir})
 
 
-def setup(app: Sphinx) -> None:
+def setup(app: Sphinx) -> None:  # noqa: ARG001
     compile_plotly_charts()
     register_jinja_functions()
     # app.connect("html-page-context", register_jinja_functions)

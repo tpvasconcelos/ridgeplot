@@ -1,18 +1,19 @@
+#!/usr/bin/env python
 from __future__ import annotations
 
 from itertools import repeat
-from typing import Optional
+from typing import Iterable
 
 import plotly.graph_objects as go
 
 
 def plot_violin(
-    data,
-    names=None,
-    colors=None,
-    violin_kwargs: Optional[dict] = None,
-    layout_kwargs: Optional[dict] = None,
-):
+    data: Iterable[Iterable[float]],
+    names: Iterable[str] | None = None,
+    colors: Iterable[str] | None = None,
+    violin_kwargs: dict | None = None,
+    layout_kwargs: dict | None = None,
+) -> go.Figure:
     names = names if names is not None else repeat(None)
     colors = colors if colors is not None else repeat(None)
     layout_kwargs = layout_kwargs if layout_kwargs is not None else {}

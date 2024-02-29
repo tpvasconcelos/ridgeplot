@@ -18,7 +18,6 @@ from ridgeplot._types import (
 )
 
 if TYPE_CHECKING:
-    from typing import Optional, Union
 
     import plotly.graph_objects as go
 
@@ -28,18 +27,18 @@ if TYPE_CHECKING:
 
 
 def ridgeplot(
-    samples: Union[Samples, ShallowSamples, None] = None,
-    densities: Union[Densities, ShallowDensities, None] = None,
+    samples: Samples | ShallowSamples | None = None,
+    densities: Densities | ShallowDensities | None = None,
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
     kde_points: KDEPoints = 500,
-    colorscale: Union[str, ColorScale] = "plasma",
+    colorscale: str | ColorScale = "plasma",
     colormode: Colormode = "mean-minmax",
-    coloralpha: Optional[float] = None,
-    labels: Union[LabelsArray, ShallowLabelsArray, None] = None,
+    coloralpha: float | None = None,
+    labels: LabelsArray | ShallowLabelsArray | None = None,
     linewidth: float = 1.0,
     spacing: float = 0.5,
-    show_annotations: Union[bool, MissingType] = MISSING,
+    show_annotations: bool | MissingType = MISSING,
     show_yticklabels: bool = True,
     xpad: float = 0.05,
 ) -> go.Figure:

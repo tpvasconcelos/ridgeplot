@@ -19,6 +19,5 @@ sphinxext-opengraph
 # matplotlib is used to generate social cards
 matplotlib
 # ./extras/_compile_plotly_charts.py
-beautifulsoup4
 minify-html
 kaleido

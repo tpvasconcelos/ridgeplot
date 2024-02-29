@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING, Any, Iterator, TypeVar, cast
 
 if TYPE_CHECKING:
     from types import ModuleType
-    from typing import Optional, Tuple, Union
 
     from plotly.graph_objs import Figure
 
@@ -27,10 +26,10 @@ def patch_plotly_show() -> Iterator[None]:
     from plotly.io._utils import validate_coerce_fig_to_dict
 
     def patched(
-        fig: Union[Figure, dict[str, Any]],
-        renderer: Optional[str] = None,
+        fig: Figure | dict[str, Any],
+        renderer: str | None = None,  # noqa: ARG001
         validate: bool = True,
-        **kwargs: Any,
+        **kwargs: Any,  # noqa: ARG001
     ) -> None:
         validate_coerce_fig_to_dict(fig, validate)
 
@@ -60,7 +59,7 @@ def round_trip_pickle(obj: _T, protocol: int = pickle.HIGHEST_PROTOCOL) -> _T:
     return cast(_T, pickle.loads(pickle.dumps(obj, protocol=protocol)))  # noqa: S301
 
 
-def import_pyscript_as_module(path: Union[str, Path]) -> ModuleType:
+def import_pyscript_as_module(path: str | Path) -> ModuleType:
     """Import a Python script as a module.
 
     Parameters
@@ -94,7 +93,7 @@ def import_pyscript_as_module(path: Union[str, Path]) -> ModuleType:
     return module
 
 
-def import_attrs_from_pyscript(path: Union[str, Path], *attributes: str) -> Tuple[Any, ...]:
+def import_attrs_from_pyscript(path: str | Path, *attributes: str) -> tuple[Any, ...]:
     r"""Import attributes from a Python script.
 
     Parameters

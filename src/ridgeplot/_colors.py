@@ -3,16 +3,12 @@ from __future__ import annotations
 import json
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Iterable, Tuple, Union, cast
+from typing import Iterable, Tuple, Union, cast
 
 from _plotly_utils.colors import validate_colors, validate_scale_values
 from plotly.colors import find_intermediate_color, hex_to_rgb, label_rgb
 
 from ridgeplot._utils import LazyMapping, normalise_min_max
-
-if TYPE_CHECKING:
-    from typing import Dict, List
-
 
 _PATH_TO_COLORS_JSON = Path(__file__).parent.joinpath("colors.json")
 
@@ -47,7 +43,7 @@ _Color = Union[
 ]
 
 
-def _colormap_loader() -> Dict[str, ColorScale]:
+def _colormap_loader() -> dict[str, ColorScale]:
     colors: dict[str, ColorScale] = json.loads(_PATH_TO_COLORS_JSON.read_text())
     for name, colorscale in colors.items():
         colors[name] = tuple((s, c) for s, c in colorscale)
@@ -106,7 +102,7 @@ def _any_to_rgb(color: _Color) -> str:
     return rgb
 
 
-def list_all_colorscale_names() -> List[str]:
+def list_all_colorscale_names() -> list[str]:
     """Get a list with all available colorscale names.
 
     .. versionadded:: 0.1.21
@@ -120,7 +116,7 @@ def list_all_colorscale_names() -> List[str]:
     return sorted(_COLORSCALE_MAPPING.keys())
 
 
-def get_all_colorscale_names() -> Tuple[str, ...]:  # pragma: no cover
+def get_all_colorscale_names() -> tuple[str, ...]:  # pragma: no cover
     """Get a tuple with all available colorscale names.
 
     .. deprecated:: 0.1.21

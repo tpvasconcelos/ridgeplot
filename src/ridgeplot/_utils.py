@@ -12,11 +12,6 @@ if TYPE_CHECKING:
         Any,
         Callable,
         Iterator,
-        List,
-        Optional,
-        Set,
-        Tuple,
-        Union,
     )
 
     from ridgeplot._types import Numeric
@@ -32,7 +27,7 @@ def normalise_min_max(val: Numeric, min_: Numeric, max_: Numeric) -> float:
     return float((val - min_) / (max_ - min_))
 
 
-def get_collection_array_shape(arr: Collection[Any]) -> Tuple[Union[int, Set[int]], ...]:
+def get_collection_array_shape(arr: Collection[Any]) -> tuple[int | set[int], ...]:
     """Return the shape of a :class:`~typing.Collection` array.
 
     Parameters
@@ -115,7 +110,7 @@ def get_collection_array_shape(arr: Collection[Any]) -> Tuple[Union[int, Set[int
             raise TypeError(f"Expected a Collection. Got {type(obj)} instead.")
         return len(obj)
 
-    shape: List[Union[int, Set[int]]] = [_get_dim_length(arr)]
+    shape: list[int | set[int]] = [_get_dim_length(arr)]
     while isinstance(arr, Collection):
         try:
             dim_lengths = set(map(_get_dim_length, arr))
@@ -156,7 +151,7 @@ class LazyMapping(Mapping[KT, VT]):
 
     def __init__(self, loader: Callable[[], Mapping[KT, VT]]):
         self._loader = loader
-        self._inner_mapping: Optional[Mapping[KT, VT]] = None
+        self._inner_mapping: Mapping[KT, VT] | None = None
 
     @property
     def _mapping(self) -> Mapping[KT, VT]:
