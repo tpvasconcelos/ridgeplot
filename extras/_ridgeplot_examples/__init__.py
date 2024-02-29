@@ -11,13 +11,11 @@ def tighten_margins(fig: go.Figure) -> go.Figure:
         # If the Figure's margins are different from the default values,
         # we'll assume that the user has set these values intentionally
         return fig
-    # If the Figure has a title, we'll leave 40px of space at the top
-    # None that this might not work well for all titles. E.g., if the
-    # title has multiple lines, or if the font size is larger, etc.
-    fig_has_title = fig.layout.title.text != ""
-    margin_top = None if fig_has_title else 40
-    fig = fig.update_layout(margin=dict(l=0, r=0, t=margin_top, b=40))
-    return fig
+    # If the Figure does not have a title, we'll leave 40px of space at the
+    # top to account for the Plotly toolbar. If the Figure does include
+    # a title, we'll leave the top margin with the default value.
+    margin_top = None if fig.layout.title.text else 40
+    return fig.update_layout(margin=dict(l=0, r=0, t=margin_top, b=0))
 
 
 def load_basic() -> go.Figure:
