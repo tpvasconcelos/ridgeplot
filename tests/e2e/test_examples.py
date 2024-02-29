@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Callable
 
 import pytest
 
-from _ridgeplot_examples import ALL_EXAMPLES, tighten_margins
+from _ridgeplot_examples import ALL_EXAMPLES
 
 if TYPE_CHECKING:
     import plotly.graph_objects as go
@@ -44,7 +44,6 @@ def test_examples_width_height_set(
 def test_regressions(plot_id: str, example_loader: Callable[[], go.Figure]) -> None:
     """Verify that the rendered WebP images match the current artifacts."""
     fig = example_loader()
-    fig = tighten_margins(fig)
     img = fig.to_image(
         format="webp",
         width=fig.layout.width,
