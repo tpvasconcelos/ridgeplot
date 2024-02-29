@@ -228,25 +228,43 @@ sitemap_url_scheme = "{link}"
 
 # -- autodoc & napoleon ----------------------------------------------------------------------------
 _TYPE_ALIASES = {
-    "Numeric",
-    "NumericT",
-    "KDEPoints",
-    "KDEBandwidth",
-    "ColorScale",
-    "LabelsArray",
-    "ColorsArray",
-    "MidpointsArray",
-    "XYCoordinate",
-    "DensityTrace",
-    "DensitiesRow",
-    "Densities",
-    "SamplesTrace",
-    "SamplesRow",
-    "Samples",
-    "ShallowLabelsArray",
-    "ShallowColorsArray",
-    "ShallowDensities",
-    "ShallowSamples",
+    "ridgeplot._colors": {
+        "ColorScale",
+    },
+    "ridgeplot._figure_factory": {
+        "LabelsArray",
+        "ShallowLabelsArray",
+        "ColorsArray",
+        "ShallowColorsArray",
+        "MidpointsArray",
+        "Colormode",
+    },
+    "ridgeplot._kde": {
+        "KDEPoints",
+        "KDEBandwidth",
+    },
+    "ridgeplot._missing": {
+        "MISSING",
+        "MissingType",
+    },
+    "ridgeplot._types": {
+        "CollectionL1",
+        "CollectionL2",
+        "CollectionL3",
+        "Float",
+        "Int",
+        "Numeric",
+        "NumericT",
+        "XYCoordinate",
+        "DensityTrace",
+        "DensitiesRow",
+        "Densities",
+        "ShallowDensities",
+        "SamplesTrace",
+        "SamplesRow",
+        "Samples",
+        "ShallowSamples",
+    },
 }
 
 # autodoc config
@@ -254,7 +272,7 @@ _TYPE_ALIASES = {
 autodoc_member_order = "bysource"
 autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
-autodoc_type_aliases = {x: x for x in _TYPE_ALIASES}
+autodoc_type_aliases = {a: a for aliases in _TYPE_ALIASES.values() for a in aliases}
 
 # autodoc-typehints config
 # https://github.com/tox-dev/sphinx-autodoc-typehints
@@ -267,7 +285,9 @@ autodoc_type_aliases = {x: x for x in _TYPE_ALIASES}
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_preprocess_types = True
-napoleon_type_aliases = {x: f":data:`~ridgeplot._types.{x}`" for x in _TYPE_ALIASES}
+napoleon_type_aliases = {
+    a: f":data:`~{module}.{a}`" for module, aliases in _TYPE_ALIASES.items() for a in aliases
+}
 
 # -- sphinx_remove_toctrees ------------------------------------------------------------------------
 # Use the `sphinx_remove_toctrees` extension to remove auto-generated
