@@ -8,11 +8,7 @@ from typing import (
 )
 
 if TYPE_CHECKING:
-    from typing import (
-        Any,
-        Callable,
-        Iterator,
-    )
+    from typing import Any, Callable, Iterator
 
     from ridgeplot._types import Numeric
 
