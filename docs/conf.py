@@ -122,13 +122,17 @@ html_css_files = [
 #       `extrahead` block (which should be included in the <head> tab).
 # html_js_files = []
 
+# nitpicky mode options
+nitpicky = True
+nitpick_ignore = []
+
 # -- Options for HTML output -----------------------------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
 html_theme = "furo"
-html_title = project_name
+html_title = f"{project_name} docs ({release})"
 html_short_title = project_name
 
 html_favicon = "_static/favicon.ico"  # 32x32 pixel .ico file
@@ -204,7 +208,7 @@ extlinks = {
     "gh-issue": (f"{github_project_url}/issues/%s", "#%s"),
     "gh-pr": (f"{github_project_url}/pull/%s", "#%s"),
     "gh-discussion": (f"{github_project_url}/discussions/%s", "#%s"),
-    "gh-user": (f"{github_project_url}/%s", "@%s"),
+    "gh-user": ("https://github.com/%s", "@%s"),
     "repo-file": (f"{repo_url}/blob/main/%s", "%s"),
     "repo-dir": (f"{repo_url}/tree/main/%s", "%s"),
 }
@@ -212,21 +216,8 @@ extlinks_detect_hardcoded_links = True
 
 
 # -- intersphinx  ----------------------------------------------------------------------------------
-meta_classifiers = metadata.get_all("Classifier")
-if not meta_classifiers:
-    raise RuntimeError("No classifiers found in the project metadata")
-py_versions = []
-for c in meta_classifiers:
-    if not c.startswith("Programming Language :: Python :: "):
-        continue
-    pyv = c.split("::")[-1].strip()
-    if pyv[0] not in ("2", "3"):
-        continue
-    py_versions.append(pyv)
-if not py_versions:
-    raise RuntimeError("No Python versions found in the project classifiers")
 intersphinx_mapping = {
-    **{f"python{v}": (f"https://docs.python.org/{v}/", None) for v in py_versions},
+    "python": ("https://docs.python.org/3", None),
     "packaging": ("https://packaging.pypa.io/en/latest", None),
     "numpy": ("https://docs.scipy.org/doc/numpy/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
@@ -234,64 +225,28 @@ intersphinx_mapping = {
     "statsmodels": ("https://www.statsmodels.org/stable/", None),
     "plotly": ("https://plotly.com/python-api-reference/", None),
 }
-nitpicky = True
+
 
 # -- sphinx-sitemap --------------------------------------------------------------------------------
 html_baseurl = docs_url
 sitemap_url_scheme = "{link}"
 
+
 # -- autodoc, napoleon, and autodoc-typehints ------------------------------------------------------
-_TYPE_ALIASES = {
-    "ridgeplot._colors": {
-        "ColorScale",
-    },
-    "ridgeplot._figure_factory": {
-        "LabelsArray",
-        "ShallowLabelsArray",
-        "ColorsArray",
-        "ShallowColorsArray",
-        "MidpointsArray",
-        "Colormode",
-    },
-    "ridgeplot._kde": {
-        "KDEPoints",
-        "KDEBandwidth",
-    },
-    "ridgeplot._missing": {
-        "MISSING",
-        "MissingType",
-    },
-    "ridgeplot._types": {
-        "CollectionL1",
-        "CollectionL2",
-        "CollectionL3",
-        "Float",
-        "Int",
-        "Numeric",
-        "NumericT",
-        "XYCoordinate",
-        "DensityTrace",
-        "DensitiesRow",
-        "Densities",
-        "ShallowDensities",
-        "SamplesTrace",
-        "SamplesRow",
-        "Samples",
-        "ShallowSamples",
-    },
-}
+
 
 # autodoc config
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
 autodoc_member_order = "bysource"
 autodoc_typehints = "description"
 autodoc_default_options = {
+    "members": True,
     "member-order": "bysource",
     "undoc-members": True,
-    # "show-inheritance": True,
+    "show-inheritance": True,
 }
 autodoc_typehints_description_target = "documented"
-autodoc_type_aliases = {a: a for aliases in _TYPE_ALIASES.values() for a in aliases}
+
 
 # autodoc-typehints config
 # https://github.com/tox-dev/sphinx-autodoc-typehints
@@ -300,26 +255,64 @@ autodoc_type_aliases = {a: a for aliases in _TYPE_ALIASES.values() for a in alia
 # always_document_param_types = True
 # simplify_optional_unions = False
 
+
 # Napoleon config
 # https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_preprocess_types = True
 # napoleon_use_rtype = False
-napoleon_type_aliases = {
-    a: f":data:`~{module}.{a}`" for module, aliases in _TYPE_ALIASES.items() for a in aliases
+
+
+# Type aliases
+_TYPE_ALIASES_FULLY_QUALIFIED = {
+    # ------- ._colors -----------------------------
+    "ridgeplot._colors.ColorScale",
+    # ------- ._figure_factory ---------------------
+    "ridgeplot._figure_factory.LabelsArray",
+    "ridgeplot._figure_factory.ShallowLabelsArray",
+    "ridgeplot._figure_factory.ColorsArray",
+    "ridgeplot._figure_factory.ShallowColorsArray",
+    "ridgeplot._figure_factory.MidpointsArray",
+    "ridgeplot._figure_factory.Colormode",
+    # ------- ._kde --------------------------------
+    "ridgeplot._kde.KDEPoints",
+    "ridgeplot._kde.KDEBandwidth",
+    # ------- ._missing ----------------------------
+    "ridgeplot._missing.MISSING",
+    "ridgeplot._missing.MissingType",
+    # ------- ._types ------------------------------
+    "ridgeplot._types.CollectionL1",
+    "ridgeplot._types.CollectionL2",
+    "ridgeplot._types.CollectionL3",
+    "ridgeplot._types.Float",
+    "ridgeplot._types.Int",
+    "ridgeplot._types.Numeric",
+    "ridgeplot._types.NumericT",
+    "ridgeplot._types.XYCoordinate",
+    "ridgeplot._types.DensityTrace",
+    "ridgeplot._types.DensitiesRow",
+    "ridgeplot._types.Densities",
+    "ridgeplot._types.ShallowDensities",
+    "ridgeplot._types.SamplesTrace",
+    "ridgeplot._types.SamplesRow",
+    "ridgeplot._types.Samples",
+    "ridgeplot._types.ShallowSamples",
 }
+_TYPE_ALIASES = {fq.split(".")[-1]: fq for fq in _TYPE_ALIASES_FULLY_QUALIFIED}
+autodoc_type_aliases = {k: f":data:`~{v}`" for k, v in _TYPE_ALIASES.items()}
+napoleon_type_aliases = autodoc_type_aliases.copy()
+
 
 # -- sphinx_remove_toctrees ------------------------------------------------------------------------
 # Use the `sphinx_remove_toctrees` extension to remove auto-generated
 # toctrees (generated by `autosummary`) from the main sidebar.
-remove_from_toctrees = [
-    # "api/public/*",
-    "api/internal/*",
-]
+remove_from_toctrees = ["api/internal/*"]
+
 
 # -- sphinx-paramlinks -----------------------------------------------------------------------------
 paramlinks_hyperlink_param = "name"
+
 
 # -- myst config -----------------------------------------------------------------------------------
 myst_enable_extensions = [

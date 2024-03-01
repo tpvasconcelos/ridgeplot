@@ -218,4 +218,4 @@ You need push access to the project's repository to make releases. The following
 
 ## Code of Conduct
 
-Please remember to read and follow our standard [Code of Conduct](https://github.com/tpvasconcelos/ridgeplot/blob/main/CODE_OF_CONDUCT.md). 🤝
+Please remember to read and follow our standard {repo-file}`Code of Conduct <CODE_OF_CONDUCT.md>`. 🤝

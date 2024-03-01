@@ -62,7 +62,7 @@ def load_probly(
                :align: left
 
                * - Creator
-                 - `zonination <https://github.com/zonination>`_
+                 - :gh-user:`zonination`
                * - Source
                  - https://raw.githubusercontent.com/zonination/perceptions/51207062aa173777264d3acce0131e1e2456d966/probly.csv
                * - Accessed on
@@ -80,8 +80,7 @@ def load_probly(
                :align: left
 
                * - Creator
-                 - Wade Fagen-Ulmschneider (`wadefagen
-                   <https://github.com/wadefagen>`_)
+                 - Wade Fagen-Ulmschneider (:gh-user:`wadefagen`)
                * - Source
                  - https://raw.githubusercontent.com/wadefagen/datasets/7e752937b72edc3126e3dd17e3cd97eb727af8f9/Perception-of-Probability-Words/survey-results.csv
                * - Accessed on

@@ -56,7 +56,7 @@ _COLORSCALE_MAPPING: LazyMapping[str, ColorScale] = LazyMapping(loader=_colormap
 def validate_colorscale(colorscale: ColorScale) -> None:
     """Validate the structure, scale values, and colors of a colorscale.
 
-    Adapted from :func:`_plotly_utils.colors.validate_colorscale`.
+    Adapted from ``_plotly_utils.colors.validate_colorscale``.
     """
     scale, colors = zip(*colorscale)
     validate_scale_values(scale=scale)
