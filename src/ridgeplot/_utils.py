@@ -131,9 +131,7 @@ class LazyMapping(Mapping[KT, VT]):
 
     Examples
     --------
-    >>> from typing import Dict
-    >>>
-    >>> def my_io_loader() -> Dict[str, int]:
+    >>> def my_io_loader() -> dict[str, int]:
     ...     print("Loading...")
     ...     return {"a": 1, "b": 2}
     ...

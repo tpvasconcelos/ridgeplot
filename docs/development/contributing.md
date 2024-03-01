@@ -15,7 +15,7 @@ The following is a set of (slightly opinionated) rules and general guidelines fo
 (Development-environment)=
 ## Development environment
 
-Here are some guidelines for setting up your development environment. Most of the steps have been abstracted away using the [make](<https://en.wikipedia.org/wiki/Make_(software)>) build automation tool. Feel free to peak inside {{ repo_file('Makefile') }} at any time to see exactly what is being run, and in which order.
+Here are some guidelines for setting up your development environment. Most of the steps have been abstracted away using the [make](<https://en.wikipedia.org/wiki/Make_(software)>) build automation tool. Feel free to peak inside {repo-file}`Makefile` at any time to see exactly what is being run, and in which order.
 
 First, you will need to [clone](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork) this repository. For this, make sure you have a [GitHub account](https://github.com/join), fork ridgeplot to your GitHub account by clicking the [Fork](https://github.com/tpvasconcelos/ridgeplot/fork) button, and clone the main repository locally (e.g. using SSH)
 
@@ -113,17 +113,17 @@ tox -p -m static tests
 
 It's that simple 🙌 !! Note only that this will take a while the first time you run the command, since it will have to create all the required virtual environments (along with their dependencies) for each CI step.
 
-The configuration for Tox can be found in {{ repo_file('tox.ini') }}.
+The configuration for Tox can be found in {repo-file}`tox.ini`.
 
 #### Tests and coverage reports
 
-We use [pytest](https://github.com/pytest-dev/pytest) as our testing framework, and [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/) to track and measure code coverage. You can find all configuration details in {{ repo_file('tox.ini') }}. To trigger all tests, simply run
+We use [pytest](https://github.com/pytest-dev/pytest) as our testing framework, and [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/) to track and measure code coverage. You can find all configuration details in {repo-file}`tox.ini`. To trigger all tests, simply run
 
 ```shell
 tox -p -m tests
 ```
 
-If you need more control over which tests are running, or which flags are being passed to pytest, you can also invoke `pytest` directly which will run on your current virtual environment. Configuration details can be found in {{ repo_file('tox.ini') }}.
+If you need more control over which tests are running, or which flags are being passed to pytest, you can also invoke `pytest` directly which will run on your current virtual environment. Configuration details can be found in {repo-file}`tox.ini`.
 
 #### Linting
 
@@ -133,11 +133,11 @@ This project uses [pre-commit hooks](https://pre-commit.com/) to check and autom
 pre-commit run --all-files
 ```
 
-For more information on which hooks will run, have a look inside the {{ repo_file('.pre-commit-config.yaml') }} configuration file. If you want to manually trigger individual hooks, you can invoke the `pre-commit`script directly. If you need even more control over the tools used you could also invoke them directly (e.g., `isort .`). Remember however that this is **not** the recommended approach.
+For more information on which hooks will run, have a look inside the {repo-file}`.pre-commit-config.yaml` configuration file. If you want to manually trigger individual hooks, you can invoke the `pre-commit`script directly. If you need even more control over the tools used you could also invoke them directly (e.g., `isort .`). Remember however that this is **not** the recommended approach.
 
 ### GitHub Actions
 
-We use [GitHub Actions](https://github.com/features/actions) to automatically run all integration approval steps defined with Tox on every push or pull request event. These checks run on all major operating systems and all supported Python versions. Finally, the generated coverage reports are uploaded to [Codecov](https://about.codecov.io/) and [Codacy](https://www.codacy.com/). Check {{ repo_file('.github/workflows/ci.yaml') }} for more details.
+We use [GitHub Actions](https://github.com/features/actions) to automatically run all integration approval steps defined with Tox on every push or pull request event. These checks run on all major operating systems and all supported Python versions. Finally, the generated coverage reports are uploaded to [Codecov](https://about.codecov.io/) and [Codacy](https://www.codacy.com/). Check {repo-file}`.github/workflows/ci.yaml` for more details.
 
 ### Tools and software
 
@@ -145,18 +145,18 @@ Here is a quick overview of all CI tools and software in use, some of which have
 
 | Tool                                                                       | Category         | config files                                 | Details                                                                                                                                                                                             |
 |----------------------------------------------------------------------------|------------------|----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Tox](https://github.com/tox-dev/tox)                                      | 🔧 Orchestration | {{ repo_file('tox.ini') }}                   | We use Tox to reliably run all integration approval steps in reproducible isolated virtual environments.                                                                                            |
-| [GitHub Actions](https://github.com/features/actions)                      | 🔧 Orchestration | {{ repo_file('.github/workflows/ci.yaml') }} | Workflow automation for GitHub. We use it to automatically run all integration approval steps defined with Tox on every push or pull request event.                                                 |
-| [Git](https://git-scm.com/)                                                | 🕰 VCS           | {{ repo_file('.gitignore') }}                | Projects version control system software of choice.                                                                                                                                                 |
-| [pytest](https://github.com/pytest-dev/pytest)                             | 🧪 Testing       | {{ repo_file('tox.ini') }}                   | Testing framework for python code.                                                                                                                                                                  |
-| [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/)                 | 📊 Coverage      | {{ repo_file('tox.ini') }}                   | Coverage plugin for pytest.                                                                                                                                                                         |
+| [Tox](https://github.com/tox-dev/tox)                                      | 🔧 Orchestration | {repo-file}`tox.ini`                   | We use Tox to reliably run all integration approval steps in reproducible isolated virtual environments.                                                                                            |
+| [GitHub Actions](https://github.com/features/actions)                      | 🔧 Orchestration | {repo-file}`.github/workflows/ci.yaml` | Workflow automation for GitHub. We use it to automatically run all integration approval steps defined with Tox on every push or pull request event.                                                 |
+| [Git](https://git-scm.com/)                                                | 🕰 VCS           | {repo-file}`.gitignore`                | Projects version control system software of choice.                                                                                                                                                 |
+| [pytest](https://github.com/pytest-dev/pytest)                             | 🧪 Testing       | {repo-file}`tox.ini`                   | Testing framework for python code.                                                                                                                                                                  |
+| [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/)                 | 📊 Coverage      | {repo-file}`tox.ini`                   | Coverage plugin for pytest.                                                                                                                                                                         |
 | [Codecov](https://about.codecov.io/) and [Codacy](https://www.codacy.com/) | 📊 Coverage      |                                              | Two great services for tracking, monitoring, and alerting on code coverage and code quality.                                                                                                        |
-| [pre-commit hooks](https://pre-commit.com/)                                | 💅 Linting       | {{ repo_file('.pre-commit-config.yaml') }}   | Used to to automatically check and fix any formatting rules on every commit.                                                                                                                        |
-| [mypy](https://github.com/python/mypy)                                     | 💅 Linting       | {{ repo_file('mypy.ini') }}                  | A static type checker for Python. We use quite a strict configuration here, which can be tricky at times. Feel free to ask for help from the community by commenting on your issue or pull request. |
-| [black](https://github.com/psf/black)                                      | 💅 Linting       | {{ repo_file('pyproject.toml') }}            | "The uncompromising Python code formatter". We use `black` to automatically format Python code in a deterministic manner. We use a maximum line length of 100 characters.                           |
-| [flake8](https://github.com/pycqa/flake8)                                  | 💅 Linting       | {{ repo_file('setup.cfg') }}                 | Used to check the style and quality of python code.                                                                                                                                                 |
-| [isort](https://github.com/pycqa/isort)                                    | 💅 Linting       | {{ repo_file('setup.cfg') }}                 | Used to sort python imports.                                                                                                                                                                        |
-| [EditorConfig](https://editorconfig.org/)                                  | 💅 Linting       | {{ repo_file('.editorconfig') }}             | This repository uses the `.editorconfig` standard configuration file, which aims to ensure consistent style across multiple programming environments.                                               |
+| [pre-commit hooks](https://pre-commit.com/)                                | 💅 Linting       | {repo-file}`.pre-commit-config.yaml`   | Used to to automatically check and fix any formatting rules on every commit.                                                                                                                        |
+| [mypy](https://github.com/python/mypy)                                     | 💅 Linting       | {repo-file}`mypy.ini`                  | A static type checker for Python. We use quite a strict configuration here, which can be tricky at times. Feel free to ask for help from the community by commenting on your issue or pull request. |
+| [black](https://github.com/psf/black)                                      | 💅 Linting       | {repo-file}`pyproject.toml`            | "The uncompromising Python code formatter". We use `black` to automatically format Python code in a deterministic manner. We use a maximum line length of 100 characters.                           |
+| [flake8](https://github.com/pycqa/flake8)                                  | 💅 Linting       | {repo-file}`setup.cfg`                 | Used to check the style and quality of python code.                                                                                                                                                 |
+| [isort](https://github.com/pycqa/isort)                                    | 💅 Linting       | {repo-file}`setup.cfg`                 | Used to sort python imports.                                                                                                                                                                        |
+| [EditorConfig](https://editorconfig.org/)                                  | 💅 Linting       | {repo-file}`.editorconfig`             | This repository uses the `.editorconfig` standard configuration file, which aims to ensure consistent style across multiple programming environments.                                               |
 
 ## Project structure
 
@@ -164,21 +164,21 @@ Here is a quick overview of all CI tools and software in use, some of which have
 
 GitHub's community health files allow repository maintainers to set contributing guidelines to help collaborators make meaningful, useful contributions to a project. Read more on this official [reference](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions).
 
-- {{ repo_file('CODE_OF_CONDUCT.md') }} - A CODE_OF_CONDUCT file defines standards for how to engage in a community. For more information, see "[Adding a code of conduct to your project.](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-code-of-conduct-to-your-project)"
-- {{ repo_file('CONTRIBUTING.md') }} - A CONTRIBUTING file communicates how people should contribute to your project. For more information, see "[Setting guidelines for repository contributors.](https://docs.github.com/en/articles/setting-guidelines-for-repository-contributors)"
+- {repo-file}`CODE_OF_CONDUCT.md` - A CODE_OF_CONDUCT file defines standards for how to engage in a community. For more information, see "[Adding a code of conduct to your project.](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-code-of-conduct-to-your-project)"
+- {repo-file}`CONTRIBUTING.md` - A CONTRIBUTING file communicates how people should contribute to your project. For more information, see "[Setting guidelines for repository contributors.](https://docs.github.com/en/articles/setting-guidelines-for-repository-contributors)"
 
 ### Configuration files
 
 For more context on some of the tools referenced below, refer to the sections on [Continuous Integration](#continuous-integration).
 
-- {{ repo_file('.github/workflows/ci.yaml') }} - Workflow definition for our CI GitHub Actions pipeline.
-- {{ repo_file('.pre-commit-config.yaml') }} - List of pre-commit hooks.
-- {{ repo_file('.editorconfig') }} - [EditorConfig](https://editorconfig.org/) standard configuration file.
-- {{ repo_file('mypy.ini') }} - Configuration for the `mypy` static type checker.
-- {{ repo_file('pyproject.toml') }} -
+- {repo-file}`.github/workflows/ci.yaml` - Workflow definition for our CI GitHub Actions pipeline.
+- {repo-file}`.pre-commit-config.yaml` - List of pre-commit hooks.
+- {repo-file}`.editorconfig` - [EditorConfig](https://editorconfig.org/) standard configuration file.
+- {repo-file}`mypy.ini` - Configuration for the `mypy` static type checker.
+- {repo-file}`pyproject.toml` -
 - [build system](https://setuptools.readthedocs.io/en/latest/build_meta.html) requirements (probably won't need to touch these!) and [black](https://github.com/psf/black) configurations.
-- {{ repo_file('setup.cfg') }} - Here, we specify the package metadata, requirements, as well as configuration details for [flake8](https://github.com/pycqa/flake8) and [isort](https://github.com/pycqa/isort).
-- {{ repo_file('tox.ini') }} - Configuration for [tox](https://github.com/tox-dev/tox), [pytest](https://github.com/pytest-dev/pytest), and [coverage](https://coverage.readthedocs.io/en/latest/index.html).
+- {repo-file}`setup.cfg` - Here, we specify the package metadata, requirements, as well as configuration details for [flake8](https://github.com/pycqa/flake8) and [isort](https://github.com/pycqa/isort).
+- {repo-file}`tox.ini` - Configuration for [tox](https://github.com/tox-dev/tox), [pytest](https://github.com/pytest-dev/pytest), and [coverage](https://coverage.readthedocs.io/en/latest/index.html).
 
 ## Release process
 

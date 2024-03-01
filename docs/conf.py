@@ -3,7 +3,6 @@ from __future__ import annotations
 import sys
 from datetime import datetime
 from pathlib import Path
-from pprint import pformat
 from typing import TYPE_CHECKING
 
 try:
@@ -37,7 +36,7 @@ if TYPE_CHECKING:
 
 metadata = importlib_metadata.metadata("ridgeplot")
 
-project = project_name = metadata["name"]
+project = project_name = name = metadata["name"]
 author = metadata["author"]
 release = metadata["version"]
 version = ".".join(release.split(".")[:2])
@@ -64,8 +63,9 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    # NOTE: 'sphinx_autodoc_typehints' should be loaded after
+    #       'sphinx.ext.autodoc' and 'sphinx.ext.napoleon'
     # "sphinx_autodoc_typehints",
-    # "sphinx_toolbox.more_autodoc.typehints",
     "sphinx_copybutton",
     "sphinx_design",
     "sphinx_inline_tabs",
@@ -128,13 +128,13 @@ html_css_files = [
 # a list of builtin themes.
 
 html_theme = "furo"
-# html_title = project_name
+html_title = project_name
 html_short_title = project_name
 
 html_favicon = "_static/favicon.ico"  # 32x32 pixel .ico file
 html_logo = "_static/img/logo-wide.png"
 html_sourcelink_suffix = ""
-html_last_updated_fmt = ""
+html_last_updated_fmt = "%B %d, %Y"
 
 project_urls = dict(url.split(", ") for url in metadata.get_all("project-url"))  # type: ignore[union-attr]
 repo_url = project_urls["Source code"]
@@ -189,6 +189,7 @@ rst_epilog = """
 .. |~go.Figure| replace:: :class:`~plotly.graph_objects.Figure`
 """
 
+
 # -- ghissue  --------------------------------------------------------------------------------------
 github_project_url = repo_url
 
@@ -196,6 +197,18 @@ github_project_url = repo_url
 # imgmath_image_format = "png"
 # imgmath_latex_preamble = r"\usepackage[active]{preview}"
 # imgmath_use_preview = True
+
+
+# -- extlinks  -------------------------------------------------------------------------------------
+extlinks = {
+    "gh-issue": (f"{github_project_url}/issues/%s", "#%s"),
+    "gh-pr": (f"{github_project_url}/pull/%s", "#%s"),
+    "gh-discussion": (f"{github_project_url}/discussions/%s", "#%s"),
+    "gh-user": (f"{github_project_url}/%s", "@%s"),
+    "repo-file": (f"{repo_url}/blob/main/%s", "%s"),
+    "repo-dir": (f"{repo_url}/tree/main/%s", "%s"),
+}
+extlinks_detect_hardcoded_links = True
 
 
 # -- intersphinx  ----------------------------------------------------------------------------------
@@ -214,19 +227,20 @@ if not py_versions:
     raise RuntimeError("No Python versions found in the project classifiers")
 intersphinx_mapping = {
     **{f"python{v}": (f"https://docs.python.org/{v}/", None) for v in py_versions},
+    "packaging": ("https://packaging.pypa.io/en/latest", None),
     "numpy": ("https://docs.scipy.org/doc/numpy/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
     "statsmodels": ("https://www.statsmodels.org/stable/", None),
     "plotly": ("https://plotly.com/python-api-reference/", None),
 }
-print(f"intersphinx_mapping = {pformat(intersphinx_mapping)}")
+nitpicky = True
 
 # -- sphinx-sitemap --------------------------------------------------------------------------------
 html_baseurl = docs_url
 sitemap_url_scheme = "{link}"
 
-# -- autodoc & napoleon ----------------------------------------------------------------------------
+# -- autodoc, napoleon, and autodoc-typehints ------------------------------------------------------
 _TYPE_ALIASES = {
     "ridgeplot._colors": {
         "ColorScale",
@@ -271,20 +285,27 @@ _TYPE_ALIASES = {
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
 autodoc_member_order = "bysource"
 autodoc_typehints = "description"
+autodoc_default_options = {
+    "member-order": "bysource",
+    "undoc-members": True,
+    # "show-inheritance": True,
+}
 autodoc_typehints_description_target = "documented"
 autodoc_type_aliases = {a: a for aliases in _TYPE_ALIASES.values() for a in aliases}
 
 # autodoc-typehints config
 # https://github.com/tox-dev/sphinx-autodoc-typehints
-# typehints_document_rtype = False
-# typehints_use_rtype = False
-# typehints_defaults = "braces"
+# typehints_use_rtype = True  # use w/ `napoleon_use_rtype` to avoid duplication
+# typehints_defaults = "comma"
+# always_document_param_types = True
+# simplify_optional_unions = False
 
 # Napoleon config
 # https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_preprocess_types = True
+# napoleon_use_rtype = False
 napoleon_type_aliases = {
     a: f":data:`~{module}.{a}`" for module, aliases in _TYPE_ALIASES.items() for a in aliases
 }
@@ -323,30 +344,6 @@ myst_substitutions = {
 # -- custom setup steps ------------------------------------------------------------
 
 
-def register_jinja_functions() -> None:
-    """Add custom functions to the jinja context
-    For example, you can define the following function:
-    >>> def now() -> str:
-    >>>     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    Add it to the jinja DEFAULT_NAMESPACE
-    >>> DEFAULT_NAMESPACE["now"] = now
-
-    Use it in your docs like this:
-    This is a Markdown block rendered at time={{ now() }}
-    """
-    from jinja2.defaults import DEFAULT_NAMESPACE
-
-    def repo_file(file_name: str) -> str:
-        return f"[{file_name}]({repo_url}/blob/main/{file_name})"
-
-    def repo_dir(dir_name: str) -> str:
-        return f"[{dir_name}]({repo_url}/tree/main/{dir_name})"
-
-    DEFAULT_NAMESPACE.update({"repo_file": repo_file, "repo_dir": repo_dir})
-
-
 def setup(app: Sphinx) -> None:  # noqa: ARG001
     compile_plotly_charts()
-    register_jinja_functions()
     # app.connect("html-page-context", register_jinja_functions)
