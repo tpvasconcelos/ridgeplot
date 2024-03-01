@@ -315,7 +315,9 @@ myst_enable_extensions = [
 myst_dmath_double_inline = True
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html#auto-generated-header-anchors
 myst_heading_anchors = 2
-myst_substitutions = {"some_jinja2_key": "value"}
+myst_substitutions = {
+    # "some_jinja2_key": "value",
+}
 
 
 # -- custom setup steps ------------------------------------------------------------
