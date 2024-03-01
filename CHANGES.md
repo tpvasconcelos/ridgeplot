@@ -5,6 +5,10 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Documentation
+
+- Small documentation improvements ([#180](https://github.com/tpvasconcelos/ridgeplot/pull/180))
+
 ### Internals
 
 - Migrate from `setup.cfg` from `pyproject.toml` ([#176](https://github.com/tpvasconcelos/ridgeplot/pull/176))
