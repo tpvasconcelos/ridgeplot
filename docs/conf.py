@@ -40,7 +40,7 @@ project = project_name = name = metadata["name"]
 author = metadata["author"]
 release = metadata["version"]
 version = ".".join(release.split(".")[:2])
-project_copyright = f"2021 - {datetime.today().year}, {author}"  # noqa: DTZ002
+copyright = project_copyright = f"2021 - {datetime.today().year}, {author}"  # noqa: DTZ002, A001
 
 master_doc = "index"
 language = "en"
@@ -52,7 +52,6 @@ language = "en"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    # "myst_nb",
     "myst_parser",
     "notfound.extension",
     "sphinx.ext.autodoc",
@@ -268,6 +267,7 @@ napoleon_preprocess_types = True
 _TYPE_ALIASES_FULLY_QUALIFIED = {
     # ------- ._colors -----------------------------
     "ridgeplot._colors.ColorScale",
+    "ridgeplot._colors._Color",
     # ------- ._figure_factory ---------------------
     "ridgeplot._figure_factory.LabelsArray",
     "ridgeplot._figure_factory.ShallowLabelsArray",
@@ -300,8 +300,11 @@ _TYPE_ALIASES_FULLY_QUALIFIED = {
     "ridgeplot._types.ShallowSamples",
 }
 _TYPE_ALIASES = {fq.split(".")[-1]: fq for fq in _TYPE_ALIASES_FULLY_QUALIFIED}
-autodoc_type_aliases = {k: f":data:`~{v}`" for k, v in _TYPE_ALIASES.items()}
-napoleon_type_aliases = autodoc_type_aliases.copy()
+autodoc_type_aliases = {
+    **{a: a for a in _TYPE_ALIASES.values()},
+    **{fq: fq for fq in _TYPE_ALIASES.values()},
+}
+napoleon_type_aliases = {a: f":data:`~{fq}`" for a, fq in _TYPE_ALIASES.items()}
 
 
 # -- sphinx_remove_toctrees ------------------------------------------------------------------------

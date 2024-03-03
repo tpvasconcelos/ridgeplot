@@ -17,8 +17,10 @@ if TYPE_CHECKING:
 
 
 KDEPoints = Union[int, CollectionL1[Numeric]]
+""""""
 
 KDEBandwidth = Union[str, float, Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]]
+""""""
 
 
 def estimate_density_trace(

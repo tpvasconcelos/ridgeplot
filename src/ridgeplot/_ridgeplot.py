@@ -130,7 +130,7 @@ def ridgeplot(
 
     colorscale : str or ColorScale
         Any valid Plotly color-scale or a str with a valid named color-scale.
-        Use :func:`~ridgeplot.get_all_colorscale_names()` to see which names
+        Use :func:`~ridgeplot.list_all_colorscale_names()` to see which names
         are available or check out `Plotly's built-in color-scales`_.
 
     colormode : Colormode

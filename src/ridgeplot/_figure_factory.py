@@ -66,6 +66,7 @@ For instance, the following is a valid :data:`MidpointsArray`:
 """
 
 Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
+""""""
 
 _D3HF = ".7"
 """Hover format
@@ -81,11 +82,12 @@ _DEFAULT_HOVERTEMPLATE = (
     "<br>"
     "<extra>%{fullData.name}</extra>"
 )  # fmt: skip
+""""""
 
 
 def get_xy_extrema(densities: Densities) -> tuple[Numeric, Numeric, Numeric, Numeric]:
-    """Get the global x-y extrema (x_min, x_max, y_min, y_max) from all the
-    :data:`~ridgeplot._types.DensityTrace`s in the
+    r"""Get the global x-y extrema (x_min, x_max, y_min, y_max) over all
+    :data:`~ridgeplot._types.DensityTrace`\s in the
     :data:`~ridgeplot._types.Densities` array.
 
     Parameters

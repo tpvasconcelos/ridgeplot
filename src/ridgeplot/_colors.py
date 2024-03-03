@@ -41,6 +41,7 @@ _Color = Union[
     # rgb tuple
     Tuple[float, float, float],
 ]
+""""""
 
 
 def _colormap_loader() -> dict[str, ColorScale]:
