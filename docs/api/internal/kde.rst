@@ -1,7 +1,7 @@
-Kernel density estimation (KDE)
-===============================
+ridgeplot._kde
+==============
+
+Kernel density estimation (KDE) utilities.
 
 .. automodule:: ridgeplot._kde
-   :members:
-   :undoc-members:
    :private-members:

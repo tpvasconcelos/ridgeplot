@@ -1,7 +1,7 @@
-Missing sentinel
-================
+ridgeplot._missing
+==================
+
+Missing sentinel class.
 
 .. automodule:: ridgeplot._missing
-   :members:
-   :undoc-members:
    :private-members:

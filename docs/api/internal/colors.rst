@@ -1,7 +1,7 @@
-Color utilities
-===============
+ridgeplot._colors
+=================
+
+Color utilities.
 
 .. automodule:: ridgeplot._colors
-   :members:
-   :undoc-members:
    :private-members:

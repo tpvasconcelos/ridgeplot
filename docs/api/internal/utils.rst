@@ -1,7 +1,7 @@
-Other utilities
-===============
+ridgeplot._utils
+================
+
+Miscellaneous utilities and helper functions.
 
 .. automodule:: ridgeplot._utils
-   :members:
-   :undoc-members:
    :private-members:
