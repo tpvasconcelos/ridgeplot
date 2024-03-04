@@ -123,7 +123,7 @@ html_css_files = [
 
 # nitpicky mode options
 nitpicky = True
-nitpick_ignore = []
+nitpick_ignore: list[tuple[str, str]] = []
 
 # -- Options for HTML output -----------------------------------------------------------------------
 
@@ -336,7 +336,7 @@ myst_enable_extensions = [
 myst_dmath_double_inline = True
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html#auto-generated-header-anchors
 myst_heading_anchors = 2
-myst_substitutions = {
+myst_substitutions: dict[str, str] = {
     # "some_jinja2_key": "value",
 }
 
