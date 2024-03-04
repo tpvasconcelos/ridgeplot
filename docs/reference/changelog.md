@@ -7,7 +7,8 @@ Unreleased changes
 
 ### Documentation
 
-- Small documentation improvements ({gh-issue}`180`)
+- Misc documentation improvements ({gh-issue}`180`)
+- Move changelog to `./docs/reference/changelog.md` ({gh-issue}`180`)
 
 ### Internals
 
