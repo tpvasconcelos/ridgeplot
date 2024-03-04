@@ -39,7 +39,8 @@ _T = TypeVar("_T")
 CollectionL1 = Collection[_T]
 """A :data:`~typing.TypeAlias` for a 1-level-deep :class:`~typing.Collection`.
 
-Example:
+Example
+-------
 
 >>> c1 = [1, 2, 3]
 """
@@ -47,7 +48,8 @@ Example:
 CollectionL2 = Collection[Collection[_T]]
 """A :data:`~typing.TypeAlias` for a 2-level-deep :class:`~typing.Collection`.
 
-Example:
+Example
+-------
 
 >>> c2 = [[1, 2, 3], [4, 5, 6]]
 """
@@ -55,7 +57,8 @@ Example:
 CollectionL3 = Collection[Collection[Collection[_T]]]
 """A :data:`~typing.TypeAlias` for a 3-level-deep :class:`~typing.Collection`.
 
-Example:
+Example
+-------
 
 >>> c3 = [
 ...     [[1, 2], [3, 4]],
@@ -101,7 +104,8 @@ XYCoordinate = Tuple[NumericT, NumericT]
 """A 2D :math:`(x, y)` coordinate, represented as a :class:`~tuple` of
 two :data:`Numeric` values.
 
-Example:
+Example
+-------
 
 >>> xy_coord = (1, 2)
 """
@@ -145,7 +149,8 @@ These are equivalent:
 - ``CollectionL2[XYCoordinate]``
 - ``Collection[Collection[Tuple[Numeric, Numeric]]]``
 
-Example:
+Example
+-------
 
 .. tab-set::
 
@@ -182,7 +187,8 @@ These are equivalent:
 - ``CollectionL3[XYCoordinate]``
 - ``Collection[Collection[Collection[Tuple[Numeric, Numeric]]]]``
 
-For instance, the following is a valid ``Densities`` object:
+Example
+-------
 
 .. tab-set::
 
@@ -221,7 +227,8 @@ These are equivalent:
 - ``CollectionL2[XYCoordinate]``
 - ``Collection[Collection[Tuple[Numeric, Numeric]]]``
 
-Example:
+Example
+-------
 
 .. tab-set::
 
@@ -273,7 +280,8 @@ SamplesTrace = CollectionL1[Numeric]
 """A :data:`SamplesTrace` is a collection of numeric values representing a
 set of samples from which a :data:`DensityTrace` can be estimated via KDE.
 
-Example:
+Example
+-------
 
 .. tab-set::
 
@@ -297,7 +305,8 @@ plotted on a given row of a ridgeplot.
 i.e. a :data:`SamplesRow` is a collection of :data:`SamplesTrace`\s and can be
 converted into a :data:`DensitiesRow` by applying KDE to each trace.
 
-Example:
+Example
+-------
 
 .. tab-set::
 
@@ -331,7 +340,8 @@ type by applying a kernel density estimation (KDE) algorithm to each trace.
 
 See :data:`Densities` for more details.
 
-Example:
+Example
+-------
 
 .. tab-set::
 
@@ -361,7 +371,8 @@ ShallowSamples = CollectionL1[SamplesTrace]
 """Shallow type for :data:`Samples` where each row of the ridgeplot contains
 only a single trace.
 
-Example:
+Example
+-------
 
 .. tab-set::
 

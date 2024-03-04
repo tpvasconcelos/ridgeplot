@@ -259,8 +259,12 @@ autodoc_typehints_description_target = "documented"
 # https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
-napoleon_preprocess_types = True
+napoleon_use_admonition_for_examples = True
+napoleon_use_admonition_for_notes = False
+napoleon_use_param = False
 # napoleon_use_rtype = False
+napoleon_preprocess_types = True
+napoleon_attr_annotations = True
 
 
 # Type aliases
@@ -274,7 +278,7 @@ _TYPE_ALIASES_FULLY_QUALIFIED = {
     "ridgeplot._figure_factory.ColorsArray",
     "ridgeplot._figure_factory.ShallowColorsArray",
     "ridgeplot._figure_factory.MidpointsArray",
-    "ridgeplot._figure_factory.Colormode",
+    # "ridgeplot._figure_factory.Colormode",
     # ------- ._kde --------------------------------
     "ridgeplot._kde.KDEPoints",
     "ridgeplot._kde.KDEBandwidth",
