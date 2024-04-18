@@ -71,10 +71,11 @@ Example
 """
 
 Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
-""""""
+"""The :paramref:`ridgeplot.ridgeplot.colormode` argument in
+:func:`ridgeplot.ridgeplot()`."""
 
 _D3HF = ".7"
-"""Hover format
+"""Default (d3-format) format for floats in hover labels.
 
 After trying to read through the plotly.py source code, I couldn't find a
 simple way to replicate the default hover format using the d3-format syntax
@@ -87,7 +88,10 @@ _DEFAULT_HOVERTEMPLATE = (
     "<br>"
     "<extra>%{fullData.name}</extra>"
 )  # fmt: skip
-""""""
+"""Default ``hovertemplate`` for density traces.
+
+See :func:`ridgeplot._figure_factory.RidgePlotFigureFactory.draw_density_trace`.
+"""
 
 
 def get_xy_extrema(densities: Densities) -> tuple[Numeric, Numeric, Numeric, Numeric]:
