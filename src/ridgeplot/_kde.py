@@ -10,17 +10,16 @@ from statsmodels.sandbox.nonparametric.kernels import CustomKernel as Statsmodel
 from ridgeplot._types import CollectionL1, Numeric
 
 if TYPE_CHECKING:
-
     import numpy.typing as npt
 
     from ridgeplot._types import Densities, Samples, SamplesTrace, XYCoordinate
 
 
 KDEPoints = Union[int, CollectionL1[Numeric]]
-""""""
+"""The :paramref:`ridgeplot.ridgeplot.kde_points` parameter."""
 
 KDEBandwidth = Union[str, float, Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]]
-""""""
+"""The :paramref:`ridgeplot.ridgeplot.bandwidth` parameter."""
 
 
 def estimate_density_trace(
