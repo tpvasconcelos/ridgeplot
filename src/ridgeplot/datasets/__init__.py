@@ -31,10 +31,9 @@ def load_probly(
     Parameters
     ----------
     version : {'zonination', 'wadefagen', 'illinois'}, default: 'zonination'
-        The version of the dataset to load. Valid options are
-        ``"zonination"`` (default), ``"wadefagen"``, and ``"illinois"``. Each
-        version is slightly different and originates from different surveys.
-        See the `Notes`_ section for more details.
+        The version of the dataset to load. Each version is slightly different
+        and originates from different surveys. See the `Notes`_ section for
+        more details on each version.
 
     Returns
     -------
