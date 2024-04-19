@@ -21,7 +21,8 @@
   <a href="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot"><img src="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge" alt="CodeFactor"></a>
   <a href="https://app.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade"><img src="https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021" alt="Codacy code quality Badge"></a>
 </p>
-______________________________________________________________________
+
+-----------------
 
 `ridgeplot` is a Python package that provides a simple interface for plotting beautiful and interactive [ridgeline plots](https://www.data-to-viz.com/graph/ridgeline.html) within the extensive [Plotly](https://plotly.com/python/) ecosystem.
 
