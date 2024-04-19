@@ -40,7 +40,7 @@ Take a look at the [getting started guide](getting_started/getting_started), whi
 
 <h3>Basic example</h3>
 
-For those in a hurry, here's a very basic example on how to quickly get started with {py:func}`~ridgeplot.ridgeplot()`.
+For those in a hurry, here's a very basic example on how to quickly get started with the {py:func}`~ridgeplot.ridgeplot()` function.
 
 ```python
 import numpy as np
