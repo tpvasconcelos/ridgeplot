@@ -127,6 +127,8 @@ def get_xy_extrema(densities: Densities) -> tuple[Numeric, Numeric, Numeric, Num
     ... )
     (-2, 4, 0, 4)
     """
+    if len(densities) == 0:
+        raise ValueError("The densities array should not be empty.")
     x_flat: list[Numeric] = []
     y_flat: list[Numeric] = []
     for row in densities:
