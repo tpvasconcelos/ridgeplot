@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ridgeplot"
 description = "Beautiful ridgeline plots in python"
-version = "0.1.24"
+version = "0.1.25"
 authors = [
     { name = "Tomas Pereira de Vasconcelos" }
 ]
