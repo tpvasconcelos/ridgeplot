@@ -2,7 +2,7 @@
 """Extract the latest release notes
 
 Execution steps:
-- Extracts the latest release notes from the CHANGES.md file.
+- Extracts the latest release notes from docs/reference/changelog.md
 - The output is written to the `LATEST_RELEASE_NOTES.md` file.
 - The body of this file is then used as the body of the GitHub release.
 """
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from markdown_it.token import Token
 
 PATH_TO_TOP_LEVEL = Path(__file__).parent.parent
-PATH_TO_CHANGES = PATH_TO_TOP_LEVEL.joinpath("CHANGES.md")
+PATH_TO_CHANGES = PATH_TO_TOP_LEVEL.joinpath("docs/reference/changelog.md")
 PATH_TO_LATEST_RELEASE_NOTES = PATH_TO_TOP_LEVEL.joinpath("LATEST_RELEASE_NOTES.md")
 
 
