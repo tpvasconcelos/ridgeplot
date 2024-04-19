@@ -16,6 +16,10 @@ Unreleased changes
 - Use `importlib.resources` to load data assets from within the package - to be PEP-302 compliant ({gh-issue}`176`)
 - Enforce "strict" mypy mode (mostly improved type annotations for generic types) ({gh-issue}`177`)
 
+### CI/CD
+
+- Add support for Python 3.12 ({gh-issue}`182`)
+
 ---
 
 0.1.24
