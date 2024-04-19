@@ -75,7 +75,7 @@ make init-jupyter
 
 4. Include tests that cover any code changes you make, and make sure the test fails without your patch.
 
-5. Add an entry to CHANGES.md summarising the changes in this pull request. The entry should follow the same style and format as other entries, i.e.
+5. Add an entry to {repo-file}`docs/reference/changelog.md` summarising the changes in this pull request. The entry should follow the same style and format as other entries, i.e.
 
    > `- Your summary here. (#XXX)`
 
@@ -184,7 +184,7 @@ For more context on some of the tools referenced below, refer to the sections on
 
 You need push access to the project's repository to make releases. The following release steps are here for reference only.
 
-1. Review the `## Unreleased changes` section in CHANGES.md by checking for consistency in format and, if necessary, refactoring related entries into relevant subsections (e.g. _Features_, _Docs_, _Bugfixes_, _Security_, etc.). Take a look at previous release notes for guidance and try to keep it consistent.
+1. Review the `## Unreleased changes` section in {repo-file}`docs/reference/changelog.md` by checking for consistency in format and, if necessary, refactoring related entries into relevant subsections (e.g. _Features_, _Docs_, _Bugfixes_, _Security_, etc.). Take a look at previous release notes for guidance and try to keep it consistent.
 2. Submit a pull request with these changes only and use the `"Cleanup release notes for X.X.X release"` template for the pull request title. ridgeplot uses the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`) versioning standard. You can determine the latest release version by running `git describe --tags --abbrev=0` on the `main` branch. Based on this, you can determine the next release version by incrementing the MAJOR, MINOR, or PATCH. More on this on the next section. For now, just make sure you merge this pull request into the `main` branch before continuing.
 3. Use the [bumpversion](https://github.com/peritus/bumpversion) utility to bump the current version. This utility will automatically bump the current version, and issue a relevant commit and git tag. E.g.,
    ```shell
