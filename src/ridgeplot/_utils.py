@@ -8,11 +8,7 @@ from typing import (
 )
 
 if TYPE_CHECKING:
-    from typing import (
-        Any,
-        Callable,
-        Iterator,
-    )
+    from typing import Any, Callable, Iterator
 
     from ridgeplot._types import Numeric
 
@@ -121,11 +117,11 @@ def get_collection_array_shape(arr: Collection[Any]) -> tuple[int | set[int], ..
     return tuple(shape)
 
 
-KT = TypeVar("KT")  # Mapping key type
-VT = TypeVar("VT")  # Mapping value type
+_KT = TypeVar("_KT")  # Mapping key type
+_VT = TypeVar("_VT")  # Mapping value type
 
 
-class LazyMapping(Mapping[KT, VT]):
+class LazyMapping(Mapping[_KT, _VT]):
     """A lazy mapping that loads its contents only when first needed.
 
     Parameters
@@ -135,9 +131,7 @@ class LazyMapping(Mapping[KT, VT]):
 
     Examples
     --------
-    >>> from typing import Dict
-    >>>
-    >>> def my_io_loader() -> Dict[str, int]:
+    >>> def my_io_loader() -> dict[str, int]:
     ...     print("Loading...")
     ...     return {"a": 1, "b": 2}
     ...
@@ -149,20 +143,20 @@ class LazyMapping(Mapping[KT, VT]):
 
     __slots__ = ("_loader", "_inner_mapping")
 
-    def __init__(self, loader: Callable[[], Mapping[KT, VT]]):
+    def __init__(self, loader: Callable[[], Mapping[_KT, _VT]]):
         self._loader = loader
-        self._inner_mapping: Mapping[KT, VT] | None = None
+        self._inner_mapping: Mapping[_KT, _VT] | None = None
 
     @property
-    def _mapping(self) -> Mapping[KT, VT]:
+    def _mapping(self) -> Mapping[_KT, _VT]:
         if self._inner_mapping is None:
             self._inner_mapping = self._loader()
         return self._inner_mapping
 
-    def __getitem__(self, item: KT) -> VT:
+    def __getitem__(self, item: _KT) -> _VT:
         return self._mapping.__getitem__(item)
 
-    def __iter__(self) -> Iterator[KT]:
+    def __iter__(self) -> Iterator[_KT]:
         return self._mapping.__iter__()
 
     def __len__(self) -> int:

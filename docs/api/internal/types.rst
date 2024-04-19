@@ -1,7 +1,7 @@
-Types
-=====
+ridgeplot._types
+================
+
+Miscellaneous types, type aliases, and related utilities.
 
 .. automodule:: ridgeplot._types
-   :members:
-   :undoc-members:
    :private-members:

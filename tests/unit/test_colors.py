@@ -129,33 +129,36 @@ def test_any_to_rgb(color: _Color, expected: str) -> None:
         # invalid string values
         ("not a color", ValueError, None),
         # invalid hex
-        ("#1234567890", PlotlyError, r"rgb colors tuples cannot exceed 255"),
+        ("#1234567890", ValueError, r"too many values to unpack \(expected 3\)"),
         ("#ABCDEFGHIJ", ValueError, r"invalid literal for int\(\) with base 16"),
         # invalid rgb
         ("rgb(0,0,999)", PlotlyError, r"rgb colors tuples cannot exceed 255"),
         # invalid tuple
-        ((1, 2), IndexError, None),
+        ((1, 2), ValueError, r"not enough values to unpack \(expected 3, got 2\)"),
+        ((1, 2, 3, 4), ValueError, r"too many values to unpack \(expected 3\)"),
     ],
 )
 def test_any_to_rgb_fails_for_invalid_color(
-    color: Any, expected_exception: type[Exception], exception_match: str | None
+    color: Any,
+    expected_exception: type[Exception],
+    exception_match: str | None,
 ) -> None:
-    pytest.raises(expected_exception, _any_to_rgb, color=color).match(exception_match or "")
+    with pytest.raises(expected_exception, match=exception_match or ""):
+        _any_to_rgb(color)
 
 
 @pytest.mark.xfail(reason="Incomplete implementation of RGB string validation from Plotly.")
 @pytest.mark.parametrize(
     ("color", "expected_exception", "exception_match"),
     [
-        # invalid rgb string
         ("rgb(1,2,3,4,5)", PlotlyError, None),
         ("rgb(0,0,-2)", PlotlyError, r"rgb colors tuples cannot exceed 255"),
-        # invalid tuple
-        ((1, 2, 3, 4), PlotlyError, None),
     ],
 )
 def test_any_to_rgb_bug_in_validation_incomplete(
-    color: Any, expected_exception: type[Exception], exception_match: str | None
+    color: Any,
+    expected_exception: type[Exception],
+    exception_match: str | None,
 ) -> None:
     with pytest.raises(expected_exception, match=exception_match or ""):
         _any_to_rgb(color=color)
