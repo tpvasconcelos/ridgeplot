@@ -15,8 +15,8 @@ try:
 except ModuleNotFoundError:
     # When this module is run from the readthedocs build server,
     # the _compile_plotly_charts module will not be available
-    # because the `extras` dir is not in the PYTHONPATH.
-    sys.path.append((Path(__file__).parents[1] / "extras").resolve().as_posix())
+    # because the `ci_utils` dir is not in the PYTHONPATH.
+    sys.path.append((Path(__file__).parents[1] / "ci_utils").resolve().as_posix())
     from _compile_plotly_charts import compile_plotly_charts
 
 if TYPE_CHECKING:

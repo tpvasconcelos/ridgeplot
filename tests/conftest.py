@@ -6,7 +6,7 @@ import pytest
 from _test_helpers import patch_plotly_show
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True, scope="session")
 def _patch_plotly_show() -> Generator[None, None, None]:
     with patch_plotly_show():
         yield
