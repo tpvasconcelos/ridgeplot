@@ -17,9 +17,9 @@ from mdformat.renderer import MDRenderer
 if TYPE_CHECKING:
     from markdown_it.token import Token
 
-PATH_TO_TOP_LEVEL = Path(__file__).parent.parent
-PATH_TO_CHANGES = PATH_TO_TOP_LEVEL.joinpath("docs/reference/changelog.md")
-PATH_TO_LATEST_RELEASE_NOTES = PATH_TO_TOP_LEVEL.joinpath("LATEST_RELEASE_NOTES.md")
+PATH_ROOT_DIR = Path(__file__).parents[2]
+PATH_TO_CHANGES = PATH_ROOT_DIR.joinpath("docs/reference/changelog.md")
+PATH_TO_LATEST_RELEASE_NOTES = PATH_ROOT_DIR.joinpath("LATEST_RELEASE_NOTES.md")
 
 
 def _remove_heading(tokens: list[Token]) -> list[Token]:

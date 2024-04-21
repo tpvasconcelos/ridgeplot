@@ -20,7 +20,8 @@ if TYPE_CHECKING:
     import plotly.graph_objects as go
 
 
-PATH_DOCS = Path(__file__).parents[2] / "docs"
+PATH_ROOT_DIR = Path(__file__).parents[2]
+PATH_DOCS = PATH_ROOT_DIR / "docs"
 PATH_STATIC_CHARTS = PATH_DOCS / "_static/charts"
 PATH_STATIC_JS = PATH_DOCS / "_static/js"
 
