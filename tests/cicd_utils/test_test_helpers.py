@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-from _test_helpers import round_trip_pickle
+
+from ci_pkg.test_helpers import round_trip_pickle
 
 
 @pytest.mark.parametrize(

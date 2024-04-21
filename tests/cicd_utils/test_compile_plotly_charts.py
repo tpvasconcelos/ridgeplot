@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from _compile_plotly_charts import PATH_DOCS
+from ci_pkg.compile_plotly_charts import PATH_DOCS
 
 
 def test_path_docs_exists() -> None:

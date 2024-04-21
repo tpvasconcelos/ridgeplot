@@ -80,10 +80,7 @@ ignore = [
 ]
 
 [lint.per-file-ignores]
-"bin/*" = [
-    "T201", # `print` found
-]
-"extras/*" = [
+"cicd_utils/*" = [
     "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
     "T201", # `print` found
 ]
@@ -112,7 +109,7 @@ banned-from = ["pandas", "numpy"]
 force-wrap-aliases = true
 combine-as-imports = true
 required-imports = ["from __future__ import annotations"]
-known-first-party = ["ridgeplot", "_ridgeplot_examples", "extras"]
+known-first-party = ["ridgeplot", "ci_pkg"]
 
 [lint.mccabe]
 max-complexity = 10

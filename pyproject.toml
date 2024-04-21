@@ -15,6 +15,7 @@ maintainers = [
 readme = "README.md"
 license = { file = "LICENSE" }
 classifiers = [
+    # https://pypi.org/classifiers/
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",

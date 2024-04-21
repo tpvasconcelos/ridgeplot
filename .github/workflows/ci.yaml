@@ -89,9 +89,9 @@ jobs:
         shell: bash
         run: tox -e tests-e2e
 
-      - name: Test the `extras` utilities
+      - name: Test the CI/CD utilities
         shell: bash
-        run: tox -e tests-extras
+        run: tox -e tests-cicd_utils
 
       # Upload coverage reports to Codecov and Codacy.
 
