@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import Generator
 
 import pytest
-from _test_helpers import patch_plotly_show
+
+from ci_pkg.test_helpers import patch_plotly_show
 
 
 @pytest.fixture(autouse=True, scope="session")

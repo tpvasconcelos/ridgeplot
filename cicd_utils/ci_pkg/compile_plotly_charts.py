@@ -14,13 +14,13 @@ from typing import TYPE_CHECKING, Callable
 from minify_html import minify
 from plotly.offline import get_plotlyjs
 
-from _ridgeplot_examples import ALL_EXAMPLES, tighten_margins
+from ci_pkg.ridgeplot_examples import ALL_EXAMPLES, tighten_margins
 
 if TYPE_CHECKING:
     import plotly.graph_objects as go
 
 
-PATH_DOCS = Path(__file__).parent.parent / "docs"
+PATH_DOCS = Path(__file__).parents[2] / "docs"
 PATH_STATIC_CHARTS = PATH_DOCS / "_static/charts"
 PATH_STATIC_JS = PATH_DOCS / "_static/js"
 

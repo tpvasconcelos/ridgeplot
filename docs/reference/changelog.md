@@ -5,7 +5,7 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- Move all CI/CD utilities to the `ci_utils/` directory
+- Move all CI/CD utilities to the `cicd_utils/` directory
 
 ---
 

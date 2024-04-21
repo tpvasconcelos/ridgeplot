@@ -30,7 +30,7 @@ prune docs/build
 
 # Misc
 recursive-include .github *.yaml
-recursive-include ci_utils README.md *.py
+recursive-include cicd_utils README.md *.py
 recursive-include misc *.py *.ipynb
 recursive-include requirements *.txt
 recursive-include tests *.py
