@@ -96,7 +96,7 @@ jobs:
       # Upload coverage reports to Codecov and Codacy.
 
       - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         env:
           OS: "${{ matrix.os }}"
           PYTHON: "${{ matrix.python-version }}"

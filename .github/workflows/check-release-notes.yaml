@@ -2,7 +2,7 @@ name: Check Release Notes
 
 on:
   pull_request:
-    types: [ opened, reopened, synchronize, labeled, unlabeled ]
+    types: [ opened, synchronize, reopened, labeled, unlabeled ]
 
 jobs:
   build:
