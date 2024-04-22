@@ -1,3 +1,6 @@
+# This workflow checks whether the user remembered to update
+# the changelog with a relevant entry for the PR.
+# This check is skipped if the PR has the "skip news" label.
 name: Check Release Notes
 
 on:
@@ -5,7 +8,7 @@ on:
     types: [ opened, synchronize, reopened, labeled, unlabeled ]
 
 jobs:
-  build:
+  check:
     name: Check for entry in Changelog
     runs-on: ubuntu-latest
     steps:

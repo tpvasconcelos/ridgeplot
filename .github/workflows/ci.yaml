@@ -1,4 +1,11 @@
-name: CI
+# Run all CI checks on all pushes to the main branch or pull-request updates.
+# This includes running static checks such as linting and type checking,
+# as well as running the test suite on all supported Python versions.
+# Coverage reports will be uploaded to Codecov and Codacy.
+#
+# The documentation will also be built, and a link to the docs will be
+# added to the PR description.
+name: CI checks
 
 on:
   push:
