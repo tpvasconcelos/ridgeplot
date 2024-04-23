@@ -1,14 +1,95 @@
-name: Release workflow
+# This workflow builds source (sdist) and binary (wheel) distributions
+# for the Python package on every push event, followed by publishing
+# them to TestPyPi. This should be a good indicator that the build
+# and publishing process is always working correctly (as opposed
+# to only finding out when we actually want to publish a new
+# release).
+#
+# When new tags are pushed - in addition to the steps above -
+# we also publish the build distributions to the "real" PyPi
+# repository, and publish a new GitHub Release containing
+# the latest section extracted from the release notes
+# and the Sigstore-certified built distributions.
+name: Release workflow 🚀
 
-on:
-  push:
-    tags:
-      - "*.*.*"
+on: push
 
 jobs:
-  release:
+  build:
+    name: Build distributions
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-python
+        with:
+          python-version: "3.8"
+          requirements: tox
+      - name: Build source (sdist) and binary (wheel) distributions
+        run: tox -e build-dists
+      - uses: actions/upload-artifact@v3
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  publish-to-testpypi:
+    name: Publish distribution to TestPyPI
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/ridgeplot
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: python-package-distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
+          verbose: true
+          print-hash: true
+
+  publish-to-pypi:
+    name: Publish distribution to PyPI
+    if: startsWith(github.ref, 'refs/tags/')
+    needs:
+      - build
+      - publish-to-testpypi
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    environment:
+      name: pypi
+      url: https://pypi.org/p/ridgeplot
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: python-package-distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verbose: true
+          print-hash: true
+
+  github-release:
+    name: Publish a GitHub Release
+    needs:
+      - publish-to-pypi
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: write  # IMPORTANT: mandatory for making GitHub Releases
+      id-token: write  # IMPORTANT: mandatory for sigstore
+    steps:
+
+      # Generate the release notes
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-python
         with:
@@ -16,25 +97,24 @@ jobs:
           requirements: tox
       - name: Generate release notes
         run: tox -e release-notes
+
+      # Sign the package distributions with Sigstore
+      # https://github.com/marketplace/actions/gh-action-sigstore-python
+      - uses: actions/download-artifact@v3
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Sign the dists with Sigstore
+        uses: sigstore/gh-action-sigstore-python@v1.2.3
+        with:
+          inputs: >-
+            ./dist/*.tar.gz
+            ./dist/*.whl
+
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           body_path: LATEST_RELEASE_NOTES.md
-
-  build-and-publish-to-pypi:
-    needs: release
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-python
-        with:
-          python-version: "3.8"
-          requirements: tox
-      - name: Build and publish a release to TestPyPI
-        env:
-          TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN_TEST }}"
-        run: tox -e publish-pypi-test
-      - name: Build and publish a release PyPI
-        env:
-          TWINE_PASSWORD: "${{ secrets.PYPI_TOKEN }}"
-        run: tox -e publish-pypi-prod
+          # `dist/` contains the built distributions, and the
+          # Sigstore-produced signatures and certificates.
+          files: dist/**

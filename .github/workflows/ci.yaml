@@ -1,4 +1,11 @@
-name: CI
+# Run all CI checks on all pushes to the main branch or pull-request updates.
+# This includes running static checks such as linting and type checking,
+# as well as running the test suite on all supported Python versions.
+# Coverage reports will be uploaded to Codecov and Codacy.
+#
+# The documentation will also be built, and a link to the docs will be
+# added to the PR description.
+name: CI checks
 
 on:
   push:
@@ -15,6 +22,7 @@ jobs:
   documentation-links:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    timeout-minutes: 1
     steps:
       - uses: readthedocs/actions/preview@v1
         with:
@@ -24,6 +32,7 @@ jobs:
   static-checks:
     name: Static checks
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-python
@@ -63,6 +72,7 @@ jobs:
           # - windows-latest
       fail-fast: true
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
 
