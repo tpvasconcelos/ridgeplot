@@ -26,8 +26,7 @@ jobs:
           requirements: tox
       - name: Build source (sdist) and binary (wheel) distributions
         run: tox -e build-dists
-      - name: Upload the distribution artifacts
-        uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v3
         with:
           name: python-package-distributions
           path: dist/
@@ -43,15 +42,16 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
-      - name: Download all the dists
-        uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v3
         with:
           name: python-package-distributions
           path: dist/
-      - name: Publish distribution to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
+          verbose: true
+          print-hash: true
 
   publish-to-pypi:
     name: Publish distribution to PyPI
@@ -66,13 +66,14 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
-      - name: Download all the dists
-        uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v3
         with:
           name: python-package-distributions
           path: dist/
-      - name: Publish distribution to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verbose: true
+          print-hash: true
 
   github-release:
     name: Publish a GitHub Release
@@ -95,8 +96,7 @@ jobs:
 
       # Sign the package distributions with Sigstore
       # https://github.com/marketplace/actions/gh-action-sigstore-python
-      - name: Download all the dists
-        uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v3
         with:
           name: python-package-distributions
           path: dist/
