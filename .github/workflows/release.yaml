@@ -18,6 +18,7 @@ jobs:
   build:
     name: Build distributions
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-python
@@ -36,6 +37,7 @@ jobs:
     needs:
       - build
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     environment:
       name: testpypi
       url: https://test.pypi.org/p/ridgeplot
@@ -60,6 +62,7 @@ jobs:
       - build
       - publish-to-testpypi
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     environment:
       name: pypi
       url: https://pypi.org/p/ridgeplot
@@ -80,6 +83,7 @@ jobs:
     needs:
       - publish-to-pypi
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     permissions:
       contents: write  # IMPORTANT: mandatory for making GitHub Releases
       id-token: write  # IMPORTANT: mandatory for sigstore

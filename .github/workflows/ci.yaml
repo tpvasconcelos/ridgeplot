@@ -22,6 +22,7 @@ jobs:
   documentation-links:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    timeout-minutes: 1
     steps:
       - uses: readthedocs/actions/preview@v1
         with:
@@ -31,6 +32,7 @@ jobs:
   static-checks:
     name: Static checks
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-python
@@ -70,6 +72,7 @@ jobs:
           # - windows-latest
       fail-fast: true
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
 

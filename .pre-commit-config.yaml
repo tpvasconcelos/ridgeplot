@@ -1,5 +1,5 @@
 default_language_version:
-    python: python3.8
+  python: python3.8
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -29,6 +29,18 @@ repos:
         files: ^.*\.ipynb$
       - id: trailing-whitespace
         exclude: .bumpversion.cfg
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema.git
+    rev: 0.28.2
+    hooks:
+      - id: check-github-actions
+      - id: check-github-workflows
+      - id: check-jsonschema
+        name: "Check GitHub Workflows set timeout-minutes"
+        files: ^\.github/workflows/[^/]+$
+        types: [ yaml ]
+        args: [ "--builtin-schema", "github-workflows-require-timeout" ]
+      - id: check-readthedocs
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.2.6

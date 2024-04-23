@@ -11,6 +11,7 @@ Unreleased changes
 
 - Move all CI/CD utilities to the `cicd_utils/` directory ({gh-issue}`186`)
 - Publish to PyPi as a Trusted Publisher ({gh-issue}`187`)
+- Add `check-jsonschema` pre-commit hooks and define `timeout-minutes` for all GitHub workflows ({gh-issue}`187`)
 
 ---
 
