@@ -35,7 +35,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 keywords = [
-    "ridgeline", "ridgeplot", "joyplot", "ggridges", "ridges", "ridge", "plot", "plotting", "distplot", "plotly"
+    "ridgeline", "ridgeplot", "joyplot", "ggridges", "ridges", "ridge", "plot", "plotting", "distplot", "plotly", "data-visualization"
 ]
 requires-python = ">=3.8"
 dependencies = [
