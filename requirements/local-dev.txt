@@ -17,3 +17,9 @@ ipython
 pip-tools
 pipdeptree
 ptpython
+
+# And everything else...
+-r cicd_utils.txt
+-r docs.txt
+-r mypy.txt
+-r tests.txt

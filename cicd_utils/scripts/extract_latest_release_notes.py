@@ -9,7 +9,7 @@ Execution steps:
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Sequence, cast
+from typing import TYPE_CHECKING, Sequence
 
 from markdown_it import MarkdownIt
 from mdformat.renderer import MDRenderer
@@ -50,7 +50,7 @@ def get_tokens_latest_release() -> list[Token]:
 def render_md_tokens(tokens: Sequence[Token]) -> str:
     md_renderer = MDRenderer()
     text = md_renderer.render(tokens=tokens, options={}, env={})
-    return cast(str, text)
+    return text
 
 
 def log_release_text(text: str) -> None:
