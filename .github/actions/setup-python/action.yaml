@@ -23,6 +23,10 @@ runs:
       with:
         python-version: "${{ inputs.python-version }}"
 
+    - name: Install uv
+      shell: bash
+      run: pip install --upgrade uv
+
     # >>>>>>>> Caching uv packages >>>>>>>>
 
     - name: Get uv cache dir
@@ -45,10 +49,6 @@ runs:
         restore-keys: uv-${{ runner.os }}-${{ inputs.python-version }}-
 
     # <<<<<<<< Caching uv packages <<<<<<<<
-
-    - name: Install uv
-      shell: bash
-      run: pip install --upgrade uv
 
     - name: Install and/or upgrade seed packages
       if: ${{ inputs.install-seed-packages == 'true' }}
