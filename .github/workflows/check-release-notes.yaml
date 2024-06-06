@@ -17,6 +17,6 @@ jobs:
       - name: Grep Changelog for PR number
         if: contains(github.event.pull_request.labels.*.name, 'skip news') != true
         run: |
-          grep '{gh-issue}`${{ github.event.pull_request.number }}`' ./docs/reference/changelog.md || \
+          grep '{gh-pr}`${{ github.event.pull_request.number }}`' ./docs/reference/changelog.md || \
           (echo "Entry for PR #${{ github.event.pull_request.number }} missing from changelog" && \
           exit 1)
