@@ -1,11 +1,12 @@
 # Install python package in editable mode
 -e file:.
 
+# Tox
 tox
+tox-uv
 
-# pre-commit and dependency management
+# pre-commit
 pre-commit
-pip-compile-multi
 
 # Releases are still a manual process that
 # requires the use of bumpversion locally
