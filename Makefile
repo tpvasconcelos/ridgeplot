@@ -42,16 +42,22 @@ init: clean-all install ## initialise development environment
 
 .venv: ## create a virtual environment
 	@echo "==> Creating local virtual environment under: $(VENV_PATH)/ ($(BASE_PYTHON))"
-	@$(BASE_PYTHON) -m pip install --upgrade pip
-	@$(BASE_PYTHON) -m venv "$(VENV_PATH)"
-	@echo "==> Installing and/or upgrading build dependencies..."
-	@$(VENV_BIN)/python -m pip install --upgrade pip setuptools wheel
+	@if command -v uv; then \
+		uv venv --python="$(BASE_PYTHON)" --seed "$(VENV_PATH)"; \
+	else \
+		$(BASE_PYTHON) -m pip install --upgrade pip; \
+		$(BASE_PYTHON) -m venv "$(VENV_PATH)"; \
+		echo "==> Installing seed packages..."; \
+		$(VENV_BIN)/pip install --upgrade pip setuptools wheel; \
+	fi
+	@echo "==> Installing uv in the virtual environment..."
+	@$(VENV_BIN)/pip install uv
 
 
 .PHONY: install
 install: .venv ## install all local development dependencies
 	@echo "==> Installing local development requirements..."
-	@$(VENV_BIN)/python -m pip install -r requirements/local-dev.txt
+	@$(VENV_BIN)/uv pip install -r requirements/local-dev.txt
 	@echo "==> Installing pre-commit hooks..."
 	@$(VENV_BIN)/pre-commit install --install-hooks
 
@@ -59,8 +65,8 @@ install: .venv ## install all local development dependencies
 .PHONY: jupyter-init
 jupyter-init: ## initialise a jupyterlab environment and install extensions
 	@echo "==> Setting up jupyterlab environment..."
-	@$(VENV_BIN)/python -m pip install --upgrade ipykernel jupyter
-	@$(VENV_BIN)/python -m ipykernel install --user --name="ridgeplot"
+	@$(VENV_BIN)/uv pip install --upgrade ipykernel jupyter
+	@$(VENV_BIN)/ipykernel install --user --name="ridgeplot"
 
 
 # ==============================================================
@@ -75,9 +81,7 @@ clean-all: clean-ci clean-venv clean-build clean-pyc ## remove all artifacts
 .PHONY: clean-build
 clean-build: ## remove build artifacts
 	@echo "==> Removing build artifacts..."
-	rm -fr build/
-	rm -fr dist/
-	rm -fr .eggs/
+	rm -fr build/ dist/ .eggs/
 	find . -name '*.egg-info' -o -name '*.egg' -exec rm -fr {} +
 
 
@@ -90,9 +94,7 @@ clean-pyc: ## remove Python file artifacts
 .PHONY: clean-ci
 clean-ci: ## remove linting, testing, and coverage artifacts
 	@echo "==> Removing lint, test, and coverage artifacts..."
-	rm -fr .tox/
-	rm -fr .pytest_cache/
-	rm -fr .mypy_cache/
+	rm -fr .tox/ .pytest_cache/ .mypy_cache/
 	find . -name 'coverage.xml' -o -name '.coverage' -exec rm -fr {} +
 
 
