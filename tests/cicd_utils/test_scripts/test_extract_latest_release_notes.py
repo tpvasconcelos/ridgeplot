@@ -6,18 +6,23 @@ from typing import TYPE_CHECKING
 import pytest
 
 from cicd.scripts.extract_latest_release_notes import (
+    PATH_TO_CHANGELOG,
     extract_latest_release_notes,
-    get_tokens_latest_release,
-    parse_markdown,
+    parse_markdown_tokens,
 )
 
 if TYPE_CHECKING:
     from markdown_it.token import Token
 
 
-def test_get_tokens_latest_release_file_not_found() -> None:
-    with pytest.raises(FileNotFoundError):
-        get_tokens_latest_release(changelog=Path("non_existent_file.md"))
+def test_path_to_changelog_exists() -> None:
+    assert PATH_TO_CHANGELOG.exists()
+    assert PATH_TO_CHANGELOG.is_file()
+
+
+def test_extract_latest_release_notes_file_not_found() -> None:
+    with pytest.raises(FileNotFoundError, match="File not found: non_existent_file.md"):
+        extract_latest_release_notes(changelog=Path("non_existent_file.md"))
 
 
 CHANGELOG_CONTENT_01 = """\
@@ -71,15 +76,14 @@ def test_extract_latest_release_notes(
 
 
 def test_myst_roles() -> None:
-    path_root_dir = Path(__file__).parents[3]
-    path_to_changelog = path_root_dir.joinpath("docs/reference/changelog.md")
+    whitelisted_roles = {"gh-pr"}
 
     def validate_tokens(tkns: list[Token]) -> None:
         for token in tkns:
             if token.children:
                 validate_tokens(token.children)
-            if token.type == "myst_role" and token.meta.get("name", "") != "gh-pr":
+            if token.type == "myst_role" and token.meta.get("name", "") not in whitelisted_roles:
                 raise ValueError(f"Unexpected myst role: {token.meta}")
 
-    tokens = parse_markdown(path_to_changelog.read_text())
+    tokens = parse_markdown_tokens(PATH_TO_CHANGELOG.read_text())
     validate_tokens(tokens)

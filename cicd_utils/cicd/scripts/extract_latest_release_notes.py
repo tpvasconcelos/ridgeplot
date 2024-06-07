@@ -16,19 +16,16 @@ from markdown_it.token import Token
 from mdformat.renderer import MDRenderer
 from mdit_py_plugins.myst_role import myst_role_plugin
 
+PATH_ROOT_DIR = Path(__file__).parents[3]
+PATH_TO_CHANGELOG = PATH_ROOT_DIR.joinpath("docs/reference/changelog.md")
+PATH_TO_LATEST_RELEASE_NOTES = PATH_ROOT_DIR.joinpath("LATEST_RELEASE_NOTES.md")
 
-def parse_markdown(text: str) -> list[Token]:
+
+def parse_markdown_tokens(text: str) -> list[Token]:
+    """Parse markdown text and return `markdown_it` tokens."""
     md_parser = MarkdownIt().use(myst_role_plugin)
     tokens = md_parser.parse(src=text)
     return tokens
-
-
-def remove_heading(tokens: list[Token]) -> list[Token]:
-    if tokens[0].type != "heading_open":
-        raise ValueError("Expected first token to be a 'heading_open'")
-    if tokens[2].type != "heading_close":
-        raise ValueError("Expected third token to be a 'heading_close'")
-    return tokens[3:]
 
 
 def get_link_tokens(text: str, href: str) -> list[Token]:
@@ -56,35 +53,36 @@ def replace_pr_links(tokens: list[Token]) -> list[Token]:
     return tokens_new
 
 
-def get_tokens_latest_release(changelog: Path) -> list[Token]:
-    if not changelog.exists():
-        raise FileNotFoundError(f"File not found: {changelog}")
-
-    tokens = parse_markdown(text=changelog.read_text())
-
+def get_latest_release_section(tokens: list[Token]) -> list[Token]:
+    # Get the tokens pertaining to the latest release section,
+    # which should be the second h2 section in the changelog.
     count_h2 = 0
-    tokens_latest_release: list[Token] = []
+    tokens_lr: list[Token] = []
     for token in tokens:
         is_h2 = token.type == "heading_open" and token.tag == "h2"
         count_h2 += is_h2
         if count_h2 == 2:
-            tokens_latest_release.append(token)
+            tokens_lr.append(token)
         elif count_h2 > 2:
             break
-
-    tokens_latest_release = remove_heading(tokens_latest_release)
-    tokens_latest_release = replace_pr_links(tokens_latest_release)
-    return tokens_latest_release
+    # Remove h2 heading tokens
+    tokens_lr = tokens_lr[3:]
+    return tokens_lr
 
 
 def render_md_tokens(tokens: Sequence[Token]) -> str:
+    """Render markdown tokens as text."""
     md_renderer = MDRenderer()
     text = md_renderer.render(tokens=tokens, options={}, env={})
     return text
 
 
 def extract_latest_release_notes(changelog: Path) -> str:
-    release_md_tokens = get_tokens_latest_release(changelog=changelog)
+    if not changelog.exists():
+        raise FileNotFoundError(f"File not found: {changelog}")
+    tokens = parse_markdown_tokens(text=changelog.read_text())
+    release_md_tokens = get_latest_release_section(tokens=tokens)
+    release_md_tokens = replace_pr_links(release_md_tokens)
     text = render_md_tokens(release_md_tokens)
     return text
 
@@ -97,12 +95,9 @@ def log_release_text(text: str) -> None:
 
 
 def main() -> None:
-    path_root_dir = Path(__file__).parents[2]
-    path_to_changelog = path_root_dir.joinpath("docs/reference/changelog.md")
-    path_to_latest_release_notes = path_root_dir.joinpath("LATEST_RELEASE_NOTES.md")
-    release_text = extract_latest_release_notes(changelog=path_to_changelog)
-    log_release_text(release_text)
-    path_to_latest_release_notes.write_text(release_text)
+    text = extract_latest_release_notes(changelog=PATH_TO_CHANGELOG)
+    log_release_text(text)
+    PATH_TO_LATEST_RELEASE_NOTES.write_text(text)
 
 
 if __name__ == "__main__":
