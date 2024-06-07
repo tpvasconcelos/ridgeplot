@@ -9,17 +9,13 @@ Execution steps:
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Sequence, cast
+from typing import TYPE_CHECKING, Sequence
 
 from markdown_it import MarkdownIt
 from mdformat.renderer import MDRenderer
 
 if TYPE_CHECKING:
     from markdown_it.token import Token
-
-PATH_ROOT_DIR = Path(__file__).parents[2]
-PATH_TO_CHANGES = PATH_ROOT_DIR.joinpath("docs/reference/changelog.md")
-PATH_TO_LATEST_RELEASE_NOTES = PATH_ROOT_DIR.joinpath("LATEST_RELEASE_NOTES.md")
 
 
 def _remove_heading(tokens: list[Token]) -> list[Token]:
@@ -30,9 +26,12 @@ def _remove_heading(tokens: list[Token]) -> list[Token]:
     return tokens[3:]
 
 
-def get_tokens_latest_release() -> list[Token]:
+def get_tokens_latest_release(changelog: Path) -> list[Token]:
+    if not changelog.exists():
+        raise FileNotFoundError(f"File not found: {changelog}")
+
     md_parser = MarkdownIt()
-    tokens = md_parser.parse(src=PATH_TO_CHANGES.read_text())
+    tokens = md_parser.parse(src=changelog.read_text())
 
     count_h2 = 0
     tokens_latest_release: list[Token] = []
@@ -50,7 +49,7 @@ def get_tokens_latest_release() -> list[Token]:
 def render_md_tokens(tokens: Sequence[Token]) -> str:
     md_renderer = MDRenderer()
     text = md_renderer.render(tokens=tokens, options={}, env={})
-    return cast(str, text)
+    return text
 
 
 def log_release_text(text: str) -> None:
@@ -61,10 +60,14 @@ def log_release_text(text: str) -> None:
 
 
 def main() -> None:
-    release_md_tokens = get_tokens_latest_release()
+    path_root_dir = Path(__file__).parents[2]
+    path_to_changelog = path_root_dir.joinpath("docs/reference/changelog.md")
+    path_to_latest_release_notes = path_root_dir.joinpath("LATEST_RELEASE_NOTES.md")
+
+    release_md_tokens = get_tokens_latest_release(changelog=path_to_changelog)
     release_text = render_md_tokens(release_md_tokens)
     log_release_text(release_text)
-    PATH_TO_LATEST_RELEASE_NOTES.write_text(release_text)
+    path_to_latest_release_notes.write_text(release_text)
 
 
 if __name__ == "__main__":

@@ -4,15 +4,20 @@ This directory contains python source code and helper scripts used by CI/CD task
 
 **Note to maintainers:** It is not mandatory, but it is highly recommended to also test the code in this directory (meta, I know!). See `tests/cicd_utils/` for some examples.
 
-## The `ci_pkg` package
+## The `cicd` package
 
-The `ci_pkg/` directory is a Python package containing modules used/imported by some CI tasks such as our test suite (`tests/`) or documentation building entrypoint (`docs/conf.py`). This package needs to be made explicitly discoverable to these tools by (for instance) appending it to the Python PATH:
+The `cicd/` directory is a Python package containing modules used/imported by some CI tasks such as our test suite (`tests/`) or documentation building entrypoint (`docs/conf.py`).
+
+For this reason, the `cicd_utils` directory needs to be made explicitly discoverable to these tools by appending it to the Python PATH:
 
 - For pytest, we configure this using the [pythonpath](https://docs.pytest.org/en/7.4.x/reference/reference.html#confval-pythonpath) option in `pytest.ini`.
 - For Sphinx, we set `PYTHONPATH={env:PYTHONPATH}{:}{toxinidir}/cicd_utils` in the relevant environment in `tox.ini`.
+
+For static analysis tools, we need to help them discover the `cicd` or be made aware of it:
+
 - For mypy, we can add it to the `files` option in `mypy.ini` to help with import discovery.
-- For ruff/isort, we also added it to the `known-first-party` list (`ruff.toml`)
+- For ruff/isort, we also added it to the `known-first-party` list (see `ruff.toml`)
 
-## The `scripts` directory
+### The `cicd/scripts` directory
 
-The `scripts` directory contains various scripts used by some CI/CD tasks. These scripts should all be marked as executable and contain a shebang line at the top.
+The `cicd/scripts` directory contains various scripts used by some CI/CD tasks. These scripts should all be marked as executable and contain a shebang line at the top.

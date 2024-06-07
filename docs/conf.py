@@ -11,13 +11,13 @@ except ImportError:
     import importlib_metadata  # type: ignore[no-redef]
 
 try:
-    from ci_pkg.compile_plotly_charts import compile_plotly_charts
+    from cicd.compile_plotly_charts import compile_plotly_charts
 except ImportError:
     # When this script is run from the readthedocs build server,
-    # the `ci_pkg` package will not be available because
+    # the `cicd` package will not be available because
     # the `cicd_utils` dir is not in the PYTHONPATH.
     sys.path.append((Path(__file__).parents[1] / "cicd_utils").resolve().as_posix())
-    from ci_pkg.compile_plotly_charts import compile_plotly_charts
+    from cicd.compile_plotly_charts import compile_plotly_charts
 
 if TYPE_CHECKING:
     from sphinx.application import Sphinx

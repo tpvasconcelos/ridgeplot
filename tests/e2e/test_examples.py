@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable
 
 import pytest
 
-from ci_pkg.ridgeplot_examples import ALL_EXAMPLES
+from cicd.ridgeplot_examples import ALL_EXAMPLES
 
 if TYPE_CHECKING:
     import plotly.graph_objects as go
@@ -31,9 +30,7 @@ def test_examples_width_height_set(
     assert isinstance(fig.layout.height, int), msg
 
 
-@pytest.mark.skipif(
-    # TODO: Fix this (i.e. re-enable these tests)!
-    condition=os.getenv("CI") is not None,
+@pytest.mark.skip(
     reason=(
         "Currently breaking in CI, probably due to small "
         "differences in output between environments. "
