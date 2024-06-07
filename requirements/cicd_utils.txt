@@ -1,7 +1,7 @@
-# ./cicd_utils/ci_pkg/compile_plotly_charts.py
+# ./cicd_utils/cicd/compile_plotly_charts.py
 minify-html
 kaleido
 
-# ./cicd_utils/scripts/extract_latest_release_notes.py
+# ./cicd_utils/cicd/scripts/extract_latest_release_notes.py
 markdown-it-py
 mdformat

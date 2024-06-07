@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from ci_pkg.test_helpers import round_trip_pickle
+from cicd.test_helpers import round_trip_pickle
 
 
 @pytest.mark.parametrize(

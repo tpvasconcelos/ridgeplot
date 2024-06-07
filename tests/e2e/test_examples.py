@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Callable
 
 import pytest
 
-from ci_pkg.ridgeplot_examples import ALL_EXAMPLES
+from cicd.ridgeplot_examples import ALL_EXAMPLES
 
 if TYPE_CHECKING:
     import plotly.graph_objects as go

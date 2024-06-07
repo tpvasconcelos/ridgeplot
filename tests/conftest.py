@@ -4,7 +4,7 @@ from typing import Generator
 
 import pytest
 
-from ci_pkg.test_helpers import patch_plotly_show
+from cicd.test_helpers import patch_plotly_show
 
 
 @pytest.fixture(autouse=True, scope="session")
