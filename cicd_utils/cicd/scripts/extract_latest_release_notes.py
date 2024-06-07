@@ -17,7 +17,13 @@ from mdformat.renderer import MDRenderer
 from mdit_py_plugins.myst_role import myst_role_plugin
 
 
-def _remove_heading(tokens: list[Token]) -> list[Token]:
+def parse_markdown(text: str) -> list[Token]:
+    md_parser = MarkdownIt().use(myst_role_plugin)
+    tokens = md_parser.parse(src=text)
+    return tokens
+
+
+def remove_heading(tokens: list[Token]) -> list[Token]:
     if tokens[0].type != "heading_open":
         raise ValueError("Expected first token to be a 'heading_open'")
     if tokens[2].type != "heading_close":
@@ -25,7 +31,7 @@ def _remove_heading(tokens: list[Token]) -> list[Token]:
     return tokens[3:]
 
 
-def _get_link_tokens(text: str, href: str) -> list[Token]:
+def get_link_tokens(text: str, href: str) -> list[Token]:
     return [
         Token(type="link_open", tag="a", nesting=1, attrs={"href": href}),
         Token(type="text", tag="", nesting=0, level=1, content=text),
@@ -33,14 +39,14 @@ def _get_link_tokens(text: str, href: str) -> list[Token]:
     ]
 
 
-def _replace_pr_links(tokens: list[Token]) -> list[Token]:
+def replace_pr_links(tokens: list[Token]) -> list[Token]:
     tokens_new = []
     for token in tokens:
         if token.children:
-            token.children = _replace_pr_links(token.children)
+            token.children = replace_pr_links(token.children)
         if token.type == "myst_role" and token.meta.get("name", "") == "gh-pr":
             pr_number = int(token.content)
-            link_tokens = _get_link_tokens(
+            link_tokens = get_link_tokens(
                 text=f"#{pr_number}",
                 href=f"https://github.com/tpvasconcelos/ridgeplot/pull/{pr_number}",
             )
@@ -54,8 +60,7 @@ def get_tokens_latest_release(changelog: Path) -> list[Token]:
     if not changelog.exists():
         raise FileNotFoundError(f"File not found: {changelog}")
 
-    md_parser = MarkdownIt().use(myst_role_plugin)
-    tokens = md_parser.parse(src=changelog.read_text())
+    tokens = parse_markdown(text=changelog.read_text())
 
     count_h2 = 0
     tokens_latest_release: list[Token] = []
@@ -67,8 +72,8 @@ def get_tokens_latest_release(changelog: Path) -> list[Token]:
         elif count_h2 > 2:
             break
 
-    tokens_latest_release = _remove_heading(tokens_latest_release)
-    tokens_latest_release = _replace_pr_links(tokens_latest_release)
+    tokens_latest_release = remove_heading(tokens_latest_release)
+    tokens_latest_release = replace_pr_links(tokens_latest_release)
     return tokens_latest_release
 
 
