@@ -204,9 +204,9 @@ github_project_url = repo_url
 
 # -- extlinks  -------------------------------------------------------------------------------------
 extlinks = {
-    "gh-issue": (f"{github_project_url}/issues/%s", "#%s"),
-    "gh-pr": (f"{github_project_url}/pull/%s", "#%s"),
-    "gh-discussion": (f"{github_project_url}/discussions/%s", "#%s"),
+    "gh-issue": (f"{repo_url}/issues/%s", "#%s"),
+    "gh-pr": (f"{repo_url}/pull/%s", "#%s"),
+    "gh-discussion": (f"{repo_url}/discussions/%s", "#%s"),
     "gh-user": ("https://github.com/%s", "@%s"),
     "repo-file": (f"{repo_url}/blob/main/%s", "%s"),
     "repo-dir": (f"{repo_url}/tree/main/%s", "%s"),
