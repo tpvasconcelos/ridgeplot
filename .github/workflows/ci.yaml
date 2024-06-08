@@ -91,10 +91,6 @@ jobs:
         env:
           DIFF_AGAINST: HEAD
 
-      - name: Run doctests
-        shell: bash
-        run: tox -e doctests
-
       - name: Run E2E tests
         shell: bash
         run: tox -e tests-e2e
@@ -102,6 +98,12 @@ jobs:
       - name: Test the CI/CD utilities
         shell: bash
         run: tox -e tests-cicd_utils
+
+      # Combine coverage reports from all test suites
+
+      - name: Combine coverage reports
+        shell: bash
+        run: tox -e coverage-combine
 
       # Upload coverage reports to Codecov and Codacy.
 

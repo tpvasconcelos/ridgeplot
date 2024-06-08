@@ -74,7 +74,7 @@ jupyter-init: ## initialise a jupyterlab environment and install extensions
 # ==============================================================
 
 .PHONY: clean-all
-clean-all: clean-ci clean-venv clean-build clean-pyc ## remove all artifacts
+clean-all: clean-build clean-pyc clean-cov clean-ci-caches clean-tox clean-venv ## remove all artifacts
 	@echo "==> Removed all artifacts!"
 
 
@@ -91,11 +91,22 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '*.pyc' -o -name '*.pyo' -o -name '*~' -o -name '__pycache__' -exec rm -fr {} +
 
 
-.PHONY: clean-ci
-clean-ci: ## remove linting, testing, and coverage artifacts
-	@echo "==> Removing lint, test, and coverage artifacts..."
-	rm -fr .tox/ .pytest_cache/ .mypy_cache/
-	find . -name 'coverage.xml' -o -name '.coverage' -exec rm -fr {} +
+.PHONY: clean-cov
+clean-cov: ## remove coverage artifacts
+	@echo "==> Removing coverage artifacts..."
+	find . \( -name 'coverage.*.xml' -o -name '.coverage.*' \) -exec rm -fr {} +
+
+
+.PHONY: clean-ci-caches
+clean-ci-caches: ## remove CI caches (e.g. `.pytest_cache`, `.mypy_cache`, etc...)
+	@echo "==> Removing CI caches..."
+	rm -fr .pytest_cache/ .mypy_cache/
+
+
+.PHONY: clean-tox
+clean-tox: ## remove Tox artifacts
+	@echo "==> Removing Tox artifacts..."
+	rm -fr .tox/
 
 
 .PHONY: clean-venv
