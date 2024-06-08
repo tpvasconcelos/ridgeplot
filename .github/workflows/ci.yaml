@@ -94,16 +94,22 @@ jobs:
       - name: Run E2E tests
         shell: bash
         run: tox -e tests-e2e
+        env:
+          DIFF_AGAINST: HEAD
 
       - name: Test the CI/CD utilities
         shell: bash
         run: tox -e tests-cicd_utils
+        env:
+          DIFF_AGAINST: HEAD
 
       # Combine coverage reports from all test suites
 
       - name: Combine coverage reports
         shell: bash
         run: tox -e coverage-combine
+        env:
+          DIFF_AGAINST: HEAD
 
       # Upload coverage reports to Codecov and Codacy.
 
