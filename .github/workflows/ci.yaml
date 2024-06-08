@@ -120,7 +120,9 @@ jobs:
           PYTHON: "${{ matrix.python-version }}"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
+          file: ./coverage.combined.src.xml
+          disable_search: true
+          flags: combined-src
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           verbose: true
@@ -129,4 +131,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage.xml
+          coverage-reports: coverage.combined.src.xml
