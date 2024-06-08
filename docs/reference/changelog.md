@@ -9,7 +9,7 @@ Unreleased changes
 
 ### CI/CD
 
-- Refactor code coverage logic ({gh-pr}`193`)
+- Refactor test coverage logic ({gh-pr}`193`)
 - Replace `pip` and `venv` with `uv` ({gh-pr}`189`)
 - Move all CI/CD utilities to the `cicd_utils/` directory ({gh-pr}`186`)
 - Publish to PyPi as a Trusted Publisher ({gh-pr}`187`)
