@@ -139,7 +139,10 @@ html_logo = "_static/img/logo-wide.png"
 html_sourcelink_suffix = ""
 html_last_updated_fmt = "%B %d, %Y"
 
-project_urls = dict(url.split(", ") for url in metadata.get_all("project-url"))  # type: ignore[union-attr]
+meta_project_urls = metadata.get_all("project-url")
+if meta_project_urls is None:
+    raise ValueError("No 'project_urls' metadata found in 'pyproject.toml'")
+project_urls = dict(url.split(", ") for url in meta_project_urls)
 repo_url = project_urls["Source code"]
 docs_url = project_urls["Documentation"]
 

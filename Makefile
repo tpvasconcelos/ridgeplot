@@ -57,7 +57,7 @@ init: clean-all install ## initialise development environment
 .PHONY: install
 install: .venv ## install all local development dependencies
 	@echo "==> Installing local development requirements..."
-	@$(VENV_BIN)/uv pip install -r requirements/local-dev.txt
+	@$(VENV_BIN)/uv pip install --upgrade -r requirements/local-dev.txt
 	@echo "==> Installing pre-commit hooks..."
 	@$(VENV_BIN)/pre-commit install --install-hooks
 
