@@ -76,7 +76,7 @@ def test_extract_latest_release_notes(
 
 
 def test_myst_roles() -> None:
-    whitelisted_roles = {"gh-pr"}
+    whitelisted_roles = {"gh-pr", "gh-issue"}
 
     def validate_tokens(tkns: list[Token]) -> None:
         for token in tkns:
