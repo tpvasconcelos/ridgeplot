@@ -14,7 +14,6 @@ bumpversion
 
 # Various useful utilities for local development
 ipython
-pip-tools
 pipdeptree
 ptpython
 

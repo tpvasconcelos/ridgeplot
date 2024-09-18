@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import json
 import warnings
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, Tuple, Union, cast
+from typing import Union, cast
 
 from _plotly_utils.colors import validate_colors, validate_scale_values
 from plotly.colors import find_intermediate_color, hex_to_rgb
@@ -12,7 +13,7 @@ from ridgeplot._utils import LazyMapping, normalise_min_max
 
 _PATH_TO_COLORS_JSON = Path(__file__).parent.joinpath("colors.json")
 
-ColorScale = Iterable[Tuple[float, str]]
+ColorScale = Iterable[tuple[float, str]]
 """A colorscale is an iterable of tuples of two elements:
 
 0. the first element (a *scale value*) is a float bounded to the
@@ -35,7 +36,7 @@ For instance, the Viridis colorscale would be defined as
  (1.0, 'rgb(253, 231, 37)'))
 """
 
-_Color = Union[str, Tuple[float, float, float]]
+_Color = Union[str, tuple[float, float, float]]
 """A color can be represented as an rgb(a) or hex string or a tuple of
 ``(r, g, b)`` values."""
 

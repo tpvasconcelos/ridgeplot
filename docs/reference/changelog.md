@@ -12,8 +12,6 @@ Unreleased changes
 0.1.26
 ------
 
-- ...
-
 ### Breaking changes
 
 - Dropped support for `statsmodels==0.14.2` due to import-time issue. See {gh-issue}`197` for more details. ({gh-pr}`198`)

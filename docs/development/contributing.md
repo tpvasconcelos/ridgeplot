@@ -36,10 +36,10 @@ The following command will 1) create a new virtual environment (under `.venv`), 
 make init
 ```
 
-The default and **recommended** base python is `python3.8`. You can change this by exporting the `BASE_PYTHON` environment variable:
+The default and **recommended** base python is `python3.9`. You can change this by exporting the `BASE_PYTHON` environment variable:
 
 ```shell
-BASE_PYTHON=python3.12 make init
+BASE_PYTHON=python3.13 make init
 ```
 
 If you need to use jupyter-lab, you can install all extra requirements, as well as set up the environment and jupyter kernel with
