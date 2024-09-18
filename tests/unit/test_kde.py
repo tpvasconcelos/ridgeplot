@@ -35,7 +35,9 @@ def test_estimate_density_trace_points() -> None:
     assert np.argmin(y) == 0
 
 
-#
+# ==============================================================
+# ---  estimate_densities()
+# ==============================================================
 
 
 def test_estimate_densities() -> None:

@@ -41,11 +41,12 @@ def replace_pr_links(tokens: list[Token]) -> list[Token]:
     for token in tokens:
         if token.children:
             token.children = replace_pr_links(token.children)
-        if token.type == "myst_role" and token.meta.get("name", "") == "gh-pr":
-            pr_number = int(token.content)
+        if token.type == "myst_role" and token.meta.get("name", "") in ("gh-pr", "gh-issue"):
+            gh_number = int(token.content)
+            gh_type = "pull" if token.meta["name"] == "gh-pr" else "issues"
             link_tokens = get_link_tokens(
-                text=f"#{pr_number}",
-                href=f"https://github.com/tpvasconcelos/ridgeplot/pull/{pr_number}",
+                text=f"#{gh_number}",
+                href=f"https://github.com/tpvasconcelos/ridgeplot/{gh_type}/{gh_number}",
             )
             tokens_new.extend(link_tokens)
             continue

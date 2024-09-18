@@ -7,6 +7,10 @@ Unreleased changes
 
 - ...
 
+### Breaking changes
+
+- Dropped support for `statsmodels==0.14.2` due to import-time issue. See {gh-issue}`197` for more details. ({gh-pr}`198`)
+
 ### CI/CD
 
 - Refactor test coverage logic ({gh-pr}`193`)
