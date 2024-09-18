@@ -33,7 +33,7 @@ def estimate_density_trace(
     For a given set of sample values, computes the kernel densities (KDE) at
     the given points.
     """
-    if not np.isfinite(trace_samples).all():  # type: ignore[call-overload]
+    if not np.isfinite(trace_samples).all():
         raise ValueError("The samples array should not contain any infs or NaNs.")
     if isinstance(points, int):
         # By default, we'll use a 'hard' KDE span. That is, we'll
