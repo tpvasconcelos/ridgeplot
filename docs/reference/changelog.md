@@ -5,7 +5,9 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+### Breaking changes
+
+- Dropped support for Python 3.8. ({gh-pr}`200`)
 
 ---
 
