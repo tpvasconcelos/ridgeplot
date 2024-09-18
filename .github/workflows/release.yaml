@@ -27,7 +27,7 @@ jobs:
           requirements: tox
       - name: Build source (sdist) and binary (wheel) distributions
         run: tox -e build-dists
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: python-package-distributions
           path: dist/
@@ -44,7 +44,7 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: python-package-distributions
           path: dist/
@@ -69,7 +69,7 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: python-package-distributions
           path: dist/
@@ -100,7 +100,7 @@ jobs:
 
       # Sign the package distributions with Sigstore
       # https://github.com/marketplace/actions/gh-action-sigstore-python
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: python-package-distributions
           path: dist/
