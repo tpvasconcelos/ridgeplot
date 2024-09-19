@@ -13,10 +13,10 @@ For this reason, the `cicd_utils` directory needs to be made explicitly discover
 - For pytest, we configure this using the [pythonpath](https://docs.pytest.org/en/7.4.x/reference/reference.html#confval-pythonpath) option in `pytest.ini`.
 - For Sphinx, we set `PYTHONPATH={env:PYTHONPATH}{:}{toxinidir}/cicd_utils` in the relevant environment in `tox.ini`.
 
-For static analysis tools, we need to help them discover the `cicd` or be made aware of it:
+Static analysis tools will also we need to be made aware of this package:
 
 - For mypy, we can add it to the `files` option in `mypy.ini` to help with import discovery.
-- For ruff/isort, we also added it to the `known-first-party` list (see `ruff.toml`)
+- For ruff's _isort_-implementation, we also added it to the `known-first-party` list (see `ruff.toml`)
 
 ### The `cicd/scripts` directory
 
