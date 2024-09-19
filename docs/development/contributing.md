@@ -51,46 +51,31 @@ make init-jupyter
 ## Pull Request Workflow
 
 1. Always confirm that you have properly configured your Git username and email.
-
    ```shell
    git config --global user.name 'Your name'
    git config --global user.email 'Your email address'
    ```
-
 2. Each release series has its own branch (i.e. `MAJOR.MINOR.x`). If submitting a documentation or bug fix contribution, branch off of the latest release series branch.
-
    ```shell
    git fetch origin
    git checkout -b <YOUR-BRANCH-NAME> origin/x.x.x
    ```
-
    Otherwise, if submitting a new feature or API change, branch off of the `main` branch
-
    ```shell
    git fetch origin
    git checkout -b <YOUR-BRANCH-NAME> origin/main
    ```
-
 3. Apply and commit your changes.
-
 4. Include tests that cover any code changes you make, and make sure the test fails without your patch.
-
 5. Add an entry to {repo-file}`docs/reference/changelog.md` summarising the changes in this pull request. The entry should follow the same style and format as other entries, i.e.
-
    > `- Your summary here. (#XXX)`
-
    where `#XXX` should link to the relevant pull request. If you think that the changes in this pull request do not warrant a changelog entry, please state it in your pull request's description. In such cases, a maintainer should add a `skip news` label to make CI pass.
-
 6. Make sure all integration approval steps are passing locally (i.e., `tox`).
-
 7. Push your changes to your fork
-
    ```shell
    git push --set-upstream fork <YOUR-BRANCH-NAME>
    ```
-
 8. [Create a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request). Remember to update the pull request's description with relevant notes on the changes implemented, and to [link to relevant issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue) (e.g., `fixes #XXX` or `closes #XXX`).
-
 9. Wait for all remote CI checks to pass and for a ridgeplot contributor to approve your pull request.
 
 ## Continuous Integration
