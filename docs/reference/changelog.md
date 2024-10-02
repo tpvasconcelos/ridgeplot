@@ -5,14 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+- Add `actionlint` pre-commit hook ({gh-pr}`201`)
+- Improve logic in `.github/workflows/check-release-notes.yaml` to post comments to the PR ({gh-pr}`201`)
 
 ---
 
 0.1.26
 ------
-
-- ...
 
 ### Breaking changes
 

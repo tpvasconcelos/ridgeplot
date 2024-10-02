@@ -7,7 +7,7 @@ on:
   pull_request:
     types: [ opened, synchronize, reopened, labeled, unlabeled ]
   issue_comment:
-    types: [created, deleted]
+    types: [ created, deleted ]
 
 jobs:
   check:
