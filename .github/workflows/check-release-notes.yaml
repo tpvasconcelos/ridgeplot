@@ -32,16 +32,20 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: 'Missing changelog entry'
 
-      # if MISSING_CHANGELOG_ENTRY and no comment found --> post comment
+      #                      MISSING_CHANGELOG_ENTRY=1     MISSING_CHANGELOG_ENTRY=0
+      # comment-id=''            (A) POST
+      # comment-id='1234'        (C) UNRESOLVE                  (B) RESOLVE
 
-      - name: Post comment if changelog entry is missing
+      # (A) Post comment
+
+      - name: Post comment
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id == '' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            :warning: **Missing changelog entry** :warning:
+            ### :warning: **Missing changelog entry** :warning:
 
             Please add an entry to the changelog in `docs/reference/changelog.md` for this PR.
             The entry should be in the following format:
@@ -52,9 +56,9 @@ jobs:
 
             If you don't think a changelog entry is necessary for this change, you can add a `skip news` label to this PR.
 
-      # if not MISSING_CHANGELOG_ENTRY and comment found --> mark comment as resolved
+      # (D) Resolve comment
 
-      - name: Resolve comment if changelog entry is present
+      - name: Resolve comment
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '0' && steps.fc.outputs.comment-id != '' }}
         uses: octokit/graphql-action@v2.3.2
         with:
@@ -64,6 +68,22 @@ jobs:
                 minimizedComment {
                   isMinimized
                   minimizedReason
+                }
+              }
+            }
+
+
+      # (C) Unresolve comment
+
+      - name: Unresolve comment
+        if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id != '' }}
+        uses: octokit/graphql-action@v2.3.2
+        with:
+          query: |
+            mutation unminimizeComment {
+              unminimizeComment(input: { subjectId: "${{ steps.fc.outputs.comment-id }}" }) {
+                unminimizedComment {
+                  isMinimized
                 }
               }
             }
