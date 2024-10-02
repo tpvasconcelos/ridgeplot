@@ -34,6 +34,11 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: 'Missing changelog entry'
 
+      - name: Debug notice
+        run: |
+          echo ::notice::MISSING_CHANGELOG_ENTRY=${{ env.MISSING_CHANGELOG_ENTRY }}
+          echo ::notice::comment-id=${{ steps.fc.outputs.comment-id }}
+
       #                      MISSING_CHANGELOG_ENTRY=1     MISSING_CHANGELOG_ENTRY=0
       # comment-id=''            (A) POST
       # comment-id='1234'        (C) UNRESOLVE                  (B) RESOLVE
@@ -60,9 +65,7 @@ jobs:
 
       - name: Error and exit
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id == '' }}
-        run: |
-          echo "::error file=docs/reference/changelog.md,title=Missing Changelog Entry::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
-          exit 1
+        run: echo "::error file=docs/reference/changelog.md,title='Missing Changelog Entry'::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
 
       # (D) Resolve comment
 
@@ -101,6 +104,4 @@ jobs:
 
       - name: Error and exit
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id != '' }}
-        run: |
-          echo "::error file=docs/reference/changelog.md,title=Missing Changelog Entry::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
-          exit 1
+        run: echo "::error file=docs/reference/changelog.md,title='Missing Changelog Entry'::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
