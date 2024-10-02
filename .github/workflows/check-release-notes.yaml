@@ -61,7 +61,9 @@ jobs:
 
       - name: Error and exit
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id == '' }}
-        run: echo "::error title='Missing Changelog Entry'::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
+        run: |
+          echo "::error title=Missing Changelog Entry::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
+          exit 1
 
       # (D) Resolve comment
 
@@ -100,4 +102,6 @@ jobs:
 
       - name: Error and exit
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id != '' }}
-        run: echo "::error title='Missing Changelog Entry'::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
+        run: |
+          echo "::error title=Missing Changelog Entry::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
+          exit 1
