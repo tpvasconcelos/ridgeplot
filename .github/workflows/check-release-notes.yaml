@@ -70,7 +70,7 @@ jobs:
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '0' && steps.fc.outputs.comment-id != '' }}
         uses: octokit/graphql-action@v2.3.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CHECK_RELEASE_NOTES_TOKEN }}
         with:
           query: |
             mutation minimizeComment {
@@ -89,7 +89,7 @@ jobs:
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id != '' }}
         uses: octokit/graphql-action@v2.3.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CHECK_RELEASE_NOTES_TOKEN }}
         with:
           query: |
             mutation unminimizeComment {
