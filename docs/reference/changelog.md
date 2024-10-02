@@ -9,7 +9,6 @@ Unreleased changes
 
 - Add `actionlint` pre-commit hook ({gh-pr}`201`)
 - Improve logic in `.github/workflows/check-release-notes.yaml` to post comments to the PR ({gh-pr}`201`)
-- Fix typo in `.github/workflows/release.yaml` which caused the release to TestPyPI to fail if a release with the same version already existed ({gh-pr}`201`)
 
 ---
 
