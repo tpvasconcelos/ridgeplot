@@ -24,7 +24,7 @@ jobs:
         if: "!contains(github.event.pull_request.labels.*.name, 'skip news')"
         run: |
           # shellcheck disable=SC2016
-          if grep -p '{gh-pr}`${{ github.event.pull_request.number }}`' ./docs/reference/changelog.md; then
+          if grep '{gh-pr}`${{ github.event.pull_request.number }}`' ./docs/reference/changelog.md; then
             echo 'MISSING_CHANGELOG_ENTRY=0' >> "$GITHUB_ENV"
           fi
 
