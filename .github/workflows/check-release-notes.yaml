@@ -46,7 +46,6 @@ jobs:
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id == '' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ### :warning: **Missing changelog entry** :warning:
@@ -72,7 +71,7 @@ jobs:
         with:
           script: |
             query = `mutation minimizeComment {
-              minimizeComment(input: { subjectId: "${{ steps.fc.outputs.comment-id }}", classifier: RESOLVED }) {
+              minimizeComment(input: { subjectId: "${{ steps.fc.outputs.comment-node-id }}", classifier: RESOLVED }) {
                 minimizedComment {
                   isMinimized
                   minimizedReason
@@ -90,7 +89,7 @@ jobs:
         with:
           script: |
             query = `mutation unminimizeComment {
-              unminimizeComment(input: { subjectId: "${{ steps.fc.outputs.comment-id }}" }) {
+              unminimizeComment(input: { subjectId: "${{ steps.fc.outputs.comment-node-id }}" }) {
                 unminimizedComment {
                   isMinimized
                 }
