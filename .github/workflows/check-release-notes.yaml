@@ -14,8 +14,10 @@ jobs:
     timeout-minutes: 1
     steps:
       - uses: actions/checkout@v4
+
       - name: Default MISSING_CHANGELOG_ENTRY to 1
         run: echo 'MISSING_CHANGELOG_ENTRY=1' >> "$GITHUB_ENV"
+
       - name: Check changelog if not skipped
         if: "!contains(github.event.pull_request.labels.*.name, 'skip news')"
         run: |
@@ -56,11 +58,19 @@ jobs:
 
             If you don't think a changelog entry is necessary for this change, you can add a `skip news` label to this PR.
 
+      - name: Error and exit
+        if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id == '' }}
+        run: |
+          echo "::error file=docs/reference/changelog.md,title=Missing Changelog Entry::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
+          exit 1
+
       # (D) Resolve comment
 
       - name: Resolve comment
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '0' && steps.fc.outputs.comment-id != '' }}
         uses: octokit/graphql-action@v2.3.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           query: |
             mutation minimizeComment {
@@ -78,6 +88,8 @@ jobs:
       - name: Unresolve comment
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id != '' }}
         uses: octokit/graphql-action@v2.3.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           query: |
             mutation unminimizeComment {
@@ -87,3 +99,9 @@ jobs:
                 }
               }
             }
+
+      - name: Error and exit
+        if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id != '' }}
+        run: |
+          echo "::error file=docs/reference/changelog.md,title=Missing Changelog Entry::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
+          exit 1
