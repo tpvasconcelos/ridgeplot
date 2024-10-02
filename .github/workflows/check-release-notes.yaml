@@ -68,37 +68,36 @@ jobs:
 
       - name: Resolve comment
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '0' && steps.fc.outputs.comment-id != '' }}
-        uses: octokit/graphql-action@v2.3.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.CHECK_RELEASE_NOTES_TOKEN }}
+        uses: actions/github-script@v7
         with:
-          query: |
-            mutation minimizeComment {
+          script: |
+            query = `mutation minimizeComment {
               minimizeComment(input: { subjectId: "${{ steps.fc.outputs.comment-id }}", classifier: RESOLVED }) {
                 minimizedComment {
                   isMinimized
                   minimizedReason
                 }
               }
-            }
-
+            }`;
+            const result = await github.graphql(query);
+            console.log(result);
 
       # (C) Unresolve comment
 
       - name: Unresolve comment
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id != '' }}
-        uses: octokit/graphql-action@v2.3.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.CHECK_RELEASE_NOTES_TOKEN }}
+        uses: actions/github-script@v7
         with:
-          query: |
-            mutation unminimizeComment {
+          script: |
+            query = `mutation unminimizeComment {
               unminimizeComment(input: { subjectId: "${{ steps.fc.outputs.comment-id }}" }) {
                 unminimizedComment {
                   isMinimized
                 }
               }
-            }
+            }`;
+            const result = await github.graphql(query);
+            console.log(result);
 
       - name: Error and exit
         if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id != '' }}
