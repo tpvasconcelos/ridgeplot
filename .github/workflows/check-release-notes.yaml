@@ -6,6 +6,8 @@ name: Check Release Notes
 on:
   pull_request:
     types: [ opened, synchronize, reopened, labeled, unlabeled ]
+  issue_comment:
+    types: [created, deleted]
 
 jobs:
   check:
