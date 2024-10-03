@@ -34,6 +34,10 @@ jobs:
 
   publish-to-testpypi:
     name: Publish distribution to TestPyPI
+    # TODO: Change this to only run on pushes to the main branch
+    #       Requires different version per commit
+    #       ref: https://setuptools-scm.readthedocs.io/en/latest/
+    if: startsWith(github.ref, 'refs/tags/')
     needs:
       - build
     runs-on: ubuntu-latest
@@ -51,7 +55,6 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
-          skip-existing: true
           verbose: true
           print-hash: true
 

@@ -9,6 +9,11 @@ Unreleased changes
 
 - Dropped support for Python 3.8. ({gh-pr}`200`)
 
+### CI/CD
+
+- Add `actionlint` pre-commit hook ({gh-pr}`201`)
+- Improve logic in `.github/workflows/check-release-notes.yaml` to post comments to the PR ({gh-pr}`201`)
+
 ---
 
 0.1.26
