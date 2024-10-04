@@ -8,9 +8,11 @@ Unreleased changes
 ### Breaking changes
 
 - Dropped support for Python 3.8. ({gh-pr}`200`)
+- Removed deprecated function `get_all_colorscale_names()` in favor of `list_all_colorscale_names()`. ({gh-pr}`200`)
 
 ### CI/CD
 
+- Adopt `setuptools-scm` for package versioning ({gh-pr}`200`)
 - Add `actionlint` pre-commit hook ({gh-pr}`201`)
 - Improve logic in `.github/workflows/check-release-notes.yaml` to post comments to the PR ({gh-pr}`201`)
 
