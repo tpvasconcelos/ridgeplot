@@ -6,6 +6,8 @@ name: Check Release Notes
 on:
   pull_request:
     types: [ opened, synchronize, reopened, labeled, unlabeled ]
+  issue_comment:
+    types: [ created, deleted ]
 
 jobs:
   check:
@@ -14,9 +16,92 @@ jobs:
     timeout-minutes: 1
     steps:
       - uses: actions/checkout@v4
-      - name: Grep Changelog for PR number
-        if: contains(github.event.pull_request.labels.*.name, 'skip news') != true
+
+      - name: Default MISSING_CHANGELOG_ENTRY to 1
+        run: echo 'MISSING_CHANGELOG_ENTRY=1' >> "$GITHUB_ENV"
+
+      - name: Check changelog if not skipped
+        if: "!contains(github.event.pull_request.labels.*.name, 'skip news')"
         run: |
-          grep '{gh-issue}`${{ github.event.pull_request.number }}`' ./docs/reference/changelog.md || \
-          (echo "Entry for PR #${{ github.event.pull_request.number }} missing from changelog" && \
-          exit 1)
+          # shellcheck disable=SC2016
+          if grep '{gh-pr}`${{ github.event.pull_request.number }}`' ./docs/reference/changelog.md; then
+            echo 'MISSING_CHANGELOG_ENTRY=0' >> "$GITHUB_ENV"
+          fi
+
+      - name: Find comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: 'Missing changelog entry'
+
+      #                      MISSING_CHANGELOG_ENTRY=1     MISSING_CHANGELOG_ENTRY=0
+      # comment-id=''            (A) POST
+      # comment-id='1234'        (C) UNRESOLVE                  (B) RESOLVE
+
+      # (A) Post comment
+
+      - name: Post comment
+        if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id == '' }}
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ### :warning: **Missing changelog entry** :warning:
+
+            Please add an entry to the changelog in `docs/reference/changelog.md` for this PR.
+            The entry should be in the following format:
+
+            ```markdown
+            - Description of the change ({gh-pr}`${{ github.event.pull_request.number }}`)
+            ```
+
+            If you don't think a changelog entry is necessary for this change, you can add a `skip news` label to this PR.
+
+      - name: Error and exit
+        if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id == '' }}
+        run: |
+          echo "::error title=Missing Changelog Entry::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
+          exit 1
+
+      # (D) Resolve comment
+
+      - name: Resolve comment
+        if: ${{ env.MISSING_CHANGELOG_ENTRY == '0' && steps.fc.outputs.comment-id != '' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            query = `mutation minimizeComment {
+              minimizeComment(input: { subjectId: "${{ steps.fc.outputs.comment-node-id }}", classifier: RESOLVED }) {
+                minimizedComment {
+                  isMinimized
+                  minimizedReason
+                }
+              }
+            }`;
+            const result = await github.graphql(query);
+            console.log(result);
+
+      # (C) Unresolve comment
+
+      - name: Unresolve comment
+        if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id != '' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            query = `mutation unminimizeComment {
+              unminimizeComment(input: { subjectId: "${{ steps.fc.outputs.comment-node-id }}" }) {
+                unminimizedComment {
+                  isMinimized
+                }
+              }
+            }`;
+            const result = await github.graphql(query);
+            console.log(result);
+
+      - name: Error and exit
+        if: ${{ env.MISSING_CHANGELOG_ENTRY == '1' && steps.fc.outputs.comment-id != '' }}
+        run: |
+          echo "::error title=Missing Changelog Entry::Please add an entry to the changelog in docs/reference/changelog.md for the changes in this PR."
+          exit 1

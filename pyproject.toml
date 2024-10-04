@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ridgeplot"
 description = "Beautiful ridgeline plots in python"
-version = "0.1.25"
+version = "0.1.26"
 authors = [
     { name = "Tomas Pereira de Vasconcelos" }
 ]
@@ -41,7 +41,7 @@ requires-python = ">=3.8"
 dependencies = [
     "numpy>=1",
     "plotly>=4",
-    "statsmodels>=0.12",
+    "statsmodels>=0.12,!=0.14.2",  # See GH197 for details
     'typing-extensions; python_version<"3.10"',
     'importlib-resources; python_version<"3.10"',
 ]

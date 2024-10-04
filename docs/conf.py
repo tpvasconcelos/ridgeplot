@@ -11,13 +11,13 @@ except ImportError:
     import importlib_metadata  # type: ignore[no-redef]
 
 try:
-    from ci_pkg.compile_plotly_charts import compile_plotly_charts
+    from cicd.compile_plotly_charts import compile_plotly_charts
 except ImportError:
     # When this script is run from the readthedocs build server,
-    # the `ci_pkg` package will not be available because
+    # the `cicd` package will not be available because
     # the `cicd_utils` dir is not in the PYTHONPATH.
     sys.path.append((Path(__file__).parents[1] / "cicd_utils").resolve().as_posix())
-    from ci_pkg.compile_plotly_charts import compile_plotly_charts
+    from cicd.compile_plotly_charts import compile_plotly_charts
 
 if TYPE_CHECKING:
     from sphinx.application import Sphinx
@@ -139,7 +139,10 @@ html_logo = "_static/img/logo-wide.png"
 html_sourcelink_suffix = ""
 html_last_updated_fmt = "%B %d, %Y"
 
-project_urls = dict(url.split(", ") for url in metadata.get_all("project-url"))  # type: ignore[union-attr]
+meta_project_urls = metadata.get_all("project-url")
+if meta_project_urls is None:
+    raise ValueError("No 'project_urls' metadata found in 'pyproject.toml'")
+project_urls = dict(url.split(", ") for url in meta_project_urls)
 repo_url = project_urls["Source code"]
 docs_url = project_urls["Documentation"]
 
@@ -204,9 +207,9 @@ github_project_url = repo_url
 
 # -- extlinks  -------------------------------------------------------------------------------------
 extlinks = {
-    "gh-issue": (f"{github_project_url}/issues/%s", "#%s"),
-    "gh-pr": (f"{github_project_url}/pull/%s", "#%s"),
-    "gh-discussion": (f"{github_project_url}/discussions/%s", "#%s"),
+    "gh-issue": (f"{repo_url}/issues/%s", "#%s"),
+    "gh-pr": (f"{repo_url}/pull/%s", "#%s"),
+    "gh-discussion": (f"{repo_url}/discussions/%s", "#%s"),
     "gh-user": ("https://github.com/%s", "@%s"),
     "repo-file": (f"{repo_url}/blob/main/%s", "%s"),
     "repo-dir": (f"{repo_url}/tree/main/%s", "%s"),

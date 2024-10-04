@@ -91,17 +91,25 @@ jobs:
         env:
           DIFF_AGAINST: HEAD
 
-      - name: Run doctests
-        shell: bash
-        run: tox -e doctests
-
       - name: Run E2E tests
         shell: bash
         run: tox -e tests-e2e
+        env:
+          DIFF_AGAINST: HEAD
 
       - name: Test the CI/CD utilities
         shell: bash
         run: tox -e tests-cicd_utils
+        env:
+          DIFF_AGAINST: HEAD
+
+      # Combine coverage reports from all test suites
+
+      - name: Combine coverage reports
+        shell: bash
+        run: tox -e coverage-combine
+        env:
+          DIFF_AGAINST: HEAD
 
       # Upload coverage reports to Codecov and Codacy.
 
@@ -112,7 +120,9 @@ jobs:
           PYTHON: "${{ matrix.python-version }}"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
+          file: ./coverage.combined.src.xml
+          disable_search: true
+          flags: combined-src
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           verbose: true
@@ -121,4 +131,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage.xml
+          coverage-reports: coverage.combined.src.xml
