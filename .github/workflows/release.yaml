@@ -21,6 +21,10 @@ jobs:
     timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
+        with:
+          # TODO: This can be very expensive for large repos. Is there a better way to do this?
+          # Fetch all history and tags for setuptools_scm to work
+          fetch-depth: 0
       - uses: ./.github/actions/setup-python
         with:
           python-version: "3.9"
@@ -91,6 +95,10 @@ jobs:
 
       # Generate the release notes
       - uses: actions/checkout@v4
+        with:
+          # TODO: This can be very expensive for large repos. Is there a better way to do this?
+          # Fetch all history and tags for setuptools_scm to work
+          fetch-depth: 0
       - uses: ./.github/actions/setup-python
         with:
           python-version: "3.9"
