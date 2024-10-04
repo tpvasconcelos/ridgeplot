@@ -9,12 +9,16 @@ Execution steps:
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Sequence
+from typing import TYPE_CHECKING
 
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
 from mdformat.renderer import MDRenderer
 from mdit_py_plugins.myst_role import myst_role_plugin
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
 
 PATH_ROOT_DIR = Path(__file__).parents[3]
 PATH_TO_CHANGELOG = PATH_ROOT_DIR.joinpath("docs/reference/changelog.md")

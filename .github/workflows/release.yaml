@@ -21,9 +21,13 @@ jobs:
     timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
+        with:
+          # TODO: This can be very expensive for large repos. Is there a better way to do this?
+          # Fetch all history and tags for setuptools_scm to work
+          fetch-depth: 0
       - uses: ./.github/actions/setup-python
         with:
-          python-version: "3.8"
+          python-version: "3.9"
           requirements: tox
       - name: Build source (sdist) and binary (wheel) distributions
         run: tox -e build-dists
@@ -34,10 +38,7 @@ jobs:
 
   publish-to-testpypi:
     name: Publish distribution to TestPyPI
-    # TODO: Change this to only run on pushes to the main branch
-    #       Requires different version per commit
-    #       ref: https://setuptools-scm.readthedocs.io/en/latest/
-    if: startsWith(github.ref, 'refs/tags/')
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
     needs:
       - build
     runs-on: ubuntu-latest
@@ -94,9 +95,13 @@ jobs:
 
       # Generate the release notes
       - uses: actions/checkout@v4
+        with:
+          # TODO: This can be very expensive for large repos. Is there a better way to do this?
+          # Fetch all history and tags for setuptools_scm to work
+          fetch-depth: 0
       - uses: ./.github/actions/setup-python
         with:
-          python-version: "3.8"
+          python-version: "3.9"
           requirements: tox
       - name: Generate release notes
         run: tox -e release-notes
@@ -108,7 +113,7 @@ jobs:
           name: python-package-distributions
           path: dist/
       - name: Sign the dists with Sigstore
-        uses: sigstore/gh-action-sigstore-python@v1.2.3
+        uses: sigstore/gh-action-sigstore-python@v3.0.0
         with:
           inputs: >-
             ./dist/*.tar.gz

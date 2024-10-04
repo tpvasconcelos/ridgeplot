@@ -28,7 +28,7 @@ jobs:
         with:
           project-slug: "ridgeplot"
 
-  # Run static checks only for Ubuntu and Python 3.8
+  # Run static checks only for Ubuntu and Python 3.9
   static-checks:
     name: Static checks
     runs-on: ubuntu-latest
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-python
         with:
-          python-version: "3.8"
+          python-version: "3.9"
           requirements: tox
       # Instead of running all checks in one task (i.e., `tox -m static`),
       # we'll instead run them one-by-one, so that it's easier to
@@ -55,7 +55,6 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
@@ -75,6 +74,10 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+        with:
+          # TODO: This can be very expensive for large repos. Is there a better way to do this?
+          # Fetch all history and tags for setuptools_scm to work
+          fetch-depth: 0
 
       - uses: ./.github/actions/setup-python
         with:

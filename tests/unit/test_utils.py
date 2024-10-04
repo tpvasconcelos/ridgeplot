@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-from typing import Any, Mapping
+from typing import TYPE_CHECKING, Any
 from unittest import mock
 
 import pytest
 
 from ridgeplot._utils import LazyMapping, normalise_min_max
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 
 class TestNormaliseMinMax:
