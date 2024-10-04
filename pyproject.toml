@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ridgeplot"
 description = "Beautiful ridgeline plots in python"
-version = "0.1.26"
+dynamic = ["version"]
 authors = [
     { name = "Tomas Pereira de Vasconcelos" }
 ]
@@ -60,6 +60,9 @@ Changelog = "https://ridgeplot.readthedocs.io/en/stable/reference/changelog.html
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = false
+
+[tool.setuptools_scm]
+local_scheme = "no-local-version"
 
 [tool.black]
 line-length = 100

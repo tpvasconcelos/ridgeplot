@@ -11,6 +11,7 @@ Unreleased changes
 
 ### CI/CD
 
+- Adopt `setuptools-scm` for package versioning ({gh-pr}`200`)
 - Add `actionlint` pre-commit hook ({gh-pr}`201`)
 - Improve logic in `.github/workflows/check-release-notes.yaml` to post comments to the PR ({gh-pr}`201`)
 

@@ -1,6 +1,10 @@
 # Install python package in editable mode
 -e file:.
 
+# build dependencies
+setuptools>=64
+setuptools-scm>=8
+
 # Tox
 tox
 tox-uv
