@@ -8,6 +8,7 @@ Unreleased changes
 ### Breaking changes
 
 - Dropped support for Python 3.8. ({gh-pr}`200`)
+- Removed deprecated function `get_all_colorscale_names()` in favor of `list_all_colorscale_names()`. ({gh-pr}`200`)
 
 ### CI/CD
 

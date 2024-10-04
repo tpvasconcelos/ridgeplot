@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import warnings
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Union, cast
@@ -112,25 +111,6 @@ def list_all_colorscale_names() -> list[str]:
         A list with all available colorscale names.
     """
     return sorted(_COLORSCALE_MAPPING.keys())
-
-
-def get_all_colorscale_names() -> tuple[str, ...]:  # pragma: no cover
-    """Get a tuple with all available colorscale names.
-
-    .. deprecated:: 0.1.21
-        Use :func:`list_all_colorscale_names()` instead.
-
-    Returns
-    -------
-    tuple[str, ...]
-        A tuple with all available colorscale names.
-    """
-    warnings.warn(
-        "get_all_colorscale_names() is deprecated in favor of list_all_colorscale_names().",
-        DeprecationWarning,
-        stacklevel=2,
-    )
-    return tuple(list_all_colorscale_names())
 
 
 def get_colorscale(name: str) -> ColorScale:
