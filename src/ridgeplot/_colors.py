@@ -3,16 +3,12 @@ from __future__ import annotations
 import json
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Iterable, Tuple, cast
+from typing import Iterable, Tuple, Union, cast
 
 from _plotly_utils.colors import validate_colors, validate_scale_values
-from plotly.colors import find_intermediate_color, hex_to_rgb, label_rgb
+from plotly.colors import find_intermediate_color, hex_to_rgb
 
 from ridgeplot._utils import LazyMapping, normalise_min_max
-
-if TYPE_CHECKING:
-    from typing import Dict, List, Union
-
 
 _PATH_TO_COLORS_JSON = Path(__file__).parent.joinpath("colors.json")
 
@@ -39,11 +35,15 @@ For instance, the Viridis colorscale would be defined as
  (1.0, 'rgb(253, 231, 37)'))
 """
 
+_Color = Union[str, Tuple[float, float, float]]
+"""A color can be represented as an rgb(a) or hex string or a tuple of
+``(r, g, b)`` values."""
 
-def _colormap_loader() -> Dict[str, ColorScale]:
-    colors: dict = json.loads(_PATH_TO_COLORS_JSON.read_text())
+
+def _colormap_loader() -> dict[str, ColorScale]:
+    colors: dict[str, ColorScale] = json.loads(_PATH_TO_COLORS_JSON.read_text())
     for name, colorscale in colors.items():
-        colors[name] = tuple(tuple(entry) for entry in colorscale)
+        colors[name] = tuple((s, c) for s, c in colorscale)
     return colors
 
 
@@ -53,14 +53,14 @@ _COLORSCALE_MAPPING: LazyMapping[str, ColorScale] = LazyMapping(loader=_colormap
 def validate_colorscale(colorscale: ColorScale) -> None:
     """Validate the structure, scale values, and colors of a colorscale.
 
-    Adapted from :func:`_plotly_utils.colors.validate_colorscale`.
+    Adapted from ``_plotly_utils.colors.validate_colorscale``.
     """
     scale, colors = zip(*colorscale)
     validate_scale_values(scale=scale)
     validate_colors(colors=colors)
 
 
-def _any_to_rgb(color: Union[str, tuple]) -> str:
+def _any_to_rgb(color: _Color) -> str:
     """Convert any color to an rgb string.
 
     Parameters
@@ -84,11 +84,11 @@ def _any_to_rgb(color: Union[str, tuple]) -> str:
     if not isinstance(color, (str, tuple)):
         raise TypeError(f"Expected str or tuple for color, got {type(color)} instead.")
     if isinstance(color, tuple):
-        rgb = cast(str, label_rgb(color))
+        r, g, b = color
+        rgb = f"rgb({r}, {g}, {b})"
     elif color.startswith("#"):
-        rgb = cast(str, label_rgb(hex_to_rgb(color)))
+        return _any_to_rgb(cast(str, hex_to_rgb(color)))
     elif color.startswith("rgb("):
-        # Already an rgb string
         rgb = color
     else:
         raise ValueError(
@@ -99,7 +99,7 @@ def _any_to_rgb(color: Union[str, tuple]) -> str:
     return rgb
 
 
-def list_all_colorscale_names() -> List[str]:
+def list_all_colorscale_names() -> list[str]:
     """Get a list with all available colorscale names.
 
     .. versionadded:: 0.1.21
@@ -113,7 +113,7 @@ def list_all_colorscale_names() -> List[str]:
     return sorted(_COLORSCALE_MAPPING.keys())
 
 
-def get_all_colorscale_names() -> Tuple[str, ...]:  # pragma: no cover
+def get_all_colorscale_names() -> tuple[str, ...]:  # pragma: no cover
     """Get a tuple with all available colorscale names.
 
     .. deprecated:: 0.1.21
@@ -188,6 +188,6 @@ def get_color(colorscale: ColorScale, midpoint: float) -> str:
     )
 
 
-def apply_alpha(color: Union[tuple, str], alpha: float) -> str:
+def apply_alpha(color: _Color, alpha: float) -> str:
     color = _any_to_rgb(color)
     return f"rgba({color[4:-1]}, {alpha})"

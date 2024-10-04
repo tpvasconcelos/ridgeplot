@@ -1,6 +1,5 @@
-# Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
-
+# Read the Docs configuration file (v2)
+# ref: https://docs.readthedocs.io/en/stable/config-file/v2.html
 version: 2
 
 build:
@@ -11,6 +10,8 @@ build:
 python:
   install:
     - requirements: requirements/docs.txt
+    - method: pip
+      path: .
 
 sphinx:
   configuration: docs/conf.py

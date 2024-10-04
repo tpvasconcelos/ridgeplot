@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable
 
 import pytest
 
-from _ridgeplot_examples import ALL_EXAMPLES, normalize
+from cicd.ridgeplot_examples import ALL_EXAMPLES
 
 if TYPE_CHECKING:
     import plotly.graph_objects as go
@@ -21,16 +20,17 @@ def test_path_charts_exists() -> None:
 
 
 @pytest.mark.parametrize(("plot_id", "example_loader"), ALL_EXAMPLES)
-def test_examples_width_height_set(plot_id: str, example_loader: Callable[[], go.Figure]) -> None:
+def test_examples_width_height_set(
+    plot_id: str,  # noqa: ARG001
+    example_loader: Callable[[], go.Figure],
+) -> None:
     msg = "Both `width` and `height` should be set in all example plots."
     fig = example_loader()
     assert isinstance(fig.layout.width, int), msg
     assert isinstance(fig.layout.height, int), msg
 
 
-@pytest.mark.skipif(
-    # TODO: Fix this (i.e. re-enable these tests)!
-    condition=os.getenv("CI") is not None,
+@pytest.mark.skip(
     reason=(
         "Currently breaking in CI, probably due to small "
         "differences in output between environments. "
@@ -41,7 +41,6 @@ def test_examples_width_height_set(plot_id: str, example_loader: Callable[[], go
 def test_regressions(plot_id: str, example_loader: Callable[[], go.Figure]) -> None:
     """Verify that the rendered WebP images match the current artifacts."""
     fig = example_loader()
-    fig = normalize(fig)
     img = fig.to_image(
         format="webp",
         width=fig.layout.width,

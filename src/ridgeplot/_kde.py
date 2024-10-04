@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import TYPE_CHECKING, Callable, Union
+from typing import TYPE_CHECKING, Any, Callable, Union
 
 import numpy as np
 import statsmodels.api as sm
@@ -10,16 +10,16 @@ from statsmodels.sandbox.nonparametric.kernels import CustomKernel as Statsmodel
 from ridgeplot._types import CollectionL1, Numeric
 
 if TYPE_CHECKING:
-    from typing import List
-
     import numpy.typing as npt
 
     from ridgeplot._types import Densities, Samples, SamplesTrace, XYCoordinate
 
 
 KDEPoints = Union[int, CollectionL1[Numeric]]
+"""The :paramref:`ridgeplot.ridgeplot.kde_points` parameter."""
 
 KDEBandwidth = Union[str, float, Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]]
+"""The :paramref:`ridgeplot.ridgeplot.bandwidth` parameter."""
 
 
 def estimate_density_trace(
@@ -27,7 +27,7 @@ def estimate_density_trace(
     points: KDEPoints,
     kernel: str,
     bandwidth: KDEBandwidth,
-) -> List[XYCoordinate[float]]:
+) -> list[XYCoordinate[float]]:
     """Estimates a density trace from a set of samples.
 
     For a given set of sample values, computes the kernel densities (KDE) at
@@ -72,7 +72,7 @@ def estimate_density_trace(
 
 
 def _validate_densities(
-    x: npt.NDArray[np.floating], y: npt.NDArray[np.floating], kernel: str
+    x: npt.NDArray[np.floating[Any]], y: npt.NDArray[np.floating[Any]], kernel: str
 ) -> None:
     # I haven't investigated the root of this issue yet
     # but statsmodels' KDEUnivariate implementation

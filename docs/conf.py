@@ -3,21 +3,24 @@ from __future__ import annotations
 import sys
 from datetime import datetime
 from pathlib import Path
-from pprint import pformat
+from typing import TYPE_CHECKING
 
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata  # type: ignore[import-not-found, no-redef]
+    import importlib_metadata  # type: ignore[no-redef]
 
 try:
-    from _compile_plotly_charts import compile_plotly_charts
-except ModuleNotFoundError:
-    # When this module is run from the readthedocs build server,
-    # the _compile_plotly_charts module will not be available
-    # because the `extras` dir is not in the PYTHONPATH.
-    sys.path.append((Path(__file__).parents[1] / "extras").resolve().as_posix())
-    from _compile_plotly_charts import compile_plotly_charts
+    from cicd.compile_plotly_charts import compile_plotly_charts
+except ImportError:
+    # When this script is run from the readthedocs build server,
+    # the `cicd` package will not be available because
+    # the `cicd_utils` dir is not in the PYTHONPATH.
+    sys.path.append((Path(__file__).parents[1] / "cicd_utils").resolve().as_posix())
+    from cicd.compile_plotly_charts import compile_plotly_charts
+
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -33,11 +36,11 @@ except ModuleNotFoundError:
 
 metadata = importlib_metadata.metadata("ridgeplot")
 
-project = project_name = metadata["name"]
+project = project_name = name = metadata["name"]
 author = metadata["author"]
 release = metadata["version"]
 version = ".".join(release.split(".")[:2])
-project_copyright = f"2021 - {datetime.today().year}, {author}"  # noqa: DTZ002
+copyright = project_copyright = f"2021 - {datetime.today().year}, {author}"  # noqa: DTZ002, A001
 
 master_doc = "index"
 language = "en"
@@ -49,7 +52,6 @@ language = "en"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    # "myst_nb",
     "myst_parser",
     "notfound.extension",
     "sphinx.ext.autodoc",
@@ -60,8 +62,9 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    # NOTE: 'sphinx_autodoc_typehints' should be loaded after
+    #       'sphinx.ext.autodoc' and 'sphinx.ext.napoleon'
     # "sphinx_autodoc_typehints",
-    # "sphinx_toolbox.more_autodoc.typehints",
     "sphinx_copybutton",
     "sphinx_design",
     "sphinx_gallery.gen_gallery",
@@ -106,14 +109,22 @@ html_css_files = [
     "css/versionmodified_admonitions.css",
     # FontAwesome CSS for footer icons
     # https://fontawesome.com/search
-    # "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css",
-    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.1/css/fontawesome.min.css",
-    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.1/css/brands.min.css",
+    # "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css",
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css",
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/brands.min.css",
 ]
 
-html_js_files = [
-    "js/plotly.min.js",
-]
+# NOTE: When using the 'furo' theme, the `html_js_files` will be placed at
+#       the bottom of the page.
+#       See: https://github.com/pradyunsg/furo/blob/01887051504bbec32e241af9cebcf5cd10f656d1/src/furo/theme/furo/base.html#L91-L96
+#       If you want to place the JS files at the top of the page, you can use
+#       extend the `_templates/base.html` file and place the JS files in the
+#       `extrahead` block (which should be included in the <head> tab).
+# html_js_files = []
+
+# nitpicky mode options
+nitpicky = True
+nitpick_ignore: list[tuple[str, str]] = []
 
 # -- Options for HTML output -----------------------------------------------------------------------
 
@@ -121,20 +132,20 @@ html_js_files = [
 # a list of builtin themes.
 
 html_theme = "furo"
-# html_title = project_name
+html_title = f"{project_name} docs ({release})"
 html_short_title = project_name
 
 html_favicon = "_static/favicon.ico"  # 32x32 pixel .ico file
 html_logo = "_static/img/logo-wide.png"
 html_sourcelink_suffix = ""
-html_last_updated_fmt = ""
+html_last_updated_fmt = "%B %d, %Y"
 
 meta_project_urls = metadata.get_all("project-url")
-if not meta_project_urls:
-    raise RuntimeError("No project URLs found in the project metadata")
-project_urls = [(n[:-1], url) for n, url in map(str.split, meta_project_urls)]
-repo_url = next(url for n, url in project_urls if n == "Source")
-docs_url = next(url for n, url in project_urls if n == "Documentation")
+if meta_project_urls is None:
+    raise ValueError("No 'project_urls' metadata found in 'pyproject.toml'")
+project_urls = dict(url.split(", ") for url in meta_project_urls)
+repo_url = project_urls["Source code"]
+docs_url = project_urls["Documentation"]
 
 html_theme_options = {
     "sidebar_hide_name": True,
@@ -185,6 +196,7 @@ rst_epilog = """
 .. |~go.Figure| replace:: :class:`~plotly.graph_objects.Figure`
 """
 
+
 # -- ghissue  --------------------------------------------------------------------------------------
 github_project_url = repo_url
 
@@ -194,84 +206,120 @@ github_project_url = repo_url
 # imgmath_use_preview = True
 
 
+# -- extlinks  -------------------------------------------------------------------------------------
+extlinks = {
+    "gh-issue": (f"{repo_url}/issues/%s", "#%s"),
+    "gh-pr": (f"{repo_url}/pull/%s", "#%s"),
+    "gh-discussion": (f"{repo_url}/discussions/%s", "#%s"),
+    "gh-user": ("https://github.com/%s", "@%s"),
+    "repo-file": (f"{repo_url}/blob/main/%s", "%s"),
+    "repo-dir": (f"{repo_url}/tree/main/%s", "%s"),
+}
+extlinks_detect_hardcoded_links = True
+
+
 # -- intersphinx  ----------------------------------------------------------------------------------
-meta_classifiers = metadata.get_all("Classifier")
-if not meta_classifiers:
-    raise RuntimeError("No classifiers found in the project metadata")
-py_versions = []
-for c in meta_classifiers:
-    if not c.startswith("Programming Language :: Python :: "):
-        continue
-    pyv = c.split("::")[-1].strip()
-    if pyv[0] not in ("2", "3"):
-        continue
-    py_versions.append(pyv)
-if not py_versions:
-    raise RuntimeError("No Python versions found in the project classifiers")
 intersphinx_mapping = {
-    **{f"python{v}": (f"https://docs.python.org/{v}/", None) for v in py_versions},
+    "python": ("https://docs.python.org/3", None),
+    "packaging": ("https://packaging.pypa.io/en/latest", None),
     "numpy": ("https://docs.scipy.org/doc/numpy/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
     "statsmodels": ("https://www.statsmodels.org/stable/", None),
     "plotly": ("https://plotly.com/python-api-reference/", None),
 }
-print(f"intersphinx_mapping = {pformat(intersphinx_mapping)}")
+
 
 # -- sphinx-sitemap --------------------------------------------------------------------------------
 html_baseurl = docs_url
 sitemap_url_scheme = "{link}"
 
-# -- autodoc & napoleon ----------------------------------------------------------------------------
-_TYPE_ALIASES = {
-    "Numeric",
-    "NumericT",
-    "KDEPoints",
-    "KDEBandwidth",
-    "ColorScale",
-    "LabelsArray",
-    "ColorsArray",
-    "MidpointsArray",
-    "XYCoordinate",
-    "DensityTrace",
-    "DensitiesRow",
-    "Densities",
-    "SamplesTrace",
-    "SamplesRow",
-    "Samples",
-    "ShallowLabelsArray",
-    "ShallowColorsArray",
-    "ShallowDensities",
-    "ShallowSamples",
-}
+
+# -- autodoc, napoleon, and autodoc-typehints ------------------------------------------------------
+
 
 # autodoc config
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
 autodoc_member_order = "bysource"
 autodoc_typehints = "description"
+autodoc_default_options = {
+    "members": True,
+    "member-order": "bysource",
+    "undoc-members": True,
+    "show-inheritance": True,
+}
 autodoc_typehints_description_target = "documented"
-autodoc_type_aliases = {x: x for x in _TYPE_ALIASES}
+
 
 # autodoc-typehints config
 # https://github.com/tox-dev/sphinx-autodoc-typehints
-# typehints_document_rtype = False
-# typehints_use_rtype = False
-# typehints_defaults = "braces"
+# typehints_use_rtype = True  # use w/ `napoleon_use_rtype` to avoid duplication
+# typehints_defaults = "comma"
+# always_document_param_types = True
+# simplify_optional_unions = False
+
 
 # Napoleon config
 # https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
+napoleon_use_admonition_for_examples = True
+napoleon_use_admonition_for_notes = False
+napoleon_use_param = False
+# napoleon_use_rtype = False
 napoleon_preprocess_types = True
-napoleon_type_aliases = {x: f":data:`~ridgeplot._types.{x}`" for x in _TYPE_ALIASES}
+napoleon_attr_annotations = True
+
+
+# Type aliases
+_TYPE_ALIASES_FULLY_QUALIFIED = {
+    # ------- ._colors -----------------------------
+    "ridgeplot._colors.ColorScale",
+    "ridgeplot._colors._Color",
+    # ------- ._figure_factory ---------------------
+    "ridgeplot._figure_factory.LabelsArray",
+    "ridgeplot._figure_factory.ShallowLabelsArray",
+    "ridgeplot._figure_factory.ColorsArray",
+    "ridgeplot._figure_factory.ShallowColorsArray",
+    "ridgeplot._figure_factory.MidpointsArray",
+    # "ridgeplot._figure_factory.Colormode",
+    # ------- ._kde --------------------------------
+    "ridgeplot._kde.KDEPoints",
+    "ridgeplot._kde.KDEBandwidth",
+    # ------- ._missing ----------------------------
+    "ridgeplot._missing.MISSING",
+    "ridgeplot._missing.MissingType",
+    # ------- ._types ------------------------------
+    "ridgeplot._types.CollectionL1",
+    "ridgeplot._types.CollectionL2",
+    "ridgeplot._types.CollectionL3",
+    "ridgeplot._types.Float",
+    "ridgeplot._types.Int",
+    "ridgeplot._types.Numeric",
+    "ridgeplot._types.NumericT",
+    "ridgeplot._types.XYCoordinate",
+    "ridgeplot._types.DensityTrace",
+    "ridgeplot._types.DensitiesRow",
+    "ridgeplot._types.Densities",
+    "ridgeplot._types.ShallowDensities",
+    "ridgeplot._types.SamplesTrace",
+    "ridgeplot._types.SamplesRow",
+    "ridgeplot._types.Samples",
+    "ridgeplot._types.ShallowSamples",
+}
+_TYPE_ALIASES = {fq.split(".")[-1]: fq for fq in _TYPE_ALIASES_FULLY_QUALIFIED}
+autodoc_type_aliases = {
+    **{a: a for a in _TYPE_ALIASES.values()},
+    **{fq: fq for fq in _TYPE_ALIASES.values()},
+}
+napoleon_type_aliases = {a: f":data:`~{fq}`" for a, fq in _TYPE_ALIASES.items()}
+
 
 # -- sphinx_remove_toctrees ------------------------------------------------------------------------
 # Use the `sphinx_remove_toctrees` extension to remove auto-generated
 # toctrees (generated by `autosummary`) from the main sidebar.
-remove_from_toctrees = [
-    # "api/public/*",
-    "api/internal/*",
-]
+remove_from_toctrees = ["api/internal/*"]
+
 
 # -- sphinx-gallery config -------------------------------------------------------------------------
 import plotly.io as pio  # noqa: E402
@@ -289,6 +337,7 @@ sphinx_gallery_conf = {
 # -- sphinx-paramlinks -----------------------------------------------------------------------------
 paramlinks_hyperlink_param = "name"
 
+
 # -- myst config -----------------------------------------------------------------------------------
 myst_enable_extensions = [
     "amsmath",
@@ -304,38 +353,16 @@ myst_enable_extensions = [
 myst_dmath_double_inline = True
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html#auto-generated-header-anchors
 myst_heading_anchors = 2
-myst_substitutions = {"some_jinja2_key": "value"}
+myst_substitutions: dict[str, str] = {
+    # "some_jinja2_key": "value",
+}
 
 
 # -- custom setup steps ------------------------------------------------------------
 
 
-def register_jinja_functions() -> None:
-    """Add custom functions to the jinja context
-    For example, you can define the following function:
-    >>> def now() -> str:
-    >>>     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    Add it to the jinja DEFAULT_NAMESPACE
-    >>> DEFAULT_NAMESPACE["now"] = now
-
-    Use it in your docs like this:
-    This is a Markdown block rendered at time={{ now() }}
-    """
-    from jinja2.defaults import DEFAULT_NAMESPACE
-
-    def repo_file(file_name: str) -> str:
-        return f"[{file_name}]({repo_url}/blob/main/{file_name})"
-
-    def repo_dir(dir_name: str) -> str:
-        return f"[{dir_name}]({repo_url}/tree/main/{dir_name})"
-
-    DEFAULT_NAMESPACE.update({"repo_file": repo_file, "repo_dir": repo_dir})
-
-
-def setup(app) -> None:  # type: ignore[no-untyped-def]
+def setup(app: Sphinx) -> None:
     compile_plotly_charts()
-    register_jinja_functions()
     # app.connect("html-page-context", register_jinja_functions)
     # html_css_files doesn't seem to be working...
     for css_path in Path("_static/css").glob("*.css"):

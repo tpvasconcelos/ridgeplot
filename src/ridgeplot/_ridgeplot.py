@@ -18,7 +18,6 @@ from ridgeplot._types import (
 )
 
 if TYPE_CHECKING:
-    from typing import Optional, Union
 
     import plotly.graph_objects as go
 
@@ -28,18 +27,18 @@ if TYPE_CHECKING:
 
 
 def ridgeplot(
-    samples: Union[Samples, ShallowSamples, None] = None,
-    densities: Union[Densities, ShallowDensities, None] = None,
+    samples: Samples | ShallowSamples | None = None,
+    densities: Densities | ShallowDensities | None = None,
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
     kde_points: KDEPoints = 500,
-    colorscale: Union[str, ColorScale] = "plasma",
+    colorscale: str | ColorScale = "plasma",
     colormode: Colormode = "mean-minmax",
-    coloralpha: Optional[float] = None,
-    labels: Union[LabelsArray, ShallowLabelsArray, None] = None,
+    coloralpha: float | None = None,
+    labels: LabelsArray | ShallowLabelsArray | None = None,
     linewidth: float = 1.0,
     spacing: float = 0.5,
-    show_annotations: Union[bool, MissingType] = MISSING,
+    show_annotations: bool | MissingType = MISSING,
     show_yticklabels: bool = True,
     xpad: float = 0.05,
 ) -> go.Figure:
@@ -72,17 +71,17 @@ def ridgeplot(
         - :math:`S_t` is the number of samples per trace, where each trace
           :math:`t \in T_r` can also have a different number of samples.
 
-        The KDE will be performed over the sample values :math:`S_t` for each
-        trace :math:`t \in T`. After the KDE, the resulting array will be a (4D)
-        `:paramref:`densities` array with shape :math:`(R, T_r, P_t, 2)`
-        (see :paramref:`densities` below for more details).
+        The KDE will be performed over the sample values (:math:`S_t`) for all
+        traces. After the KDE, the resulting array will be a (4D)
+        :paramref:`densities` array with shape :math:`(R, T_r, P_t, 2)`
+        (see below for more details).
 
     densities : Densities or ShallowDensities, optional
-        If ``densities`` arrays are specified instead, the KDE step will be
-        skipped and all associated arguments ignored. Each density array should
-        have shape :math:`(R, T_r, P_t, 2)` (4D). Just like the
-        :paramref:`samples` argument, we also support irregular (`ragged`_)
-        ``densities`` arrays, where:
+        If a ``densities`` array is specified, the KDE step will be skipped and
+        all associated arguments ignored. Each density array should have shape
+        :math:`(R, T_r, P_t, 2)` (4D). Just like the :paramref:`samples`
+        argument, we also support irregular (`ragged`_) ``densities`` arrays,
+        where:
 
         - :math:`R` is the number of rows in the plot
         - :math:`T_r` is the number of traces per row, where each row
@@ -131,10 +130,10 @@ def ridgeplot(
 
     colorscale : str or ColorScale
         Any valid Plotly color-scale or a str with a valid named color-scale.
-        Use :func:`~ridgeplot.get_all_colorscale_names()` to see which names
+        Use :func:`~ridgeplot.list_all_colorscale_names()` to see which names
         are available or check out `Plotly's built-in color-scales`_.
 
-    colormode
+    colormode : Colormode
         This argument controls the logic for choosing the color filling of each
         ridgeline trace. Each option provides a different method for
         calculating the :paramref:`colorscale` midpoint of each trace. The

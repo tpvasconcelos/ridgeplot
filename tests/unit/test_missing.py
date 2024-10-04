@@ -5,7 +5,8 @@ from importlib import reload
 from typing import Any
 
 import pytest
-from _test_helpers import round_trip_pickle
+
+from cicd.test_helpers import round_trip_pickle
 
 
 def test_repr() -> None:

@@ -1,0 +1,10 @@
+# mypy dependencies
+mypy
+
+# Third-party stubs
+types-python-dateutil
+types-pytz
+types-PyYAML
+types-requests
+types-tqdm
+pandas-stubs

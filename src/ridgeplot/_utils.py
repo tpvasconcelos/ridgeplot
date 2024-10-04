@@ -8,16 +8,7 @@ from typing import (
 )
 
 if TYPE_CHECKING:
-    from typing import (
-        Any,
-        Callable,
-        Iterator,
-        List,
-        Optional,
-        Set,
-        Tuple,
-        Union,
-    )
+    from typing import Any, Callable, Iterator
 
     from ridgeplot._types import Numeric
 
@@ -32,7 +23,7 @@ def normalise_min_max(val: Numeric, min_: Numeric, max_: Numeric) -> float:
     return float((val - min_) / (max_ - min_))
 
 
-def get_collection_array_shape(arr: Collection) -> Tuple[Union[int, Set[int]], ...]:
+def get_collection_array_shape(arr: Collection[Any]) -> tuple[int | set[int], ...]:
     """Return the shape of a :class:`~typing.Collection` array.
 
     Parameters
@@ -115,7 +106,7 @@ def get_collection_array_shape(arr: Collection) -> Tuple[Union[int, Set[int]], .
             raise TypeError(f"Expected a Collection. Got {type(obj)} instead.")
         return len(obj)
 
-    shape: List[Union[int, Set[int]]] = [_get_dim_length(arr)]
+    shape: list[int | set[int]] = [_get_dim_length(arr)]
     while isinstance(arr, Collection):
         try:
             dim_lengths = set(map(_get_dim_length, arr))
@@ -126,11 +117,11 @@ def get_collection_array_shape(arr: Collection) -> Tuple[Union[int, Set[int]], .
     return tuple(shape)
 
 
-KT = TypeVar("KT")  # Mapping key type
-VT = TypeVar("VT")  # Mapping value type
+_KT = TypeVar("_KT")  # Mapping key type
+_VT = TypeVar("_VT")  # Mapping value type
 
 
-class LazyMapping(Mapping[KT, VT]):
+class LazyMapping(Mapping[_KT, _VT]):
     """A lazy mapping that loads its contents only when first needed.
 
     Parameters
@@ -140,9 +131,7 @@ class LazyMapping(Mapping[KT, VT]):
 
     Examples
     --------
-    >>> from typing import Dict
-    >>>
-    >>> def my_io_loader() -> Dict[str, int]:
+    >>> def my_io_loader() -> dict[str, int]:
     ...     print("Loading...")
     ...     return {"a": 1, "b": 2}
     ...
@@ -154,20 +143,20 @@ class LazyMapping(Mapping[KT, VT]):
 
     __slots__ = ("_loader", "_inner_mapping")
 
-    def __init__(self, loader: Callable[[], Mapping[KT, VT]]):
+    def __init__(self, loader: Callable[[], Mapping[_KT, _VT]]):
         self._loader = loader
-        self._inner_mapping: Optional[Mapping[KT, VT]] = None
+        self._inner_mapping: Mapping[_KT, _VT] | None = None
 
     @property
-    def _mapping(self) -> Mapping[KT, VT]:
+    def _mapping(self) -> Mapping[_KT, _VT]:
         if self._inner_mapping is None:
             self._inner_mapping = self._loader()
         return self._inner_mapping
 
-    def __getitem__(self, item: KT) -> VT:
+    def __getitem__(self, item: _KT) -> _VT:
         return self._mapping.__getitem__(item)
 
-    def __iter__(self) -> Iterator[KT]:
+    def __iter__(self) -> Iterator[_KT]:
         return self._mapping.__iter__()
 
     def __len__(self) -> int:

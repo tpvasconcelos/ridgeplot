@@ -1,9 +1,9 @@
 default_language_version:
-    python: python3.8
+  python: python3.8
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-added-large-files
         args: [ '--maxkb=500' ]
@@ -30,15 +30,32 @@ repos:
       - id: trailing-whitespace
         exclude: .bumpversion.cfg
 
+  - repo: https://github.com/python-jsonschema/check-jsonschema.git
+    rev: 0.29.2
+    hooks:
+      - id: check-github-actions
+      - id: check-github-workflows
+      - id: check-jsonschema
+        name: "Check GitHub Workflows set timeout-minutes"
+        files: ^\.github/workflows/[^/]+$
+        types: [ yaml ]
+        args: [ "--builtin-schema", "github-workflows-require-timeout" ]
+      - id: check-readthedocs
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.2
+    hooks:
+      - id: actionlint
+
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.6
+    rev: v2.3.0
     hooks:
       - id: codespell
         args: [ "-L", "probly" ]
         exclude: ^docs/_static/.*\.(js|html)$|^src/ridgeplot/.*\.c$
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.9.0.6
+    rev: v0.10.0.1
     hooks:
       - id: shellcheck
 
@@ -56,7 +73,7 @@ repos:
           - mdformat-myst
 
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.15
+    rev: v0.19
     hooks:
       - id: validate-pyproject
 
@@ -66,26 +83,19 @@ repos:
       - id: check-manifest
         args: [ --no-build-isolation ]
 
-  # TODO: Add this back in once we can reconcile the different locked files into a single one
-  # - repo: https://github.com/peterdemin/pip-compile-multi
-  #   rev: v2.4.6
-  #   hooks:
-  #     - id: pip-compile-multi-verify
-  #       args: [ --backtracking, --out-ext, 38-darwin.txt ]
-
   - repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.16.0
+    rev: 1.18.0
     hooks:
       - id: blacken-docs
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 23.12.1
+    rev: 24.8.0
     hooks:
       - id: black-jupyter
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.11
+    rev: v0.6.5
     hooks:
       - id: ruff
-        args: [ --fix, --exit-non-zero-on-fix ]
+        args: [ --show-fixes, --exit-non-zero-on-fix ]
         types_or: [ python, pyi, jupyter ]
