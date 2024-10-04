@@ -24,7 +24,7 @@ class TestGetXYExtrema:
 
     def test_raise_for_empty_sequence(self) -> None:
         # Fails for empty sequence
-        with pytest.raises(ValueError, match="arg is an empty sequence"):
+        with pytest.raises(ValueError, match="The densities array should not be empty"):
             get_xy_extrema(densities=[])
 
     def test_raise_for_non_2d_array(self) -> None:

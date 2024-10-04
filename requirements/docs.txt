@@ -1,3 +1,8 @@
+# Documentation requirements
+
+# Depends on `cicd_utils`
+-r cicd_utils.txt
+
 # Sphinx dependencies
 furo
 jinja2
@@ -16,9 +21,6 @@ sphinx-toolbox
 sphinx_design
 sphinx_thebe
 sphinxext-opengraph
+
 # matplotlib is used to generate social cards
 matplotlib
-# ./extras/_compile_plotly_charts.py
-beautifulsoup4
-minify-html
-kaleido

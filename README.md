@@ -21,9 +21,10 @@
   <a href="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot"><img src="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge" alt="CodeFactor"></a>
   <a href="https://app.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade"><img src="https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021" alt="Codacy code quality Badge"></a>
 </p>
-______________________________________________________________________
 
-`ridgeplot` is a Python package that provides a simple interface for plotting beautiful and interactive [ridgeline plots](https://www.data-to-viz.com/graph/ridgeline.html) within the extensive [Plotly](https://plotly.com/python/) ecosystem.
+-----------------
+
+`ridgeplot` is a Python package that provides a simple interface for plotting beautiful and interactive [ridgeline plots](https://ridgeplot.readthedocs.io/en/stable/getting_started/getting_started.html) within the extensive [Plotly](https://plotly.com/python/) ecosystem.
 
 ## Installation
 
@@ -43,7 +44,7 @@ The full official documentation can be found at: https://ridgeplot.readthedocs.i
 
 ### Basic example
 
-This basic example gets you started with a simple call to the `ridgeplot()` function.
+For those in a hurry, here's a very basic example on how to quickly get started with [ridgeplot()](https://ridgeplot.readthedocs.io/en/stable/api/public/ridgeplot.ridgeplot.html) function.
 
 ```python
 import numpy as np
@@ -59,7 +60,7 @@ fig.show()
 
 ### Flexible configuration
 
-In this example, we will be replicating the first ridgeline plot example in this [_from Data to Viz_ post](https://www.data-to-viz.com/graph/ridgeline.html), which uses the _"Perception of Probability Words"_ dataset.
+In this example, we will try to replicate the first ridgeline plot in this [_from Data to Viz_ post](https://www.data-to-viz.com/graph/ridgeline.html). The example in the post was created using the [_"Perception of Probability Words"_ dataset](https://ridgeplot.readthedocs.io/en/stable/api/public/ridgeplot.datasets.load_probly.html) and the popular [ggridges](https://wilkelab.org/ggridges/) R package. In the end, we will see how the `ridgeplot` Python library can be used to create a (nearly) identical plot, thanks to its extensive configuration options.
 
 ```python
 import numpy as np

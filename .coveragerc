@@ -1,37 +1,40 @@
 [run]
-branch = True
+branch = true
+
+[paths]
+# https://coverage.readthedocs.io/en/latest/config.html#paths
+src =
+    src
+    .tox*/*/lib/python*/site-packages
+    .tox*/pypy*/site-packages
+    .tox*\*\Lib\site-packages
+    */src
+    *\src
+
 
 [report]
+precision = 1
 show_missing = true
-#fail_under = 100
-precision = 2
+skip_covered = false
+fail_under = 50
+
+# Some of the patterns below were taken or adapted
+# from: https://github.com/asottile/covdefaults
 exclude_lines =
     # a more strict default pragma
     \# pragma: no cover\b
-
     # allow defensive code
     ^\s*raise AssertionError\b
     ^\s*raise NotImplementedError\b
     ^\s*return NotImplemented\b
     ^\s*raise$
-
     # typing-related code
-    ^\s*if (False|TYPE_CHECKING):
+    ^\s*if (__debug__|False|TYPE_CHECKING):
+    ^@overload\b
     : \.\.\.(\s*#.*)?$
     ^ +\.\.\.$
     -> ['"]?NoReturn['"]?:
-
     # non-runnable code
     if __name__ == ['"]__main__['"]:$
-
-    # additional platform related pragmas (see below)
-    # additional version related pragmas (see below)
 partial_branches =
-    # a more strict default pragma
-    \# pragma: no cover\b
-
-    # out platform pragmas
-    \# pragma: (nt|posix|cygwin|darwin|linux|msys|win32|cpython|pypy) (no )?cover\b
-
-    # our version pragmas
-    \# pragma: (>=?|<=?|==|!=)\d+\.\d+ cover\b
+    \# pragma: no branch\b

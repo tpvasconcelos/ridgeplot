@@ -18,7 +18,7 @@ title: beautiful ridgeline plots in Python
 [![Codacy code quality Badge](https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021)](https://app.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 :::
 
-______________________________________________________________________
+-----------------
 
 `ridgeplot` is a Python package that provides a simple interface for plotting beautiful and interactive [ridgeline plots](getting_started/getting_started.md) within the extensive [Plotly](https://plotly.com/python/) ecosystem.
 
@@ -40,7 +40,7 @@ Take a look at the [getting started guide](getting_started/getting_started), whi
 
 <h3>Basic example</h3>
 
-For those in a hurry, here's a very basic example on how to quickly get started with {py:func}`~ridgeplot.ridgeplot()`.
+For those in a hurry, here's a very basic example on how to quickly get started with the {py:func}`~ridgeplot.ridgeplot()` function.
 
 ```python
 import numpy as np

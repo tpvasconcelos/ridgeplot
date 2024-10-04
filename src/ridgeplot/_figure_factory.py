@@ -9,7 +9,7 @@ from ridgeplot._types import CollectionL1, CollectionL2
 from ridgeplot._utils import normalise_min_max
 
 if TYPE_CHECKING:
-    from typing import Callable, Collection, Dict, List, Optional, Tuple, Union
+    from typing import Callable, Collection
 
     from ridgeplot._colors import ColorScale
     from ridgeplot._types import Densities, Numeric
@@ -18,7 +18,8 @@ if TYPE_CHECKING:
 LabelsArray = CollectionL2[str]
 """A :data:`LabelsArray` represents the labels of traces in a ridgeplot.
 
-For instance, the following is a valid :data:`LabelsArray`:
+Example
+-------
 
 >>> labels_array: LabelsArray = [
 ...     ["trace 1", "trace 2", "trace 3"],
@@ -29,7 +30,8 @@ For instance, the following is a valid :data:`LabelsArray`:
 ShallowLabelsArray = CollectionL1[str]
 """Shallow type for :data:`LabelsArray`.
 
-Example:
+Example
+-------
 
 >>> labels_array: ShallowLabelsArray = ["trace 1", "trace 2", "trace 3"]
 """
@@ -37,7 +39,8 @@ Example:
 ColorsArray = CollectionL2[str]
 """A :data:`ColorsArray` represents the colors of traces in a ridgeplot.
 
-For instance, the following is a valid :data:`ColorsArray`:
+Example
+-------
 
 >>> colors_array: ColorsArray = [
 ...     ["red", "blue", "green"],
@@ -48,7 +51,8 @@ For instance, the following is a valid :data:`ColorsArray`:
 ShallowColorsArray = CollectionL1[str]
 """Shallow type for :data:`ColorsArray`.
 
-Example:
+Example
+-------
 
 >>> colors_array: ShallowColorsArray = ["red", "blue", "green"]
 """
@@ -57,7 +61,8 @@ MidpointsArray = CollectionL2[float]
 """A :data:`MidpointsArray` represents the midpoints of colorscales in a
 ridgeplot.
 
-For instance, the following is a valid :data:`MidpointsArray`:
+Example
+-------
 
 >>> midpoints_array: MidpointsArray = [
 ...     [0.2, 0.5, 1],
@@ -66,9 +71,11 @@ For instance, the following is a valid :data:`MidpointsArray`:
 """
 
 Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
+"""The :paramref:`ridgeplot.ridgeplot.colormode` argument in
+:func:`ridgeplot.ridgeplot()`."""
 
 _D3HF = ".7"
-"""Hover format
+"""Default (d3-format) format for floats in hover labels.
 
 After trying to read through the plotly.py source code, I couldn't find a
 simple way to replicate the default hover format using the d3-format syntax
@@ -81,11 +88,15 @@ _DEFAULT_HOVERTEMPLATE = (
     "<br>"
     "<extra>%{fullData.name}</extra>"
 )  # fmt: skip
+"""Default ``hovertemplate`` for density traces.
+
+See :func:`ridgeplot._figure_factory.RidgePlotFigureFactory.draw_density_trace`.
+"""
 
 
-def get_xy_extrema(densities: Densities) -> Tuple[Numeric, Numeric, Numeric, Numeric]:
-    """Get the global x-y extrema (x_min, x_max, y_min, y_max) from all the
-    :data:`~ridgeplot._types.DensityTrace`s in the
+def get_xy_extrema(densities: Densities) -> tuple[Numeric, Numeric, Numeric, Numeric]:
+    r"""Get the global x-y extrema (x_min, x_max, y_min, y_max) over all
+    :data:`~ridgeplot._types.DensityTrace`\s in the
     :data:`~ridgeplot._types.Densities` array.
 
     Parameters
@@ -116,8 +127,10 @@ def get_xy_extrema(densities: Densities) -> Tuple[Numeric, Numeric, Numeric, Num
     ... )
     (-2, 4, 0, 4)
     """
-    x_flat: List[Numeric] = []
-    y_flat: List[Numeric] = []
+    if len(densities) == 0:
+        raise ValueError("The densities array should not be empty.")
+    x_flat: list[Numeric] = []
+    y_flat: list[Numeric] = []
     for row in densities:
         for trace in row:
             for x, y in trace:
@@ -126,7 +139,7 @@ def get_xy_extrema(densities: Densities) -> Tuple[Numeric, Numeric, Numeric, Num
     return min(x_flat), max(x_flat), min(y_flat), max(y_flat)
 
 
-def _mul(a: Tuple[Numeric, ...], b: Tuple[Numeric, ...]) -> Tuple[Numeric, ...]:
+def _mul(a: tuple[Numeric, ...], b: tuple[Numeric, ...]) -> tuple[Numeric, ...]:
     """Multiply two tuples element-wise."""
     return tuple(a_i * b_i for a_i, b_i in zip(a, b))
 
@@ -137,10 +150,10 @@ class RidgePlotFigureFactory:
     def __init__(
         self,
         densities: Densities,
-        colorscale: Union[str, ColorScale],
-        coloralpha: Optional[float],
+        colorscale: str | ColorScale,
+        coloralpha: float | None,
         colormode: Colormode,
-        labels: Optional[LabelsArray],
+        labels: LabelsArray | None,
         linewidth: float,
         spacing: float,
         show_yticklabels: bool,
@@ -171,7 +184,7 @@ class RidgePlotFigureFactory:
 
         self.densities: Densities = densities
         self.colorscale: ColorScale = colorscale
-        self.coloralpha: Optional[float] = coloralpha
+        self.coloralpha: float | None = coloralpha
         self.colormode = colormode
         self.labels: LabelsArray = labels
         self.linewidth: float = float(linewidth)
@@ -189,7 +202,7 @@ class RidgePlotFigureFactory:
         self.colors: ColorsArray = self.pre_compute_colors()
 
     @property
-    def colormode_maps(self) -> Dict[str, Callable[[], MidpointsArray]]:
+    def colormode_maps(self) -> dict[str, Callable[[], MidpointsArray]]:
         return {
             "row-index": self._compute_midpoints_row_index,
             "trace-index": self._compute_midpoints_trace_index,
@@ -248,7 +261,7 @@ class RidgePlotFigureFactory:
             ),
         )
 
-    def update_layout(self, y_ticks: List[float]) -> None:
+    def update_layout(self, y_ticks: list[float]) -> None:
         """Update figure's layout."""
         self.fig.update_layout(
             legend=dict(traceorder="normal"),

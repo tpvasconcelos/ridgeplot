@@ -1,4 +1,11 @@
-name: CI
+# Run all CI checks on all pushes to the main branch or pull-request updates.
+# This includes running static checks such as linting and type checking,
+# as well as running the test suite on all supported Python versions.
+# Coverage reports will be uploaded to Codecov and Codacy.
+#
+# The documentation will also be built, and a link to the docs will be
+# added to the PR description.
+name: CI checks
 
 on:
   push:
@@ -14,6 +21,8 @@ jobs:
   # https://github.com/readthedocs/actions/tree/main/preview
   documentation-links:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    timeout-minutes: 1
     steps:
       - uses: readthedocs/actions/preview@v1
         with:
@@ -23,6 +32,7 @@ jobs:
   static-checks:
     name: Static checks
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-python
@@ -49,13 +59,20 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
-          # - "3.12"
+          - "3.12"
         os:
           - ubuntu-latest
-          - macos-latest
+          # There shouldn't be any behavior differences between
+          # OSes, so we'll only run the test suite on Ubuntu for now.
+          # Also, since I (the main maintainer) develop on a macOS
+          # machine, I'll run the tests locally on macOS before
+          # merging any PRs or releasing new versions. This should
+          # be sufficient and will speed up the CI process...
+          # - macos-latest
           # - windows-latest
       fail-fast: true
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
 
@@ -74,28 +91,38 @@ jobs:
         env:
           DIFF_AGAINST: HEAD
 
-      - name: Run doctests
-        shell: bash
-        run: tox -e doctests
-
       - name: Run E2E tests
         shell: bash
         run: tox -e tests-e2e
+        env:
+          DIFF_AGAINST: HEAD
 
-      - name: Test the `extras` utilities
+      - name: Test the CI/CD utilities
         shell: bash
-        run: tox -e tests-extras
+        run: tox -e tests-cicd_utils
+        env:
+          DIFF_AGAINST: HEAD
+
+      # Combine coverage reports from all test suites
+
+      - name: Combine coverage reports
+        shell: bash
+        run: tox -e coverage-combine
+        env:
+          DIFF_AGAINST: HEAD
 
       # Upload coverage reports to Codecov and Codacy.
 
       - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         env:
           OS: "${{ matrix.os }}"
           PYTHON: "${{ matrix.python-version }}"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
+          file: ./coverage.combined.src.xml
+          disable_search: true
+          flags: combined-src
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           verbose: true
@@ -104,4 +131,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage.xml
+          coverage-reports: coverage.combined.src.xml
