@@ -18,8 +18,7 @@ def test_packaged_installed() -> None:
     assert Path.cwd().resolve() != package_path.parent.resolve()
 
 
-def test_import_all() -> None:
-    """Assert that the package's __all__ attribute is correctly defined."""
+def test_public_api() -> None:
     from ridgeplot import __all__ as public_api
 
     assert set(public_api) == {"ridgeplot", "list_all_colorscale_names", "__version__"}
