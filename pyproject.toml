@@ -62,6 +62,9 @@ where = ["src"]
 namespaces = false
 
 [tool.setuptools_scm]
+# PyPi does not support _local_ versioning
+# and we want to push X.devM to TestPyPi
+# on every merge to the `main` branch
 local_scheme = "no-local-version"
 
 [tool.black]
