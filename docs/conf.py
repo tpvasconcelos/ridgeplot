@@ -65,7 +65,7 @@ extensions = [
     "sphinx.ext.viewcode",
     # NOTE: 'sphinx_autodoc_typehints' should be loaded after
     #       'sphinx.ext.autodoc' and 'sphinx.ext.napoleon'
-    # "sphinx_autodoc_typehints",
+    "sphinx_autodoc_typehints",
     "sphinx_copybutton",
     "sphinx_design",
     "sphinx_inline_tabs",
@@ -244,7 +244,7 @@ autosectionlabel_prefix_document = True
 # autodoc config
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
 autodoc_member_order = "bysource"
-autodoc_typehints = "description"
+autodoc_typehints = "none"
 autodoc_default_options = {
     "members": True,
     "member-order": "bysource",
@@ -256,10 +256,10 @@ autodoc_typehints_description_target = "documented"
 
 # autodoc-typehints config
 # https://github.com/tox-dev/sphinx-autodoc-typehints
-# typehints_use_rtype = True  # use w/ `napoleon_use_rtype` to avoid duplication
-# typehints_defaults = "comma"
-# always_document_param_types = True
-# simplify_optional_unions = False
+typehints_use_rtype = True  # use w/ `napoleon_use_rtype` to avoid duplication
+typehints_defaults = "comma"
+always_document_param_types = True
+simplify_optional_unions = False
 
 
 # Napoleon config
@@ -269,7 +269,7 @@ napoleon_numpy_docstring = True
 napoleon_use_admonition_for_examples = True
 napoleon_use_admonition_for_notes = False
 napoleon_use_param = False
-# napoleon_use_rtype = False
+napoleon_use_rtype = False
 napoleon_preprocess_types = True
 napoleon_attr_annotations = True
 
