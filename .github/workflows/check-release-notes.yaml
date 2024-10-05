@@ -20,7 +20,11 @@ jobs:
       - name: Default MISSING_CHANGELOG_ENTRY to 1
         run: echo 'MISSING_CHANGELOG_ENTRY=1' >> "$GITHUB_ENV"
 
-      - name: Check changelog if not skipped
+      - name: Skip news?
+        if: "contains(github.event.pull_request.labels.*.name, 'skip news')"
+        run: echo 'MISSING_CHANGELOG_ENTRY=0' >> "$GITHUB_ENV"
+
+      - name: Else, check for changelog entry
         if: "!contains(github.event.pull_request.labels.*.name, 'skip news')"
         run: |
           # shellcheck disable=SC2016
@@ -35,6 +39,12 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
           body-includes: 'Missing changelog entry'
+
+      - name: Echo debug info
+        run: |
+          echo "MISSING_CHANGELOG_ENTRY=${{ env.MISSING_CHANGELOG_ENTRY }}"
+          echo "comment-id=${{ steps.fc.outputs.comment-id }}"
+          echo "comment-node-id=${{ steps.fc.outputs.comment-node-id }}"
 
       #                      MISSING_CHANGELOG_ENTRY=1     MISSING_CHANGELOG_ENTRY=0
       # comment-id=''            (A) POST

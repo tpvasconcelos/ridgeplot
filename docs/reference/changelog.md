@@ -7,7 +7,7 @@ Unreleased changes
 
 ### Breaking changes
 
-- Dropped support for Python 3.8 ({gh-pr}`200`)
+- Dropped support for Python 3.8, in accordance with the official Python support policy[^1]. ({gh-pr}`204`)
 - Removed deprecated function `get_all_colorscale_names()` in favor of `list_all_colorscale_names()` ({gh-pr}`200`)
 
 ### CI/CD
@@ -62,7 +62,7 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 
 ### Breaking changes
 
-- Dropped support for Python 3.7. ({gh-pr}`154`)
+- Dropped support for Python 3.7, in accordance with the official Python support policy[^1]. ({gh-pr}`154`)
 
 ### Features
 
@@ -201,3 +201,7 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 ------
 
 - 🚀 Initial release!
+
+---
+
+[^1]: <https://devguide.python.org/versions/>
