@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Collection, Tuple, TypeVar, Union, overload
+from collections.abc import Collection
+from typing import TYPE_CHECKING, Any, TypeVar, Union, overload
 
 import numpy as np
 
@@ -100,7 +101,7 @@ def _is_numeric(obj: Any) -> bool:
 # ---  `Densities` array
 # ========================================================
 
-XYCoordinate = Tuple[NumericT, NumericT]
+XYCoordinate = tuple[NumericT, NumericT]
 """A 2D :math:`(x, y)` coordinate, represented as a :class:`~tuple` of
 two :data:`Numeric` values.
 

@@ -1,14 +1,14 @@
 from __future__ import annotations
 
+from collections.abc import Collection, Mapping
 from typing import (
     TYPE_CHECKING,
-    Collection,
-    Mapping,
     TypeVar,
 )
 
 if TYPE_CHECKING:
-    from typing import Any, Callable, Iterator
+    from collections.abc import Iterator
+    from typing import Any, Callable
 
     from ridgeplot._types import Numeric
 

@@ -55,6 +55,7 @@ extensions = [
     "myst_parser",
     "notfound.extension",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
     "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
     "sphinx.ext.extlinks",
@@ -235,6 +236,9 @@ sitemap_url_scheme = "{link}"
 
 
 # -- autodoc, napoleon, and autodoc-typehints ------------------------------------------------------
+
+# autosectionlabel
+autosectionlabel_prefix_document = True
 
 
 # autodoc config

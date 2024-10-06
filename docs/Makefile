@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINXOPTS    ?=
+SPHINXOPTS    ?= --show-traceback --write-all
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = .
 BUILDDIR      = build
@@ -22,6 +22,7 @@ help:
 livehtml:
 	sphinx-autobuild \
 		--open-browser \
+		--port=0 \  # automatically select an open port
 		--delay=0 \
 		--watch=../src/ridgeplot \
 		--re-ignore '_static/charts/.*' \

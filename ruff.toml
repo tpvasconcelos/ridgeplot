@@ -1,7 +1,7 @@
 # ================================================
 # Top-level settings
 # ================================================
-target-version = "py38"
+target-version = "py39"
 fix = true
 line-length = 100
 
