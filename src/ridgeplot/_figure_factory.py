@@ -9,7 +9,8 @@ from ridgeplot._types import CollectionL1, CollectionL2
 from ridgeplot._utils import normalise_min_max
 
 if TYPE_CHECKING:
-    from typing import Callable, Collection
+    from collections.abc import Collection
+    from typing import Callable
 
     from ridgeplot._colors import ColorScale
     from ridgeplot._types import Densities, Numeric
