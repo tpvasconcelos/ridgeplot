@@ -7,7 +7,7 @@ title: beautiful ridgeline plots in Python
 
 [![PyPI - Latest Release](https://img.shields.io/pypi/v/ridgeplot)](https://pypi.org/project/ridgeplot/)
 [![PyPI - Python Versions](https://img.shields.io/pypi/pyversions/ridgeplot)](https://pypi.org/project/ridgeplot/)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/ridgeplot)](https://pypi.org/project/ridgeplot/)
+[![Pepy Total Downloads](https://img.shields.io/pepy/dt/ridgeplot)](https://pepy.tech/project/ridgeplot)
 [![PyPI - Package Status](https://img.shields.io/pypi/status/ridgeplot.svg)](https://pypi.org/project/ridgeplot/)
 [![PyPI - License](https://img.shields.io/pypi/l/ridgeplot)](https://github.com/tpvasconcelos/ridgeplot/blob/main/LICENSE)
 

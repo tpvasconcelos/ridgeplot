@@ -41,15 +41,17 @@ jobs:
           requirements: tox
       # Instead of running all checks in one task (i.e., `tox -m static`),
       # we'll instead run them one-by-one, so that it's easier to
-      # identify and debug failing tests in the GitHub UI.
+      # identify and debug failing checks in the GitHub UI.
       - name: Run static checks with pre-commit
         shell: bash
+        env:
+          SKIP: "no-commit-to-branch"
         run: tox -e pre-commit
       - name: Run type checks with mypy
         shell: bash
         run: tox -e mypy
 
-  # Run test suits for all platforms and Python versions
+  # Run test suits for all supported platforms and Python versions
   software-tests:
     name: Software tests
     strategy:
@@ -61,12 +63,12 @@ jobs:
           - "3.12"
         os:
           - ubuntu-latest
-          # There shouldn't be any behavior differences between
-          # OSes, so we'll only run the test suite on Ubuntu for now.
-          # Also, since I (the main maintainer) develop on a macOS
-          # machine, I'll run the tests locally on macOS before
-          # merging any PRs or releasing new versions. This should
-          # be sufficient and will speed up the CI process...
+          # There shouldn't be any behavior differences between OSes,
+          # so we'll only run the test suite on Ubuntu for now. Also,
+          # since I (the main maintainer) develop on a macOS machine,
+          # I will run all tests locally on macOS before merging any
+          # PRs or releasing new versions. This should be sufficient
+          # and will speed up the CI/CD process quite significantly.
           # - macos-latest
           # - windows-latest
       fail-fast: true

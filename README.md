@@ -11,7 +11,7 @@
   <!-- TODO: https://www.gitpod.io/docs/getting-started -->
   <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/v/ridgeplot" alt="PyPI - Latest Release"></a>
   <a href="https://github.com/tpvasconcelos/ridgeplot/"><img src="https://img.shields.io/pypi/pyversions/ridgeplot" alt="PyPI - Python Versions"></a>
-  <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/dm/ridgeplot" alt="PyPI - Downloads"></a>
+  <a href="https://pepy.tech/project/ridgeplot"><img src="https://img.shields.io/pepy/dt/ridgeplot" alt="Pepy Total Downloads"></a>
   <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/status/ridgeplot.svg" alt="PyPI - Package Status"></a>
   <a href="https://github.com/tpvasconcelos/ridgeplot/blob/main/LICENSE"><img src="https://img.shields.io/pypi/l/ridgeplot" alt="PyPI - License"></a>
   <br>
