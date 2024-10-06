@@ -169,9 +169,9 @@ You need to have push-access to the project's repository to make releases. There
    ```shell
    bumpversion --dry-run --verbose [--allow-dirty] [major,minor,patch]
    ```
-4. Push your changes along with all tag references:
+4. Push your changes along with the new git tag to the remote repository.
    ```shell
-   git push && git push --tags
+   git push --follow-tags
    ```
 5. At this point, a couple of GitHub Actions workflows will be triggered:
     1. {repo-file}`.github/workflows/ci.yaml`: Runs all integration approval checks.
