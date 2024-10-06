@@ -6,3 +6,4 @@ kaleido
 markdown-it-py
 mdit-py-plugins
 mdformat
+mdformat-footnote

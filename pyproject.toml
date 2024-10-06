@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ridgeplot"
 description = "Beautiful ridgeline plots in python"
-version = "0.1.26"
+dynamic = ["version"]
 authors = [
     { name = "Tomas Pereira de Vasconcelos" }
 ]
@@ -22,7 +22,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -37,7 +36,7 @@ classifiers = [
 keywords = [
     "ridgeline", "ridgeplot", "joyplot", "ggridges", "ridges", "ridge", "plot", "plotting", "distplot", "plotly", "data-visualization"
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
     "numpy>=1",
     "plotly>=4",
@@ -61,6 +60,12 @@ Changelog = "https://ridgeplot.readthedocs.io/en/stable/reference/changelog.html
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = false
+
+[tool.setuptools_scm]
+# PyPi does not support _local_ versioning
+# and we want to push X.devM to TestPyPi
+# on every merge to the `main` branch
+local_scheme = "no-local-version"
 
 [tool.black]
 line-length = 100

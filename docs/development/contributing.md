@@ -36,10 +36,10 @@ The following command will 1) create a new virtual environment (under `.venv`), 
 make init
 ```
 
-The default and **recommended** base python is `python3.8`. You can change this by exporting the `BASE_PYTHON` environment variable:
+The default and **recommended** base python is `python3.9`. You can change this by exporting the `BASE_PYTHON` environment variable:
 
 ```shell
-BASE_PYTHON=python3.12 make init
+BASE_PYTHON=python3.13 make init
 ```
 
 If you need to use jupyter-lab, you can install all extra requirements, as well as set up the environment and jupyter kernel with
@@ -51,43 +51,29 @@ make init-jupyter
 ## Pull Request Workflow
 
 1. Always confirm that you have properly configured your Git username and email.
-
    ```shell
    git config --global user.name '<Your name>'
    git config --global user.email '<Your email address>'
    ```
-
 2. Branch off the `main` branch:
-
    ```shell
    git fetch origin
    git branch <YOUR-BRANCH-NAME> origin/main
    ```
-
 3. Implement and commit your changes.
-
 4. Make sure that all integration approval steps are passing locally (see [Continuous Integration](#continuous-integration) below).
-
    ```shell
    tox -p -m static tests
    ```
-
 5. Push your changes to your fork
-
    ```shell
    git push --set-upstream fork <YOUR-BRANCH-NAME>
    ```
-
 6. [Create a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request), and remember to update the pull request's description with relevant notes on the changes implemented, and [link to relevant issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue) (e.g., `fixes #XXX` or `closes #XXX`).
-
 7. At this point, you'll probably also want to add an entry to {repo-file}`docs/reference/changelog.md` summarising the changes in this pull request. The entry should follow the same style and format as other entries, i.e.
-
    > `- Your summary here. ({gh-issue}`XXX`)`
-
    where `XXX` should be replaced with your PR's number. If you think that the changes in this pull request do not warrant a changelog entry, please state it in your pull request's description. In such cases, a maintainer should add a `skip news` label to make CI pass.
-
 8. Wait for all remote CI checks to pass and for a ridgeplot contributor to approve your pull request.
-
 9. Once your pull request is approved, it will be merged into the `main` branch, and your changes will be automatically included in the next ridgeplot release.
 
 ## Continuous Integration

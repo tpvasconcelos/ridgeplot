@@ -5,10 +5,24 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.1.27
+------
+
+### Breaking changes
+
+- Dropped support for Python 3.8, in accordance with the official Python support policy[^1]. ({gh-pr}`204`)
+- Removed deprecated function `get_all_colorscale_names()` in favor of `list_all_colorscale_names()` ({gh-pr}`200`)
+
 ### CI/CD
 
+- Adopt `setuptools-scm` for package versioning ({gh-pr}`200`)
 - Add `actionlint` pre-commit hook ({gh-pr}`201`)
 - Improve logic in `.github/workflows/check-release-notes.yaml` to post comments to the PR ({gh-pr}`201`)
+- Handle footnotes in the automatically generated release notes ({gh-pr}`209`)
 
 ---
 
@@ -56,7 +70,7 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 
 ### Breaking changes
 
-- Dropped support for Python 3.7. ({gh-pr}`154`)
+- Dropped support for Python 3.7, in accordance with the official Python support policy[^1]. ({gh-pr}`154`)
 
 ### Features
 
@@ -195,3 +209,7 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 ------
 
 - 🚀 Initial release!
+
+---
+
+[^1]: <https://devguide.python.org/versions/>
