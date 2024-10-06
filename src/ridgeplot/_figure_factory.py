@@ -16,6 +16,29 @@ if TYPE_CHECKING:
     from ridgeplot._types import Densities, Numeric
 
 
+TraceType = Literal["area", "bar"]
+"""The type of trace to draw in a ridgeplot."""
+
+TraceTypesArray = CollectionL2[TraceType]
+"""A :data:`TraceTypesArray` represents the types of traces in a ridgeplot.
+
+Example
+-------
+
+>>> trace_types_array: TraceTypesArray = [
+...     ["area", "bar", "area"],
+...     ["bar", "area"],
+... ]
+"""
+
+ShallowTraceTypesArray = CollectionL1[TraceType]
+"""Shallow type for :data:`TraceTypesArray`.
+
+Example
+
+>>> trace_types_array: ShallowTraceTypesArray = ["area", "bar", "area"]
+"""
+
 LabelsArray = CollectionL2[str]
 """A :data:`LabelsArray` represents the labels of traces in a ridgeplot.
 
@@ -155,6 +178,7 @@ class RidgePlotFigureFactory:
         coloralpha: float | None,
         colormode: Colormode,
         labels: LabelsArray | None,
+        trace_type: TraceTypesArray | TraceType,
         linewidth: float,
         spacing: float,
         show_yticklabels: bool,
@@ -182,8 +206,11 @@ class RidgePlotFigureFactory:
         if labels is None:
             ids = iter(range(1, n_traces + 1))
             labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
+        if isinstance(trace_type, str):
+            trace_type = [[trace_type] * len(row) for row in densities]
 
         self.densities: Densities = densities
+        self.trace_types: TraceTypesArray = trace_type
         self.colorscale: ColorScale = colorscale
         self.coloralpha: float | None = coloralpha
         self.colormode = colormode
@@ -234,6 +261,7 @@ class RidgePlotFigureFactory:
         x: Collection[Numeric],
         y: Collection[Numeric],
         y_shifted: float,
+        trace_type: TraceType,
         label: str,
         color: str,
     ) -> None:
@@ -243,24 +271,47 @@ class RidgePlotFigureFactory:
         fills the trace until the previously drawn trace (see
         :meth:`draw_base`). This is why the base trace must be drawn first.
         """
-        self.draw_base(x=x, y_shifted=y_shifted)
-        self.fig.add_trace(
-            go.Scatter(
-                x=x,
+        TraceCls = go.Scatter if trace_type == "area" else go.Bar
+
+        if trace_type == "area":
+            self.draw_base(x=x, y_shifted=y_shifted)
+
+        kwargs = dict(
+            x=x,
+            name=label,
+            # Hover information
+            customdata=[[y_i] for y_i in y],
+            hovertemplate=_DEFAULT_HOVERTEMPLATE,
+        )
+        if trace_type == "area":
+            kwargs.update(
                 y=[y_i + y_shifted for y_i in y],
                 fillcolor=color,
-                name=label,
                 fill="tonexty",
                 mode="lines",
                 line=dict(
                     color="rgba(0,0,0,0.6)" if color is not None else None,
                     width=self.linewidth,
                 ),
-                # Hover information
-                customdata=[[y_i] for y_i in y],
-                hovertemplate=_DEFAULT_HOVERTEMPLATE,
-            ),
-        )
+            )
+        else:
+            kwargs.update(
+                y=y,
+                base=y_shifted,
+                marker=dict(
+                    color=color,
+                    # TODO: Review these default values for marker_line
+                    line=dict(
+                        # color="rgba(0,0,0,0.6)" if color is not None else None,
+                        # width=self.linewidth,
+                        color="rgba(0,0,0,0.6)",
+                        width=0.4,
+                    ),
+                ),
+                # width=1,  # TODO: how to handle this?
+            )
+
+        self.fig.add_trace(TraceCls(**kwargs))
 
     def update_layout(self, y_ticks: list[float]) -> None:
         """Update figure's layout."""
@@ -283,6 +334,8 @@ class RidgePlotFigureFactory:
             showticklabels=True,
             **axes_common,
         )
+        # TODO: Review default layout for bar traces...
+        self.fig.update_layout(barmode="stack", bargap=0, bargroupgap=0)
 
     def _compute_midpoints_row_index(self) -> MidpointsArray:
         """colormode='row-index'
@@ -362,8 +415,20 @@ class RidgePlotFigureFactory:
 
     def make_figure(self) -> go.Figure:
         y_ticks = []
-        for i, (row, labels, colors) in enumerate(zip(self.densities, self.labels, self.colors)):
+        for i, (row, trace_types, labels, colors) in enumerate(
+            zip(self.densities, self.trace_types, self.labels, self.colors)
+        ):
             n_traces = len(row)
+            n_trace_types = len(trace_types)
+            if n_traces != n_trace_types:
+                # TODO: This should be handled upstream
+                if n_trace_types == 1:
+                    trace_types = list(trace_types) * n_traces
+                else:
+                    raise ValueError(
+                        f"Mismatch between number of traces ({n_traces}) and "
+                        f"number of trace types ({n_trace_types}) for row {i}."
+                    )
             n_labels = len(labels)
             if n_traces != n_labels:
                 # TODO: This should be handled upstream
@@ -377,8 +442,10 @@ class RidgePlotFigureFactory:
             # y_shifted is the y-origin for the new trace
             y_shifted = -i * float(self.y_max * self.spacing)
             y_ticks.append(y_shifted)
-            for trace, label, color in zip(row, labels, colors):
+            for trace, trace_type, label, color in zip(row, trace_types, labels, colors):
                 x, y = zip(*trace)
-                self.draw_density_trace(x=x, y=y, y_shifted=y_shifted, label=label, color=color)
+                self.draw_density_trace(
+                    x=x, y=y, y_shifted=y_shifted, trace_type=trace_type, label=label, color=color
+                )
         self.update_layout(y_ticks=y_ticks)
         return self.fig
