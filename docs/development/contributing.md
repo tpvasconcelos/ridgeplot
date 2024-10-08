@@ -1,12 +1,18 @@
 # Contributing
 
-Thank you for your interest in contributing to ridgeplot! 🚀
+**Thank you for your interest in improving ridgeplot!** 🚀
 
-The contribution process for ridgeplot should start with [filing a GitHub issue](https://github.com/tpvasconcelos/ridgeplot/issues/new/choose). We define three main categories of issues, and each category has its own GitHub issue template
+We really appreciate the time you're taking and your efforts to make this project better for everyone.
 
-- ⭐ Feature requests
-- 🐛 Bug reports
-- 📚 Documentation fixes
+The contribution process for ridgeplot should start with [filing a GitHub issue](https://github.com/tpvasconcelos/ridgeplot/issues/new/choose). We define three main categories of issues, each with its own issue template
+
+- ⭐ **Feature request:** You have an idea for a new feature or enhancement to the existing functionality.
+- 🐛 **Bug report:** You encountered an issue with the software or something is not working as expected or as documented.
+- 📚 **Documentation improvement:** You found a typo, missing information, something that could be explained better, or you have a suggestion for a new section or example.
+
+For questions, discussions, or general feedback, please use the [GitHub Discussions](https://github.com/tpvasconcelos/ridgeplot/discussions) feature.
+
+Our response time may vary, but we will get back to you as soon as possible.
 
 After the implementation strategy has been agreed on by a ridgeplot contributor, the next step is to introduce your changes as a pull request (see [](#pull-request-workflow)) against the ridgeplot repository. Once your pull request is merged, your changes will be automatically included in the next ridgeplot release. Every change should be listed in the ridgeplot [Changelog](../reference/changelog.md).
 
