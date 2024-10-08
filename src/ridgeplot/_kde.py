@@ -76,18 +76,24 @@ def _validate_densities(
 ) -> None:
     # I haven't investigated the root of this issue yet
     # but statsmodels' KDEUnivariate implementation
-    # can return a `float('NaN')` if something goes
+    # can return a float('NaN') if something goes
     # wrong internally. As to avoid confusion
     # further down the pipeline, I decided
     # to check whether the correct object
     # (and shape) are being returned.
-    wrong_return_type = not isinstance(y, np.ndarray)
-    wrong_return_shape = y.shape != x.shape
+    msg = (
+        f"statsmodels failed to evaluate densities using the {kernel!r} kernel. "
+        "Try setting kernel='gau' (the default kernel)."
+        if kernel != "gau"
+        else ""
+    )
+    if not isinstance(y, np.ndarray):
+        # Fail early if the return type is incorrect
+        # Otherwise, the remaining checks will fail
+        raise RuntimeError(msg)  # noqa: TRY004
+    wrong_shape = y.shape != x.shape
     not_finite = ~np.isfinite(y).all()
-    if wrong_return_type or wrong_return_shape or not_finite:
-        msg = f"statsmodels failed to evaluate densities using the {kernel!r} kernel."
-        if kernel != "gau":
-            msg += " Try setting kernel='gau' (the default kernel)."
+    if wrong_shape or not_finite:
         raise RuntimeError(msg)
 
 
