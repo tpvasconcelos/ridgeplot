@@ -1,17 +1,20 @@
-# Run all CI checks on all pushes to the main branch or pull-request updates.
-# This includes running static checks such as linting and type checking,
-# as well as running the test suite on all supported Python versions.
-# Coverage reports will be uploaded to Codecov and Codacy.
+# Run all CI checks on pushes to the main branch or pull-request updates.
 #
-# The documentation will also be built, and a link to the docs will be
-# added to the PR description.
+# This includes: running static checks such as linting and type checking,
+# running the test suite on all supported Python versions, and uploading
+# coverage reports to Codecov and Codacy. Additionally, the Sphinx docs
+# are built, and a link to the docs will be added to the PR description
+#
 name: CI checks
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   pull-requests: write
@@ -61,6 +64,7 @@ jobs:
           - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
         os:
           - ubuntu-latest
           # There shouldn't be any behavior differences between OSes,

@@ -1,0 +1,34 @@
+name: Greet new users
+
+on:
+  issues:
+    types: [ opened ]
+  pull_request_target:
+    types: [ opened ]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: |
+            **Thank you for submitting your first issue with us!** 🎉
+
+            Our response times may vary, but we'll get back to you as soon as we can!
+
+            Welcome aboard! 🚀
+          pr-message: |
+            **Thank you for submitting your first pull request with us!** 🎉
+
+            Our response times may vary, but we'll get back to you as soon as we can!
+
+            To help us help you, please make sure you have:
+            * Followed our [contributing guidelines](https://ridgeplot.readthedocs.io/en/latest/development/contributing.html).
+            * Provided all the necessary information in your pull request's description.
+            * All CI check are passing.
+            * You have reviewed your own code! 🤠
+
+            Welcome aboard! 🚀

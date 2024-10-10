@@ -1,18 +1,30 @@
-# This workflow builds source (sdist) and binary (wheel) distributions
-# for the Python package on every push event, followed by publishing
-# them to TestPyPi. This should be a good indicator that the build
-# and publishing process is always working correctly (as opposed
-# to only finding out when we actually want to publish a new
-# release).
+# This workflow automates the build, publish, and release process for the Python 🐍 package 📦
 #
-# When new tags are pushed - in addition to the steps above -
-# we also publish the build distributions to the "real" PyPi
-# repository, and publish a new GitHub Release containing
-# the latest section extracted from the release notes
-# and the Sigstore-certified built distributions.
+# It builds both source (sdist) and binary (wheel) distributions,
+# on every tag push to the main branch, or pull request event.
+#
+# If the event is a push to the main branch, the distributions
+# are published to TestPyPI. This should be a good indicator
+# that the build and publishing process is always working
+# correctly, as opposed to only finding out when we try
+# to actually publish a new release to the real PyPI.
+#
+# Only when a new tag push, the distributions are then published to
+# the "real" PyPI, and a new GitHub Release is created containing
+# the latest release notes and Sigstore-certified distributions.
+#
 name: Release workflow 🚀
 
-on: push
+on:
+  push:
+    branches: [ main ]
+    tags: [ '*' ]
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -38,7 +50,7 @@ jobs:
 
   publish-to-testpypi:
     name: Publish distribution to TestPyPI
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    if: github.ref == 'refs/heads/main'
     needs:
       - build
     runs-on: ubuntu-latest
