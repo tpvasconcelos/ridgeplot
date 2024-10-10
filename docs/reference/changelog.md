@@ -11,6 +11,7 @@ Unreleased changes
 - Add `concurrency` entries to relevant GitHub workflows ({gh-pr}`211`)
 - Add Dependabot configuration file ({gh-pr}`211`)
 - Add GitHub issue templates ({gh-pr}`211`)
+- Add support for Python 3.13 ({gh-pr}`217`)
 
 ---
 
