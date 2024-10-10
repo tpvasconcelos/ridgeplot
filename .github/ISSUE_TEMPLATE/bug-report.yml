@@ -35,7 +35,7 @@ body:
         This information will help us reproduce the issue you encountered and identify potential causes.
 
         To find the version of ridgeplot you're using, you can run `pip show ridgeplot` in your terminal, or
-        alternatively `python -c "import ridgeplot; print(ridgeplot.__version__)"`.
+        alternatively: `python -c "import ridgeplot; print(ridgeplot.__version__)"`.
 
         To find the version of Python you're using, you can run `python --version` in your terminal.
   - type: input
@@ -80,6 +80,9 @@ body:
     validations:
       required: true
 
+  - type: markdown
+    attributes:
+      value: ---
   - type: checkboxes
     attributes:
       label: "Are you willing to submit PR?"
