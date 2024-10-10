@@ -58,31 +58,29 @@ make init-jupyter
 
 1. Always confirm that you have properly configured your Git username and email.
    ```shell
-   git config --global user.name 'Your name'
-   git config --global user.email 'Your email address'
+   git config --global user.name '<Your name>'
+   git config --global user.email '<Your email address>'
    ```
-2. Each release series has its own branch (i.e. `MAJOR.MINOR.x`). If submitting a documentation or bug fix contribution, branch off of the latest release series branch.
+2. Branch off the `main` branch:
    ```shell
    git fetch origin
-   git checkout -b <YOUR-BRANCH-NAME> origin/x.x.x
+   git branch <YOUR-BRANCH-NAME> origin/main
    ```
-   Otherwise, if submitting a new feature or API change, branch off of the `main` branch
+3. Implement and commit your changes.
+4. Make sure that all integration approval steps are passing locally (see [Continuous Integration](#continuous-integration) below).
    ```shell
-   git fetch origin
-   git checkout -b <YOUR-BRANCH-NAME> origin/main
+   tox -m static tests
    ```
-3. Apply and commit your changes.
-4. Include tests that cover any code changes you make, and make sure the test fails without your patch.
-5. Add an entry to {repo-file}`docs/reference/changelog.md` summarising the changes in this pull request. The entry should follow the same style and format as other entries, i.e.
-   > `- Your summary here. (#XXX)`
-   where `#XXX` should link to the relevant pull request. If you think that the changes in this pull request do not warrant a changelog entry, please state it in your pull request's description. In such cases, a maintainer should add a `skip news` label to make CI pass.
-6. Make sure all integration approval steps are passing locally (i.e., `tox`).
-7. Push your changes to your fork
+5. Push your changes to your fork
    ```shell
    git push --set-upstream fork <YOUR-BRANCH-NAME>
    ```
-8. [Create a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request). Remember to update the pull request's description with relevant notes on the changes implemented, and to [link to relevant issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue) (e.g., `fixes #XXX` or `closes #XXX`).
-9. Wait for all remote CI checks to pass and for a ridgeplot contributor to approve your pull request.
+6. [Create a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request), and remember to update the pull request's description with relevant notes on the changes implemented, and [link to relevant issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue) (e.g., `fixes #XXX` or `closes #XXX`).
+7. At this point, you'll probably also want to add an entry to {repo-file}`docs/reference/changelog.md` summarising the changes in this pull request. The entry should follow the same style and format as other entries, i.e.
+   > `- Your summary here. ({gh-issue}`XXX`)`
+   where `XXX` should be replaced with your PR's number. If you think that the changes in this pull request do not warrant a changelog entry, please state it in your pull request's description. In such cases, a maintainer should add a `skip news` label to make CI pass.
+8. Wait for all remote CI checks to pass and for a ridgeplot contributor to approve your pull request.
+9. Once your pull request is approved, it will be merged into the `main` branch, and your changes will be automatically included in the next ridgeplot release.
 
 ## Continuous Integration
 
@@ -90,7 +88,7 @@ From GitHub's [Continuous Integration and Continuous Delivery (CI/CD) Fundamenta
 
 > _Continuous Integration (CI) automatically builds, tests, and **integrates** code changes within a shared repository._
 
-The first step to Continuous Integration (CI) is having a version control system (VCS) in place. Luckily, you don't have to worry about that! As you have already noticed, we use [Git](https://git-scm.com/) and host on [GitHub](https://github.com/tpvasconcelos/ridgeplot).
+The first step to Continuous Integration (CI) is having a version control system (VCS) in place. Luckily, you don't have to worry about that! As you have already noticed, we use [git](https://git-scm.com/) and host on [GitHub](https://github.com/tpvasconcelos/ridgeplot).
 
 On top of this, we also run a series of integration approval steps that allow us to ship code changes faster and more reliably. In order to achieve this, we run automated tests and coverage reports, as well as syntax (and type) checkers, code style formatters, and dependency vulnerability scans.
 
@@ -99,32 +97,38 @@ On top of this, we also run a series of integration approval steps that allow us
 Our tool of choice to configure and reliably run all integration approval steps is [Tox](https://github.com/tox-dev/tox), which allows us to run each step in reproducible isolated virtual environments. To trigger all checks in parallel, simply run:
 
 ```shell
-tox -p -m static tests
+tox -m static tests
 ```
 
-It's that simple 🙌 !! Note only that this will take a while the first time you run the command, since it will have to create all the required virtual environments (along with their dependencies) for each CI step.
+It's that simple 🙌 !! Note that this could take a while the first time you run the command, since it will have to create all the required virtual environments (along with their dependencies) for each CI step.
 
 The configuration for Tox can be found in {repo-file}`tox.ini`.
 
 #### Tests and coverage reports
 
-We use [pytest](https://github.com/pytest-dev/pytest) as our testing framework, and [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/) to track and measure code coverage. You can find all configuration details in {repo-file}`tox.ini`. To trigger all tests, simply run
+We use [pytest](https://github.com/pytest-dev/pytest) as our testing framework, and [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/) to track and measure code coverage. To trigger all tests in parallel, run:
 
 ```shell
-tox -p -m tests
+tox -m tests
 ```
 
-If you need more control over which tests are running, or which flags are being passed to pytest, you can also invoke `pytest` directly which will run on your current virtual environment. Configuration details can be found in {repo-file}`tox.ini`.
+If you need more control over which tests are running, or which flags are being passed to pytest, you can also invoke `tox -e pytest -- <PYTEST_FLAGS>`. For instance, to run only the tests in the `tests/unit/test_init.py` file without coverage, you could run:
 
-#### Linting
+```shell
+tox -e pytest -- tests/unit/test_init.py --no-cov
+```
 
-This project uses [pre-commit hooks](https://pre-commit.com/) to check and automatically fix any formatting rules. These checks are triggered before creating any git commit. To manually trigger all linting steps (i.e., all pre-commit hooks), run
+For more details on how these checks are configured, take a look at the {repo-file}`pytest.ini`, {repo-file}`.coveragerc`, and/or {repo-file}`tox.ini` configuration files.
+
+#### Linting and formatting
+
+This project uses [pre-commit hooks](https://pre-commit.com/) to check and automatically fix any code formatting issues. These checks are triggered against all [staged files](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F/#_the_three_states) before creating any git commit. To manually trigger all pre-commit hooks against all files, run:
 
 ```shell
 pre-commit run --all-files
 ```
 
-For more information on which hooks will run, have a look inside the {repo-file}`.pre-commit-config.yaml` configuration file. If you want to manually trigger individual hooks, you can invoke the `pre-commit`script directly. If you need even more control over the tools used you could also invoke them directly (e.g., `isort .`). Remember however that this is **not** the recommended approach.
+For more information on all the checks being run, take a look inside the {repo-file}`.pre-commit-config.yaml` configuration file.
 
 ### GitHub Actions
 
@@ -132,79 +136,60 @@ We use [GitHub Actions](https://github.com/features/actions) to automatically ru
 
 ### Tools and software
 
-Here is a quick overview of all CI tools and software in use, some of which have already been discussed in the sections above.
+Here is a quick overview of ~all~ most of the CI tools and software used in this project, along with their respective configuration files. If you have any questions or need help with any of these tools, feel free to ask for help from the community by commenting on your issue or pull request.
 
-| Tool                                                                       | Category         | config files                                 | Details                                                                                                                                                                                             |
-|----------------------------------------------------------------------------|------------------|----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Tox](https://github.com/tox-dev/tox)                                      | 🔧 Orchestration | {repo-file}`tox.ini`                   | We use Tox to reliably run all integration approval steps in reproducible isolated virtual environments.                                                                                            |
-| [GitHub Actions](https://github.com/features/actions)                      | 🔧 Orchestration | {repo-file}`.github/workflows/ci.yaml` | Workflow automation for GitHub. We use it to automatically run all integration approval steps defined with Tox on every push or pull request event.                                                 |
-| [Git](https://git-scm.com/)                                                | 🕰 VCS           | {repo-file}`.gitignore`                | Projects version control system software of choice.                                                                                                                                                 |
-| [pytest](https://github.com/pytest-dev/pytest)                             | 🧪 Testing       | {repo-file}`tox.ini`                   | Testing framework for python code.                                                                                                                                                                  |
-| [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/)                 | 📊 Coverage      | {repo-file}`tox.ini`                   | Coverage plugin for pytest.                                                                                                                                                                         |
-| [Codecov](https://about.codecov.io/) and [Codacy](https://www.codacy.com/) | 📊 Coverage      |                                              | Two great services for tracking, monitoring, and alerting on code coverage and code quality.                                                                                                        |
-| [pre-commit hooks](https://pre-commit.com/)                                | 💅 Linting       | {repo-file}`.pre-commit-config.yaml`   | Used to to automatically check and fix any formatting rules on every commit.                                                                                                                        |
-| [mypy](https://github.com/python/mypy)                                     | 💅 Linting       | {repo-file}`mypy.ini`                  | A static type checker for Python. We use quite a strict configuration here, which can be tricky at times. Feel free to ask for help from the community by commenting on your issue or pull request. |
-| [black](https://github.com/psf/black)                                      | 💅 Linting       | {repo-file}`pyproject.toml`            | "The uncompromising Python code formatter". We use `black` to automatically format Python code in a deterministic manner. We use a maximum line length of 100 characters.                           |
-| [flake8](https://github.com/pycqa/flake8)                                  | 💅 Linting       | {repo-file}`setup.cfg`                 | Used to check the style and quality of python code.                                                                                                                                                 |
-| [isort](https://github.com/pycqa/isort)                                    | 💅 Linting       | {repo-file}`setup.cfg`                 | Used to sort python imports.                                                                                                                                                                        |
-| [EditorConfig](https://editorconfig.org/)                                  | 💅 Linting       | {repo-file}`.editorconfig`             | This repository uses the `.editorconfig` standard configuration file, which aims to ensure consistent style across multiple programming environments.                                               |
-
-## Project structure
-
-### Community health files
-
-GitHub's community health files allow repository maintainers to set contributing guidelines to help collaborators make meaningful, useful contributions to a project. Read more on this official [reference](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions).
-
-- {repo-file}`CODE_OF_CONDUCT.md` - A CODE_OF_CONDUCT file defines standards for how to engage in a community. For more information, see "[Adding a code of conduct to your project.](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-code-of-conduct-to-your-project)"
-- {repo-file}`CONTRIBUTING.md` - A CONTRIBUTING file communicates how people should contribute to your project. For more information, see "[Setting guidelines for repository contributors.](https://docs.github.com/en/articles/setting-guidelines-for-repository-contributors)"
-
-### Configuration files
-
-For more context on some of the tools referenced below, refer to the sections on [Continuous Integration](#continuous-integration).
-
-- {repo-file}`.github/workflows/ci.yaml` - Workflow definition for our CI GitHub Actions pipeline.
-- {repo-file}`.pre-commit-config.yaml` - List of pre-commit hooks.
-- {repo-file}`.editorconfig` - [EditorConfig](https://editorconfig.org/) standard configuration file.
-- {repo-file}`mypy.ini` - Configuration for the `mypy` static type checker.
-- {repo-file}`pyproject.toml` -
-- [build system](https://setuptools.readthedocs.io/en/latest/build_meta.html) requirements (probably won't need to touch these!) and [black](https://github.com/psf/black) configurations.
-- {repo-file}`setup.cfg` - Here, we specify the package metadata, requirements, as well as configuration details for [flake8](https://github.com/pycqa/flake8) and [isort](https://github.com/pycqa/isort).
-- {repo-file}`tox.ini` - Configuration for [tox](https://github.com/tox-dev/tox), [pytest](https://github.com/pytest-dev/pytest), and [coverage](https://coverage.readthedocs.io/en/latest/index.html).
+| Tool                                                                       | Category         | config files                           | Details                                                                                                                                                                                                |
+|----------------------------------------------------------------------------|------------------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Tox](https://github.com/tox-dev/tox)                                      | 🔧 Orchestration | {repo-file}`tox.ini`                   | We use Tox to reliably run all integration approval steps in reproducible isolated virtual environments.                                                                                               |
+| [GitHub Actions](https://github.com/features/actions)                      | 🔧 Orchestration | {repo-file}`.github/workflows/ci.yaml` | Workflow automation for GitHub. We use it to automatically run all integration approval steps defined with Tox on every push or pull request event.                                                    |
+| [git](https://git-scm.com/)                                                | 🕰 VCS           | {repo-file}`.gitignore`                | Projects version control system software of choice.                                                                                                                                                    |
+| [pytest](https://github.com/pytest-dev/pytest)                             | 🧪 Testing       | {repo-file}`tox.ini`                   | Testing framework for python code.                                                                                                                                                                     |
+| [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/)                 | 📊 Coverage      | {repo-file}`tox.ini`                   | Coverage plugin for pytest.                                                                                                                                                                            |
+| [Codecov](https://about.codecov.io/) and [Codacy](https://www.codacy.com/) | 📊 Coverage      | {repo-file}`.github/workflows/ci.yaml` | Two great services for tracking, monitoring, and alerting on code coverage and code quality.                                                                                                           |
+| [pre-commit hooks](https://pre-commit.com/)                                | 💅 Linting       | {repo-file}`.pre-commit-config.yaml`   | Used to to automatically check and fix any formatting rules on every commit.                                                                                                                           |
+| [mypy](https://github.com/python/mypy)                                     | 💅 Linting       | {repo-file}`mypy.ini`                  | A static type checker for Python. We use quite a strict configuration here, which can be tricky at times. Feel free to ask for help from the community by commenting on your issue or pull request.    |
+| [black](https://github.com/psf/black)                                      | 💅 Linting       | {repo-file}`pyproject.toml`            | "The uncompromising Python code formatter". We use `black` to automatically format Python code in a deterministic manner. Maybe we'll replace this with `ruff` in the future.                          |
+| [ruff](https://github.com/astral-sh/ruff)                                  | 💅 Linting       | {repo-file}`ruff.toml`                 | "An extremely fast Python linter and code formatter, written in Rust." For this project, ruff replaced Flake8 (+plugins), isort, pydocstyle, pyupgrade, and autoflake with a single (and faster) tool. |
+| [EditorConfig](https://editorconfig.org/)                                  | 💅 Linting       | {repo-file}`.editorconfig`             | This repository uses the `.editorconfig` standard configuration file, which aims to ensure consistent style across multiple programming environments.                                                  |
+| [bumpversion](https://github.com/c4urself/bump2version)                    | 📦 Packaging     | {repo-file}`.bumpversion.cfg`          | A small command line tool to simplify releasing software by updating all version strings in your source code by the correct increment.                                                                 |
 
 ## Release process
 
-You need push access to the project's repository to make releases. The following release steps are here for reference only.
+You need to have push-access to the project's repository to make releases. Therefore, the following release steps are intended to be used as a reference for maintainers and [contributors](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-user-account-settings/permission-levels-for-a-personal-account-repository#collaborator-access-for-a-repository-owned-by-a-personal-account) with push-access to the repository.
 
-1. Review the `## Unreleased changes` section in {repo-file}`docs/reference/changelog.md` by checking for consistency in format and, if necessary, refactoring related entries into relevant subsections (e.g. _Features_, _Docs_, _Bugfixes_, _Security_, etc.). Take a look at previous release notes for guidance and try to keep it consistent.
-2. Submit a pull request with these changes only and use the `"Cleanup release notes for X.X.X release"` template for the pull request title. ridgeplot uses the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`) versioning standard. You can determine the latest release version by running `git describe --tags --abbrev=0` on the `main` branch. Based on this, you can determine the next release version by incrementing the MAJOR, MINOR, or PATCH. More on this on the next section. For now, just make sure you merge this pull request into the `main` branch before continuing.
-3. Use the [bumpversion](https://github.com/peritus/bumpversion) utility to bump the current version. This utility will automatically bump the current version, and issue a relevant commit and git tag. E.g.,
+1. Review the `## Unreleased changes` section in {repo-file}`docs/reference/changelog.md` by checking for consistency in format and, if necessary, refactoring related entries into relevant subsections (e.g., _Features_, _Docs_, _Bugfixes_, _Security_, etc.). Take a look at previous release notes for guidance and try to keep it consistent.
+2. Submit a pull request with these changes only and use the `"Cleanup release notes for X.X.X release"` template for the pull request title. ridgeplot uses the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`) versioning standard. You can determine the latest release version by running `git describe --tags --abbrev=0` on the `main` branch. Based on this, you can determine the next release version by incrementing the MAJOR, MINOR, or PATCH. More on this in the next section. Remember to merge this pull request into the `main` branch before continuing to the next step!
+3. TODO: Put steps 4. and 5. in a separate script in `cicd_utils/` and call it from here. The script should ask for user confirmation before proceeding. To avoid accidental releases, maybe require the user to type out the exact version to be released (you can include the version in the script's output so the user can copy-paste it). The script to validate that the user is running the script from the correct cwd, git branch (`main`), set the `SKIP='no-commit-to-branch'` environment variable to skip the pre-commit hook that doesn't allow commits to the `main` branch, and finally, run the `bumpversion <major|minor|patch>` command. Maybe ask for confirmation to push all changes and new tags to the remote repository or to revert all changes and tags if the user decides to cancel the release?
+4. Use the [bumpversion](https://github.com/peritus/bumpversion) utility to bump the current version. This utility will automatically bump the current version, and apply a relevant commit and git tag. E.g.,
    ```shell
    # Bump MAJOR version (e.g., 0.4.2 -> 1.0.0)
-   bumpversion major
+   SKIP='no-commit-to-branch' bumpversion major
 
    # Bump MINOR version (e.g., 0.4.2 -> 0.5.0)
-   bumpversion minor
+   SKIP='no-commit-to-branch' bumpversion minor
 
    # Bump PATCH version (e.g., 0.4.2 -> 0.4.3)
-   bumpversion patch
+   SKIP='no-commit-to-branch' bumpversion patch
    ```
    You can always perform a dry-run to see what will happen under the hood.
    ```shell
    bumpversion --dry-run --verbose [--allow-dirty] [major,minor,patch]
    ```
-4. Push your changes along with all tag references:
+4. Push your changes along with the new git tag to the remote repository.
    ```shell
-   git push && git push --tags
+   git push --follow-tags
    ```
-5. At this point a couple of GitHub Actions workflows will be triggered:
-    1. `.github/workflows/ci.yaml`: Runs all CI checks with Tox against the new changes pushed to `main`.
-    2. `.github/workflows/release.yaml`: Issues a new GitHub release triggered by the new git tag pushed in the previous step.
-    3. `.github/workflows/publish-pypi.yaml`: Builds, packages, and uploads the source and wheel package to PyPI (and test PyPI). This is triggered by the new GitHub release created in the previous step.
+5. At this point, a couple of GitHub Actions workflows will be triggered:
+    1. {repo-file}`.github/workflows/ci.yaml`: Runs all integration approval checks.
+    2. {repo-file}`.github/workflows/release.yaml`: Builds and publishes the new packaged Python distributions to PyPi (and TestPyPi) and publishes a new GitHub Release with relevant release notes and Sigstore-certified built distributions.
 6. **Trust but verify!**
-    1. Verify that all three workflows passed successfully: <https://github.com/tpvasconcelos/ridgeplot/actions>
+    1. Verify that all workflows run successfully: <https://github.com/tpvasconcelos/ridgeplot/actions>
     2. Verify that the new git tag is present in the remote repository: <https://github.com/tpvasconcelos/ridgeplot/tags>
-    3. Verify that the new release is present in the remote repository and that the release notes were correctly parsed: <https://github.com/tpvasconcelos/ridgeplot/releases>
+    3. Verify that the new release is present in the remote repository: <https://github.com/tpvasconcelos/ridgeplot/releases>
+        1. and that the release notes were correctly parsed
+        2. and that the relevant assets were correctly uploaded
     4. Verify that the new package is available in PyPI: <https://pypi.org/project/ridgeplot/>
+        1. and TestPyPI: <https://test.pypi.org/project/ridgeplot/>
     5. Verify that the docs were updated and published to <https://ridgeplot.readthedocs.io/en/stable/>
 
 ## Code of Conduct
