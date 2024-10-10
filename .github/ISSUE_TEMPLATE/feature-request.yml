@@ -1,5 +1,5 @@
 ---
-name: "Feature request"
+name: "⭐ Feature request"
 description: "Suggest a new idea or enhancement to ridgeplot"
 title: "[FEATURE] "
 labels: [ "enhancement" ]
@@ -29,21 +29,19 @@ body:
   - type: textarea
     attributes:
       label: "Description"
-      description: "Describe the feature/enhancement you are proposing"
-      placeholder: >
-        Please provide a detailed description of the feature or enhancement you are suggesting.
-
-        Instead of focusing solely on _how_ to implement it, explain your motivation, use-case, the problem you're facing, and what you're trying to achieve.
+      description: |
+        If possible, please explain your motivation, use-case, the problem you're facing, and what you're trying to achieve.
         This context will help us better understand your needs and collaborate on finding the best solution.
 
-        If you have example plots or a vision for what the output should look like (even if it's just a rough sketch or mockup), feel free to attach them here.
+        If you have example plots or a vision for what the output should look like, feel free to attach them here.
         You can easily upload files by dragging and dropping them into this area.
+      placeholder: "Please provide a detailed description of the feature or enhancement you are suggesting."
     validations:
       required: true
   - type: textarea
     attributes:
       label: "Possible solution"
-      description: >
+      description: |
         This section is optional, but if you have thoughts on how this enhancement could be implemented, feel free to share them here.
 
         For instance, even if you just have an idea for how the API could look like from the user's perspective, you could provide a code snippet like:
@@ -55,25 +53,24 @@ body:
         ```
 
         Providing sample code can help us better understand your vision and jumpstart discussions around potential solutions.
+      placeholder: "(Optional) If you have a possible solution in mind, please describe it here."
   - type: textarea
     attributes:
       label: "Other considerations"
-      description: "Any other information you would like to provide"
-      placeholder: >
+      description: |
         This section is also optional but, if applicable, consider how this change might impact ridgeplot’s current architecture, API, and user experience.
 
         Considerations around backward compatibility, documentation updates, and long-term maintainability will have to be taken into account by the maintainers before implementing the feature.
-    validations:
-      required: false
+      placeholder: "(Optional) Any other considerations or context you'd like to share?"
   - type: checkboxes
     attributes:
-      label: Are you willing to submit PR?
-      description: >
+      label: "Are you willing to submit PR?"
+      description: |
         This totally optional, but if you’re interested, we’d love to help guide you through the process, especially if you already have a good idea of how to implement the feature.
 
         If you'd like to contribute, check the box below and take a look at our [contributing guidelines](https://ridgeplot.readthedocs.io/en/latest/development/contributing.html) for more details.
       options:
-        - label: Yes I am willing to submit a PR!
+        - label: Yes I am willing to submit a PR! 🚀
   - type: markdown
     attributes:
       value: |
