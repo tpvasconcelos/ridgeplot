@@ -52,7 +52,7 @@ body:
       value: |
         ---
 
-        ## (OPTIONAL) Possible solution
+        ## [OPTIONAL] Possible solution
 
         This section is also optional so feel free to leave it empty!
 
@@ -77,7 +77,7 @@ body:
       value: |
         ---
 
-        ## (OPTIONAL) Other considerations
+        ## [OPTIONAL] Other considerations
 
         This section is also optional so feel free to leave it empty!
 
@@ -88,6 +88,9 @@ body:
     attributes:
       label: "Other considerations"
 
+  - type: markdown
+    attributes:
+      value: ---
   - type: checkboxes
     attributes:
       label: "Are you willing to submit PR?"
