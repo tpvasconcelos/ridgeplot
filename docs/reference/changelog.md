@@ -10,6 +10,7 @@ Unreleased changes
 - Add new `"Greet new users"` workflow to welcome new contributors to the project ({gh-pr}`210`)
 - Add `concurrency` entries to relevant GitHub workflows ({gh-pr}`211`)
 - Add Dependabot configuration file ({gh-pr}`211`)
+- Add GitHub issue templates ({gh-pr}`211`)
 
 ---
 
