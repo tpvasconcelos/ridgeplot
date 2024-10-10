@@ -63,7 +63,7 @@ install: .venv ## install all local development dependencies
 
 
 .PHONY: jupyter-init
-jupyter-init: ## initialise a jupyterlab environment and install extensions
+jupyter-init: install ## initialise a jupyter environment
 	@echo "==> Setting up jupyterlab environment..."
 	@$(VENV_BIN)/uv pip install --upgrade ipykernel jupyter
 	@$(VENV_BIN)/ipykernel install --user --name="ridgeplot"
@@ -100,7 +100,7 @@ clean-cov: ## remove coverage artifacts
 .PHONY: clean-ci-caches
 clean-ci-caches: ## remove CI caches (e.g. `.pytest_cache`, `.mypy_cache`, etc...)
 	@echo "==> Removing CI caches..."
-	rm -fr .pytest_cache/ .mypy_cache/
+	rm -fr .pytest_cache/ .mypy_cache/ .ruff_cache/
 
 
 .PHONY: clean-tox
