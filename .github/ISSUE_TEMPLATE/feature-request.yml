@@ -38,8 +38,8 @@ body:
 
         If you have example plots or a vision for what the output should look like (even if it's just a rough sketch or mockup), feel free to attach them here.
         You can easily upload files by dragging and dropping them into this area.
-      validations:
-        required: true
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: "Possible solution"
@@ -63,8 +63,8 @@ body:
         This section is also optional but, if applicable, consider how this change might impact ridgeplot’s current architecture, API, and user experience.
 
         Considerations around backward compatibility, documentation updates, and long-term maintainability will have to be taken into account by the maintainers before implementing the feature.
-      validations:
-        required: false
+    validations:
+      required: false
   - type: checkboxes
     attributes:
       label: Are you willing to submit PR?
