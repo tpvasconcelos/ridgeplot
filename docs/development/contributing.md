@@ -69,7 +69,7 @@ make init-jupyter
 3. Implement and commit your changes.
 4. Make sure that all integration approval steps are passing locally (see [Continuous Integration](#continuous-integration) below).
    ```shell
-   tox -p -m static tests
+   tox -m static tests
    ```
 5. Push your changes to your fork
    ```shell
@@ -97,7 +97,7 @@ On top of this, we also run a series of integration approval steps that allow us
 Our tool of choice to configure and reliably run all integration approval steps is [Tox](https://github.com/tox-dev/tox), which allows us to run each step in reproducible isolated virtual environments. To trigger all checks in parallel, simply run:
 
 ```shell
-tox -p -m static tests
+tox -m static tests
 ```
 
 It's that simple 🙌 !! Note that this could take a while the first time you run the command, since it will have to create all the required virtual environments (along with their dependencies) for each CI step.
@@ -109,7 +109,7 @@ The configuration for Tox can be found in {repo-file}`tox.ini`.
 We use [pytest](https://github.com/pytest-dev/pytest) as our testing framework, and [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/) to track and measure code coverage. To trigger all tests in parallel, run:
 
 ```shell
-tox -p -m tests
+tox -m tests
 ```
 
 If you need more control over which tests are running, or which flags are being passed to pytest, you can also invoke `tox -e pytest -- <PYTEST_FLAGS>`. For instance, to run only the tests in the `tests/unit/test_init.py` file without coverage, you could run:

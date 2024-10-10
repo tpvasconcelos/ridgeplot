@@ -5,6 +5,10 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Documentation
+
+- Update and improve the "Contributing" guide ({gh-pr}`218`)
+
 ### CI/CD
 
 - Add new `"Greet new users"` workflow to welcome new contributors to the project ({gh-pr}`210`)
