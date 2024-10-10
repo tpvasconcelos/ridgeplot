@@ -3,7 +3,14 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, cast
 
-from ridgeplot._figure_factory import LabelsArray, RidgePlotFigureFactory, ShallowLabelsArray
+from ridgeplot._figure_factory import (
+    LabelsArray,
+    RidgePlotFigureFactory,
+    ShallowLabelsArray,
+    ShallowTraceTypesArray,
+    TraceType,
+    TraceTypesArray,
+)
 from ridgeplot._kde import estimate_densities
 from ridgeplot._missing import MISSING, MissingType
 from ridgeplot._types import (
@@ -36,6 +43,7 @@ def ridgeplot(
     colormode: Colormode = "mean-minmax",
     coloralpha: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
+    trace_type: TraceType | TraceTypesArray | ShallowTraceTypesArray = "area",
     linewidth: float = 1.0,
     spacing: float = 0.5,
     show_annotations: bool | MissingType = MISSING,
@@ -233,6 +241,10 @@ def ridgeplot(
         labels = cast(ShallowLabelsArray, labels)
         labels = cast(LabelsArray, nest_shallow_collection(labels))
 
+    elif is_flat_str_collection(trace_type):
+        trace_type = cast(ShallowTraceTypesArray, trace_type)
+        trace_type = cast(TraceTypesArray, nest_shallow_collection(trace_type))
+
     if colormode == "index":  # type: ignore[comparison-overlap]
         warnings.warn(  # type: ignore[unreachable]
             "The colormode='index' value has been deprecated in favor of "
@@ -258,6 +270,7 @@ def ridgeplot(
     ridgeplot_figure_factory = RidgePlotFigureFactory(
         densities=densities,
         labels=labels,
+        trace_type=trace_type,
         colorscale=colorscale,
         coloralpha=coloralpha,
         colormode=colormode,
