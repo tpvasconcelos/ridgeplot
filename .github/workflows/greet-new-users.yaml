@@ -17,22 +17,18 @@ jobs:
           issue-message: |
             **Thank you for submitting your first issue with us!** 🎉
 
-            Our response time may vary, but we will get back to you as soon as possible.
-
-            To help us help you, please make sure you have provided all the necessary information in your issue's description. 🙏
-
-            If you'd like to contribute to the project (maybe even fix the issue yourself!), please check out our [contributing guidelines](https://ridgeplot.readthedocs.io/en/latest/development/contributing.html).
+            Our response times may vary, but we'll get back to you as soon as we can!
 
             Welcome aboard! 🚀
           pr-message: |
             **Thank you for submitting your first pull request with us!** 🎉
 
-            Our response time may vary, but we will get back to you as soon as possible.
+            Our response times may vary, but we'll get back to you as soon as we can!
 
             To help us help you, please make sure you have:
-            * followed our [contributing guidelines](https://ridgeplot.readthedocs.io/en/latest/development/contributing.html).
-            * provided all the necessary information in your pull request's description.
-            * all CI check are passing.
-            * you have reviewed your own code!
+            * Followed our [contributing guidelines](https://ridgeplot.readthedocs.io/en/latest/development/contributing.html).
+            * Provided all the necessary information in your pull request's description.
+            * All CI check are passing.
+            * You have reviewed your own code! 🤠
 
             Welcome aboard! 🚀
