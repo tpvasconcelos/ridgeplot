@@ -1,0 +1,42 @@
+# CodeQL workflow for Python
+#
+# About code scanning:
+#   - https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning
+# Repo code scanning alerts:
+#   - https://github.com/tpvasconcelos/ridgeplot/security/code-scanning
+#
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '23 16 * * 6'
+
+jobs:
+  codeql-python:
+    name: Analyze (Python)
+    runs-on: 'ubuntu-latest'
+    timeout-minutes: 5
+    permissions:
+      # required for all workflows
+      security-events: write
+      # required to fetch internal or private CodeQL packs
+      # packages: read
+      # only required for workflows in private repositories
+      # actions: read
+      # contents: read
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: github/codeql-action/init@v3
+      with:
+        # Supported languages: 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
+        languages: 'python'
+        build-mode: 'none'
+
+    - uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:python"
