@@ -12,6 +12,7 @@ title: beautiful ridgeline plots in Python
 [![PyPI - License](https://img.shields.io/pypi/l/ridgeplot)](https://github.com/tpvasconcelos/ridgeplot/blob/main/LICENSE)
 
 [![GitHub CI](https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yml/badge.svg)](https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yml/)
+[![CodeQL](https://github.com/tpvasconcelos/ridgeplot/actions/workflows/codeql.yml/badge.svg)](https://github.com/tpvasconcelos/ridgeplot/actions/workflows/codeql.yml/)
 [![Docs](https://readthedocs.org/projects/ridgeplot/badge/?version=latest&style=flat)](https://ridgeplot.readthedocs.io/en/latest/)
 [![codecov](https://codecov.io/gh/tpvasconcelos/ridgeplot/branch/main/graph/badge.svg)](https://codecov.io/gh/tpvasconcelos/ridgeplot)
 [![CodeFactor](https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge)](https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot)
