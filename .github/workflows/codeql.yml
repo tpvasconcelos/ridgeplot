@@ -1,3 +1,10 @@
+# CodeQL workflow for Python
+#
+# About code scanning:
+#   - https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning
+# Repo code scanning alerts:
+#   - https://github.com/tpvasconcelos/ridgeplot/security/code-scanning
+#
 name: "CodeQL"
 
 on:
@@ -9,9 +16,10 @@ on:
     - cron: '23 16 * * 6'
 
 jobs:
-  analyze:
+  codeql-python:
     name: Analyze (Python)
     runs-on: 'ubuntu-latest'
+    timeout-minutes: 5
     permissions:
       # required for all workflows
       security-events: write
