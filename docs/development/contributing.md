@@ -174,6 +174,10 @@ tox -m static
 
 We use [GitHub Actions](https://github.com/features/actions) to automatically run all integration approval steps defined with Tox on every push or pull request event. These checks run on all major operating systems and all supported Python versions. Coverage data is also uploaded to [Codecov](https://about.codecov.io/) and [Codacy](https://www.codacy.com/) here. Check {repo-file}`.github/workflows` for more details.
 
+Additionally, we use [CodeQL](https://securitylab.github.com/tools/codeql) to automatically check for security vulnerabilities in the codebase. This check is set to run every day but also on every push or pull request event. Check {repo-file}`.github/workflows/codeql.yml` for more details.
+
+Finally, we have a small workflow (see {repo-file}`.github/workflows/check-release-notes.yml`) that checks if the PR author remembered to add an entry to the changelog. If the PR does not warrant a changelog entry, the author can add a `skip news` label to make the CI checks pass.
+
 ### Tools and software
 
 Here is a quick overview of ~all~ most of the CI tools and software used in this project, along with their respective configuration files. If you have any questions or need help with any of these tools, feel free to ask for help from the community by commenting on your issue or pull request.
