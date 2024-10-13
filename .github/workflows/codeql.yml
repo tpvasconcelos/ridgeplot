@@ -1,0 +1,37 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '23 16 * * 6'
+
+jobs:
+  analyze:
+    name: Analyze (Python)
+    runs-on: 'ubuntu-latest'
+    permissions:
+      # required for all workflows
+      security-events: write
+      # required to fetch internal or private CodeQL packs
+      # packages: read
+      # only required for workflows in private repositories
+      # actions: read
+      # contents: read
+    steps:
+    - uses: actions/checkout@v4
+
+    # Initializes the CodeQL tools for scanning.
+    - uses: github/codeql-action/init@v3
+      with:
+        # CodeQL supports: 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
+        languages: python
+        build-mode: none
+        # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+        # queries: security-extended,security-and-quality
+
+    - uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:python"
