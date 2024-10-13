@@ -1,10 +1,6 @@
 # Contributing
 
-:::{admonition} Note
-:class: important
-
-**Thank you for your interest in improving ridgeplot!** 🚀
-:::
+Thank you for your interest in improving ridgeplot! 🚀
 
 We really appreciate you taking the time to help make this project better for everyone.
 
@@ -68,7 +64,7 @@ make jupyter-init
 :::{admonition} Note
 :class: danger
 
-Make sure you always work within this virtual environment (i.e., `$ source .venv/bin/activate`). We also recommend that you set up your IDE to always point to this Python interpreter. If you are unsure how to do this, please refer to the documentation of your specific IDE, and get comfortable with using virtual environments in Python. You can thank us later! 🐍
+Make sure you always work within this virtual environment (_e.g.,_ `$ source .venv/bin/activate`). We also recommend that you set up your IDE to always point to this Python interpreter. If you are unsure how to do this, please refer to the documentation of your specific IDE, and get comfortable using virtual environments in Python. You can thank us later! 🐍
 :::
 
 ## Pull Request Workflow
@@ -106,9 +102,11 @@ If you're reading this, it means you're probably getting ready to submit a pull 
 
 ## Continuous Integration
 
-From GitHub's [CI/CD: The what, why, and how](https://github.com/resources/articles/devops/ci-cd):
+```{epigraph}
+Continuous Integration (CI): automatically builds, tests, and **integrates** code changes within a shared repository.
 
-> _Continuous Integration (CI) automatically builds, tests, and **integrates** code changes within a shared repository._
+-- GitHub: [CI/CD: The what, why, and how](https://github.com/resources/articles/devops/ci-cd)
+```
 
 The first step to Continuous Integration (CI) is having a version control system (VCS) in place. Luckily, you don't have to worry about that! As you have astutely noticed, we use [git](https://git-scm.com/) and host on [GitHub](https://github.com/tpvasconcelos/ridgeplot).
 
@@ -203,7 +201,9 @@ Here is a quick overview of ~all~ most of the CI tools and software used in this
 
 ## Release process
 
-You need to have push-access to the project's repository to make releases. Therefore, the following release steps are intended to be used as a reference for maintainers and [contributors](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-user-account-settings/permission-levels-for-a-personal-account-repository#collaborator-access-for-a-repository-owned-by-a-personal-account) with push-access to the repository.
+:::{info} This section is only intended for maintainers
+You need to have push-access to the project's repository to make releases. Therefore, the following release steps are intended to be used as a reference for maintainers or [collaborators](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-user-account-settings/permission-levels-for-a-personal-account-repository#collaborator-access-for-a-repository-owned-by-a-personal-account) with push-access to the repository.
+:::
 
 1. Review the `## Unreleased changes` section in {repo-file}`docs/reference/changelog.md` by checking for consistency in format and, if necessary, refactoring related entries into relevant subsections (e.g., _Features_, _Docs_, _Bugfixes_, _Security_, etc.). Take a look at previous release notes for guidance and try to keep it consistent.
 2. Submit a pull request with these changes only and use the `"Cleanup release notes for X.X.X release"` template for the pull request title. ridgeplot uses the [SemVer](https://semver.org/) (`MAJOR.MINOR.PATCH`) versioning standard. You can determine the latest release version by running `git describe --tags --abbrev=0` on the `main` branch. Based on this, you can determine the next release version by incrementing the MAJOR, MINOR, or PATCH. More on this in the next section. Remember to merge this pull request into the `main` branch before continuing to the next step!
@@ -229,15 +229,15 @@ You need to have push-access to the project's repository to make releases. There
 5. At this point, a couple of GitHub Actions workflows will be triggered:
     1. {repo-file}`.github/workflows/ci.yml`: Runs all integration approval checks.
     2. {repo-file}`.github/workflows/release.yml`: Builds and publishes the new packaged Python distributions to PyPi (and TestPyPi) and publishes a new GitHub Release with relevant release notes and Sigstore-certified built distributions.
-6. **Trust but verify!**
-    1. Verify that all workflows run successfully: <https://github.com/tpvasconcelos/ridgeplot/actions>
-    2. Verify that the new git tag is present in the remote repository: <https://github.com/tpvasconcelos/ridgeplot/tags>
-    3. Verify that the new release is present in the remote repository: <https://github.com/tpvasconcelos/ridgeplot/releases>
+6. **Trust but verify!** ⚠️
+    1. Verify that all workflows [run successfully](https://github.com/tpvasconcelos/ridgeplot/actions);
+    2. Verify that the new git tag [is present](https://github.com/tpvasconcelos/ridgeplot/tags) in the remote repository;
+    3. Verify that the new release [is present](https://github.com/tpvasconcelos/ridgeplot/releases) in the remote repository;
         1. and that the release notes were correctly parsed
         2. and that the relevant assets were correctly uploaded
-    4. Verify that the new package is available in PyPI: <https://pypi.org/project/ridgeplot/>
-        1. and TestPyPI: <https://test.pypi.org/project/ridgeplot/>
-    5. Verify that the docs were updated and published to <https://ridgeplot.readthedocs.io/en/stable/>
+    4. Verify that the new package is available [in PyPI](https://pypi.org/project/ridgeplot/);
+        1. [and TestPyPI](https://test.pypi.org/project/ridgeplot/)
+    5. Verify that the docs were updated and published [to ReadTheDocs](https://ridgeplot.readthedocs.io/en/stable/).
 
 ## Code of Conduct
 
