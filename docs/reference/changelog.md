@@ -16,7 +16,7 @@ Unreleased changes
 - Add Dependabot configuration file ({gh-pr}`211`)
 - Add GitHub issue templates ({gh-pr}`211`)
 - Add support for Python 3.13 ({gh-pr}`217`)
-- Add CodeQL analysis to the CI workflow ({gh-pr}`220`)
+- Add a CodeQL GitHub workflow ({gh-pr}`220`)
 
 ---
 

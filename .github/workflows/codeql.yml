@@ -34,8 +34,8 @@ jobs:
     - uses: github/codeql-action/init@v3
       with:
         # Supported languages: 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
-        languages: python
-        build-mode: 'autobuild'
+        languages: 'python'
+        build-mode: 'none'
 
     - uses: github/codeql-action/analyze@v3
       with:
