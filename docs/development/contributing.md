@@ -1,6 +1,10 @@
 # Contributing
 
+:::{admonition} Note
+:class: important
+
 **Thank you for your interest in improving ridgeplot!** 🚀
+:::
 
 We really appreciate you taking the time to help make this project better for everyone.
 
@@ -62,7 +66,7 @@ make jupyter-init
 ```
 
 :::{admonition} Note
-:class: important
+:class: danger
 
 Make sure you always work within this virtual environment (i.e., `$ source .venv/bin/activate`). We also recommend that you set up your IDE to always point to this Python interpreter. If you are unsure how to do this, please refer to the documentation of your specific IDE, and get comfortable with using virtual environments in Python. You can thank us later! 🐍
 :::
@@ -187,10 +191,10 @@ Here is a quick overview of ~all~ most of the CI tools and software used in this
 | [Tox](https://github.com/tox-dev/tox)                                      | 🔧 Orchestration | {repo-file}`tox.ini`                  | We use Tox to reliably run all integration approval steps in reproducible isolated virtual environments.                                                                                               |
 | [GitHub Actions](https://github.com/features/actions)                      | 🔧 Orchestration | {repo-file}`.github/workflows/ci.yml` | Workflow automation for GitHub. We use it to automatically run all integration approval steps on every push or pull request event.                                                                     |
 | [git](https://git-scm.com/)                                                | 🕰 VCS           | {repo-file}`.gitignore`               | The project's version control system.                                                                                                                                                                  |
-| [pytest](https://github.com/pytest-dev/pytest)                             | 🧪 Testing       | {repo-file}`tox.ini`                  | Testing framework for python code.                                                                                                                                                                     |
-| [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/)                 | 📊 Coverage      | {repo-file}`tox.ini`                  | Coverage plugin for pytest.                                                                                                                                                                            |
-| [Codecov](https://about.codecov.io/) and [Codacy](https://www.codacy.com/) | 📊 Coverage      | {repo-file}`.github/workflows/ci.yml` | Two great services for tracking, monitoring, and alerting on code coverage and code quality.                                                                                                           |
-| [pre-commit hooks](https://pre-commit.com/)                                | 💅 Linting       | {repo-file}`.pre-commit-config.yaml`  | Used to to automatically check and fix any formatting rules on every commit.                                                                                                                           |
+| [pytest](https://github.com/pytest-dev/pytest)                             | 🧪 Testing       | {repo-file}`pytest.ini`               | Testing framework for python code.                                                                                                                                                                     |
+| [Coverage.py](https://github.com/nedbat/coveragepy)                        | 📊 Coverage      | {repo-file}`.coveragerc`              | The code coverage tool for Python                                                                                                                                                                      |
+| [Codecov](https://about.codecov.io/) and [Codacy](https://www.codacy.com/) | 📊 Coverage      | {repo-file}`.github/workflows/ci.yml` | Two external services for tracking, monitoring, and alerting on code coverage and code quality.                                                                                                        |
+| [pre-commit](https://pre-commit.com/)                                      | 💅 Linting       | {repo-file}`.pre-commit-config.yaml`  | Used to to automatically check and fix any formatting rules on every commit.                                                                                                                           |
 | [mypy](https://github.com/python/mypy)                                     | 💅 Linting       | {repo-file}`mypy.ini`                 | A static type checker for Python. We use quite a strict configuration here, which can be tricky at times. Feel free to ask for help from the community by commenting on your issue or pull request.    |
 | [black](https://github.com/psf/black)                                      | 💅 Linting       | {repo-file}`pyproject.toml`           | "The uncompromising Python code formatter". We use `black` to automatically format Python code in a deterministic manner. Maybe we'll replace this with `ruff` in the future.                          |
 | [ruff](https://github.com/astral-sh/ruff)                                  | 💅 Linting       | {repo-file}`ruff.toml`                | "An extremely fast Python linter and code formatter, written in Rust." For this project, ruff replaced Flake8 (+plugins), isort, pydocstyle, pyupgrade, and autoflake with a single (and faster) tool. |
