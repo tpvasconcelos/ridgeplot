@@ -7,7 +7,7 @@ Unreleased changes
 
 ### Documentation
 
-- Update and improve the "Contributing" guide ({gh-pr}`218`)
+- Update and improve the "Contributing" guide ({gh-pr}`218` and {gh-pr}`221`)
 
 ### CI/CD
 
