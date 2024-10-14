@@ -1,12 +1,17 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, cast
 
 from plotly import graph_objects as go
 
-from ridgeplot._colors import apply_alpha, get_color
-from ridgeplot._types import CollectionL1, CollectionL2
-from ridgeplot._utils import normalise_min_max
+from ridgeplot._colors import apply_alpha, get_color, get_colorscale, validate_colorscale
+from ridgeplot._types import (
+    CollectionL1,
+    CollectionL2,
+    is_flat_str_collection,
+    nest_shallow_collection,
+)
+from ridgeplot._utils import get_collection_array_shape, normalise_min_max
 
 if TYPE_CHECKING:
     from collections.abc import Collection
@@ -154,7 +159,7 @@ class RidgePlotFigureFactory:
         colorscale: ColorScale,
         coloralpha: float | None,
         colormode: Colormode,
-        labels: LabelsArray,
+        labels: LabelsArray | None,
         linewidth: float,
         spacing: float,
         show_yticklabels: bool,
@@ -163,11 +168,24 @@ class RidgePlotFigureFactory:
         # ==============================================================
         # ---  Get clean and validated input arguments
         # ==============================================================
+        shape = get_collection_array_shape(densities)
+        if len(shape) != 4:
+            raise ValueError(
+                f"Expected a 4D array of densities, got a {len(shape)}D array instead."
+            )
+
+        n_rows = len(densities)
+        n_traces = sum(len(row) for row in densities)
+
         if colormode not in self.colormode_maps:
             raise ValueError(
                 f"The colormode argument should be one of "
                 f"{tuple(self.colormode_maps.keys())}, got {colormode} instead."
             )
+
+        if labels is None:
+            ids = iter(range(1, n_traces + 1))
+            labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
 
         self.densities = densities
         self.colorscale = colorscale
@@ -182,14 +200,47 @@ class RidgePlotFigureFactory:
         # ==============================================================
         # ---  Other instance variables
         # ==============================================================
-        self.n_rows: int = len(densities)
-        self.n_traces: int = sum(len(row) for row in densities)
+        self.n_rows: int = n_rows
+        self.n_traces: int = n_traces
         self.x_min, self.x_max, _, self.y_max = get_xy_extrema(densities=self.densities)
         self.fig: go.Figure = go.Figure()
         self.colors: ColorsArray = self.pre_compute_colors()
 
+    @classmethod
+    def from_shallow_types(
+        cls,
+        densities: Densities,
+        colorscale: str | ColorScale,
+        colormode: Colormode,
+        coloralpha: float | None,
+        labels: LabelsArray | ShallowLabelsArray | None,
+        linewidth: float,
+        spacing: float,
+        show_yticklabels: bool,
+        xpad: float,
+    ) -> RidgePlotFigureFactory:
+        if isinstance(colorscale, str):
+            colorscale = get_colorscale(name=colorscale)
+        validate_colorscale(colorscale)
+
+        if is_flat_str_collection(labels):
+            labels = cast(ShallowLabelsArray, labels)
+            labels = cast(LabelsArray, nest_shallow_collection(labels))
+
+        return cls(
+            densities=densities,
+            colorscale=colorscale,
+            coloralpha=coloralpha,
+            colormode=colormode,
+            labels=labels,
+            linewidth=linewidth,
+            spacing=spacing,
+            show_yticklabels=show_yticklabels,
+            xpad=xpad,
+        )
+
     @property
-    def colormode_maps(self) -> dict[str, Callable[[], MidpointsArray]]:
+    def colormode_maps(self) -> dict[Colormode, Callable[[], MidpointsArray]]:
         return {
             "row-index": self._compute_midpoints_row_index,
             "trace-index": self._compute_midpoints_trace_index,

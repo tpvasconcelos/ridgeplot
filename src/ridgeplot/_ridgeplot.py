@@ -3,8 +3,12 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, cast
 
-from ridgeplot._colors import get_colorscale, validate_colorscale
-from ridgeplot._figure_factory import LabelsArray, RidgePlotFigureFactory, ShallowLabelsArray
+from ridgeplot._figure_factory import (
+    Colormode,
+    LabelsArray,
+    RidgePlotFigureFactory,
+    ShallowLabelsArray,
+)
 from ridgeplot._kde import estimate_densities
 from ridgeplot._missing import MISSING, MissingType
 from ridgeplot._types import (
@@ -12,7 +16,6 @@ from ridgeplot._types import (
     Samples,
     ShallowDensities,
     ShallowSamples,
-    is_flat_str_collection,
     is_shallow_densities,
     is_shallow_samples,
     nest_shallow_collection,
@@ -23,7 +26,6 @@ if TYPE_CHECKING:
     import plotly.graph_objects as go
 
     from ridgeplot._colors import ColorScale
-    from ridgeplot._figure_factory import Colormode
     from ridgeplot._kde import KDEBandwidth, KDEPoints
 
 
@@ -247,13 +249,6 @@ def ridgeplot(
     )
     del samples, kernel, bandwidth, kde_points
 
-    # n_rows = len(densities)
-    n_traces = sum(len(row) for row in densities)
-
-    if isinstance(colorscale, str):
-        colorscale = get_colorscale(name=colorscale)
-    validate_colorscale(colorscale)
-
     if colormode == "index":  # type: ignore[comparison-overlap]
         # TODO: Raise ValueError in an upcoming version
         # TODO: Drop support for the deprecated argument in 0.2.0
@@ -266,15 +261,7 @@ def ridgeplot(
             DeprecationWarning,
             stacklevel=2,
         )
-        colormode = "row-index"
-
-    if is_flat_str_collection(labels):
-        labels = cast(ShallowLabelsArray, labels)
-        labels = cast(LabelsArray, nest_shallow_collection(labels))
-    if labels is None:
-        ids = iter(range(1, n_traces + 1))
-        labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
-
+        colormode = cast(Colormode, "row-index")
     if show_annotations is not MISSING:
         # TODO: Raise TypeError in an upcoming version
         # TODO: Drop support for the deprecated argument in 0.2.0
@@ -287,7 +274,7 @@ def ridgeplot(
         )
         show_yticklabels = show_annotations
 
-    ridgeplot_figure_factory = RidgePlotFigureFactory(
+    ridgeplot_figure_factory = RidgePlotFigureFactory.from_shallow_types(
         densities=densities,
         labels=labels,
         colorscale=colorscale,
