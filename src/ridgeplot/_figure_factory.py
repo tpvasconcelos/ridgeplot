@@ -206,6 +206,7 @@ class RidgePlotFigureFactory:
         if labels is None:
             ids = iter(range(1, n_traces + 1))
             labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
+
         if isinstance(trace_type, str):
             trace_type = [[trace_type] * len(row) for row in densities]
 
@@ -423,7 +424,7 @@ class RidgePlotFigureFactory:
             if n_traces != n_trace_types:
                 # TODO: This should be handled upstream
                 if n_trace_types == 1:
-                    trace_types = list(trace_types) * n_traces
+                    trace_types = list(trace_types) * n_traces  # noqa: PLW2901
                 else:
                     raise ValueError(
                         f"Mismatch between number of traces ({n_traces}) and "
