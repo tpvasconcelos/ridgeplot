@@ -338,6 +338,7 @@ myst_enable_extensions = [
     "dollarmath",
     "fieldlist",
     "substitution",
+    "strikethrough",
     "tasklist",
 ]
 myst_dmath_double_inline = True
@@ -346,6 +347,9 @@ myst_heading_anchors = 2
 myst_substitutions: dict[str, str] = {
     # "some_jinja2_key": "value",
 }
+suppress_warnings = [
+    "myst.strikethrough",
+]
 
 
 # -- custom setup steps ------------------------------------------------------------
