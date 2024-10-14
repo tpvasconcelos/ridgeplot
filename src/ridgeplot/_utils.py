@@ -117,6 +117,39 @@ def get_collection_array_shape(arr: Collection[Any]) -> tuple[int | set[int], ..
     return tuple(shape)
 
 
+def ordered_dedup(seq: Collection[Any]) -> list[Any]:
+    """Return a list with the elements of ``seq`` in the order they first appear.
+
+    Parameters
+    ----------
+    seq
+        A sequence.
+
+    Returns
+    -------
+    list
+        A list with the elements of ``seq`` in the order they first appear.
+
+    Examples
+    --------
+    >>> ordered_dedup([1, 2, 3, 1, 2, 3, 1, 2, 3])
+    [1, 2, 3]
+
+    >>> ordered_dedup([1, 2, 3, 4, 5, 6])
+    [1, 2, 3, 4, 5, 6]
+
+    >>> ordered_dedup([1, 1, 1, 1, 1, 1, 1, 1, 1])
+    [1]
+
+    >>> ordered_dedup([1, 2, 3, 3, 2, 1])
+    [1, 2, 3]
+
+    >>> ordered_dedup([3, 1, 2, 4, 2, 4, 5])
+    [3, 1, 2, 4, 5]
+    """
+    return list(dict.fromkeys(seq))
+
+
 _KT = TypeVar("_KT")  # Mapping key type
 _VT = TypeVar("_VT")  # Mapping value type
 

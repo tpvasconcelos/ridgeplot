@@ -6,7 +6,7 @@ from plotly import graph_objects as go
 
 from ridgeplot._colors import apply_alpha, get_color, get_colorscale, validate_colorscale
 from ridgeplot._types import CollectionL1, CollectionL2
-from ridgeplot._utils import normalise_min_max
+from ridgeplot._utils import normalise_min_max, ordered_dedup
 
 if TYPE_CHECKING:
     from collections.abc import Collection
@@ -187,7 +187,8 @@ class RidgePlotFigureFactory:
         self.colorscale: ColorScale = colorscale
         self.coloralpha: float | None = coloralpha
         self.colormode = colormode
-        self.labels: LabelsArray = labels
+        self.trace_labels: LabelsArray = labels
+        self.y_labels: LabelsArray = [ordered_dedup(row) for row in labels]
         self.linewidth: float = float(linewidth)
         self.spacing: float = float(spacing)
         self.show_yticklabels: bool = bool(show_yticklabels)
@@ -203,7 +204,7 @@ class RidgePlotFigureFactory:
         self.colors: ColorsArray = self.pre_compute_colors()
 
     @property
-    def colormode_maps(self) -> dict[str, Callable[[], MidpointsArray]]:
+    def colormode_maps(self) -> dict[Colormode, Callable[[], MidpointsArray]]:
         return {
             "row-index": self._compute_midpoints_row_index,
             "trace-index": self._compute_midpoints_trace_index,
@@ -274,7 +275,7 @@ class RidgePlotFigureFactory:
         self.fig.update_yaxes(
             showticklabels=self.show_yticklabels,
             tickvals=y_ticks,
-            ticktext=self.labels,
+            ticktext=self.y_labels,
             **axes_common,
         )
         x_padding = self.xpad * (self.x_max - self.x_min)
@@ -362,7 +363,9 @@ class RidgePlotFigureFactory:
 
     def make_figure(self) -> go.Figure:
         y_ticks = []
-        for i, (row, labels, colors) in enumerate(zip(self.densities, self.labels, self.colors)):
+        for i, (row, labels, colors) in enumerate(
+            zip(self.densities, self.trace_labels, self.colors)
+        ):
             n_traces = len(row)
             n_labels = len(labels)
             if n_traces != n_labels:
