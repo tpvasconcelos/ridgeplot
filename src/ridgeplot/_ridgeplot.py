@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING, cast
 
 from ridgeplot._colors import get_colorscale, validate_colorscale
@@ -254,10 +255,18 @@ def ridgeplot(
     validate_colorscale(colorscale)
 
     if colormode == "index":  # type: ignore[comparison-overlap]
-        raise ValueError(
-            "HINT: The colormode='index' value has been deprecated "
-            "in the past in favor of colormode='row-index'."
+        # TODO: Raise ValueError in an upcoming version
+        # TODO: Drop support for the deprecated argument in 0.2.0
+        warnings.warn(  # type: ignore[unreachable]
+            "The colormode='index' value has been deprecated in favor of "
+            "colormode='row-index', which provides the same functionality but "
+            "is more explicit and allows to distinguish between the "
+            "'row-index' and 'trace-index' modes. Support for the "
+            "deprecated value will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
         )
+        colormode = "row-index"
 
     if is_flat_str_collection(labels):
         labels = cast(ShallowLabelsArray, labels)
@@ -267,10 +276,16 @@ def ridgeplot(
         labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
 
     if show_annotations is not MISSING:
-        raise TypeError(
-            "HINT: The show_annotations argument has been deprecated "
-            "in the past in favor of show_yticklabels.",
+        # TODO: Raise TypeError in an upcoming version
+        # TODO: Drop support for the deprecated argument in 0.2.0
+        warnings.warn(
+            "The show_annotations argument has been deprecated in favor of "
+            "show_yticklabels. Support for the deprecated argument will be "
+            "removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
         )
+        show_yticklabels = show_annotations
 
     ridgeplot_figure_factory = RidgePlotFigureFactory(
         densities=densities,
