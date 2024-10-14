@@ -48,9 +48,12 @@ def test_shallow_labels() -> None:
 
 
 def test_deprecated_colormode_index() -> None:
-    with pytest.warns(
-        DeprecationWarning,
-        match="The colormode='index' value has been deprecated in favor of colormode='row-index'",
+    with pytest.raises(
+        ValueError,
+        match=(
+            "The colormode='index' value has been deprecated "
+            "in the past in favor of colormode='row-index'"
+        ),
     ):
         ridgeplot(
             samples=[[1, 2, 3], [1, 2, 3]],
@@ -59,8 +62,11 @@ def test_deprecated_colormode_index() -> None:
 
 
 def test_deprecated_show_annotations_is_not_missing() -> None:
-    with pytest.warns(
-        DeprecationWarning,
-        match="The show_annotations argument has been deprecated in favor of show_yticklabels",
+    with pytest.raises(
+        TypeError,
+        match=(
+            "The show_annotations argument has been deprecated "
+            "in the past in favor of show_yticklabels"
+        ),
     ):
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_annotations=True)
