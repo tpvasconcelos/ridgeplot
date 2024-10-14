@@ -5,7 +5,18 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+### Documentation
+
+- Update and improve the "Contributing" guide ({gh-pr}`218` and {gh-pr}`221`)
+
+### CI/CD
+
+- Add new `"Greet new users"` workflow to welcome new contributors to the project ({gh-pr}`210`)
+- Add `concurrency` entries to relevant GitHub workflows ({gh-pr}`211`)
+- Add Dependabot configuration file ({gh-pr}`211`)
+- Add GitHub issue templates ({gh-pr}`211`)
+- Add support for Python 3.13 ({gh-pr}`217`)
+- Add a CodeQL GitHub workflow ({gh-pr}`220`)
 
 ---
 
@@ -21,7 +32,7 @@ Unreleased changes
 
 - Adopt `setuptools-scm` for package versioning ({gh-pr}`200`)
 - Add `actionlint` pre-commit hook ({gh-pr}`201`)
-- Improve logic in `.github/workflows/check-release-notes.yaml` to post comments to the PR ({gh-pr}`201`)
+- Improve logic in `.github/workflows/check-release-notes.yml` to post comments to the PR ({gh-pr}`201`)
 - Handle footnotes in the automatically generated release notes ({gh-pr}`209`)
 
 ---
@@ -156,7 +167,7 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 0.1.17
 ------
 
-- Automate the release process. See .github/workflows/release.yaml, which issues a new GitHub release whenever a new git tag is pushed to the main branch by extracting the release notes from the changelog.
+- Automate the release process. See .github/workflows/release.yml, which issues a new GitHub release whenever a new git tag is pushed to the main branch by extracting the release notes from the changelog.
 - Fix automated release process to PyPI. ({gh-pr}`27`)
 
 ---

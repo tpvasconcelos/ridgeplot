@@ -6,6 +6,7 @@ include *.cfg
 include *.ini
 include *.md
 include *.toml
+include *.yml
 include *.yaml
 
 # Stubs
@@ -29,7 +30,7 @@ recursive-include docs/_templates *.html
 prune docs/build
 
 # Misc
-recursive-include .github *.yaml
+recursive-include .github *.yml *.yaml
 recursive-include cicd_utils README.md *.py
 recursive-include misc *.py *.ipynb
 recursive-include requirements *.txt
