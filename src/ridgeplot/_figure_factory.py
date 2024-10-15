@@ -81,7 +81,7 @@ Example
 ... ]
 """
 
-Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
+Colormode = Literal["row-index", "trace-index", "trace-index-row-wise", "mean-minmax", "mean-means"]
 """The :paramref:`ridgeplot.ridgeplot.colormode` argument in
 :func:`ridgeplot.ridgeplot()`."""
 
@@ -254,6 +254,7 @@ class RidgePlotFigureFactory:
         return {
             "row-index": self._compute_midpoints_row_index,
             "trace-index": self._compute_midpoints_trace_index,
+            "trace-index-row-wise": self._compute_midpoints_trace_index_row_wise,
             "mean-minmax": self._compute_midpoints_mean_minmax,
             "mean-means": self._compute_midpoints_mean_means,
         }
@@ -332,23 +333,12 @@ class RidgePlotFigureFactory:
         )
 
     def _compute_midpoints_row_index(self) -> MidpointsArray:
-        """colormode='row-index'
-
-        Uses the row's index. e.g. if the ridgeplot has 3 rows of traces, then
-        the midpoints will be [[1, ...], [0.5, ...], [0, ...]].
-        """
         return [
             [((self.n_rows - 1) - ith_row) / (self.n_rows - 1)] * len(row)
             for ith_row, row in enumerate(self.densities)
         ]
 
     def _compute_midpoints_trace_index(self) -> MidpointsArray:
-        """colormode='trace-index'
-
-        Uses the trace's index. e.g. if the ridgeplot has a total of 3 traces
-        (across all rows), then the midpoints will be  0, 0.5, and 1,
-        respectively.
-        """
         midpoints = []
         ith_trace = 0
         for row in self.densities:
@@ -359,13 +349,13 @@ class RidgePlotFigureFactory:
             midpoints.append(midpoints_row)
         return midpoints
 
-    def _compute_midpoints_mean_minmax(self) -> MidpointsArray:
-        """colormode='mean-minmax'
+    def _compute_midpoints_trace_index_row_wise(self) -> MidpointsArray:
+        return [
+            [((len(row) - 1) - ith_row_trace) / (len(row) - 1) for ith_row_trace in range(len(row))]
+            for row in self.densities
+        ]
 
-        Uses the min-max normalized (weighted) mean of each density to calculate
-        the midpoints. The normalization min and max values are the minimum and
-        maximum x-values from all densities, respectively.
-        """
+    def _compute_midpoints_mean_minmax(self) -> MidpointsArray:
         midpoints = []
         for row in self.densities:
             midpoints_row = []
@@ -378,12 +368,6 @@ class RidgePlotFigureFactory:
         return midpoints
 
     def _compute_midpoints_mean_means(self) -> MidpointsArray:
-        """colormode='mean-means'
-
-        Uses the min-max normalized (weighted) mean of each density to calculate
-        the midpoints. The normalization min and max values are the minimum and
-        maximum mean values from all densities, respectively.
-        """
         means = []
         for row in self.densities:
             means_row = []

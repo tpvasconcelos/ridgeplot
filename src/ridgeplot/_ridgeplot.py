@@ -171,23 +171,26 @@ def ridgeplot(
 
     colormode : Colormode
         This argument controls the logic for choosing the color filling of each
-        ridgeline trace. Each option provides a different method for
+        ridgeplot trace. Each option provides a different method for
         calculating the :paramref:`colorscale` midpoint of each trace. The
         default is mode is ``"mean-means"``. Choices are:
 
-        - ``"row-index"`` - uses the row's index. e.g. if the ridgeplot has 3
+        - ``"row-index"`` - uses the row's index. e.g., if the ridgeplot has 3
           rows of traces, then the midpoints will be
           ``[[0, ...], [0.5, ...], [1, ...]]``.
-        - ``"trace-index"`` - uses the trace's index. e.g. if the ridgeplot has
+        - ``"trace-index"`` - uses the trace's index. e.g., if the ridgeplot has
           a total of 3 traces (across all rows), then the midpoints will be
           0, 0.5, and 1, respectively.
+        - ``"trace-index-row-wise"`` - uses the row-wise trace index. e.g., if
+          the ridgeplot has a row with only one trace and another with two,
+          the midpoints will be ``[[0], [0, 1]]``.
         - ``"mean-minmax"`` - uses the min-max normalized (weighted) mean of
           each density to calculate the midpoints. The normalization min
-          and max values are the minimum and maximum x-values from all
-          densities, respectively.
+          and max values are the *absolute* minimum and maximum x-values over
+          all densities, respectively.
         - ``"mean-means"`` - uses the min-max normalized (weighted) mean of
           each density to calculate the midpoints. The normalization min
-          and max values are the minimum and maximum mean values from all
+          and max values are the minimum and maximum *mean* values over all
           densities, respectively.
 
     coloralpha : float, optional
