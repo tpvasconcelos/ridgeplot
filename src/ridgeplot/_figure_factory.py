@@ -1,12 +1,22 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from plotly import graph_objects as go
 
 from ridgeplot._colors import apply_alpha, get_color, get_colorscale, validate_colorscale
-from ridgeplot._types import CollectionL1, CollectionL2
-from ridgeplot._utils import normalise_min_max
+from ridgeplot._types import (
+    CollectionL1,
+    CollectionL2,
+    is_flat_str_collection,
+    nest_shallow_collection,
+)
+from ridgeplot._utils import (
+    get_collection_array_shape,
+    normalise_min_max,
+    normalise_row_attrs,
+    ordered_dedup,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Collection
@@ -177,7 +187,7 @@ class RidgePlotFigureFactory:
         colorscale: str | ColorScale,
         coloralpha: float | None,
         colormode: Colormode,
-        labels: LabelsArray | None,
+        trace_labels: LabelsArray | None,
         trace_type: TraceTypesArray | TraceType,
         linewidth: float,
         spacing: float,
@@ -187,12 +197,19 @@ class RidgePlotFigureFactory:
         # ==============================================================
         # ---  Get clean and validated input arguments
         # ==============================================================
+        shape = get_collection_array_shape(densities)
+        if len(shape) != 4:
+            raise ValueError(
+                f"Expected a 4D array of densities, got a {len(shape)}D array instead."
+            )
+
         n_rows = len(densities)
         n_traces = sum(len(row) for row in densities)
 
         if isinstance(colorscale, str):
             colorscale = get_colorscale(name=colorscale)
-        validate_colorscale(colorscale)
+        else:
+            validate_colorscale(colorscale)
 
         if colormode not in self.colormode_maps:
             raise ValueError(
@@ -200,26 +217,28 @@ class RidgePlotFigureFactory:
                 f"{tuple(self.colormode_maps.keys())}, got {colormode} instead."
             )
 
-        if coloralpha is not None:
-            coloralpha = float(coloralpha)
-
-        if labels is None:
+        if trace_labels is None:
             ids = iter(range(1, n_traces + 1))
-            labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
+            trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
+        else:
+            trace_labels = normalise_row_attrs(trace_labels, densities=densities)
 
         if isinstance(trace_type, str):
             trace_type = [[trace_type] * len(row) for row in densities]
+        else:
+            trace_type = normalise_row_attrs(trace_type, densities=densities)
 
-        self.densities: Densities = densities
+        self.densities = densities
         self.trace_types: TraceTypesArray = trace_type
-        self.colorscale: ColorScale = colorscale
-        self.coloralpha: float | None = coloralpha
+        self.colorscale = colorscale
+        self.coloralpha = coloralpha
         self.colormode = colormode
-        self.labels: LabelsArray = labels
-        self.linewidth: float = float(linewidth)
-        self.spacing: float = float(spacing)
-        self.show_yticklabels: bool = bool(show_yticklabels)
-        self.xpad: float = float(xpad)
+        self.trace_labels: LabelsArray = trace_labels
+        self.y_labels: LabelsArray = [ordered_dedup(row) for row in trace_labels]
+        self.linewidth = linewidth
+        self.spacing = spacing
+        self.show_yticklabels = show_yticklabels
+        self.xpad = xpad
 
         # ==============================================================
         # ---  Other instance variables
@@ -230,8 +249,46 @@ class RidgePlotFigureFactory:
         self.fig: go.Figure = go.Figure()
         self.colors: ColorsArray = self.pre_compute_colors()
 
+    @classmethod
+    def from_shallow_types(
+        cls,
+        densities: Densities,
+        colorscale: str | ColorScale,
+        colormode: Colormode,
+        coloralpha: float | None,
+        trace_labels: LabelsArray | ShallowLabelsArray | None,
+        trace_type: TraceTypesArray | ShallowTraceTypesArray | TraceType,
+        linewidth: float,
+        spacing: float,
+        show_yticklabels: bool,
+        xpad: float,
+    ) -> RidgePlotFigureFactory:
+
+        if is_flat_str_collection(trace_labels):
+            trace_labels = cast(ShallowLabelsArray, trace_labels)
+            trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
+
+        if is_flat_str_collection(trace_type):
+            trace_type = cast(ShallowTraceTypesArray, trace_type)
+            trace_type = cast(TraceTypesArray, nest_shallow_collection(trace_type))
+        else:
+            trace_type = cast(TraceType, trace_type)
+
+        return cls(
+            densities=densities,
+            colorscale=colorscale,
+            coloralpha=coloralpha,
+            colormode=colormode,
+            trace_labels=trace_labels,
+            trace_type=trace_type,
+            linewidth=linewidth,
+            spacing=spacing,
+            show_yticklabels=show_yticklabels,
+            xpad=xpad,
+        )
+
     @property
-    def colormode_maps(self) -> dict[str, Callable[[], MidpointsArray]]:
+    def colormode_maps(self) -> dict[Colormode, Callable[[], MidpointsArray]]:
         return {
             "row-index": self._compute_midpoints_row_index,
             "trace-index": self._compute_midpoints_trace_index,
@@ -277,15 +334,9 @@ class RidgePlotFigureFactory:
         if trace_type == "area":
             self.draw_base(x=x, y_shifted=y_shifted)
 
-        kwargs = dict(
-            x=x,
-            name=label,
-            # Hover information
-            customdata=[[y_i] for y_i in y],
-            hovertemplate=_DEFAULT_HOVERTEMPLATE,
-        )
+        kwargs: dict[str, Any]
         if trace_type == "area":
-            kwargs.update(
+            kwargs = dict(
                 y=[y_i + y_shifted for y_i in y],
                 fillcolor=color,
                 fill="tonexty",
@@ -296,7 +347,7 @@ class RidgePlotFigureFactory:
                 ),
             )
         else:
-            kwargs.update(
+            kwargs = dict(
                 y=y,
                 base=y_shifted,
                 marker=dict(
@@ -312,7 +363,16 @@ class RidgePlotFigureFactory:
                 # width=1,  # TODO: how to handle this?
             )
 
-        self.fig.add_trace(TraceCls(**kwargs))
+        self.fig.add_trace(
+            TraceCls(
+                x=x,
+                name=label,
+                # Hover information
+                customdata=[[y_i] for y_i in y],
+                hovertemplate=_DEFAULT_HOVERTEMPLATE,
+                **kwargs,
+            )
+        )
 
     def update_layout(self, y_ticks: list[float]) -> None:
         """Update figure's layout."""
@@ -326,7 +386,7 @@ class RidgePlotFigureFactory:
         self.fig.update_yaxes(
             showticklabels=self.show_yticklabels,
             tickvals=y_ticks,
-            ticktext=self.labels,
+            ticktext=self.y_labels,
             **axes_common,
         )
         x_padding = self.xpad * (self.x_max - self.x_min)
@@ -417,29 +477,9 @@ class RidgePlotFigureFactory:
     def make_figure(self) -> go.Figure:
         y_ticks = []
         for i, (row, trace_types, labels, colors) in enumerate(
-            zip(self.densities, self.trace_types, self.labels, self.colors)
+            # TODO: Use strict=True in Python>=3.10
+            zip(self.densities, self.trace_types, self.trace_labels, self.colors)
         ):
-            n_traces = len(row)
-            n_trace_types = len(trace_types)
-            if n_traces != n_trace_types:
-                # TODO: This should be handled upstream
-                if n_trace_types == 1:
-                    trace_types = list(trace_types) * n_traces  # noqa: PLW2901
-                else:
-                    raise ValueError(
-                        f"Mismatch between number of traces ({n_traces}) and "
-                        f"number of trace types ({n_trace_types}) for row {i}."
-                    )
-            n_labels = len(labels)
-            if n_traces != n_labels:
-                # TODO: This should be handled upstream
-                if n_labels == 1:
-                    labels = list(labels) * n_traces  # noqa: PLW2901
-                else:
-                    raise ValueError(
-                        f"Mismatch between number of traces ({n_traces}) and "
-                        f"number of labels ({n_labels}) for row {i}."
-                    )
             # y_shifted is the y-origin for the new trace
             y_shifted = -i * float(self.y_max * self.spacing)
             y_ticks.append(y_shifted)
