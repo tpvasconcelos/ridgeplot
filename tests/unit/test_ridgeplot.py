@@ -87,10 +87,16 @@ def test_colorscale_invalid_colors() -> None:
         (1.0, "not a valid color"),
     )
     with pytest.raises(
-        ValueError,
-        match="color should be a tuple or a str representation of a hex or rgb color",
+        ValueError, match="color should be a tuple or a str representation of a hex or rgb color"
     ):
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=colorscale)
+
+
+def test_colormode_invalid() -> None:
+    with pytest.raises(
+        ValueError, match="The colormode argument should be one of .* got INVALID instead"
+    ):
+        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colormode="INVALID")
 
 
 def test_coloralpha() -> None:
@@ -100,8 +106,8 @@ def test_coloralpha() -> None:
             (0.0, "rgb(10, 10, 10)"),
             (1.0, "rgb(20, 20, 20)"),
         ),
-        coloralpha=0.5,
         colormode="trace-index",
+        coloralpha=0.5,
     )
     assert fig.data[1].fillcolor == "rgba(20, 20, 20, 0.5)"
     assert fig.data[3].fillcolor == "rgba(10, 10, 10, 0.5)"
