@@ -11,7 +11,12 @@ from ridgeplot._types import (
     is_flat_str_collection,
     nest_shallow_collection,
 )
-from ridgeplot._utils import get_collection_array_shape, normalise_min_max
+from ridgeplot._utils import (
+    get_collection_array_shape,
+    normalise_min_max,
+    normalise_row_attrs,
+    ordered_dedup,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Collection
@@ -159,7 +164,7 @@ class RidgePlotFigureFactory:
         colorscale: ColorScale,
         coloralpha: float | None,
         colormode: Colormode,
-        labels: LabelsArray | None,
+        trace_labels: LabelsArray | None,
         linewidth: float,
         spacing: float,
         show_yticklabels: bool,
@@ -183,15 +188,18 @@ class RidgePlotFigureFactory:
                 f"{tuple(self.colormode_maps.keys())}, got {colormode} instead."
             )
 
-        if labels is None:
+        if trace_labels is None:
             ids = iter(range(1, n_traces + 1))
-            labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
+            trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
+        else:
+            trace_labels = normalise_row_attrs(trace_labels, densities=densities)
 
         self.densities = densities
         self.colorscale = colorscale
         self.coloralpha = float(coloralpha) if coloralpha is not None else None
         self.colormode = colormode
-        self.labels = labels
+        self.trace_labels: LabelsArray = trace_labels
+        self.y_labels: LabelsArray = [ordered_dedup(row) for row in trace_labels]
         self.linewidth: float = float(linewidth)
         self.spacing: float = float(spacing)
         self.show_yticklabels: bool = bool(show_yticklabels)
@@ -311,7 +319,7 @@ class RidgePlotFigureFactory:
         self.fig.update_yaxes(
             showticklabels=self.show_yticklabels,
             tickvals=y_ticks,
-            ticktext=self.labels,
+            ticktext=self.y_labels,
             **axes_common,
         )
         x_padding = self.xpad * (self.x_max - self.x_min)
@@ -399,18 +407,10 @@ class RidgePlotFigureFactory:
 
     def make_figure(self) -> go.Figure:
         y_ticks = []
-        for i, (row, labels, colors) in enumerate(zip(self.densities, self.labels, self.colors)):
-            n_traces = len(row)
-            n_labels = len(labels)
-            if n_traces != n_labels:
-                # TODO: This should be handled upstream
-                if n_labels == 1:
-                    labels = list(labels) * n_traces  # noqa: PLW2901
-                else:
-                    raise ValueError(
-                        f"Mismatch between number of traces ({n_traces}) and "
-                        f"number of labels ({n_labels}) for row {i}."
-                    )
+        for i, (row, labels, colors) in enumerate(
+            # TODO: Use strict=True in Python>=3.10
+            zip(self.densities, self.trace_labels, self.colors)
+        ):
             # y_shifted is the y-origin for the new trace
             y_shifted = -i * float(self.y_max * self.spacing)
             y_ticks.append(y_shifted)

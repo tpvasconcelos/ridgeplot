@@ -5,6 +5,10 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Improvements
+
+- Remove duplicated labels when plotting multiple traces on the same y-axis row ({gh-pr}`223`)
+
 ### Documentation
 
 - Update and improve the "Contributing" guide ({gh-pr}`218` and {gh-pr}`221`)
