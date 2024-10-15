@@ -42,11 +42,14 @@ def get_collection_array_shape(arr: Collection[Any]) -> tuple[int | set[int], ..
 
     Examples
     --------
+    >>> get_collection_array_shape([])
+    (0,)
+
     >>> get_collection_array_shape([1, 2, 3])
     (3,)
 
-    >>> get_collection_array_shape([[1, 2, 3], [4, 5]])
-    (2, {2, 3})
+    >>> get_collection_array_shape([[1, 2, 3], [4, 5], [6], []])
+    (4, {0, 1, 2, 3})
 
     >>> get_collection_array_shape(
     ...     [
@@ -90,14 +93,21 @@ def get_collection_array_shape(arr: Collection[Any]) -> tuple[int | set[int], ..
     >>> get_collection_array_shape(
     ...     [
     ...         [
-    ...             ["a", "b", "c", "d"], ["e", "f"],
+    ...             ["a", "b", "c", "d"],
+    ...             ["e", "f"],
     ...         ],
     ...         [
     ...             ["h", "i", "j", "k", "l"],
+    ...             [],
     ...         ],
     ...     ]
     ... )
-    (2, {1, 2}, {2, 4, 5})
+    (2, 2, {0, 2, 4, 5})
+
+    >>> get_collection_array_shape("I'm not a collection")
+    Traceback (most recent call last):
+    ...
+    TypeError: Expected a Collection. Got <class 'str'> instead.
     """
 
     def _get_dim_length(obj: Any) -> int:
@@ -107,7 +117,7 @@ def get_collection_array_shape(arr: Collection[Any]) -> tuple[int | set[int], ..
         return len(obj)
 
     shape: list[int | set[int]] = [_get_dim_length(arr)]
-    while isinstance(arr, Collection):
+    while isinstance(arr, Collection) and len(arr) > 0:
         try:
             dim_lengths = set(map(_get_dim_length, arr))
         except TypeError:
