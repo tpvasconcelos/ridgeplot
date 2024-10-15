@@ -50,7 +50,7 @@ def test_shallow_labels() -> None:
 def test_y_labels_dedup() -> None:
     assert (
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=["a"]) ==
-        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=["a", "a"])
+        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=[["a", "a"]])
     )  # fmt: skip
 
 
