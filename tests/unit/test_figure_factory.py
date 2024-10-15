@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Callable, TypeVar
 import numpy as np
 import pytest
 
-from ridgeplot._figure_factory import get_xy_extrema
+from ridgeplot._figure_factory import RidgePlotFigureFactory, get_xy_extrema
 
 if TYPE_CHECKING:
     from ridgeplot._types import Densities, DensitiesRow
@@ -87,3 +87,30 @@ class TestGetXYExtrema:
             62,  # y_max
         )
         assert get_xy_extrema(densities) == expected
+
+
+class TestRidgePlotFigureFactory:
+
+    @pytest.mark.parametrize(
+        "densities",
+        [
+            [],
+            [1, 2, 3],
+            [[1, 2, 3]],
+            [(1, 2)],
+            [[(1, 2)]],
+        ],
+    )
+    def test_densities_must_be_4d(self, densities: Densities) -> None:
+        with pytest.raises(ValueError, match="Expected a 4D array of densities"):
+            RidgePlotFigureFactory(
+                densities=densities,
+                colorscale=...,  # type: ignore[arg-type]
+                coloralpha=...,  # type: ignore[arg-type]
+                colormode=...,  # type: ignore[arg-type]
+                trace_labels=...,  # type: ignore[arg-type]
+                linewidth=...,  # type: ignore[arg-type]
+                spacing=...,  # type: ignore[arg-type]
+                show_yticklabels=...,  # type: ignore[arg-type]
+                xpad=...,  # type: ignore[arg-type]
+            )
