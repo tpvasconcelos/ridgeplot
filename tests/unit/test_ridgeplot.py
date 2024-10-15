@@ -93,6 +93,44 @@ def test_colorscale_invalid_colors() -> None:
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=colorscale)
 
 
+def test_coloralpha() -> None:
+    fig = ridgeplot(
+        samples=[[[1, 2, 3], [4, 5, 6]]],
+        colorscale=(
+            (0.0, "rgb(10, 10, 10)"),
+            (1.0, "rgb(20, 20, 20)"),
+        ),
+        coloralpha=0.5,
+        colormode="trace-index",
+    )
+    assert fig.data[1].fillcolor == "rgba(20, 20, 20, 0.5)"
+    assert fig.data[3].fillcolor == "rgba(10, 10, 10, 0.5)"
+
+
+@pytest.mark.parametrize("lw", [0.3, 0.7, 1.2, 3])
+def test_linewidth(lw: float) -> None:
+    fig = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], linewidth=lw)
+    assert fig.data[1].line.width == fig.data[3].line.width == lw
+
+
+@pytest.mark.parametrize("spacing", [0.3, 0.7, 1.2, 3])
+def test_spacing(spacing: float) -> None:
+    densities = [
+        [
+            [(0, 0), (1, 1), (2, 0)],
+            [(1, 0), (2, 1), (3, 2), (4, 1)],
+            [(3, 0), (4, 1), (5, 2), (6, 1), (7, 0)],
+        ],
+        [
+            [(-2, 0), (-1, 1), (0, 0)],
+            [(0, 0), (1, 1), (2, 1), (3, 0)],
+        ],
+    ]
+    y_max = 2
+    fig = ridgeplot(densities=densities, spacing=spacing)
+    assert fig.layout.yaxis.tickvals[-1] == -y_max * spacing
+
+
 def test_deprecated_colormode_index() -> None:
     with pytest.warns(
         DeprecationWarning,
