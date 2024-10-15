@@ -161,7 +161,7 @@ class RidgePlotFigureFactory:
     def __init__(
         self,
         densities: Densities,
-        colorscale: ColorScale,
+        colorscale: str | ColorScale,
         coloralpha: float | None,
         colormode: Colormode,
         trace_labels: LabelsArray | None,
@@ -182,6 +182,11 @@ class RidgePlotFigureFactory:
         n_rows = len(densities)
         n_traces = sum(len(row) for row in densities)
 
+        if isinstance(colorscale, str):
+            colorscale = get_colorscale(name=colorscale)
+        else:
+            validate_colorscale(colorscale)
+
         if colormode not in self.colormode_maps:
             raise ValueError(
                 f"The colormode argument should be one of "
@@ -196,14 +201,14 @@ class RidgePlotFigureFactory:
 
         self.densities = densities
         self.colorscale = colorscale
-        self.coloralpha = float(coloralpha) if coloralpha is not None else None
+        self.coloralpha = coloralpha
         self.colormode = colormode
         self.trace_labels: LabelsArray = trace_labels
         self.y_labels: LabelsArray = [ordered_dedup(row) for row in trace_labels]
-        self.linewidth: float = float(linewidth)
-        self.spacing: float = float(spacing)
-        self.show_yticklabels: bool = bool(show_yticklabels)
-        self.xpad: float = float(xpad)
+        self.linewidth = linewidth
+        self.spacing = spacing
+        self.show_yticklabels = show_yticklabels
+        self.xpad = xpad
 
         # ==============================================================
         # ---  Other instance variables
@@ -227,9 +232,6 @@ class RidgePlotFigureFactory:
         show_yticklabels: bool,
         xpad: float,
     ) -> RidgePlotFigureFactory:
-        if isinstance(colorscale, str):
-            colorscale = get_colorscale(name=colorscale)
-        validate_colorscale(colorscale)
 
         if is_flat_str_collection(trace_labels):
             trace_labels = cast(ShallowLabelsArray, trace_labels)

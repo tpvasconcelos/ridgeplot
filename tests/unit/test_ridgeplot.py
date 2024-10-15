@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 
 from ridgeplot import ridgeplot
+from ridgeplot._colors import get_colorscale
 from ridgeplot._types import nest_shallow_collection
 
 
@@ -51,6 +52,13 @@ def test_y_labels_dedup() -> None:
     assert (
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=["a"]) ==
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=[["a", "a"]])
+    )  # fmt: skip
+
+
+def test_colorscale_equivalence() -> None:
+    assert (
+        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale="bluered") ==
+        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=get_colorscale("bluered"))
     )  # fmt: skip
 
 
