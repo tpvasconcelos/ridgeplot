@@ -111,7 +111,7 @@ Example
 >>> xy_coord = (1, 2)
 """
 
-DensityTrace = CollectionL1[XYCoordinate[Any]]
+DensityTrace = CollectionL1[XYCoordinate[Numeric]]
 r"""A 2D line/trace represented as a collection of :math:`(x, y)` coordinates
 (i.e. :data:`XYCoordinate`\s).
 
@@ -119,7 +119,7 @@ These are equivalent:
 
 - ``DensityTrace``
 - ``CollectionL1[XYCoordinate]``
-- ``Collection[Tuple[Numeric, Numeric]]``
+- ``Collection[tuple[Numeric, Numeric]]``
 
 By convention, the :math:`x` values should be non-repeating and increasing. For
 instance, the following is a valid 2D line trace:

@@ -7,7 +7,7 @@ import numpy as np
 import statsmodels.api as sm
 from statsmodels.sandbox.nonparametric.kernels import CustomKernel as StatsmodelsKernel
 
-from ridgeplot._types import CollectionL1, Numeric
+from ridgeplot._types import CollectionL1, Float, Numeric
 
 if TYPE_CHECKING:
     import numpy.typing as npt
@@ -27,7 +27,7 @@ def estimate_density_trace(
     points: KDEPoints,
     kernel: str,
     bandwidth: KDEBandwidth,
-) -> list[XYCoordinate[float]]:
+) -> list[XYCoordinate[Float]]:
     """Estimates a density trace from a set of samples.
 
     For a given set of sample values, computes the kernel densities (KDE) at
