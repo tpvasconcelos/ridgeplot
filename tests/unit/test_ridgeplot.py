@@ -40,10 +40,17 @@ def test_shallow_samples() -> None:
 
 
 def test_shallow_labels() -> None:
-    shallow_labels = ["trace 1", "trace 2", "trace 3"]
+    shallow_labels = ["trace 1", "trace 2"]
     assert (
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], labels=shallow_labels) ==
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], labels=nest_shallow_collection(shallow_labels))
+    )  # fmt: skip
+
+
+def test_y_labels_dedup() -> None:
+    assert (
+        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=["a"]) ==
+        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=[["a", "a"]])
     )  # fmt: skip
 
 
