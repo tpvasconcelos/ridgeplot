@@ -221,7 +221,7 @@ class RidgePlotFigureFactory:
         colorscale: str | ColorScale,
         colormode: Colormode,
         coloralpha: float | None,
-        labels: LabelsArray | ShallowLabelsArray | None,
+        trace_labels: LabelsArray | ShallowLabelsArray | None,
         linewidth: float,
         spacing: float,
         show_yticklabels: bool,
@@ -231,16 +231,16 @@ class RidgePlotFigureFactory:
             colorscale = get_colorscale(name=colorscale)
         validate_colorscale(colorscale)
 
-        if is_flat_str_collection(labels):
-            labels = cast(ShallowLabelsArray, labels)
-            labels = cast(LabelsArray, nest_shallow_collection(labels))
+        if is_flat_str_collection(trace_labels):
+            trace_labels = cast(ShallowLabelsArray, trace_labels)
+            trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
 
         return cls(
             densities=densities,
             colorscale=colorscale,
             coloralpha=coloralpha,
             colormode=colormode,
-            labels=labels,
+            trace_labels=trace_labels,
             linewidth=linewidth,
             spacing=spacing,
             show_yticklabels=show_yticklabels,
