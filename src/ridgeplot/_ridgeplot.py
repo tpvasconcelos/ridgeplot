@@ -257,7 +257,7 @@ def ridgeplot(
 
     ridgeplot_figure_factory = RidgePlotFigureFactory(
         densities=densities,
-        labels=labels,
+        trace_labels=labels,
         colorscale=colorscale,
         coloralpha=coloralpha,
         colormode=colormode,
