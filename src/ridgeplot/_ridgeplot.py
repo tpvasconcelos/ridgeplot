@@ -266,7 +266,6 @@ def ridgeplot(
             stacklevel=2,
         )
         colormode = cast(Colormode, "row-index")
-
     if show_annotations is not MISSING:
         # TODO: Raise TypeError in an upcoming version
         # TODO: Drop support for the deprecated argument in 0.2.0
