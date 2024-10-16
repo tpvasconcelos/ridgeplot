@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from plotly import graph_objects as go
 
@@ -48,6 +48,25 @@ Example
 -------
 
 >>> labels_array: ShallowLabelsArray = ["trace 1", "trace 2", "trace 3"]
+"""
+
+TraceType = Literal["area", "bar"]
+"""The type of trace to draw in a ridgeplot."""
+
+TraceTypesArray = CollectionL2[TraceType]
+"""A :data:`TraceTypesArray` represents the types of traces in a ridgeplot.
+Example
+-------
+>>> trace_types_array: TraceTypesArray = [
+...     ["area", "bar", "area"],
+...     ["bar", "area"],
+... ]
+"""
+
+ShallowTraceTypesArray = CollectionL1[TraceType]
+"""Shallow type for :data:`TraceTypesArray`.
+Example
+>>> trace_types_array: ShallowTraceTypesArray = ["area", "bar", "area"]
 """
 
 ColorsArray = CollectionL2[str]
@@ -161,6 +180,7 @@ def _mul(a: tuple[Numeric, ...], b: tuple[Numeric, ...]) -> tuple[Numeric, ...]:
 @dataclass
 class RidgeplotTrace:
     trace: DensityTrace
+    type: TraceType
     label: str
     color: str
 
@@ -181,6 +201,7 @@ class RidgeplotFigureFactory:
         coloralpha: float | None,
         colormode: Colormode,
         trace_labels: LabelsArray | ShallowLabelsArray | None,
+        trace_types: TraceTypesArray | ShallowTraceTypesArray | TraceType,
         linewidth: float,
         spacing: float,
         show_yticklabels: bool,
@@ -215,8 +236,18 @@ class RidgeplotFigureFactory:
         else:
             if is_flat_str_collection(trace_labels):
                 trace_labels = cast(ShallowLabelsArray, trace_labels)
-                trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
+                trace_labels = nest_shallow_collection(trace_labels)
+            trace_labels = cast(LabelsArray, trace_labels)
             trace_labels = normalise_row_attrs(trace_labels, densities=densities)
+
+        if isinstance(trace_types, str):
+            trace_types = [[trace_types] * len(row) for row in densities]
+        else:
+            if is_flat_str_collection(trace_types):
+                trace_types = cast(ShallowTraceTypesArray, trace_types)
+                trace_types = nest_shallow_collection(trace_types)
+            trace_types = cast(TraceTypesArray, trace_types)
+            trace_types = normalise_row_attrs(trace_types, densities=densities)
 
         self.densities = densities
         self.colorscale = colorscale
@@ -224,6 +255,7 @@ class RidgeplotFigureFactory:
         self.colormode = colormode
         self.trace_labels: LabelsArray = trace_labels
         self.y_labels: LabelsArray = [ordered_dedup(row) for row in trace_labels]
+        self.trace_types: TraceTypesArray = trace_types
         self.linewidth = float(linewidth)
         self.spacing = float(spacing)
         self.show_yticklabels = bool(show_yticklabels)
@@ -244,13 +276,15 @@ class RidgeplotFigureFactory:
         self.rows: list[RidgeplotRow] = [
             RidgeplotRow(
                 traces=[
-                    RidgeplotTrace(trace=trace, label=label, color=color)
-                    for trace, label, color in zip_strict(traces, labels, colors)
+                    RidgeplotTrace(trace=trace, type=trace_type, label=label, color=color)
+                    for trace, label, trace_type, color in zip_strict(
+                        traces, labels, tr_types, colors
+                    )
                 ],
                 y_shifted=float(-ith_row * self.y_max * self.spacing),
             )
-            for ith_row, (traces, labels, colors) in enumerate(
-                zip_strict(self.densities, self.trace_labels, self.colors)
+            for ith_row, (traces, labels, tr_types, colors) in enumerate(
+                zip_strict(self.densities, self.trace_labels, self.trace_types, self.colors)
             )
         ]
 
@@ -288,6 +322,7 @@ class RidgeplotFigureFactory:
         y: Collection[Numeric],
         y_shifted: float,
         label: str,
+        trace_type: TraceType,
         color: str,
     ) -> None:
         """Draw a density trace.
@@ -296,23 +331,49 @@ class RidgeplotFigureFactory:
         fills the trace until the previously drawn trace (see
         :meth:`draw_base`). This is why the base trace must be drawn first.
         """
-        self.draw_base(x=x, y_shifted=y_shifted)
-        self.fig.add_trace(
-            go.Scatter(
-                x=x,
+        TraceCls = go.Scatter if trace_type == "area" else go.Bar
+
+        if trace_type == "area":
+            self.draw_base(x=x, y_shifted=y_shifted)
+
+        kwargs: dict[str, Any]
+        if trace_type == "area":
+            kwargs = dict(
                 y=[y_i + y_shifted for y_i in y],
                 fillcolor=color,
-                name=label,
                 fill="tonexty",
                 mode="lines",
                 line=dict(
                     color="rgba(0,0,0,0.6)" if color is not None else None,
                     width=self.linewidth,
                 ),
+            )
+        else:
+            kwargs = dict(
+                y=y,
+                base=y_shifted,
+                marker=dict(
+                    color=color,
+                    # TODO: Review these default values for marker_line
+                    line=dict(
+                        # color="rgba(0,0,0,0.6)" if color is not None else None,
+                        # width=self.linewidth,
+                        color="rgba(0,0,0,0.6)",
+                        width=0.4,
+                    ),
+                ),
+                # width=1,  # TODO: how to handle this?
+            )
+
+        self.fig.add_trace(
+            TraceCls(
+                x=x,
+                name=label,
                 # Hover information
                 customdata=[[y_i] for y_i in y],
                 hovertemplate=_DEFAULT_HOVERTEMPLATE,
-            ),
+                **kwargs,
+            )
         )
 
     def update_layout(self) -> None:
@@ -336,6 +397,8 @@ class RidgeplotFigureFactory:
             showticklabels=True,
             **axes_common,
         )
+        # TODO: Review default layout for bar traces...
+        self.fig.update_layout(barmode="stack", bargap=0, bargroupgap=0)
 
     def _compute_midpoints_row_index(self) -> MidpointsArray:
         return [
@@ -401,7 +464,12 @@ class RidgeplotFigureFactory:
             for trace in row.traces:
                 x, y = zip(*trace.trace)
                 self.draw_density_trace(
-                    x=x, y=y, y_shifted=row.y_shifted, label=trace.label, color=trace.color
+                    x=x,
+                    y=y,
+                    y_shifted=row.y_shifted,
+                    label=trace.label,
+                    trace_type=trace.type,
+                    color=trace.color,
                 )
         self.update_layout()
         return self.fig
