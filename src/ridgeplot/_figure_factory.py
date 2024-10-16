@@ -164,7 +164,7 @@ class RidgePlotFigureFactory:
         colorscale: str | ColorScale,
         coloralpha: float | None,
         colormode: Colormode,
-        trace_labels: LabelsArray | None,
+        trace_labels: LabelsArray | ShallowLabelsArray | None,
         linewidth: float,
         spacing: float,
         show_yticklabels: bool,
@@ -197,6 +197,9 @@ class RidgePlotFigureFactory:
             ids = iter(range(1, n_traces + 1))
             trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
         else:
+            if is_flat_str_collection(trace_labels):
+                trace_labels = cast(ShallowLabelsArray, trace_labels)
+                trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
             trace_labels = normalise_row_attrs(trace_labels, densities=densities)
 
         self.densities = densities
@@ -218,36 +221,6 @@ class RidgePlotFigureFactory:
         self.x_min, self.x_max, _, self.y_max = get_xy_extrema(densities=self.densities)
         self.fig: go.Figure = go.Figure()
         self.colors: ColorsArray = self.pre_compute_colors()
-
-    @classmethod
-    def from_shallow_types(
-        cls,
-        densities: Densities,
-        colorscale: str | ColorScale,
-        colormode: Colormode,
-        coloralpha: float | None,
-        trace_labels: LabelsArray | ShallowLabelsArray | None,
-        linewidth: float,
-        spacing: float,
-        show_yticklabels: bool,
-        xpad: float,
-    ) -> RidgePlotFigureFactory:
-
-        if is_flat_str_collection(trace_labels):
-            trace_labels = cast(ShallowLabelsArray, trace_labels)
-            trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
-
-        return cls(
-            densities=densities,
-            colorscale=colorscale,
-            coloralpha=coloralpha,
-            colormode=colormode,
-            trace_labels=trace_labels,
-            linewidth=linewidth,
-            spacing=spacing,
-            show_yticklabels=show_yticklabels,
-            xpad=xpad,
-        )
 
     @property
     def colormode_maps(self) -> dict[Colormode, Callable[[], MidpointsArray]]:

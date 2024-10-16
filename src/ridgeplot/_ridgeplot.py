@@ -274,7 +274,7 @@ def ridgeplot(
         )
         show_yticklabels = show_annotations
 
-    ridgeplot_figure_factory = RidgePlotFigureFactory.from_shallow_types(
+    ridgeplot_figure_factory = RidgePlotFigureFactory(
         densities=densities,
         trace_labels=labels,
         colorscale=colorscale,
