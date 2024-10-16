@@ -114,3 +114,21 @@ class TestRidgePlotFigureFactory:
                 show_yticklabels=...,  # type: ignore[arg-type]
                 xpad=...,  # type: ignore[arg-type]
             )
+
+    def test_float_casting(self) -> None:
+        """Ensure that specific inputs are always cast to float."""
+        rpff = RidgePlotFigureFactory(
+            densities=[[[(0, 0), (1, 1)]], [[(0, 0), (1, 1)]]],
+            colorscale="YlOrRd",
+            colormode="trace-index",
+            trace_labels=[["A"], ["B"]],
+            show_yticklabels=True,
+            # Ensure that the following inputs are cast to float
+            coloralpha=1,
+            linewidth=1,
+            spacing=1,
+            xpad=1,
+        )
+        attrs_to_check = (rpff.coloralpha, rpff.linewidth, rpff.spacing, rpff.xpad)
+        assert all(isinstance(v, float) for v in attrs_to_check)
+        assert all(v == 1.0 for v in attrs_to_check)

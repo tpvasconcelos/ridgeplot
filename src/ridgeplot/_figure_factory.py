@@ -201,14 +201,14 @@ class RidgePlotFigureFactory:
 
         self.densities = densities
         self.colorscale = colorscale
-        self.coloralpha = coloralpha
+        self.coloralpha = float(coloralpha) if coloralpha is not None else None
         self.colormode = colormode
         self.trace_labels: LabelsArray = trace_labels
         self.y_labels: LabelsArray = [ordered_dedup(row) for row in trace_labels]
-        self.linewidth = linewidth
-        self.spacing = spacing
-        self.show_yticklabels = show_yticklabels
-        self.xpad = xpad
+        self.linewidth = float(linewidth)
+        self.spacing = float(spacing)
+        self.show_yticklabels = bool(show_yticklabels)
+        self.xpad = float(xpad)
 
         # ==============================================================
         # ---  Other instance variables
