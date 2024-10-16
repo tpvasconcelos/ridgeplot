@@ -14,15 +14,16 @@ graph and source code.
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we will be replicating the first ridgeline plot example in `this _from Data to...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we will be replicating the first ridgeline plot example in this _from Data to Viz_ post , which uses the _probly_ dataset. You can find the _plobly_ dataset on multiple sources like in the bokeh python interactive visualization library. I&#x27;ll be using the same source used in the original post.">
 
 .. only:: html
 
   .. image:: /examples_gallery_out/images/thumb/sphx_glr_plot_probly_thumb.png
-    :alt: probly dataset
+    :alt:
 
   :ref:`sphx_glr_examples_gallery_out_plot_probly.py`
 
@@ -31,6 +32,8 @@ graph and source code.
       <div class="sphx-glr-thumbnail-title">probly dataset</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

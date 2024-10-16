@@ -1,0 +1,286 @@
+{
+  "column_names": [
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "builtins",
+      "module_short": "builtins",
+      "name": "list"
+    }
+  ],
+  "df": [
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core.frame",
+      "module_short": "pandas.core.frame",
+      "name": "DataFrame"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core",
+      "module_short": "pandas.core",
+      "name": "DataFrame"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas",
+      "module_short": "pandas",
+      "name": "DataFrame"
+    }
+  ],
+  "df.to_numpy": [
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core.frame",
+      "module_short": "pandas.core.frame",
+      "name": "DataFrame.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core",
+      "module_short": "pandas.core",
+      "name": "DataFrame.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas",
+      "module_short": "pandas",
+      "name": "DataFrame.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core.generic",
+      "module_short": "pandas.core.generic",
+      "name": "NDFrame.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core",
+      "module_short": "pandas.core",
+      "name": "NDFrame.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas",
+      "module_short": "pandas",
+      "name": "NDFrame.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core.arraylike",
+      "module_short": "pandas.core.arraylike",
+      "name": "OpsMixin.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core",
+      "module_short": "pandas.core",
+      "name": "OpsMixin.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas",
+      "module_short": "pandas",
+      "name": "OpsMixin.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core.base",
+      "module_short": "pandas.core.base",
+      "name": "PandasObject.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core",
+      "module_short": "pandas.core",
+      "name": "PandasObject.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas",
+      "module_short": "pandas",
+      "name": "PandasObject.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core.indexing",
+      "module_short": "pandas.core.indexing",
+      "name": "IndexingMixin.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core",
+      "module_short": "pandas.core",
+      "name": "IndexingMixin.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas",
+      "module_short": "pandas",
+      "name": "IndexingMixin.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core.accessor",
+      "module_short": "pandas.core.accessor",
+      "name": "DirNamesMixin.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas.core",
+      "module_short": "pandas.core",
+      "name": "DirNamesMixin.to_numpy"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "pandas",
+      "module_short": "pandas",
+      "name": "DirNamesMixin.to_numpy"
+    }
+  ],
+  "fig": [
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "plotly.graph_objs._figure",
+      "module_short": "plotly.graph_objs",
+      "name": "Figure"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "plotly.graph_objs",
+      "module_short": "plotly.graph_objs",
+      "name": "Figure"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "plotly",
+      "module_short": "plotly",
+      "name": "Figure"
+    }
+  ],
+  "fig.update_layout": [
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "plotly.graph_objs._figure",
+      "module_short": "plotly.graph_objs",
+      "name": "Figure.update_layout"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "plotly.graph_objs",
+      "module_short": "plotly.graph_objs",
+      "name": "Figure.update_layout"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "plotly",
+      "module_short": "plotly",
+      "name": "Figure.update_layout"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "plotly.basedatatypes",
+      "module_short": "plotly.basedatatypes",
+      "name": "BaseFigure.update_layout"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "plotly",
+      "module_short": "plotly",
+      "name": "BaseFigure.update_layout"
+    }
+  ],
+  "load_probly": [
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "builtins",
+      "module_short": "builtins",
+      "name": "function"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "ridgeplot.datasets",
+      "module_short": "ridgeplot.datasets",
+      "name": "load_probly"
+    }
+  ],
+  "np.linspace": [
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "numpy",
+      "module_short": "numpy",
+      "name": "_ArrayFunctionDispatcher"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "numpy",
+      "module_short": "numpy",
+      "name": "linspace"
+    }
+  ],
+  "pio.show": [
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "builtins",
+      "module_short": "builtins",
+      "name": "function"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "plotly.io",
+      "module_short": "plotly.io",
+      "name": "show"
+    }
+  ],
+  "ridgeplot": [
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "builtins",
+      "module_short": "builtins",
+      "name": "function"
+    },
+    {
+      "is_class": false,
+      "is_explicit": false,
+      "module": "ridgeplot",
+      "module_short": "ridgeplot",
+      "name": "ridgeplot"
+    }
+  ]
+}

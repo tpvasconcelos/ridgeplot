@@ -1,13 +1,20 @@
-# This workflow checks whether the user remembered to update
-# the changelog with a relevant entry for the PR.
-# This check is skipped if the PR has the "skip news" label.
-name: Check Release Notes
+# This workflow ensures that every pull request includes a relevant entry in the project's changelog.
+#
+# If no new entry is detected in the changelog, this workflow will
+# fail and a comment will be posted to the pull request asking
+# the author to address the issue. If the issue is resolved,
+# the comment will be resolved as well. This behavior can
+# be skipped by adding a `skip news` label to the PR...
+#
+name: Check release notes
 
 on:
   pull_request:
     types: [ opened, synchronize, reopened, labeled, unlabeled ]
-  issue_comment:
-    types: [ created, deleted ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check:

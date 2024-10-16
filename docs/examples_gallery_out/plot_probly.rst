@@ -10,8 +10,8 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_gallery_out_plot_probly.py>`
-        to download the full example code
+        :ref:`Go to the end <sphx_glr_download_examples_gallery_out_plot_probly.py>`
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -30,9 +30,12 @@ python interactive visualization library. I'll be using the
 `same source <https://raw.githubusercontent.com/zonination/perceptions/master/probly.csv>`_
 used in the original post.
 
-.. GENERATED FROM PYTHON SOURCE LINES 14-23
+.. GENERATED FROM PYTHON SOURCE LINES 14-26
 
-.. code-block:: default
+.. code-block:: Python
+
+
+    from __future__ import annotations
 
     import numpy as np
     import plotly.io as pio
@@ -50,13 +53,13 @@ used in the original post.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-25
+.. GENERATED FROM PYTHON SOURCE LINES 27-28
 
 Let's grab only the subset of columns displayed in the example
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-37
+.. GENERATED FROM PYTHON SOURCE LINES 28-40
 
-.. code-block:: default
+.. code-block:: Python
 
     column_names = [
         "Almost Certainly",
@@ -77,19 +80,19 @@ Let's grab only the subset of columns displayed in the example
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-40
+.. GENERATED FROM PYTHON SOURCE LINES 41-43
 
 Not only does 'ridgeplot(...)' come configured with sensible defaults
 but is also fully configurable to your own style and preference!
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-61
+.. GENERATED FROM PYTHON SOURCE LINES 43-64
 
-.. code-block:: default
+.. code-block:: Python
 
 
     fig = ridgeplot(
         # Get your samples in the correct format
-        samples=df.values.T,
+        samples=df.to_numpy().T,
         # We can specify the bandwidth used for KDE
         bandwidth=4,
         # and the range of points for which the KDE is evaluated
@@ -111,16 +114,25 @@ but is also fully configurable to your own style and preference!
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    /Users/tpvasconcelos/git_tree/personal_projects/ridgeplot/docs/examples_gallery_in/plot_probly.py:44: DeprecationWarning:
+
+    The colormode='index' value has been deprecated in favor of colormode='row-index', which provides the same functionality but is more explicit and allows to distinguish between the 'row-index' and 'trace-index' modes. Support for the deprecated value will be removed in a future version.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-63
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 65-66
 
 Again, update the figure layout to your liking here
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-75
+.. GENERATED FROM PYTHON SOURCE LINES 66-78
 
-.. code-block:: default
+.. code-block:: Python
 
     fig.update_layout(
         title="What probability would you assign to the phrase <i>“Highly likely”</i>?",
@@ -147,7 +159,7 @@ Again, update the figure layout to your liking here
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.422 seconds)
+   **Total running time of the script:** (0 minutes 0.329 seconds)
 
 
 .. _sphx_glr_download_examples_gallery_out_plot_probly.py:
@@ -156,14 +168,17 @@ Again, update the figure layout to your liking here
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+      :download:`Download Jupyter notebook: plot_probly.ipynb <plot_probly.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_probly.py <plot_probly.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: plot_probly.ipynb <plot_probly.ipynb>`
+      :download:`Download zipped: plot_probly.zip <plot_probly.zip>`
 
 
 .. only:: html

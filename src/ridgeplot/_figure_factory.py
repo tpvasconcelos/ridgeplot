@@ -1,12 +1,25 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, Literal, cast
 
 from plotly import graph_objects as go
 
 from ridgeplot._colors import apply_alpha, get_color, get_colorscale, validate_colorscale
-from ridgeplot._types import CollectionL1, CollectionL2
-from ridgeplot._utils import normalise_min_max
+from ridgeplot._types import (
+    CollectionL1,
+    CollectionL2,
+    DensityTrace,
+    is_flat_str_collection,
+    nest_shallow_collection,
+)
+from ridgeplot._utils import (
+    get_collection_array_shape,
+    normalise_min_max,
+    normalise_row_attrs,
+    ordered_dedup,
+)
+from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     from collections.abc import Collection
@@ -71,7 +84,7 @@ Example
 ... ]
 """
 
-Colormode = Literal["row-index", "trace-index", "mean-minmax", "mean-means"]
+Colormode = Literal["row-index", "trace-index", "trace-index-row-wise", "mean-minmax", "mean-means"]
 """The :paramref:`ridgeplot.ridgeplot.colormode` argument in
 :func:`ridgeplot.ridgeplot()`."""
 
@@ -91,7 +104,7 @@ _DEFAULT_HOVERTEMPLATE = (
 )  # fmt: skip
 """Default ``hovertemplate`` for density traces.
 
-See :func:`ridgeplot._figure_factory.RidgePlotFigureFactory.draw_density_trace`.
+See :func:`ridgeplot._figure_factory.RidgeplotFigureFactory.draw_density_trace`.
 """
 
 
@@ -145,7 +158,20 @@ def _mul(a: tuple[Numeric, ...], b: tuple[Numeric, ...]) -> tuple[Numeric, ...]:
     return tuple(a_i * b_i for a_i, b_i in zip(a, b))
 
 
-class RidgePlotFigureFactory:
+@dataclass
+class RidgeplotTrace:
+    trace: DensityTrace
+    label: str
+    color: str
+
+
+@dataclass
+class RidgeplotRow:
+    traces: list[RidgeplotTrace]
+    y_shifted: float
+
+
+class RidgeplotFigureFactory:
     """Refer to :func:`ridgeplot.ridgeplot()`."""
 
     def __init__(
@@ -154,7 +180,7 @@ class RidgePlotFigureFactory:
         colorscale: str | ColorScale,
         coloralpha: float | None,
         colormode: Colormode,
-        labels: LabelsArray | None,
+        trace_labels: LabelsArray | ShallowLabelsArray | None,
         linewidth: float,
         spacing: float,
         show_yticklabels: bool,
@@ -163,12 +189,19 @@ class RidgePlotFigureFactory:
         # ==============================================================
         # ---  Get clean and validated input arguments
         # ==============================================================
+        shape = get_collection_array_shape(densities)
+        if len(shape) != 4:
+            raise ValueError(
+                f"Expected a 4D array of densities, got a {len(shape)}D array instead."
+            )
+
         n_rows = len(densities)
         n_traces = sum(len(row) for row in densities)
 
         if isinstance(colorscale, str):
             colorscale = get_colorscale(name=colorscale)
-        validate_colorscale(colorscale)
+        else:
+            validate_colorscale(colorscale)
 
         if colormode not in self.colormode_maps:
             raise ValueError(
@@ -176,22 +209,25 @@ class RidgePlotFigureFactory:
                 f"{tuple(self.colormode_maps.keys())}, got {colormode} instead."
             )
 
-        if coloralpha is not None:
-            coloralpha = float(coloralpha)
-
-        if labels is None:
+        if trace_labels is None:
             ids = iter(range(1, n_traces + 1))
-            labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
+            trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
+        else:
+            if is_flat_str_collection(trace_labels):
+                trace_labels = cast(ShallowLabelsArray, trace_labels)
+                trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
+            trace_labels = normalise_row_attrs(trace_labels, densities=densities)
 
-        self.densities: Densities = densities
-        self.colorscale: ColorScale = colorscale
-        self.coloralpha: float | None = coloralpha
+        self.densities = densities
+        self.colorscale = colorscale
+        self.coloralpha = float(coloralpha) if coloralpha is not None else None
         self.colormode = colormode
-        self.labels: LabelsArray = labels
-        self.linewidth: float = float(linewidth)
-        self.spacing: float = float(spacing)
-        self.show_yticklabels: bool = bool(show_yticklabels)
-        self.xpad: float = float(xpad)
+        self.trace_labels: LabelsArray = trace_labels
+        self.y_labels: LabelsArray = [ordered_dedup(row) for row in trace_labels]
+        self.linewidth = float(linewidth)
+        self.spacing = float(spacing)
+        self.show_yticklabels = bool(show_yticklabels)
+        self.xpad = float(xpad)
 
         # ==============================================================
         # ---  Other instance variables
@@ -202,11 +238,28 @@ class RidgePlotFigureFactory:
         self.fig: go.Figure = go.Figure()
         self.colors: ColorsArray = self.pre_compute_colors()
 
+        # ==============================================================
+        # ---  Eagerly validate and build the RidgeplotTrace instances
+        # ==============================================================
+        self.rows: list[RidgeplotRow] = [
+            RidgeplotRow(
+                traces=[
+                    RidgeplotTrace(trace=trace, label=label, color=color)
+                    for trace, label, color in zip_strict(traces, labels, colors)
+                ],
+                y_shifted=float(-ith_row * self.y_max * self.spacing),
+            )
+            for ith_row, (traces, labels, colors) in enumerate(
+                zip_strict(self.densities, self.trace_labels, self.colors)
+            )
+        ]
+
     @property
-    def colormode_maps(self) -> dict[str, Callable[[], MidpointsArray]]:
+    def colormode_maps(self) -> dict[Colormode, Callable[[], MidpointsArray]]:
         return {
             "row-index": self._compute_midpoints_row_index,
             "trace-index": self._compute_midpoints_trace_index,
+            "trace-index-row-wise": self._compute_midpoints_trace_index_row_wise,
             "mean-minmax": self._compute_midpoints_mean_minmax,
             "mean-means": self._compute_midpoints_mean_means,
         }
@@ -262,7 +315,7 @@ class RidgePlotFigureFactory:
             ),
         )
 
-    def update_layout(self, y_ticks: list[float]) -> None:
+    def update_layout(self) -> None:
         """Update figure's layout."""
         self.fig.update_layout(
             legend=dict(traceorder="normal"),
@@ -273,8 +326,8 @@ class RidgePlotFigureFactory:
         )
         self.fig.update_yaxes(
             showticklabels=self.show_yticklabels,
-            tickvals=y_ticks,
-            ticktext=self.labels,
+            tickvals=[row.y_shifted for row in self.rows],
+            ticktext=self.y_labels,
             **axes_common,
         )
         x_padding = self.xpad * (self.x_max - self.x_min)
@@ -285,23 +338,12 @@ class RidgePlotFigureFactory:
         )
 
     def _compute_midpoints_row_index(self) -> MidpointsArray:
-        """colormode='row-index'
-
-        Uses the row's index. e.g. if the ridgeplot has 3 rows of traces, then
-        the midpoints will be [[1, ...], [0.5, ...], [0, ...]].
-        """
         return [
             [((self.n_rows - 1) - ith_row) / (self.n_rows - 1)] * len(row)
             for ith_row, row in enumerate(self.densities)
         ]
 
     def _compute_midpoints_trace_index(self) -> MidpointsArray:
-        """colormode='trace-index'
-
-        Uses the trace's index. e.g. if the ridgeplot has a total of 3 traces
-        (across all rows), then the midpoints will be  0, 0.5, and 1,
-        respectively.
-        """
         midpoints = []
         ith_trace = 0
         for row in self.densities:
@@ -312,13 +354,13 @@ class RidgePlotFigureFactory:
             midpoints.append(midpoints_row)
         return midpoints
 
-    def _compute_midpoints_mean_minmax(self) -> MidpointsArray:
-        """colormode='mean-minmax'
+    def _compute_midpoints_trace_index_row_wise(self) -> MidpointsArray:
+        return [
+            [((len(row) - 1) - ith_row_trace) / (len(row) - 1) for ith_row_trace in range(len(row))]
+            for row in self.densities
+        ]
 
-        Uses the min-max normalized (weighted) mean of each density to calculate
-        the midpoints. The normalization min and max values are the minimum and
-        maximum x-values from all densities, respectively.
-        """
+    def _compute_midpoints_mean_minmax(self) -> MidpointsArray:
         midpoints = []
         for row in self.densities:
             midpoints_row = []
@@ -331,12 +373,6 @@ class RidgePlotFigureFactory:
         return midpoints
 
     def _compute_midpoints_mean_means(self) -> MidpointsArray:
-        """colormode='mean-means'
-
-        Uses the min-max normalized (weighted) mean of each density to calculate
-        the midpoints. The normalization min and max values are the minimum and
-        maximum mean values from all densities, respectively.
-        """
         means = []
         for row in self.densities:
             means_row = []
@@ -361,24 +397,11 @@ class RidgePlotFigureFactory:
         return [[_get_color(midpoint) for midpoint in row] for row in midpoints]
 
     def make_figure(self) -> go.Figure:
-        y_ticks = []
-        for i, (row, labels, colors) in enumerate(zip(self.densities, self.labels, self.colors)):
-            n_traces = len(row)
-            n_labels = len(labels)
-            if n_traces != n_labels:
-                # TODO: This should be handled upstream
-                if n_labels == 1:
-                    labels = list(labels) * n_traces  # noqa: PLW2901
-                else:
-                    raise ValueError(
-                        f"Mismatch between number of traces ({n_traces}) and "
-                        f"number of labels ({n_labels}) for row {i}."
-                    )
-            # y_shifted is the y-origin for the new trace
-            y_shifted = -i * float(self.y_max * self.spacing)
-            y_ticks.append(y_shifted)
-            for trace, label, color in zip(row, labels, colors):
-                x, y = zip(*trace)
-                self.draw_density_trace(x=x, y=y, y_shifted=y_shifted, label=label, color=color)
-        self.update_layout(y_ticks=y_ticks)
+        for row in self.rows:
+            for trace in row.traces:
+                x, y = zip(*trace.trace)
+                self.draw_density_trace(
+                    x=x, y=y, y_shifted=row.y_shifted, label=trace.label, color=trace.color
+                )
+        self.update_layout()
         return self.fig

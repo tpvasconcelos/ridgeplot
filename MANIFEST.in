@@ -6,6 +6,7 @@ include *.cfg
 include *.ini
 include *.md
 include *.toml
+include *.yml
 include *.yaml
 
 # Stubs
@@ -26,11 +27,11 @@ recursive-include docs/_static/css *.css
 recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpg
 recursive-include docs/_static/js *.js
 recursive-include docs/_templates *.html
-recursive-include docs/examples_gallery_out *.html *.png *.md5 *.pickle *.ipynb
+recursive-include docs/examples_gallery_out *.html *.png *.md5 *.pickle *.ipynb *.json
 prune docs/build
 
 # Misc
-recursive-include .github *.yaml
+recursive-include .github *.yml *.yaml
 recursive-include cicd_utils README.md *.py
 recursive-include misc *.py *.ipynb
 recursive-include requirements *.txt

@@ -109,7 +109,7 @@ banned-from = ["pandas", "numpy"]
 force-wrap-aliases = true
 combine-as-imports = true
 required-imports = ["from __future__ import annotations"]
-known-first-party = ["ridgeplot", "cicd"]
+known-first-party = ["ridgeplot", "cicd", "ridgeplot_examples"]
 
 [lint.mccabe]
 max-complexity = 10

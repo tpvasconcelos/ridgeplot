@@ -1,0 +1,111 @@
+---
+name: "⭐ Feature request"
+description: "Suggest a new idea or enhancement to ridgeplot"
+title: "[FEATURE] "
+labels: [ "enhancement" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for your interest in improving ridgeplot!** 🚀
+
+        We really appreciate you taking the time to help make this project better for everyone.
+
+        We organize issues into two main categories:
+        - ⭐ **Feature request**: Suggest a new idea or enhancement to ridgeplot
+        - 🐛 **Bug report**: Report an issue you encountered with ridgeplot
+
+        Looks like you're about to submit a feature request.
+        Please use the template below and provide as much detail as you can.
+        The more information you provide, the easier it will be for us to understand and evaluate your suggestion.
+
+        If possible and relevant, please consider how this feature might impact ridgeplot’s current architecture and API.
+        We’ll need to take into account things like backward compatibility, potential documentation updates, and the long-term maintainability of the project.
+
+        For broader discussions, questions, or general feedback, please head over to our [GitHub Discussions](https://github.com/tpvasconcelos/ridgeplot/discussions) page.
+
+        Please note that this is a volunteer-run project, and we may not be able to respond to every issue or pull request immediately.
+        Our response time may vary, but we appreciate your patience and will try to get back to you as soon as possible.
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## Description
+
+        Please provide a detailed description of the feature or enhancement you are suggesting.
+
+        Instead of focusing solely on _how_ to implement it, explain your motivation, use-case, the problem you're facing, and what you're trying to achieve.
+        This context will help us better understand your needs and collaborate on finding the best solution.
+
+        If you have example plots or a vision for what the output should look like (even if it's just a rough sketch or mockup), feel free to attach them here.
+        You can easily upload files by dragging and dropping them into this area.
+  - type: textarea
+    attributes:
+      label: "Description"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## [OPTIONAL] Possible solution
+
+        This section is also optional so feel free to leave it empty!
+
+        If you have thoughts on how this enhancement could be implemented, feel free to share them here.
+
+        For instance, even if you just have an idea for how the API could look like from the user's perspective, you could provide a code snippet like:
+
+        ```python
+        import ridgeplot
+
+        fig = ridgeplot("<Your API suggestion here>")
+        # etc...
+        ```
+
+        Providing sample code can help us better understand your vision and jumpstart discussions around potential solutions.
+  - type: textarea
+    attributes:
+      label: "Possible solution"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## [OPTIONAL] Other considerations
+
+        This section is also optional so feel free to leave it empty!
+
+        If possible, consider how this change might impact ridgeplot’s current architecture, API, and user experience.
+
+        Considerations around backward compatibility, documentation updates, and long-term maintainability will have to be taken into account by the maintainers before implementing the feature.
+  - type: textarea
+    attributes:
+      label: "Other considerations"
+
+  - type: markdown
+    attributes:
+      value: ---
+  - type: checkboxes
+    attributes:
+      label: "Are you willing to submit PR?"
+      description: |
+        This totally optional, but if you’re interested, we’d love to help guide you through the process, especially if you already have a good idea of how to implement the feature.
+
+        If you'd like to contribute, check the box below and take a look at our [contributing guidelines](https://ridgeplot.readthedocs.io/en/latest/development/contributing.html) for more details.
+      options:
+        - label: Yes I am willing to submit a PR! 🚀
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        **Thank you for taking the time to submit this feature request!** 🎉
+
+        We will get back to you as soon as possible.

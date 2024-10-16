@@ -11,6 +11,9 @@ python interactive visualization library. I'll be using the
 `same source <https://raw.githubusercontent.com/zonination/perceptions/master/probly.csv>`_
 used in the original post.
 """
+
+from __future__ import annotations
+
 import numpy as np
 import plotly.io as pio
 
@@ -40,7 +43,7 @@ df = df[column_names]
 
 fig = ridgeplot(
     # Get your samples in the correct format
-    samples=df.values.T,
+    samples=df.to_numpy().T,
     # We can specify the bandwidth used for KDE
     bandwidth=4,
     # and the range of points for which the KDE is evaluated

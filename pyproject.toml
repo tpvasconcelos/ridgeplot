@@ -26,6 +26,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Software Development",
     "Topic :: Scientific/Engineering",
@@ -34,7 +35,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 keywords = [
-    "ridgeline", "ridgeplot", "joyplot", "ggridges", "ridges", "ridge", "plot", "plotting", "distplot", "plotly"
+    "ridgeline", "ridgeplot", "joyplot", "ggridges", "ridges", "ridge", "plot", "plotting", "distplot", "plotly", "data-visualization"
 ]
 requires-python = ">=3.9"
 dependencies = [

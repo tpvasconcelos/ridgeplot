@@ -22,9 +22,10 @@ help:
 livehtml:
 	sphinx-autobuild \
 		--open-browser \
-		--port=0 \  # automatically select an open port
+		--port=0 \
 		--delay=0 \
 		--watch=../src/ridgeplot \
+		--re-ignore 'api/public/.*' \
 		--re-ignore '_static/charts/.*' \
 		--re-ignore '_static/js/plotly.min.js' \
 		"$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

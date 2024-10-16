@@ -1,12 +1,12 @@
 
 :orphan:
 
-.. _sphx_glr_examples_gallery_out_sg_execution_times:
+.. _sphx_glr_sg_execution_times:
 
 
 Computation times
 =================
-**00:00.329** total execution time for 1 file **from examples_gallery_out**:
+**00:00.329** total execution time for 1 file **from all galleries**:
 
 .. container::
 
@@ -32,6 +32,6 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_examples_gallery_out_plot_probly.py` (``plot_probly.py``)
+   * - :ref:`sphx_glr_examples_gallery_out_plot_probly.py` (``examples_gallery_in/plot_probly.py``)
      - 00:00.329
      - 0.0

@@ -32,3 +32,6 @@ kaleido
 # although we don't need it for this project, we still
 # need to declare the dependency here.
 matplotlib
+
+# Cleanup generated files
+pre_commit_hooks

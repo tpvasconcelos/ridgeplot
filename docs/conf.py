@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -20,6 +21,8 @@ except ImportError:
     from cicd.compile_plotly_charts import compile_plotly_charts
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from sphinx.application import Sphinx
 
 # Configuration file for the Sphinx documentation builder.
@@ -352,6 +355,7 @@ myst_enable_extensions = [
     "dollarmath",
     "fieldlist",
     "substitution",
+    "strikethrough",
     "tasklist",
 ]
 myst_dmath_double_inline = True
@@ -360,14 +364,54 @@ myst_heading_anchors = 2
 myst_substitutions: dict[str, str] = {
     # "some_jinja2_key": "value",
 }
+suppress_warnings = [
+    "myst.strikethrough",
+]
 
 
 # -- custom setup steps ------------------------------------------------------------
 
 
+@contextmanager
+def reset_sys_argv() -> Generator[None]:
+    original_sys_argv = sys.argv
+    sys.argv = original_sys_argv[:1]
+    try:
+        yield
+    finally:
+        sys.argv = original_sys_argv
+
+
+def _fix_generated_public_api_rst() -> None:
+    from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
+    from pre_commit_hooks.fix_byte_order_marker import main as fix_byte_order_marker
+
+    files = [file.resolve().as_posix() for file in Path("api/public/").glob("*.rst")]
+    if not files:
+        raise RuntimeError("No RST files found. Check that the path above is correct.")
+    with reset_sys_argv():
+        end_of_file_fixer(files)
+        fix_byte_order_marker(files)
+
+
+def _fix_html_charts() -> None:
+    from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
+
+    files = [file.resolve().as_posix() for file in Path("_static/charts/").glob("*.html")]
+    if not files:
+        raise RuntimeError("No HTML files found. Check that the path above is correct.")
+    with reset_sys_argv():
+        end_of_file_fixer(files)
+
+
 def setup(app: Sphinx) -> None:
     compile_plotly_charts()
     # app.connect("html-page-context", register_jinja_functions)
-    # html_css_files doesn't seem to be working...
-    for css_path in Path("_static/css").glob("*.css"):
-        app.add_css_file(css_path.relative_to("_static").as_posix())
+
+    # TODO: Check this!
+    # # html_css_files doesn't seem to be working...
+    # for css_path in Path("_static/css").glob("*.css"):
+    #     app.add_css_file(css_path.relative_to("_static").as_posix())
+
+    app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())
+    app.connect("build-finished", lambda *_: _fix_html_charts())
