@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -19,6 +20,8 @@ except ImportError:
     sys.path.append((Path(__file__).parents[1] / "cicd_utils").resolve().as_posix())
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from sphinx.application import Sphinx
 
 # Configuration file for the Sphinx documentation builder.
@@ -354,6 +357,16 @@ suppress_warnings = [
 # -- custom setup steps ------------------------------------------------------------
 
 
+@contextmanager
+def reset_sys_argv() -> Generator[None]:
+    original_sys_argv = sys.argv
+    sys.argv = original_sys_argv[:1]
+    try:
+        yield
+    finally:
+        sys.argv = original_sys_argv
+
+
 def _fix_generated_public_api_rst() -> None:
     from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
     from pre_commit_hooks.fix_byte_order_marker import main as fix_byte_order_marker
@@ -361,8 +374,9 @@ def _fix_generated_public_api_rst() -> None:
     files = [file.resolve().as_posix() for file in Path("api/public/").glob("*.rst")]
     if not files:
         raise RuntimeError("No RST files found. Check that the path above is correct.")
-    print(fix_byte_order_marker())
-    print(end_of_file_fixer(files))
+    with reset_sys_argv():
+        fix_byte_order_marker()
+        end_of_file_fixer(files)
 
 
 def _fix_html_charts() -> None:
@@ -371,16 +385,13 @@ def _fix_html_charts() -> None:
     files = [file.resolve().as_posix() for file in Path("_static/charts/").glob("*.html")]
     if not files:
         raise RuntimeError("No HTML files found. Check that the path above is correct.")
-    print(end_of_file_fixer(files))
+    with reset_sys_argv():
+        end_of_file_fixer(files)
 
 
-def setup(app: Sphinx) -> None:  # noqa: ARG001
+def setup(app: Sphinx) -> None:
     compile_plotly_charts()
-
-    sys_argv = sys.argv.copy()
-    sys.argv = sys.argv[:1]
-    _fix_generated_public_api_rst()
-    _fix_html_charts()
-    sys.argv = sys_argv
-
     # app.connect("html-page-context", register_jinja_functions)
+
+    app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())
+    app.connect("build-finished", lambda *_: _fix_html_charts())
