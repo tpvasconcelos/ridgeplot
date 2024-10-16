@@ -375,8 +375,8 @@ def _fix_generated_public_api_rst() -> None:
     if not files:
         raise RuntimeError("No RST files found. Check that the path above is correct.")
     with reset_sys_argv():
-        fix_byte_order_marker()
         end_of_file_fixer(files)
+        fix_byte_order_marker(files)
 
 
 def _fix_html_charts() -> None:
