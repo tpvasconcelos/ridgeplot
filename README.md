@@ -15,7 +15,8 @@
   <a href="https://pypi.org/project/ridgeplot/"><img src="https://img.shields.io/pypi/status/ridgeplot.svg" alt="PyPI - Package Status"></a>
   <a href="https://github.com/tpvasconcelos/ridgeplot/blob/main/LICENSE"><img src="https://img.shields.io/pypi/l/ridgeplot" alt="PyPI - License"></a>
   <br>
-  <a href="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/"><img src="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yaml/badge.svg" alt="GitHub CI"></a>
+  <a href="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yml/"><img src="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/ci.yml/badge.svg" alt="GitHub CI"></a>
+  <a href="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/codeql.yml/"><img src="https://github.com/tpvasconcelos/ridgeplot/actions/workflows/codeql.yml/badge.svg" alt="CodeQL"></a>
   <a href="https://ridgeplot.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/ridgeplot/badge/?version=latest&style=flat" alt="Docs"></a>
   <a href="https://codecov.io/gh/tpvasconcelos/ridgeplot"><img src="https://codecov.io/gh/tpvasconcelos/ridgeplot/branch/main/graph/badge.svg" alt="codecov"></a>
   <a href="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot"><img src="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge" alt="CodeFactor"></a>

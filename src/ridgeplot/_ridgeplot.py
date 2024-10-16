@@ -3,7 +3,12 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, cast
 
-from ridgeplot._figure_factory import LabelsArray, RidgePlotFigureFactory, ShallowLabelsArray
+from ridgeplot._figure_factory import (
+    Colormode,
+    LabelsArray,
+    RidgeplotFigureFactory,
+    ShallowLabelsArray,
+)
 from ridgeplot._kde import estimate_densities
 from ridgeplot._missing import MISSING, MissingType
 from ridgeplot._types import (
@@ -11,7 +16,6 @@ from ridgeplot._types import (
     Samples,
     ShallowDensities,
     ShallowSamples,
-    is_flat_str_collection,
     is_shallow_densities,
     is_shallow_samples,
     nest_shallow_collection,
@@ -22,8 +26,40 @@ if TYPE_CHECKING:
     import plotly.graph_objects as go
 
     from ridgeplot._colors import ColorScale
-    from ridgeplot._figure_factory import Colormode
     from ridgeplot._kde import KDEBandwidth, KDEPoints
+
+
+def _normalise_densities(
+    samples: Samples | ShallowSamples | None,
+    densities: Densities | ShallowDensities | None,
+    kernel: str,
+    bandwidth: KDEBandwidth,
+    kde_points: KDEPoints,
+) -> Densities:
+    has_samples = samples is not None
+    has_densities = densities is not None
+    if has_samples and has_densities:
+        raise ValueError("You may not specify both `samples` and `densities` arguments!")
+    if not has_samples and not has_densities:
+        raise ValueError("You must specify either `samples` or `densities`")
+    if has_densities:
+        if is_shallow_densities(densities):
+            densities = cast(ShallowDensities, densities)
+            densities = nest_shallow_collection(densities)
+        densities = cast(Densities, densities)
+    else:
+        if is_shallow_samples(samples):
+            samples = cast(ShallowSamples, samples)
+            samples = nest_shallow_collection(samples)
+        samples = cast(Samples, samples)
+        # Convert samples to densities
+        densities = estimate_densities(
+            samples=samples,
+            points=kde_points,
+            kernel=kernel,
+            bandwidth=bandwidth,
+        )
+    return densities
 
 
 def ridgeplot(
@@ -139,19 +175,22 @@ def ridgeplot(
         calculating the :paramref:`colorscale` midpoint of each trace. The
         default is mode is ``"mean-means"``. Choices are:
 
-        - ``"row-index"`` - uses the row's index. e.g. if the ridgeplot has 3
+        - ``"row-index"`` - uses the row's index. e.g., if the ridgeplot has 3
           rows of traces, then the midpoints will be
           ``[[0, ...], [0.5, ...], [1, ...]]``.
-        - ``"trace-index"`` - uses the trace's index. e.g. if the ridgeplot has
+        - ``"trace-index"`` - uses the trace's index. e.g., if the ridgeplot has
           a total of 3 traces (across all rows), then the midpoints will be
           0, 0.5, and 1, respectively.
+        - ``"trace-index-row-wise"`` - uses the row-wise trace index. e.g., if
+          the ridgeplot has a row with only one trace and another with two,
+          the midpoints will be ``[[0], [0, 1]]``.
         - ``"mean-minmax"`` - uses the min-max normalized (weighted) mean of
           each density to calculate the midpoints. The normalization min
-          and max values are the minimum and maximum x-values from all
-          densities, respectively.
+          and max values are the *absolute* minimum and maximum x-values over
+          all densities, respectively.
         - ``"mean-means"`` - uses the min-max normalized (weighted) mean of
           each density to calculate the midpoints. The normalization min
-          and max values are the minimum and maximum mean values from all
+          and max values are the minimum and maximum *mean* values over all
           densities, respectively.
 
     coloralpha : float, optional
@@ -204,36 +243,18 @@ def ridgeplot(
         if neither of them is specified. i.e. you may only specify one of them.
 
     """
-    has_samples = samples is not None
-    has_densities = densities is not None
-    if has_samples and has_densities:
-        raise ValueError("You may not specify both `samples` and `densities` arguments!")
-    if not has_samples and not has_densities:
-        raise ValueError("You must specify either `samples` or `densities`")
-
-    if has_densities:
-        if is_shallow_densities(densities):
-            densities = cast(ShallowDensities, densities)
-            densities = nest_shallow_collection(densities)
-        densities = cast(Densities, densities)
-    else:
-        if is_shallow_samples(samples):
-            samples = cast(ShallowSamples, samples)
-            samples = nest_shallow_collection(samples)
-        samples = cast(Samples, samples)
-        # Convert samples to densities
-        densities = estimate_densities(
-            samples=samples,
-            points=kde_points,
-            kernel=kernel,
-            bandwidth=bandwidth,
-        )
-
-    if is_flat_str_collection(labels):
-        labels = cast(ShallowLabelsArray, labels)
-        labels = cast(LabelsArray, nest_shallow_collection(labels))
+    densities = _normalise_densities(
+        samples=samples,
+        densities=densities,
+        kernel=kernel,
+        bandwidth=bandwidth,
+        kde_points=kde_points,
+    )
+    del samples, kernel, bandwidth, kde_points
 
     if colormode == "index":  # type: ignore[comparison-overlap]
+        # TODO: Raise ValueError in an upcoming version
+        # TODO: Drop support for the deprecated argument in 0.2.0
         warnings.warn(  # type: ignore[unreachable]
             "The colormode='index' value has been deprecated in favor of "
             "colormode='row-index', which provides the same functionality but "
@@ -243,9 +264,10 @@ def ridgeplot(
             DeprecationWarning,
             stacklevel=2,
         )
-        colormode = "row-index"
-
+        colormode = cast(Colormode, "row-index")
     if show_annotations is not MISSING:
+        # TODO: Raise TypeError in an upcoming version
+        # TODO: Drop support for the deprecated argument in 0.2.0
         warnings.warn(
             "The show_annotations argument has been deprecated in favor of "
             "show_yticklabels. Support for the deprecated argument will be "
@@ -255,9 +277,9 @@ def ridgeplot(
         )
         show_yticklabels = show_annotations
 
-    ridgeplot_figure_factory = RidgePlotFigureFactory(
+    ridgeplot_figure_factory = RidgeplotFigureFactory(
         densities=densities,
-        labels=labels,
+        trace_labels=labels,
         colorscale=colorscale,
         coloralpha=coloralpha,
         colormode=colormode,

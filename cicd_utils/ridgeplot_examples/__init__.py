@@ -30,6 +30,12 @@ def load_lincoln_weather() -> go.Figure:
     return main()
 
 
+def load_lincoln_weather_red_blue() -> go.Figure:
+    from ._lincoln_weather_red_blue import main
+
+    return main()
+
+
 def load_probly() -> go.Figure:
     from ._probly import main
 
@@ -39,5 +45,6 @@ def load_probly() -> go.Figure:
 ALL_EXAMPLES: list[tuple[str, Callable[[], go.Figure]]] = [
     ("basic", load_basic),
     ("lincoln_weather", load_lincoln_weather),
+    ("lincoln_weather_red_blue", load_lincoln_weather_red_blue),
     ("probly", load_probly),
 ]

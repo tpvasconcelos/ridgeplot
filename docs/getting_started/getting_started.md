@@ -246,3 +246,28 @@ fig.show()
 ```{raw} html
 :file: ../_static/charts/lincoln_weather.html
 ```
+
+## Coloring options
+
+:::{note}
+We are currently investigating the best way to support all color options available in Plotly Express. If you have any suggestions or requests, or just want to track the progress, please check out {gh-issue}`226`.
+:::
+
+The {py:func}`~ridgeplot.ridgeplot()` function offers flexible customisation options that help you control the automatic coloring of ridgeline traces. Take a look at {py:paramref}`~ridgeplot.ridgeplot.colorscale`, {py:paramref}`~ridgeplot.ridgeplot.colormode`, and {py:paramref}`~ridgeplot.ridgeplot.coloralpha` for more information.
+
+To demonstrate how these options can be used, we can try to adjust the output from the previous example to use different colors for the minimum and maximum temperature traces. For instance, setting all minimum temperature traces to a shade of blue and all maximum temperature traces to a shade of red. To achieve this, we just need to adjust the `colorscale` and `colormode` parameters in the call to the {py:func}`~ridgeplot.ridgeplot()` function. _i.e._,
+
+```python
+fig = ridgeplot(
+    # ... same options as before
+    colorscale=(
+        (0.0, "rgb(20, 20, 255)"),
+        (1.0, "rgb(255, 20, 20)"),
+    ),
+    colormode="trace-index-row-wise",
+)
+```
+
+```{raw} html
+:file: ../_static/charts/lincoln_weather_red_blue.html
+```
