@@ -12,8 +12,8 @@ from ridgeplot._colors import (
     _Color,
     _colormap_loader,
     apply_alpha,
-    get_color,
     get_colorscale,
+    interpolate_color,
     list_all_colorscale_names,
     validate_colorscale,
 )
@@ -194,24 +194,24 @@ def test_get_colorscale_fails_for_unknown_colorscale_name() -> None:
 
 
 # ==============================================================
-# ---  get_color()
+# ---  interpolate_color()
 # ==============================================================
 
 
-def test_get_color_midpoint_in_scale() -> None:
-    assert get_color(colorscale=VIRIDIS, midpoint=0) == VIRIDIS[0][1]
-    assert get_color(colorscale=VIRIDIS, midpoint=1) == VIRIDIS[-1][1]
+def test_interpolate_color_midpoint_in_scale() -> None:
+    assert interpolate_color(colorscale=VIRIDIS, midpoint=0) == VIRIDIS[0][1]
+    assert interpolate_color(colorscale=VIRIDIS, midpoint=1) == VIRIDIS[-1][1]
 
 
-def test_get_color_midpoint_not_in_scale() -> None:
+def test_interpolate_color_midpoint_not_in_scale() -> None:
     # Hard-coded test case.
-    assert get_color(colorscale=VIRIDIS, midpoint=0.5) == "rgb(34.5, 144.0, 139.5)"
+    assert interpolate_color(colorscale=VIRIDIS, midpoint=0.5) == "rgb(34.5, 144.0, 139.5)"
 
 
 @pytest.mark.parametrize("midpoint", [-10.0, -1.3, 1.9, 100.0])
-def test_get_color_fails_for_midpoint_out_of_bounds(midpoint: float) -> None:
+def test_interpolate_color_fails_for_midpoint_out_of_bounds(midpoint: float) -> None:
     with pytest.raises(ValueError, match="should be a float value between 0 and 1"):
-        get_color(colorscale=..., midpoint=midpoint)  # type: ignore[arg-type]
+        interpolate_color(colorscale=..., midpoint=midpoint)  # type: ignore[arg-type]
 
 
 # ==============================================================

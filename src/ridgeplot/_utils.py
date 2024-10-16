@@ -13,6 +13,51 @@ if TYPE_CHECKING:
     from ridgeplot._types import CollectionL2, Densities, Numeric
 
 
+def get_xy_extrema(densities: Densities) -> tuple[Numeric, Numeric, Numeric, Numeric]:
+    r"""Get the global x-y extrema (x_min, x_max, y_min, y_max) over all
+    :data:`~ridgeplot._types.DensityTrace`\s in the
+    :data:`~ridgeplot._types.Densities` array.
+
+    Parameters
+    ----------
+    densities
+        A :data:`~ridgeplot._types.Densities` array.
+
+
+    Returns
+    -------
+    Tuple[Numeric, Numeric, Numeric, Numeric]
+        A tuple of the form (x_min, x_max, y_min, y_max).
+
+    Examples
+    --------
+    >>> get_xy_extrema(
+    ...     [
+    ...         [
+    ...             [(0, 0), (1, 1), (2, 2), (3, 3)],
+    ...             [(0, 0), (1, 1), (2, 2)],
+    ...             [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)],
+    ...         ],
+    ...         [
+    ...             [(-2, 2), (-1, 1), (0, 1)],
+    ...             [(2, 2), (3, 1), (4, 1)],
+    ...         ],
+    ...     ]
+    ... )
+    (-2, 4, 0, 4)
+    """
+    if len(densities) == 0:
+        raise ValueError("The densities array should not be empty.")
+    x_flat: list[Numeric] = []
+    y_flat: list[Numeric] = []
+    for row in densities:
+        for trace in row:
+            for x, y in trace:
+                x_flat.append(x)
+                y_flat.append(y)
+    return min(x_flat), max(x_flat), min(y_flat), max(y_flat)
+
+
 def normalise_min_max(val: Numeric, min_: Numeric, max_: Numeric) -> float:
     if max_ <= min_:
         raise ValueError(

@@ -3,11 +3,11 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, cast
 
+from ridgeplot._colormodes import Colormode
 from ridgeplot._figure_factory import (
-    Colormode,
     LabelsArray,
-    RidgeplotFigureFactory,
     ShallowLabelsArray,
+    create_ridgeplot,
 )
 from ridgeplot._kde import estimate_densities
 from ridgeplot._missing import MISSING, MissingType
@@ -277,7 +277,7 @@ def ridgeplot(
         )
         show_yticklabels = show_annotations
 
-    ridgeplot_figure_factory = RidgeplotFigureFactory(
+    fig = create_ridgeplot(
         densities=densities,
         trace_labels=labels,
         colorscale=colorscale,
@@ -288,4 +288,4 @@ def ridgeplot(
         show_yticklabels=show_yticklabels,
         xpad=xpad,
     )
-    return ridgeplot_figure_factory.make_figure()
+    return fig
