@@ -17,7 +17,6 @@ except ImportError:
     # the `cicd` package will not be available because
     # the `cicd_utils` dir is not in the PYTHONPATH.
     sys.path.append((Path(__file__).parents[1] / "cicd_utils").resolve().as_posix())
-    from cicd.compile_plotly_charts import compile_plotly_charts
 
 if TYPE_CHECKING:
     from sphinx.application import Sphinx
@@ -377,6 +376,11 @@ def _fix_html_charts() -> None:
 
 def setup(app: Sphinx) -> None:  # noqa: ARG001
     compile_plotly_charts()
+
+    sys_argv = sys.argv.copy()
+    sys.argv = sys.argv[:1]
     _fix_generated_public_api_rst()
     _fix_html_charts()
+    sys.argv = sys_argv
+
     # app.connect("html-page-context", register_jinja_functions)
