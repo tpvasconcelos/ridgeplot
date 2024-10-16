@@ -1,5 +1,7 @@
 [run]
 branch = true
+omit =
+    */_vendor/*
 
 [paths]
 # https://coverage.readthedocs.io/en/latest/config.html#paths

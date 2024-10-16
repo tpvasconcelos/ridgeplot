@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal, cast
 
 from plotly import graph_objects as go
@@ -8,6 +9,7 @@ from ridgeplot._colors import apply_alpha, get_color, get_colorscale, validate_c
 from ridgeplot._types import (
     CollectionL1,
     CollectionL2,
+    DensityTrace,
     is_flat_str_collection,
     nest_shallow_collection,
 )
@@ -17,6 +19,7 @@ from ridgeplot._utils import (
     normalise_row_attrs,
     ordered_dedup,
 )
+from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     from collections.abc import Collection
@@ -101,7 +104,7 @@ _DEFAULT_HOVERTEMPLATE = (
 )  # fmt: skip
 """Default ``hovertemplate`` for density traces.
 
-See :func:`ridgeplot._figure_factory.RidgePlotFigureFactory.draw_density_trace`.
+See :func:`ridgeplot._figure_factory.RidgeplotFigureFactory.draw_density_trace`.
 """
 
 
@@ -155,7 +158,20 @@ def _mul(a: tuple[Numeric, ...], b: tuple[Numeric, ...]) -> tuple[Numeric, ...]:
     return tuple(a_i * b_i for a_i, b_i in zip(a, b))
 
 
-class RidgePlotFigureFactory:
+@dataclass
+class RidgeplotTrace:
+    trace: DensityTrace
+    label: str
+    color: str
+
+
+@dataclass
+class RidgeplotRow:
+    traces: list[RidgeplotTrace]
+    y_shifted: float
+
+
+class RidgeplotFigureFactory:
     """Refer to :func:`ridgeplot.ridgeplot()`."""
 
     def __init__(
@@ -164,7 +180,7 @@ class RidgePlotFigureFactory:
         colorscale: str | ColorScale,
         coloralpha: float | None,
         colormode: Colormode,
-        trace_labels: LabelsArray | None,
+        trace_labels: LabelsArray | ShallowLabelsArray | None,
         linewidth: float,
         spacing: float,
         show_yticklabels: bool,
@@ -197,18 +213,21 @@ class RidgePlotFigureFactory:
             ids = iter(range(1, n_traces + 1))
             trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
         else:
+            if is_flat_str_collection(trace_labels):
+                trace_labels = cast(ShallowLabelsArray, trace_labels)
+                trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
             trace_labels = normalise_row_attrs(trace_labels, densities=densities)
 
         self.densities = densities
         self.colorscale = colorscale
-        self.coloralpha = coloralpha
+        self.coloralpha = float(coloralpha) if coloralpha is not None else None
         self.colormode = colormode
         self.trace_labels: LabelsArray = trace_labels
         self.y_labels: LabelsArray = [ordered_dedup(row) for row in trace_labels]
-        self.linewidth = linewidth
-        self.spacing = spacing
-        self.show_yticklabels = show_yticklabels
-        self.xpad = xpad
+        self.linewidth = float(linewidth)
+        self.spacing = float(spacing)
+        self.show_yticklabels = bool(show_yticklabels)
+        self.xpad = float(xpad)
 
         # ==============================================================
         # ---  Other instance variables
@@ -219,35 +238,21 @@ class RidgePlotFigureFactory:
         self.fig: go.Figure = go.Figure()
         self.colors: ColorsArray = self.pre_compute_colors()
 
-    @classmethod
-    def from_shallow_types(
-        cls,
-        densities: Densities,
-        colorscale: str | ColorScale,
-        colormode: Colormode,
-        coloralpha: float | None,
-        trace_labels: LabelsArray | ShallowLabelsArray | None,
-        linewidth: float,
-        spacing: float,
-        show_yticklabels: bool,
-        xpad: float,
-    ) -> RidgePlotFigureFactory:
-
-        if is_flat_str_collection(trace_labels):
-            trace_labels = cast(ShallowLabelsArray, trace_labels)
-            trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
-
-        return cls(
-            densities=densities,
-            colorscale=colorscale,
-            coloralpha=coloralpha,
-            colormode=colormode,
-            trace_labels=trace_labels,
-            linewidth=linewidth,
-            spacing=spacing,
-            show_yticklabels=show_yticklabels,
-            xpad=xpad,
-        )
+        # ==============================================================
+        # ---  Eagerly validate and build the RidgeplotTrace instances
+        # ==============================================================
+        self.rows: list[RidgeplotRow] = [
+            RidgeplotRow(
+                traces=[
+                    RidgeplotTrace(trace=trace, label=label, color=color)
+                    for trace, label, color in zip_strict(traces, labels, colors)
+                ],
+                y_shifted=float(-ith_row * self.y_max * self.spacing),
+            )
+            for ith_row, (traces, labels, colors) in enumerate(
+                zip_strict(self.densities, self.trace_labels, self.colors)
+            )
+        ]
 
     @property
     def colormode_maps(self) -> dict[Colormode, Callable[[], MidpointsArray]]:
@@ -310,7 +315,7 @@ class RidgePlotFigureFactory:
             ),
         )
 
-    def update_layout(self, y_ticks: list[float]) -> None:
+    def update_layout(self) -> None:
         """Update figure's layout."""
         self.fig.update_layout(
             legend=dict(traceorder="normal"),
@@ -321,7 +326,7 @@ class RidgePlotFigureFactory:
         )
         self.fig.update_yaxes(
             showticklabels=self.show_yticklabels,
-            tickvals=y_ticks,
+            tickvals=[row.y_shifted for row in self.rows],
             ticktext=self.y_labels,
             **axes_common,
         )
@@ -392,16 +397,11 @@ class RidgePlotFigureFactory:
         return [[_get_color(midpoint) for midpoint in row] for row in midpoints]
 
     def make_figure(self) -> go.Figure:
-        y_ticks = []
-        for i, (row, labels, colors) in enumerate(
-            # TODO: Use strict=True in Python>=3.10
-            zip(self.densities, self.trace_labels, self.colors)
-        ):
-            # y_shifted is the y-origin for the new trace
-            y_shifted = -i * float(self.y_max * self.spacing)
-            y_ticks.append(y_shifted)
-            for trace, label, color in zip(row, labels, colors):
-                x, y = zip(*trace)
-                self.draw_density_trace(x=x, y=y, y_shifted=y_shifted, label=label, color=color)
-        self.update_layout(y_ticks=y_ticks)
+        for row in self.rows:
+            for trace in row.traces:
+                x, y = zip(*trace.trace)
+                self.draw_density_trace(
+                    x=x, y=y, y_shifted=row.y_shifted, label=trace.label, color=trace.color
+                )
+        self.update_layout()
         return self.fig
