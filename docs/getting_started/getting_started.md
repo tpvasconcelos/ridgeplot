@@ -249,9 +249,13 @@ fig.show()
 
 ## Coloring options
 
-The {py:func}`~ridgeplot.ridgeplot()` function offers flexible customisation options that help you control the automatic coloring the ridgeline traces. Take a look at {py:paramref}`~ridgeplot.ridgeplot.colorscale`, {py:paramref}`~ridgeplot.ridgeplot.colormode`, and {py:paramref}`~ridgeplot.ridgeplot.coloralpha` for more information.
+:::{note}
+We are currently investigating the best way to support all color options available in Plotly Express. If you have any suggestions or requests, or just want to track the progress, please check out {gh-issue}`226`.
+:::
 
-To demonstrate how these options can be used, we can try adjusting the output from the previous example to use a different colors for the minimum and maximum temperature traces. For instance, setting all minimum temperature traces to a shade of blue and all maximum temperature traces to a shade of red. To achieve this, we just need to adjust the `colorscale` and `colormode` parameters in the call to the {py:func}`~ridgeplot.ridgeplot()` function. _i.e._,
+The {py:func}`~ridgeplot.ridgeplot()` function offers flexible customisation options that help you control the automatic coloring of ridgeline traces. Take a look at {py:paramref}`~ridgeplot.ridgeplot.colorscale`, {py:paramref}`~ridgeplot.ridgeplot.colormode`, and {py:paramref}`~ridgeplot.ridgeplot.coloralpha` for more information.
+
+To demonstrate how these options can be used, we can try to adjust the output from the previous example to use different colors for the minimum and maximum temperature traces. For instance, setting all minimum temperature traces to a shade of blue and all maximum temperature traces to a shade of red. To achieve this, we just need to adjust the `colorscale` and `colormode` parameters in the call to the {py:func}`~ridgeplot.ridgeplot()` function. _i.e._,
 
 ```python
 fig = ridgeplot(
@@ -261,7 +265,6 @@ fig = ridgeplot(
         (1.0, "rgb(255, 20, 20)"),
     ),
     colormode="trace-index-row-wise",
-    coloralpha=0.9,
 )
 ```
 
