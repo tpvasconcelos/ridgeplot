@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Callable, TypeVar
 import numpy as np
 import pytest
 
-from ridgeplot._figure_factory import get_xy_extrema
+from ridgeplot._figure_factory import RidgeplotFigureFactory, get_xy_extrema
 
 if TYPE_CHECKING:
     from ridgeplot._types import Densities, DensitiesRow
@@ -87,3 +87,48 @@ class TestGetXYExtrema:
             62,  # y_max
         )
         assert get_xy_extrema(densities) == expected
+
+
+class TestRidgeplotFigureFactory:
+
+    @pytest.mark.parametrize(
+        "densities",
+        [
+            [],
+            [1, 2, 3],
+            [[1, 2, 3]],
+            [(1, 2)],
+            [[(1, 2)]],
+        ],
+    )
+    def test_densities_must_be_4d(self, densities: Densities) -> None:
+        with pytest.raises(ValueError, match="Expected a 4D array of densities"):
+            RidgeplotFigureFactory(
+                densities=densities,
+                colorscale=...,  # type: ignore[arg-type]
+                coloralpha=...,  # type: ignore[arg-type]
+                colormode=...,  # type: ignore[arg-type]
+                trace_labels=...,  # type: ignore[arg-type]
+                linewidth=...,  # type: ignore[arg-type]
+                spacing=...,  # type: ignore[arg-type]
+                show_yticklabels=...,  # type: ignore[arg-type]
+                xpad=...,  # type: ignore[arg-type]
+            )
+
+    def test_float_casting(self) -> None:
+        """Ensure that specific inputs are always cast to float."""
+        rpff = RidgeplotFigureFactory(
+            densities=[[[(0, 0), (1, 1)]], [[(0, 0), (1, 1)]]],
+            colorscale="YlOrRd",
+            colormode="trace-index",
+            trace_labels=[["A"], ["B"]],
+            show_yticklabels=True,
+            # Ensure that the following inputs are cast to float
+            coloralpha=1,
+            linewidth=1,
+            spacing=1,
+            xpad=1,
+        )
+        attrs_to_check = (rpff.coloralpha, rpff.linewidth, rpff.spacing, rpff.xpad)
+        assert all(isinstance(v, float) for v in attrs_to_check)
+        assert all(v == 1.0 for v in attrs_to_check)
