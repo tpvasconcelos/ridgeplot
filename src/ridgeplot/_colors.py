@@ -143,6 +143,8 @@ def get_colorscale(name: str) -> ColorScale:
 
 
 def normalise_colorscale(colorscale: ColorScale | str) -> ColorScale:
+    """Convert mixed colorscale representations to the canonical
+    :data:`ColorScale` format."""
     if isinstance(colorscale, str):
         colorscale = get_colorscale(name=colorscale)
     else:
@@ -150,7 +152,7 @@ def normalise_colorscale(colorscale: ColorScale | str) -> ColorScale:
     return colorscale
 
 
-def get_color(colorscale: ColorScale, midpoint: float) -> str:
+def interpolate_color(colorscale: ColorScale, midpoint: float) -> str:
     """Get a color from a colorscale at a given midpoint.
 
     Given a colorscale, it interpolates the expected color at a given midpoint,
