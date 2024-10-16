@@ -3,8 +3,8 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, cast
 
+from ridgeplot._colormodes import Colormode
 from ridgeplot._figure_factory import (
-    Colormode,
     LabelsArray,
     ShallowLabelsArray,
     create_ridgeplot,
