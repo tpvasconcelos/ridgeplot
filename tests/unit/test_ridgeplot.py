@@ -92,11 +92,13 @@ def test_colorscale_invalid_colors() -> None:
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=colorscale)
 
 
-def test_colormode_invalid() -> None:
-    with pytest.raises(
-        ValueError, match="The colormode argument should be one of .* got INVALID instead"
-    ):
-        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colormode="INVALID")  # type: ignore[arg-type]
+class TestColormode:
+
+    def test_colormode_invalid(self) -> None:
+        with pytest.raises(
+            ValueError, match="The colormode argument should be one of .* got INVALID instead"
+        ):
+            ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colormode="INVALID")  # type: ignore[arg-type]
 
 
 def test_coloralpha() -> None:

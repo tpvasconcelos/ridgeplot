@@ -5,8 +5,15 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import plotly.graph_objects as go
 
+    from ridgeplot._colors import ColorScale
+    from ridgeplot._figure_factory import Colormode
 
-def main() -> go.Figure:
+
+def main(
+    colorscale: str | ColorScale = "plasma",
+    colormode: Colormode = "mean-minmax",
+    coloralpha: float | None = None,
+) -> go.Figure:
     import numpy as np
 
     from ridgeplot import ridgeplot
@@ -26,7 +33,9 @@ def main() -> go.Figure:
     fig = ridgeplot(
         samples=samples,
         labels=months,
-        coloralpha=0.98,
+        colorscale=colorscale,
+        colormode=colormode,
+        coloralpha=coloralpha,
         bandwidth=4,
         kde_points=np.linspace(-25, 110, 400),
         spacing=0.33,
@@ -50,5 +59,5 @@ def main() -> go.Figure:
 
 
 if __name__ == "__main__":
-    fig = main()
+    fig = main(coloralpha=0.98)
     fig.show()

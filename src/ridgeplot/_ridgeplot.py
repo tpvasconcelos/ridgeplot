@@ -171,7 +171,7 @@ def ridgeplot(
 
     colormode : Colormode
         This argument controls the logic for choosing the color filling of each
-        ridgeplot trace. Each option provides a different method for
+        ridgeline trace. Each option provides a different method for
         calculating the :paramref:`colorscale` midpoint of each trace. The
         default is mode is ``"mean-means"``. Choices are:
 
