@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, Callable
 from minify_html import minify
 from plotly.offline import get_plotlyjs
 
-from cicd.ridgeplot_examples import ALL_EXAMPLES, tighten_margins
+from ridgeplot_examples import ALL_EXAMPLES, tighten_margins
 
 if TYPE_CHECKING:
     import plotly.graph_objects as go

@@ -21,3 +21,8 @@ Static analysis tools will also we need to be made aware of this package:
 ### The `cicd/scripts` directory
 
 The `cicd/scripts` directory contains various scripts used by some CI/CD tasks. These scripts should all be marked as executable and contain a shebang line at the top.
+
+
+## The `ridgeplot_exampes` directory
+
+The `ridgeplot_examples` directory is also a Python package but it is used to store example/helper functions that generate figures for the documentation. These scripts are run as part of the CI/CD pipeline to ensure that the examples are up-to-date and that the figures are generated correctly. These functions are also run by the `tests/e2e` test suite to ensure that the examples are working as expected and no regressions are introduced.

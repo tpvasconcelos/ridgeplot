@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from ridgeplot.datasets import _DATA_DIR, load_probly
 
 
@@ -25,3 +27,5 @@ def test_load_probly() -> None:
     assert df_wadefagen.shape == (123, 20)
     df_illinois = load_probly(version="illinois")
     assert df_illinois.shape == (75, 17)
+    with pytest.raises(ValueError, match="Unknown version"):
+        load_probly(version="nonexistent")  # type: ignore[arg-type]

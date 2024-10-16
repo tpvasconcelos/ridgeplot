@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Callable
 
 import pytest
 
-from cicd.ridgeplot_examples import ALL_EXAMPLES
+from ridgeplot_examples import ALL_EXAMPLES
 
 if TYPE_CHECKING:
     import plotly.graph_objects as go
