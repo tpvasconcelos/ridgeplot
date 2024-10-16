@@ -76,7 +76,6 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs:
       - build
-      - publish-to-testpypi
     runs-on: ubuntu-latest
     timeout-minutes: 2
     environment:
