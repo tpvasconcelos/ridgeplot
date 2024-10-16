@@ -109,6 +109,7 @@ class TestRidgeplotFigureFactory:
                 coloralpha=...,  # type: ignore[arg-type]
                 colormode=...,  # type: ignore[arg-type]
                 trace_labels=...,  # type: ignore[arg-type]
+                trace_types=...,  # type: ignore[arg-type]
                 linewidth=...,  # type: ignore[arg-type]
                 spacing=...,  # type: ignore[arg-type]
                 show_yticklabels=...,  # type: ignore[arg-type]
@@ -122,6 +123,7 @@ class TestRidgeplotFigureFactory:
             colorscale="YlOrRd",
             colormode="trace-index",
             trace_labels=[["A"], ["B"]],
+            trace_types="area",
             show_yticklabels=True,
             # Ensure that the following inputs are cast to float
             coloralpha=1,

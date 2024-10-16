@@ -8,6 +8,9 @@ from ridgeplot._figure_factory import (
     LabelsArray,
     RidgeplotFigureFactory,
     ShallowLabelsArray,
+    ShallowTraceTypesArray,
+    TraceType,
+    TraceTypesArray,
 )
 from ridgeplot._kde import estimate_densities
 from ridgeplot._missing import MISSING, MissingType
@@ -72,6 +75,7 @@ def ridgeplot(
     colormode: Colormode = "mean-minmax",
     coloralpha: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
+    trace_types: TraceTypesArray | ShallowTraceTypesArray | TraceType = "area",
     linewidth: float = 1.0,
     spacing: float = 0.5,
     show_annotations: bool | MissingType = MISSING,
@@ -205,6 +209,8 @@ def ridgeplot(
         instead, a list of labels is specified, it must be of the same
         size/length as the number of traces.
 
+    # TODO: Add a note about the `trace_types` argument
+
     linewidth : float
         The traces' line width (in px).
 
@@ -283,6 +289,7 @@ def ridgeplot(
         colorscale=colorscale,
         coloralpha=coloralpha,
         colormode=colormode,
+        trace_types=trace_types,
         linewidth=linewidth,
         spacing=spacing,
         show_yticklabels=show_yticklabels,
