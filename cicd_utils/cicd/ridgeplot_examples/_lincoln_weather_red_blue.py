@@ -15,7 +15,6 @@ def main() -> go.Figure:
             (1.0, "rgb(60, 60, 255)"),
         ),
         colormode="trace-index-row-wise",
-        coloralpha=0.9,
     )
     return fig
 

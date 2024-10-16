@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 def main(
     colorscale: str | ColorScale = "plasma",
     colormode: Colormode = "mean-minmax",
-    coloralpha: float | None = None,
 ) -> go.Figure:
     import numpy as np
 
@@ -35,7 +34,7 @@ def main(
         labels=months,
         colorscale=colorscale,
         colormode=colormode,
-        coloralpha=coloralpha,
+        coloralpha=0.98,
         bandwidth=4,
         kde_points=np.linspace(-25, 110, 400),
         spacing=0.33,
@@ -59,5 +58,5 @@ def main(
 
 
 if __name__ == "__main__":
-    fig = main(coloralpha=0.98)
+    fig = main()
     fig.show()
