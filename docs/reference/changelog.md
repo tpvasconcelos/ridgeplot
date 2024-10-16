@@ -13,6 +13,15 @@ Unreleased changes
 
 - Update and improve the "Contributing" guide ({gh-pr}`218` and {gh-pr}`221`)
 
+### Internal
+
+- Eagerly validate input shapes in `RidgePlotFigureFactory` ({gh-pr}`222`)
+- Improve overall test coverage ({gh-pr}`222`)
+
+### Bug fixes
+
+- Support edge case in `get_collection_array_shape` where the input array is empty or contains nested empty arrays ({gh-pr}`222`)
+
 ### CI/CD
 
 - Add new `"Greet new users"` workflow to welcome new contributors to the project ({gh-pr}`210`)
