@@ -24,3 +24,6 @@ sphinxext-opengraph
 
 # matplotlib is used to generate social cards
 matplotlib
+
+# Cleanup generated files
+pre_commit_hooks

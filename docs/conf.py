@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -17,9 +18,10 @@ except ImportError:
     # the `cicd` package will not be available because
     # the `cicd_utils` dir is not in the PYTHONPATH.
     sys.path.append((Path(__file__).parents[1] / "cicd_utils").resolve().as_posix())
-    from cicd.compile_plotly_charts import compile_plotly_charts
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from sphinx.application import Sphinx
 
 # Configuration file for the Sphinx documentation builder.
@@ -355,6 +357,41 @@ suppress_warnings = [
 # -- custom setup steps ------------------------------------------------------------
 
 
-def setup(app: Sphinx) -> None:  # noqa: ARG001
+@contextmanager
+def reset_sys_argv() -> Generator[None]:
+    original_sys_argv = sys.argv
+    sys.argv = original_sys_argv[:1]
+    try:
+        yield
+    finally:
+        sys.argv = original_sys_argv
+
+
+def _fix_generated_public_api_rst() -> None:
+    from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
+    from pre_commit_hooks.fix_byte_order_marker import main as fix_byte_order_marker
+
+    files = [file.resolve().as_posix() for file in Path("api/public/").glob("*.rst")]
+    if not files:
+        raise RuntimeError("No RST files found. Check that the path above is correct.")
+    with reset_sys_argv():
+        end_of_file_fixer(files)
+        fix_byte_order_marker(files)
+
+
+def _fix_html_charts() -> None:
+    from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
+
+    files = [file.resolve().as_posix() for file in Path("_static/charts/").glob("*.html")]
+    if not files:
+        raise RuntimeError("No HTML files found. Check that the path above is correct.")
+    with reset_sys_argv():
+        end_of_file_fixer(files)
+
+
+def setup(app: Sphinx) -> None:
     compile_plotly_charts()
     # app.connect("html-page-context", register_jinja_functions)
+
+    app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())
+    app.connect("build-finished", lambda *_: _fix_html_charts())
