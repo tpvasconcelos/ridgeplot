@@ -100,6 +100,18 @@ class TestColormode:
         ):
             ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colormode="INVALID")  # type: ignore[arg-type]
 
+    def test_colormode_trace_index_row_wise(self) -> None:
+        fig = ridgeplot(
+            samples=[[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]],
+            colorscale=(
+                (0.0, "rgb(100, 100, 100)"),
+                (1.0, "rgb(200, 200, 200)"),
+            ),
+            colormode="trace-index-row-wise",
+        )
+        assert fig.data[1].fillcolor == fig.data[5].fillcolor == "rgb(200, 200, 200)"
+        assert fig.data[3].fillcolor == fig.data[7].fillcolor == "rgb(100, 100, 100)"
+
 
 def test_coloralpha() -> None:
     fig = ridgeplot(
