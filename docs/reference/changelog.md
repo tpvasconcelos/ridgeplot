@@ -5,7 +5,9 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+### Internal
+
+- Refactor `_figure_factory.py` to use a functional approach ({gh-pr}`228`)
 
 ---
 
