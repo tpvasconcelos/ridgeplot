@@ -81,7 +81,7 @@ def _zip_equal(*iterables: Collection[Any]) -> Iterable[tuple[Any, ...]]:
         return _zip_equal_generator(iterables)
 
 
-if sys.version_info <= (3, 9):
-    zip_strict = _zip_equal
-else:
+if sys.version_info >= (3, 10):
     zip_strict = functools.partial(zip, strict=True)
+else:
+    zip_strict = _zip_equal
