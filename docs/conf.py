@@ -355,6 +355,28 @@ suppress_warnings = [
 # -- custom setup steps ------------------------------------------------------------
 
 
+def _fix_generated_public_api_rst() -> None:
+    from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
+    from pre_commit_hooks.fix_byte_order_marker import main as fix_byte_order_marker
+
+    files = [file.resolve().as_posix() for file in Path("api/public/").glob("*.rst")]
+    if not files:
+        raise RuntimeError("No RST files found. Check that the path above is correct.")
+    print(fix_byte_order_marker())
+    print(end_of_file_fixer(files))
+
+
+def _fix_html_charts() -> None:
+    from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
+
+    files = [file.resolve().as_posix() for file in Path("_static/charts/").glob("*.html")]
+    if not files:
+        raise RuntimeError("No HTML files found. Check that the path above is correct.")
+    print(end_of_file_fixer(files))
+
+
 def setup(app: Sphinx) -> None:  # noqa: ARG001
     compile_plotly_charts()
+    _fix_generated_public_api_rst()
+    _fix_html_charts()
     # app.connect("html-page-context", register_jinja_functions)
