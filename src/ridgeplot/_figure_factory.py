@@ -6,13 +6,10 @@ from typing import TYPE_CHECKING, cast
 from plotly import graph_objects as go
 
 from ridgeplot._colormodes import (
-    COLORMODE_MAPS,
     Colormode,
-    ColorsArray,
     MidpointsContext,
-    pre_compute_colors,
+    compute_trace_colors,
 )
-from ridgeplot._colors import get_colorscale, validate_colorscale
 from ridgeplot._types import (
     CollectionL1,
     CollectionL2,
@@ -84,6 +81,26 @@ _DEFAULT_HOVERTEMPLATE = (
 
 See :func:`draw_density_trace`.
 """
+
+
+def normalise_trace_labels(
+    densities: Densities,
+    trace_labels: LabelsArray | ShallowLabelsArray | None,
+    n_traces: int,
+) -> LabelsArray:
+    if trace_labels is None:
+        ids = iter(range(1, n_traces + 1))
+        trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
+    else:
+        if is_flat_str_collection(trace_labels):
+            trace_labels = cast(ShallowLabelsArray, trace_labels)
+            trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
+        trace_labels = normalise_row_attrs(trace_labels, densities=densities)
+    return trace_labels
+
+
+def normalise_y_labels(trace_labels: LabelsArray) -> LabelsArray:
+    return [ordered_dedup(row) for row in trace_labels]
 
 
 @dataclass
@@ -211,56 +228,37 @@ def create_ridgeplot(
 
     n_rows = len(densities)
     n_traces = sum(len(row) for row in densities)
+    x_min, x_max, _, y_max = map(float, get_xy_extrema(densities=densities))
 
-    if isinstance(colorscale, str):
-        colorscale = get_colorscale(name=colorscale)
-    else:
-        validate_colorscale(colorscale)
+    trace_labels = normalise_trace_labels(
+        densities=densities,
+        trace_labels=trace_labels,
+        n_traces=n_traces,
+    )
+    y_labels = normalise_y_labels(trace_labels)
 
-    if colormode not in COLORMODE_MAPS:
-        raise ValueError(
-            f"The colormode argument should be one of "
-            f"{tuple(COLORMODE_MAPS)}, got {colormode} instead."
-        )
-
-    if trace_labels is None:
-        ids = iter(range(1, n_traces + 1))
-        trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
-    else:
-        if is_flat_str_collection(trace_labels):
-            trace_labels = cast(ShallowLabelsArray, trace_labels)
-            trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
-        trace_labels = normalise_row_attrs(trace_labels, densities=densities)
-
-    coloralpha = float(coloralpha) if coloralpha is not None else None
-    y_labels: LabelsArray = [ordered_dedup(row) for row in trace_labels]
+    # Force cast certain arguments to the expected types
     linewidth = float(linewidth)
     spacing = float(spacing)
     show_yticklabels = bool(show_yticklabels)
     xpad = float(xpad)
 
     # ==============================================================
-    # ---  Other instance variables
+    # ---  Build the figure
     # ==============================================================
-    x_min, x_max, _, y_max = map(float, get_xy_extrema(densities=densities))
-    midpoints_context = MidpointsContext(
-        densities=densities,
-        n_rows=n_rows,
-        n_traces=n_traces,
-        x_min=x_min,
-        x_max=x_max,
-    )
-    colors: ColorsArray = pre_compute_colors(
+
+    colors = compute_trace_colors(
         colorscale=colorscale,
         colormode=colormode,
         coloralpha=coloralpha,
-        midpoints_context=midpoints_context,
+        midpoints_context=MidpointsContext(
+            densities=densities,
+            n_rows=n_rows,
+            n_traces=n_traces,
+            x_min=x_min,
+            x_max=x_max,
+        ),
     )
-
-    # ==============================================================
-    # ---  Build the figure
-    # ==============================================================
-    fig = go.Figure()
     rows: list[RidgeplotRow] = [
         RidgeplotRow(
             traces=[
@@ -273,6 +271,8 @@ def create_ridgeplot(
             zip_strict(densities, trace_labels, colors)
         )
     ]
+
+    fig = go.Figure()
     for row in rows:
         for trace in row.traces:
             x, y = zip(*trace.trace)

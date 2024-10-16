@@ -142,6 +142,14 @@ def get_colorscale(name: str) -> ColorScale:
     return _COLORSCALE_MAPPING[name]
 
 
+def normalise_colorscale(colorscale: ColorScale | str) -> ColorScale:
+    if isinstance(colorscale, str):
+        colorscale = get_colorscale(name=colorscale)
+    else:
+        validate_colorscale(colorscale)
+    return colorscale
+
+
 def get_color(colorscale: ColorScale, midpoint: float) -> str:
     """Get a color from a colorscale at a given midpoint.
 

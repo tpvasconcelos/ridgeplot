@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal, Protocol
 
-from ridgeplot._colors import ColorScale, apply_alpha, get_color
+from ridgeplot._colors import ColorScale, apply_alpha, get_color, normalise_colorscale
 from ridgeplot._types import CollectionL2
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
@@ -123,17 +123,27 @@ def _compute_midpoints_mean_means(ctx: MidpointsContext) -> MidpointsArray:
     ]
 
 
-def pre_compute_colors(
-    colorscale: ColorScale,
+def compute_trace_colors(
+    colorscale: ColorScale | str,
     colormode: Colormode,
     coloralpha: float | None,
     midpoints_context: MidpointsContext,
 ) -> ColorsArray:
+    colorscale = normalise_colorscale(colorscale)
+    if coloralpha is not None:
+        coloralpha = float(coloralpha)
+
     def _get_color(mp: float) -> str:
         color = get_color(colorscale, midpoint=mp)
         if coloralpha is not None:
             color = apply_alpha(color, alpha=coloralpha)
         return color
+
+    if colormode not in COLORMODE_MAPS:
+        raise ValueError(
+            f"The colormode argument should be one of "
+            f"{tuple(COLORMODE_MAPS)}, got {colormode} instead."
+        )
 
     midpoints_func = COLORMODE_MAPS[colormode]
     midpoints = midpoints_func(ctx=midpoints_context)
