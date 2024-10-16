@@ -12,13 +12,6 @@ Unreleased changes
 0.1.29
 ------
 
-- ...
-
----
-
-0.1.28
-------
-
 ### Features
 
 - Add new `"trace-index-row-wise"` colormode ({gh-pr}`224`)
@@ -49,6 +42,13 @@ Unreleased changes
 - Add GitHub issue templates ({gh-pr}`211`)
 - Add support for Python 3.13 ({gh-pr}`217`)
 - Add a CodeQL GitHub workflow ({gh-pr}`220`)
+
+---
+
+0.1.28
+------
+
+- Ooops! This release was skipped due to a mistake in the release process. The changes in this release were included in the 0.1.29 release.
 
 ---
 
