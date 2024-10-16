@@ -5,6 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.1.28
+------
+
 ### Features
 
 - Add new `"trace-index-row-wise"` colormode ({gh-pr}`224`)
