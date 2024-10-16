@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Callable, TypeVar
 import numpy as np
 import pytest
 
-from ridgeplot._figure_factory import RidgePlotFigureFactory, get_xy_extrema
+from ridgeplot._figure_factory import RidgeplotFigureFactory, get_xy_extrema
 
 if TYPE_CHECKING:
     from ridgeplot._types import Densities, DensitiesRow
@@ -89,7 +89,7 @@ class TestGetXYExtrema:
         assert get_xy_extrema(densities) == expected
 
 
-class TestRidgePlotFigureFactory:
+class TestRidgeplotFigureFactory:
 
     @pytest.mark.parametrize(
         "densities",
@@ -103,7 +103,7 @@ class TestRidgePlotFigureFactory:
     )
     def test_densities_must_be_4d(self, densities: Densities) -> None:
         with pytest.raises(ValueError, match="Expected a 4D array of densities"):
-            RidgePlotFigureFactory(
+            RidgeplotFigureFactory(
                 densities=densities,
                 colorscale=...,  # type: ignore[arg-type]
                 coloralpha=...,  # type: ignore[arg-type]
@@ -117,7 +117,7 @@ class TestRidgePlotFigureFactory:
 
     def test_float_casting(self) -> None:
         """Ensure that specific inputs are always cast to float."""
-        rpff = RidgePlotFigureFactory(
+        rpff = RidgeplotFigureFactory(
             densities=[[[(0, 0), (1, 1)]], [[(0, 0), (1, 1)]]],
             colorscale="YlOrRd",
             colormode="trace-index",

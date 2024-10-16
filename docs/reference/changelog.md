@@ -15,7 +15,8 @@ Unreleased changes
 
 ### Internal
 
-- Eagerly validate input shapes in `RidgePlotFigureFactory` ({gh-pr}`222`)
+- Eagerly validate input shapes in `RidgeplotFigureFactory` ({gh-pr}`222`)
+- Vendor `_zip_equal()` from [more-itertools](https://github.com/more-itertools/more-itertools/) ({gh-pr}`222`)
 - Improve overall test coverage ({gh-pr}`222`)
 
 ### Bug fixes

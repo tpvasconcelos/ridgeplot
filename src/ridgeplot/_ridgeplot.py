@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, cast
 from ridgeplot._figure_factory import (
     Colormode,
     LabelsArray,
-    RidgePlotFigureFactory,
+    RidgeplotFigureFactory,
     ShallowLabelsArray,
 )
 from ridgeplot._kde import estimate_densities
@@ -274,7 +274,7 @@ def ridgeplot(
         )
         show_yticklabels = show_annotations
 
-    ridgeplot_figure_factory = RidgePlotFigureFactory(
+    ridgeplot_figure_factory = RidgeplotFigureFactory(
         densities=densities,
         trace_labels=labels,
         colorscale=colorscale,
