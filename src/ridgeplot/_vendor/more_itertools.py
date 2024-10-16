@@ -37,9 +37,10 @@
 
 from __future__ import annotations
 
+import functools
 import sys
 from itertools import zip_longest
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from collections.abc import Collection, Iterable
@@ -80,8 +81,7 @@ def _zip_equal(*iterables: Collection[Any]) -> Iterable[tuple[Any, ...]]:
         return _zip_equal_generator(iterables)
 
 
-def _zip_strict(*iterables: Collection[Any]) -> zip[tuple[Any, ...]]:
-    return cast(zip[tuple[Any, ...]], zip(*iterables, strict=True))  # type: ignore[call-overload]
-
-
-zip_strict = _zip_equal if sys.version_info < (3, 10) else _zip_strict
+if sys.version_info <= (3, 9):
+    zip_strict = _zip_equal
+else:
+    zip_strict = functools.partial(zip, strict=True)
