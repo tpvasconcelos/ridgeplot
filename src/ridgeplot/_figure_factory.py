@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal, cast
+from typing import TYPE_CHECKING, Literal, Protocol, cast
 
 from plotly import graph_objects as go
 
@@ -23,7 +23,6 @@ from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     from collections.abc import Collection
-    from typing import Callable
 
     from ridgeplot._colors import ColorScale
     from ridgeplot._types import Densities, Numeric
@@ -104,7 +103,7 @@ _DEFAULT_HOVERTEMPLATE = (
 )  # fmt: skip
 """Default ``hovertemplate`` for density traces.
 
-See :func:`ridgeplot._figure_factory.RidgeplotFigureFactory.draw_density_trace`.
+See :func:`draw_density_trace`.
 """
 
 
@@ -171,237 +170,292 @@ class RidgeplotRow:
     y_shifted: float
 
 
-class RidgeplotFigureFactory:
-    """Refer to :func:`ridgeplot.ridgeplot()`."""
+@dataclass
+class MidpointsContext:
+    densities: Densities
+    n_rows: int
+    n_traces: int
+    x_min: Numeric
+    x_max: Numeric
 
-    def __init__(
-        self,
-        densities: Densities,
-        colorscale: str | ColorScale,
-        coloralpha: float | None,
-        colormode: Colormode,
-        trace_labels: LabelsArray | ShallowLabelsArray | None,
-        linewidth: float,
-        spacing: float,
-        show_yticklabels: bool,
-        xpad: float,
-    ) -> None:
-        # ==============================================================
-        # ---  Get clean and validated input arguments
-        # ==============================================================
-        shape = get_collection_array_shape(densities)
-        if len(shape) != 4:
-            raise ValueError(
-                f"Expected a 4D array of densities, got a {len(shape)}D array instead."
+
+class MidpointsFunc(Protocol):
+    def __call__(self, ctx: MidpointsContext) -> MidpointsArray: ...
+
+
+def _compute_midpoints_row_index(ctx: MidpointsContext) -> MidpointsArray:
+    return [
+        [((ctx.n_rows - 1) - ith_row) / (ctx.n_rows - 1)] * len(row)
+        for ith_row, row in enumerate(ctx.densities)
+    ]
+
+
+def _compute_midpoints_trace_index(ctx: MidpointsContext) -> MidpointsArray:
+    midpoints = []
+    ith_trace = 0
+    for row in ctx.densities:
+        midpoints_row = []
+        for _ in row:
+            midpoints_row.append(((ctx.n_traces - 1) - ith_trace) / (ctx.n_traces - 1))
+            ith_trace += 1
+        midpoints.append(midpoints_row)
+    return midpoints
+
+
+def _compute_midpoints_trace_index_row_wise(ctx: MidpointsContext) -> MidpointsArray:
+    return [
+        [((len(row) - 1) - ith_row_trace) / (len(row) - 1) for ith_row_trace in range(len(row))]
+        for row in ctx.densities
+    ]
+
+
+def _compute_midpoints_mean_minmax(ctx: MidpointsContext) -> MidpointsArray:
+    midpoints = []
+    for row in ctx.densities:
+        midpoints_row = []
+        for trace in row:
+            x, y = zip(*trace)
+            midpoints_row.append(
+                normalise_min_max(sum(_mul(x, y)) / sum(y), min_=ctx.x_min, max_=ctx.x_max)
             )
+        midpoints.append(midpoints_row)
+    return midpoints
 
-        n_rows = len(densities)
-        n_traces = sum(len(row) for row in densities)
 
-        if isinstance(colorscale, str):
-            colorscale = get_colorscale(name=colorscale)
-        else:
-            validate_colorscale(colorscale)
+def _compute_midpoints_mean_means(ctx: MidpointsContext) -> MidpointsArray:
+    means = []
+    for row in ctx.densities:
+        means_row = []
+        for trace in row:
+            x, y = zip(*trace)
+            means_row.append(sum(_mul(x, y)) / sum(y))
+        means.append(means_row)
+    min_mean = min([min(row) for row in means])
+    max_mean = max([max(row) for row in means])
+    return [
+        [normalise_min_max(mean, min_=min_mean, max_=max_mean) for mean in row] for row in means
+    ]
 
-        if colormode not in self.colormode_maps:
-            raise ValueError(
-                f"The colormode argument should be one of "
-                f"{tuple(self.colormode_maps.keys())}, got {colormode} instead."
-            )
 
-        if trace_labels is None:
-            ids = iter(range(1, n_traces + 1))
-            trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
-        else:
-            if is_flat_str_collection(trace_labels):
-                trace_labels = cast(ShallowLabelsArray, trace_labels)
-                trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
-            trace_labels = normalise_row_attrs(trace_labels, densities=densities)
+def pre_compute_colors(
+    colorscale: ColorScale,
+    colormode: Colormode,
+    coloralpha: float | None,
+    midpoints_context: MidpointsContext,
+) -> ColorsArray:
+    def _get_color(mp: float) -> str:
+        color = get_color(colorscale, midpoint=mp)
+        if coloralpha is not None:
+            color = apply_alpha(color, alpha=coloralpha)
+        return color
 
-        self.densities = densities
-        self.colorscale = colorscale
-        self.coloralpha = float(coloralpha) if coloralpha is not None else None
-        self.colormode = colormode
-        self.trace_labels: LabelsArray = trace_labels
-        self.y_labels: LabelsArray = [ordered_dedup(row) for row in trace_labels]
-        self.linewidth = float(linewidth)
-        self.spacing = float(spacing)
-        self.show_yticklabels = bool(show_yticklabels)
-        self.xpad = float(xpad)
+    midpoints_func = COLORMODE_MAPS[colormode]
+    midpoints = midpoints_func(ctx=midpoints_context)
+    return [[_get_color(midpoint) for midpoint in row] for row in midpoints]
 
-        # ==============================================================
-        # ---  Other instance variables
-        # ==============================================================
-        self.n_rows: int = n_rows
-        self.n_traces: int = n_traces
-        self.x_min, self.x_max, _, self.y_max = get_xy_extrema(densities=self.densities)
-        self.fig: go.Figure = go.Figure()
-        self.colors: ColorsArray = self.pre_compute_colors()
 
-        # ==============================================================
-        # ---  Eagerly validate and build the RidgeplotTrace instances
-        # ==============================================================
-        self.rows: list[RidgeplotRow] = [
-            RidgeplotRow(
-                traces=[
-                    RidgeplotTrace(trace=trace, label=label, color=color)
-                    for trace, label, color in zip_strict(traces, labels, colors)
-                ],
-                y_shifted=float(-ith_row * self.y_max * self.spacing),
-            )
-            for ith_row, (traces, labels, colors) in enumerate(
-                zip_strict(self.densities, self.trace_labels, self.colors)
-            )
-        ]
+COLORMODE_MAPS: dict[Colormode, MidpointsFunc] = {
+    "row-index": _compute_midpoints_row_index,
+    "trace-index": _compute_midpoints_trace_index,
+    "trace-index-row-wise": _compute_midpoints_trace_index_row_wise,
+    "mean-minmax": _compute_midpoints_mean_minmax,
+    "mean-means": _compute_midpoints_mean_means,
+}
 
-    @property
-    def colormode_maps(self) -> dict[Colormode, Callable[[], MidpointsArray]]:
-        return {
-            "row-index": self._compute_midpoints_row_index,
-            "trace-index": self._compute_midpoints_trace_index,
-            "trace-index-row-wise": self._compute_midpoints_trace_index_row_wise,
-            "mean-minmax": self._compute_midpoints_mean_minmax,
-            "mean-means": self._compute_midpoints_mean_means,
-        }
 
-    def draw_base(self, x: Collection[Numeric], y_shifted: float) -> None:
-        """Draw the base for a density trace.
+def draw_base(
+    fig: go.Figure,
+    x: Collection[Numeric],
+    y_shifted: float,
+) -> go.Figure:
+    """Draw the base for a density trace.
 
-        Adds an invisible trace at constant y that will serve as the fill-limit
-        for the corresponding density trace.
-        """
-        self.fig.add_trace(
-            go.Scatter(
-                x=x,
-                y=[y_shifted] * len(x),
-                # make trace 'invisible'
-                # Note: visible=False does not work with fill="tonexty"
-                line=dict(color="rgba(0,0,0,0)", width=0),
-                showlegend=False,
-                hoverinfo="skip",
-            )
+    Adds an invisible trace at constant y that will serve as the fill-limit
+    for the corresponding density trace.
+    """
+    fig.add_trace(
+        go.Scatter(
+            x=x,
+            y=[y_shifted] * len(x),
+            # make trace 'invisible'
+            # Note: visible=False does not work with fill="tonexty"
+            line=dict(color="rgba(0,0,0,0)", width=0),
+            showlegend=False,
+            hoverinfo="skip",
         )
+    )
+    return fig
 
-    def draw_density_trace(
-        self,
-        x: Collection[Numeric],
-        y: Collection[Numeric],
-        y_shifted: float,
-        label: str,
-        color: str,
-    ) -> None:
-        """Draw a density trace.
 
-        Adds a density 'trace' to the Figure. The ``fill="tonexty"`` option
-        fills the trace until the previously drawn trace (see
-        :meth:`draw_base`). This is why the base trace must be drawn first.
-        """
-        self.draw_base(x=x, y_shifted=y_shifted)
-        self.fig.add_trace(
-            go.Scatter(
-                x=x,
-                y=[y_i + y_shifted for y_i in y],
-                fillcolor=color,
-                name=label,
-                fill="tonexty",
-                mode="lines",
-                line=dict(
-                    color="rgba(0,0,0,0.6)" if color is not None else None,
-                    width=self.linewidth,
-                ),
-                # Hover information
-                customdata=[[y_i] for y_i in y],
-                hovertemplate=_DEFAULT_HOVERTEMPLATE,
+def draw_density_trace(
+    fig: go.Figure,
+    x: Collection[Numeric],
+    y: Collection[Numeric],
+    y_shifted: float,
+    label: str,
+    color: str,
+    linewidth: float,
+) -> go.Figure:
+    """Draw a density trace.
+
+    Adds a density 'trace' to the Figure. The ``fill="tonexty"`` option
+    fills the trace until the previously drawn trace (see
+    :meth:`draw_base`). This is why the base trace must be drawn first.
+    """
+    fig = draw_base(fig, x=x, y_shifted=y_shifted)
+    fig.add_trace(
+        go.Scatter(
+            x=x,
+            y=[y_i + y_shifted for y_i in y],
+            fillcolor=color,
+            name=label,
+            fill="tonexty",
+            mode="lines",
+            line=dict(
+                color="rgba(0,0,0,0.6)" if color is not None else None,
+                width=linewidth,
             ),
+            # Hover information
+            customdata=[[y_i] for y_i in y],
+            hovertemplate=_DEFAULT_HOVERTEMPLATE,
+        ),
+    )
+    return fig
+
+
+def update_layout(
+    fig: go.Figure,
+    y_labels: LabelsArray,
+    tickvals: list[float],
+    show_yticklabels: bool,
+    xpad: float,
+    x_max: float,
+    x_min: float,
+) -> go.Figure:
+    """Update figure's layout."""
+    fig.update_layout(
+        legend=dict(traceorder="normal"),
+    )
+    axes_common = dict(
+        zeroline=False,
+        showgrid=True,
+    )
+    fig.update_yaxes(
+        showticklabels=show_yticklabels,
+        tickvals=tickvals,
+        ticktext=y_labels,
+        **axes_common,
+    )
+    x_padding = xpad * (x_max - x_min)
+    fig.update_xaxes(
+        range=[x_min - x_padding, x_max + x_padding],
+        showticklabels=True,
+        **axes_common,
+    )
+    return fig
+
+
+def create_ridgeplot(
+    densities: Densities,
+    colorscale: str | ColorScale,
+    coloralpha: float | None,
+    colormode: Colormode,
+    trace_labels: LabelsArray | ShallowLabelsArray | None,
+    linewidth: float,
+    spacing: float,
+    show_yticklabels: bool,
+    xpad: float,
+) -> go.Figure:
+    # ==============================================================
+    # ---  Get clean and validated input arguments
+    # ==============================================================
+    shape = get_collection_array_shape(densities)
+    if len(shape) != 4:
+        raise ValueError(f"Expected a 4D array of densities, got a {len(shape)}D array instead.")
+
+    n_rows = len(densities)
+    n_traces = sum(len(row) for row in densities)
+
+    if isinstance(colorscale, str):
+        colorscale = get_colorscale(name=colorscale)
+    else:
+        validate_colorscale(colorscale)
+
+    if colormode not in COLORMODE_MAPS:
+        raise ValueError(
+            f"The colormode argument should be one of "
+            f"{tuple(COLORMODE_MAPS)}, got {colormode} instead."
         )
 
-    def update_layout(self) -> None:
-        """Update figure's layout."""
-        self.fig.update_layout(
-            legend=dict(traceorder="normal"),
+    if trace_labels is None:
+        ids = iter(range(1, n_traces + 1))
+        trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
+    else:
+        if is_flat_str_collection(trace_labels):
+            trace_labels = cast(ShallowLabelsArray, trace_labels)
+            trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
+        trace_labels = normalise_row_attrs(trace_labels, densities=densities)
+
+    coloralpha = float(coloralpha) if coloralpha is not None else None
+    y_labels: LabelsArray = [ordered_dedup(row) for row in trace_labels]
+    linewidth = float(linewidth)
+    spacing = float(spacing)
+    show_yticklabels = bool(show_yticklabels)
+    xpad = float(xpad)
+
+    # ==============================================================
+    # ---  Other instance variables
+    # ==============================================================
+    x_min, x_max, _, y_max = map(float, get_xy_extrema(densities=densities))
+    midpoints_context = MidpointsContext(
+        densities=densities,
+        n_rows=n_rows,
+        n_traces=n_traces,
+        x_min=x_min,
+        x_max=x_max,
+    )
+    colors: ColorsArray = pre_compute_colors(
+        colorscale=colorscale,
+        colormode=colormode,
+        coloralpha=coloralpha,
+        midpoints_context=midpoints_context,
+    )
+
+    # ==============================================================
+    # ---  Build the figure
+    # ==============================================================
+    fig = go.Figure()
+    rows: list[RidgeplotRow] = [
+        RidgeplotRow(
+            traces=[
+                RidgeplotTrace(trace=trace, label=label, color=color)
+                for trace, label, color in zip_strict(traces, labels, colors)
+            ],
+            y_shifted=float(-ith_row * y_max * spacing),
         )
-        axes_common = dict(
-            zeroline=False,
-            showgrid=True,
+        for ith_row, (traces, labels, colors) in enumerate(
+            zip_strict(densities, trace_labels, colors)
         )
-        self.fig.update_yaxes(
-            showticklabels=self.show_yticklabels,
-            tickvals=[row.y_shifted for row in self.rows],
-            ticktext=self.y_labels,
-            **axes_common,
-        )
-        x_padding = self.xpad * (self.x_max - self.x_min)
-        self.fig.update_xaxes(
-            range=[self.x_min - x_padding, self.x_max + x_padding],
-            showticklabels=True,
-            **axes_common,
-        )
-
-    def _compute_midpoints_row_index(self) -> MidpointsArray:
-        return [
-            [((self.n_rows - 1) - ith_row) / (self.n_rows - 1)] * len(row)
-            for ith_row, row in enumerate(self.densities)
-        ]
-
-    def _compute_midpoints_trace_index(self) -> MidpointsArray:
-        midpoints = []
-        ith_trace = 0
-        for row in self.densities:
-            midpoints_row = []
-            for _ in row:
-                midpoints_row.append(((self.n_traces - 1) - ith_trace) / (self.n_traces - 1))
-                ith_trace += 1
-            midpoints.append(midpoints_row)
-        return midpoints
-
-    def _compute_midpoints_trace_index_row_wise(self) -> MidpointsArray:
-        return [
-            [((len(row) - 1) - ith_row_trace) / (len(row) - 1) for ith_row_trace in range(len(row))]
-            for row in self.densities
-        ]
-
-    def _compute_midpoints_mean_minmax(self) -> MidpointsArray:
-        midpoints = []
-        for row in self.densities:
-            midpoints_row = []
-            for trace in row:
-                x, y = zip(*trace)
-                midpoints_row.append(
-                    normalise_min_max(sum(_mul(x, y)) / sum(y), min_=self.x_min, max_=self.x_max)
-                )
-            midpoints.append(midpoints_row)
-        return midpoints
-
-    def _compute_midpoints_mean_means(self) -> MidpointsArray:
-        means = []
-        for row in self.densities:
-            means_row = []
-            for trace in row:
-                x, y = zip(*trace)
-                means_row.append(sum(_mul(x, y)) / sum(y))
-            means.append(means_row)
-        min_mean = min([min(row) for row in means])
-        max_mean = max([max(row) for row in means])
-        return [
-            [normalise_min_max(mean, min_=min_mean, max_=max_mean) for mean in row] for row in means
-        ]
-
-    def pre_compute_colors(self) -> ColorsArray:
-        def _get_color(mp: float) -> str:
-            color = get_color(self.colorscale, midpoint=mp)
-            if self.coloralpha is not None:
-                color = apply_alpha(color, alpha=self.coloralpha)
-            return color
-
-        midpoints = self.colormode_maps[self.colormode]()
-        return [[_get_color(midpoint) for midpoint in row] for row in midpoints]
-
-    def make_figure(self) -> go.Figure:
-        for row in self.rows:
-            for trace in row.traces:
-                x, y = zip(*trace.trace)
-                self.draw_density_trace(
-                    x=x, y=y, y_shifted=row.y_shifted, label=trace.label, color=trace.color
-                )
-        self.update_layout()
-        return self.fig
+    ]
+    for row in rows:
+        for trace in row.traces:
+            x, y = zip(*trace.trace)
+            fig = draw_density_trace(
+                fig,
+                x=x,
+                y=y,
+                y_shifted=row.y_shifted,
+                label=trace.label,
+                color=trace.color,
+                linewidth=linewidth,
+            )
+    fig = update_layout(
+        fig,
+        y_labels=y_labels,
+        tickvals=[row.y_shifted for row in rows],
+        show_yticklabels=show_yticklabels,
+        xpad=xpad,
+        x_max=x_max,
+        x_min=x_min,
+    )
+    return fig

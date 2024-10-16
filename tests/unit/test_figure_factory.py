@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Callable, TypeVar
 import numpy as np
 import pytest
 
-from ridgeplot._figure_factory import RidgeplotFigureFactory, get_xy_extrema
+from ridgeplot._figure_factory import create_ridgeplot, get_xy_extrema
 
 if TYPE_CHECKING:
     from ridgeplot._types import Densities, DensitiesRow
@@ -89,7 +89,7 @@ class TestGetXYExtrema:
         assert get_xy_extrema(densities) == expected
 
 
-class TestRidgeplotFigureFactory:
+class TestCreateRidgeplot:
 
     @pytest.mark.parametrize(
         "densities",
@@ -103,7 +103,7 @@ class TestRidgeplotFigureFactory:
     )
     def test_densities_must_be_4d(self, densities: Densities) -> None:
         with pytest.raises(ValueError, match="Expected a 4D array of densities"):
-            RidgeplotFigureFactory(
+            create_ridgeplot(
                 densities=densities,
                 colorscale=...,  # type: ignore[arg-type]
                 coloralpha=...,  # type: ignore[arg-type]
@@ -114,21 +114,3 @@ class TestRidgeplotFigureFactory:
                 show_yticklabels=...,  # type: ignore[arg-type]
                 xpad=...,  # type: ignore[arg-type]
             )
-
-    def test_float_casting(self) -> None:
-        """Ensure that specific inputs are always cast to float."""
-        rpff = RidgeplotFigureFactory(
-            densities=[[[(0, 0), (1, 1)]], [[(0, 0), (1, 1)]]],
-            colorscale="YlOrRd",
-            colormode="trace-index",
-            trace_labels=[["A"], ["B"]],
-            show_yticklabels=True,
-            # Ensure that the following inputs are cast to float
-            coloralpha=1,
-            linewidth=1,
-            spacing=1,
-            xpad=1,
-        )
-        attrs_to_check = (rpff.coloralpha, rpff.linewidth, rpff.spacing, rpff.xpad)
-        assert all(isinstance(v, float) for v in attrs_to_check)
-        assert all(v == 1.0 for v in attrs_to_check)
