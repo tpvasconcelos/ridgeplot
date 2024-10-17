@@ -114,6 +114,7 @@ def test_validate_colorscale_fails_for_invalid_colorscale(
         ("#000000", "rgb(0, 0, 0)"),  # valid hex string
         ("rgb(1, 2, 3)", "rgb(1, 2, 3)"),  # valid rgb string
         ((4, 5, 6), "rgb(4, 5, 6)"),  # valid tuple
+        ("forestgreen", "rgb(34, 139, 34)"),  # valid CSS named color
     ],
 )
 def test_any_to_rgb(color: _Color, expected: str) -> None:
@@ -126,8 +127,8 @@ def test_any_to_rgb(color: _Color, expected: str) -> None:
         # invalid types
         (1, TypeError, None),
         ([1, 2, 3], TypeError, None),
-        # invalid string values
-        ("not a color", ValueError, None),
+        # invalid CSS named color
+        ("not-a-color", ValueError, None),
         # invalid hex
         ("#1234567890", ValueError, r"too many values to unpack \(expected 3\)"),
         ("#ABCDEFGHIJ", ValueError, r"invalid literal for int\(\) with base 16"),
