@@ -179,28 +179,38 @@ def ridgeplot(
         colors are evenly spaced.
 
     colormode : Colormode
-        This argument controls the logic for choosing the color filling of each
+        This argument controls the logic used for choosing the color of each
         ridgeline trace. Each option provides a different method for
-        calculating the :paramref:`colorscale` midpoint of each trace. The
-        default is mode is ``"mean-means"``. Choices are:
+        calculating the interpolation value from a :paramref:`colorscale`
+        (i.e., a float value between 0 and 1) for each trace. The default is
+        mode is ``"mean-means"``. Choices are:
 
-        - ``"row-index"`` - uses the row's index. e.g., if the ridgeplot has 3
-          rows of traces, then the midpoints will be
-          ``[[0, ...], [0.5, ...], [1, ...]]``.
-        - ``"trace-index"`` - uses the trace's index. e.g., if the ridgeplot has
-          a total of 3 traces (across all rows), then the midpoints will be
-          0, 0.5, and 1, respectively.
-        - ``"trace-index-row-wise"`` - uses the row-wise trace index. e.g., if
-          the ridgeplot has a row with only one trace and another with two,
-          the midpoints will be ``[[0], [0, 1]]``.
+        - ``"row-index"`` - uses the row's index. This is useful when the
+          desired effect is to have the same color for all traces on the same
+          row. e.g., if a ridgeplot has 3 rows of traces, then the color scale
+          interpolation values will be ``[[0, ...], [0.5, ...], [1, ...]]``,
+          respectively.
+        - ``"trace-index"`` - uses the trace's index. e.g., if a ridgeplot has
+          a total of 3 traces (across all rows), then the color scale
+          interpolation values will be 0, 0.5, and 1, respectively, and
+          regardless of each trace's row.
+        - ``"trace-index-row-wise"`` - uses the row-wise trace index. This is
+          similar to the ``"trace-index"`` mode, but the trace index is reset
+          for each row. e.g., if a ridgeplot has a row with only one trace and
+          another with two traces, then the color scale interpolation values
+          will be ``[[0], [0, 1]]``, respectively.
         - ``"mean-minmax"`` - uses the min-max normalized (weighted) mean of
-          each density to calculate the midpoints. The normalization min
-          and max values are the *absolute* minimum and maximum x-values over
-          all densities, respectively.
-        - ``"mean-means"`` - uses the min-max normalized (weighted) mean of
-          each density to calculate the midpoints. The normalization min
-          and max values are the minimum and maximum *mean* values over all
-          densities, respectively.
+          each density to calculate the interpolation values. The normalization
+          min and max values are the *absolute* minimum and maximum x-values
+          over all densities. This mode is useful when the desired effect is to
+          have the color of each trace reflect the mean of the distribution,
+          while also taking into account the distributions' spread.
+        - ``"mean-means"`` - similar to the ``"mean-minmax"`` mode, but where
+          the normalization min and max values are the minimum and maximum
+          *mean* x-values over all densities. This mode is useful when the
+          desired effect is to have the color of each trace reflect the mean of
+          the distribution, but without taking into account the entire
+          variability of the distributions.
 
     coloralpha : float, optional
         If None (default), this argument will be ignored and the transparency
