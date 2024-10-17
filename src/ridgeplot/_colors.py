@@ -154,8 +154,8 @@ def get_colorscale(name: str) -> ColorScale:
     name = name.lower()
     if name not in _COLORSCALE_MAPPING:
         raise ValueError(
-            f"Unknown colorscale name: '{name}'. The available colorscale"
-            f" names are {tuple(_COLORSCALE_MAPPING.keys())}."
+            f"Unknown color scale name: '{name}'. The available color scale "
+            f"names are {tuple(_COLORSCALE_MAPPING.keys())}."
         )
     return _COLORSCALE_MAPPING[name]
 
