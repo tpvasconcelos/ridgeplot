@@ -285,7 +285,7 @@ _TYPE_ALIASES_FULLY_QUALIFIED = {
     # ------- ._colormodes -------------------------
     "ridgeplot._colormodes.Colormode",
     "ridgeplot._colormodes.ColorsArray",
-    "ridgeplot._colormodes.MidpointsArray",
+    "ridgeplot._colormodes.ColorscaleInterpolants",
     # ------- ._figure_factory ---------------------
     "ridgeplot._figure_factory.LabelsArray",
     "ridgeplot._figure_factory.ShallowLabelsArray",

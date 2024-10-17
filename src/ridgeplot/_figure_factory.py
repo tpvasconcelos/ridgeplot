@@ -7,7 +7,7 @@ from plotly import graph_objects as go
 
 from ridgeplot._colormodes import (
     Colormode,
-    MidpointsContext,
+    InterpolationContext,
     compute_trace_colors,
 )
 from ridgeplot._types import (
@@ -241,7 +241,7 @@ def create_ridgeplot(
         colorscale=colorscale,
         colormode=colormode,
         coloralpha=coloralpha,
-        midpoints_context=MidpointsContext(
+        interpolation_ctx=InterpolationContext(
             densities=densities,
             n_rows=n_rows,
             n_traces=n_traces,

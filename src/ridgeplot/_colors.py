@@ -206,28 +206,26 @@ def normalise_colorscale(colorscale: ColorScale | Collection[Color] | str) -> Co
     return colorscale
 
 
-def interpolate_color(colorscale: ColorScale, midpoint: float) -> str:
-    """Get a color from a colorscale at a given midpoint.
-
-    Given a colorscale, it interpolates the expected color at a given midpoint,
-    on a scale from 0 to 1.
-    """
-    if not (0 <= midpoint <= 1):
-        raise ValueError(f"The 'midpoint' should be a float value between 0 and 1, not {midpoint}.")
+def interpolate_color(colorscale: ColorScale, p: float) -> str:
+    """Get a color from a colorscale at a given interpolation point ``p``."""
+    if not (0 <= p <= 1):
+        raise ValueError(
+            f"The interpolation point 'p' should be a float value between 0 and 1, not {p}."
+        )
     scale = [s for s, _ in colorscale]
     colors = [_any_to_rgb(c) for _, c in colorscale]
     del colorscale
-    if midpoint in scale:
-        return colors[scale.index(midpoint)]
-    ceil = min(filter(lambda s: s > midpoint, scale))
-    floor = max(filter(lambda s: s < midpoint, scale))
-    midpoint_normalised = normalise_min_max(midpoint, min_=floor, max_=ceil)
+    if p in scale:
+        return colors[scale.index(p)]
+    ceil = min(filter(lambda s: s > p, scale))
+    floor = max(filter(lambda s: s < p, scale))
+    p_normalised = normalise_min_max(p, min_=floor, max_=ceil)
     return cast(
         str,
         find_intermediate_color(
             lowcolor=colors[scale.index(floor)],
             highcolor=colors[scale.index(ceil)],
-            intermed=midpoint_normalised,
+            intermed=p_normalised,
             colortype="rgb",
         ),
     )

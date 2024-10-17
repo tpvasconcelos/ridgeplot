@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from ridgeplot import ridgeplot
-from ridgeplot._colormodes import MidpointsContext, _compute_midpoints_mean_means
+from ridgeplot._colormodes import InterpolationContext, _interpolate_mean_means
 
 
 def test_colormode_invalid() -> None:
@@ -26,13 +26,13 @@ def test_colormode_trace_index_row_wise() -> None:
     assert fig.data[3].fillcolor == fig.data[7].fillcolor == "rgb(100, 100, 100)"
 
 
-def test_compute_midpoints_mean_means() -> None:
-    ctx = MidpointsContext.from_densities(
+def test_interpolate_mean_means() -> None:
+    ctx = InterpolationContext.from_densities(
         [
             [[(0, 1), (1, 2), (2, 1)]],
             [[(2, 2), (3, 4), (4, 2)]],
             [[(4, 1), (5, 6), (6, 1)]],
         ]
     )
-    midpoints = _compute_midpoints_mean_means(ctx)
-    assert midpoints == [[0.0], [0.5], [1.0]]
+    ps = _interpolate_mean_means(ctx)
+    assert ps == [[0.0], [0.5], [1.0]]
