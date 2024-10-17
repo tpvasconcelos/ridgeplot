@@ -48,15 +48,6 @@ For instance, the Viridis color scale can be represented as:
 """
 
 
-def _is_canonical_colorscale(
-    colorscale: ColorScale | Collection[Color] | str,
-) -> TypeIs[ColorScale]:
-    if isinstance(colorscale, str):
-        return False
-    shape = get_collection_array_shape(colorscale)
-    return len(shape) == 2 and shape[1] == 2
-
-
 def _colormap_loader() -> dict[str, ColorScale]:
     colors: dict[str, ColorScale] = json.loads(_PATH_TO_COLORS_JSON.read_text())
     for name, colorscale in colors.items():
@@ -67,9 +58,29 @@ def _colormap_loader() -> dict[str, ColorScale]:
 _COLORSCALE_MAPPING: LazyMapping[str, ColorScale] = LazyMapping(loader=_colormap_loader)
 
 
+def is_canonical_colorscale(
+    colorscale: ColorScale | Collection[Color] | str,
+) -> TypeIs[ColorScale]:
+    if isinstance(colorscale, str) or not isinstance(colorscale, Collection):
+        return False
+    shape = get_collection_array_shape(colorscale)
+    if not (len(shape) == 2 and shape[1] == 2):
+        return False
+    scale, colors = zip(*colorscale)
+    return (
+        all(isinstance(s, (int, float)) for s in scale) and
+        all(isinstance(c, (str, tuple)) for c in colors)
+    )  # fmt: skip
+
+
 def validate_canonical_colorscale(colorscale: ColorScale) -> None:
     """Validate the structure, scale values, and colors of a colorscale in the
     canonical format."""
+    if not is_canonical_colorscale(colorscale):
+        raise TypeError(
+            "The colorscale should be a collection of tuples of two elements: "
+            "a scale value and a color."
+        )
     scale, colors = zip(*colorscale)
     validate_scale_values(scale=scale)
     validate_colors(colors=colors)
@@ -186,7 +197,7 @@ def normalise_colorscale(colorscale: ColorScale | Collection[Color] | str) -> Co
     :data:`ColorScale` format."""
     if isinstance(colorscale, str):
         return get_colorscale(name=colorscale)
-    if _is_canonical_colorscale(colorscale):
+    if is_canonical_colorscale(colorscale):
         validate_canonical_colorscale(colorscale)
         return colorscale
     # There is a bug in mypy that results in the type narrowing not working
