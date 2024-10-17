@@ -197,7 +197,7 @@ def ridgeplot(
         If None (default), this argument will be ignored and the transparency
         values of the specifies color-scale will remain untouched. Otherwise,
         if a float value is passed, it will be used to overwrite the
-        transparency (alpha) of the color-scale's colors.
+        opacity/transparency of the color-scale's colors.
 
     labels : LabelsArray or ShallowLabelsArray, optional
         A list of string labels for each trace. The default value is None,

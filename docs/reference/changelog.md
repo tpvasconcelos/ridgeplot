@@ -5,6 +5,10 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Features
+
+- Add support for named CSS colors ({gh-pr}`229`)
+
 ### Internal
 
 - Refactor `_figure_factory.py` to use a functional approach ({gh-pr}`228`)
