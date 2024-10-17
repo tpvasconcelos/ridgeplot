@@ -1,23 +1,29 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from _plotly_utils.exceptions import PlotlyError
 
 from ridgeplot._colors import (
     _COLORSCALE_MAPPING,
+    Color,
     ColorScale,
     _any_to_rgb,
-    _Color,
     _colormap_loader,
+    _is_canonical_colorscale,
     apply_alpha,
+    canonical_colorscale_from_list,
     get_colorscale,
     interpolate_color,
     list_all_colorscale_names,
-    validate_colorscale,
+    normalise_colorscale,
+    validate_canonical_colorscale,
 )
 from ridgeplot._utils import LazyMapping
+
+if TYPE_CHECKING:
+    from collections.abc import Collection
 
 VIRIDIS = (
     (0.0, "rgb(68, 1, 84)"),
@@ -31,6 +37,25 @@ VIRIDIS = (
     (0.8888888888888888, "rgb(181, 222, 43)"),
     (1.0, "rgb(253, 231, 37)"),
 )
+
+# ==============================================================
+# ---  _is_canonical_colorscale()
+# ==============================================================
+
+
+@pytest.mark.parametrize(
+    ("colorscale", "expected"),
+    [
+        (VIRIDIS, True),
+        (VIRIDIS[0], False),
+        ("viridis", False),
+        (["red", "blue", "green"], False),
+        (((0, "red"), (1, "blue")), True),
+    ],
+)
+def test_is_canonical_colorscale(colorscale: ColorScale | Any, expected: bool) -> None:
+    assert _is_canonical_colorscale(colorscale) == expected
+
 
 # ==============================================================
 # ---  _colormap_loader()
@@ -51,7 +76,7 @@ def test_plotly_colorscale_mapping() -> None:
     assert isinstance(_COLORSCALE_MAPPING, LazyMapping)
     for name, colorscale in _COLORSCALE_MAPPING.items():
         assert isinstance(name, str)
-        validate_colorscale(colorscale=colorscale)
+        validate_canonical_colorscale(colorscale=colorscale)
 
 
 # ==============================================================
@@ -77,15 +102,15 @@ def test_plotly_colorscale_mapping() -> None:
     ],
 )
 def test_validate_colorscale(colorscale: ColorScale) -> None:
-    validate_colorscale(colorscale=colorscale)
+    validate_canonical_colorscale(colorscale=colorscale)
 
 
 @pytest.mark.parametrize(
     ("colorscale", "expected_exception"),
     [
-        # is not iterable
+        # is not collection
         (1, TypeError),
-        # is not iterable of iterables
+        # is not collection of tuples
         ((1, 2, 3), TypeError),
         # inner tuples should have length 2 (for the scale and color values)
         (((1, 2, 3), (4, 5, 6)), ValueError),
@@ -100,7 +125,7 @@ def test_validate_colorscale_fails_for_invalid_colorscale(
     colorscale: Any,
     expected_exception: type[Exception],
 ) -> None:
-    pytest.raises(expected_exception, validate_colorscale, colorscale=colorscale)
+    pytest.raises(expected_exception, validate_canonical_colorscale, colorscale=colorscale)
 
 
 # ==============================================================
@@ -117,7 +142,7 @@ def test_validate_colorscale_fails_for_invalid_colorscale(
         ("forestgreen", "rgb(34, 139, 34)"),  # valid CSS named color
     ],
 )
-def test_any_to_rgb(color: _Color, expected: str) -> None:
+def test_any_to_rgb(color: Color, expected: str) -> None:
     assert _any_to_rgb(color=color) == expected
 
 
@@ -195,6 +220,51 @@ def test_get_colorscale_fails_for_unknown_colorscale_name() -> None:
 
 
 # ==============================================================
+# ---  infer_colorscale_from_list()
+# ==============================================================
+
+
+@pytest.mark.parametrize(
+    ("cs_list", "expected"),
+    [
+        (
+            ["red", "green", "blue"],
+            ((0.0, "red"), (0.5, "green"), (1.0, "blue")),
+        ),
+        (
+            ("red", "green", "blue", "yellow", "purple"),
+            ((0.0, "red"), (0.25, "green"), (0.5, "blue"), (0.75, "yellow"), (1.0, "purple")),
+        ),
+    ],
+)
+def test_canonical_colorscale_from_list(cs_list: Collection[Color], expected: ColorScale) -> None:
+    assert canonical_colorscale_from_list(cs_list) == expected
+
+
+# ==============================================================
+# ---  normalise_colorscale()
+# ==============================================================
+
+
+@pytest.mark.parametrize(
+    ("colorscale", "expected"),
+    [
+        (VIRIDIS, VIRIDIS),
+        ("viridis", VIRIDIS),
+        (list(zip(*VIRIDIS))[-1], VIRIDIS),
+    ],
+)
+def test_normalise_colorscale(
+    colorscale: ColorScale | Collection[Color] | str, expected: ColorScale
+) -> None:
+    colorscale = normalise_colorscale(colorscale=colorscale)
+    values, colors = zip(*colorscale)
+    values_expected, colors_expected = zip(*expected)
+    assert values == pytest.approx(values_expected)
+    assert colors == colors_expected
+
+
+# ==============================================================
 # ---  interpolate_color()
 # ==============================================================
 
@@ -228,5 +298,5 @@ def test_interpolate_color_fails_for_midpoint_out_of_bounds(midpoint: float) -> 
         ((4, 5, 6), 1.0, "rgba(4, 5, 6, 1.0)"),
     ],
 )
-def test_apply_alpha(color: _Color, alpha: float, expected: str) -> None:
+def test_apply_alpha(color: Color, alpha: float, expected: str) -> None:
     assert apply_alpha(color=color, alpha=alpha) == expected

@@ -22,10 +22,11 @@ from ridgeplot._types import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Collection
 
     import plotly.graph_objects as go
 
-    from ridgeplot._colors import ColorScale
+    from ridgeplot._colors import Color, ColorScale
     from ridgeplot._kde import KDEBandwidth, KDEPoints
 
 
@@ -68,7 +69,7 @@ def ridgeplot(
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
     kde_points: KDEPoints = 500,
-    colorscale: str | ColorScale = "plasma",
+    colorscale: ColorScale | Collection[Color] | str = "plasma",
     colormode: Colormode = "mean-minmax",
     coloralpha: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
@@ -164,10 +165,18 @@ def ridgeplot(
         set of samples. Optionally, you can also pass a custom 1D numerical
         array, which will be used for all traces.
 
-    colorscale : str or ColorScale
-        Any valid Plotly color-scale or a str with a valid named color-scale.
-        Use :func:`~ridgeplot.list_all_colorscale_names()` to see which names
-        are available or check out `Plotly's built-in color-scales`_.
+    colorscale : ColorScale or Collection[Color] or str
+        A continuous color scale used to color the different traces in the
+        ridgeline plot. It can be represented by a string name (e.g.,
+        ``"viridis"``), a :data:`~ridgeplot._colors.ColorScale` object, or a
+        list of colors (see :data:`~ridgeplot._colors.Color`). If a string name
+        is provided, it must be one of the built-in color scales (see
+        :func:`~ridgeplot.list_all_colorscale_names()` and
+        `Plotly's built-in color-scales`_). If a list of colors is provided, it
+        must be a list of valid CSS colors (e.g.,
+        ``["rgb(255, 0, 0)", "blue", "hsl(120, 100%, 50%)"]``). The list will
+        ultimately be converted to a :data:`~ridgeplot._colors.ColorScale` object, assuming the
+        colors are evenly spaced.
 
     colormode : Colormode
         This argument controls the logic for choosing the color filling of each

@@ -8,6 +8,9 @@ from ridgeplot._types import CollectionL2
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
 if TYPE_CHECKING:
+    from collections.abc import Collection
+
+    from ridgeplot._colors import Color
     from ridgeplot._types import Densities, Numeric
 
 Colormode = Literal["row-index", "trace-index", "trace-index-row-wise", "mean-minmax", "mean-means"]
@@ -124,7 +127,7 @@ def _compute_midpoints_mean_means(ctx: MidpointsContext) -> MidpointsArray:
 
 
 def compute_trace_colors(
-    colorscale: ColorScale | str,
+    colorscale: ColorScale | Collection[Color] | str,
     colormode: Colormode,
     coloralpha: float | None,
     midpoints_context: MidpointsContext,
