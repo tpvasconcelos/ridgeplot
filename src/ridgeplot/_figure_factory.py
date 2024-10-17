@@ -28,7 +28,7 @@ from ridgeplot._vendor.more_itertools import zip_strict
 if TYPE_CHECKING:
     from collections.abc import Collection
 
-    from ridgeplot._colors import ColorScale
+    from ridgeplot._colors import Color, ColorScale
     from ridgeplot._types import Densities, Numeric
 
 
@@ -52,16 +52,6 @@ Example
 
 >>> labels_array: ShallowLabelsArray = ["trace 1", "trace 2", "trace 3"]
 """
-
-ShallowColorsArray = CollectionL1[str]
-"""Shallow type for :data:`ColorsArray`.
-
-Example
--------
-
->>> colors_array: ShallowColorsArray = ["red", "blue", "green"]
-"""
-
 
 _D3HF = ".7"
 """Default (d3-format) format for floats in hover labels.
@@ -210,7 +200,7 @@ def update_layout(
 
 def create_ridgeplot(
     densities: Densities,
-    colorscale: str | ColorScale,
+    colorscale: ColorScale | Collection[Color] | str,
     coloralpha: float | None,
     colormode: Colormode,
     trace_labels: LabelsArray | ShallowLabelsArray | None,

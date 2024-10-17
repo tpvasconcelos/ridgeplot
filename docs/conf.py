@@ -280,15 +280,15 @@ napoleon_attr_annotations = True
 # Type aliases
 _TYPE_ALIASES_FULLY_QUALIFIED = {
     # ------- ._colors -----------------------------
+    "ridgeplot._colors.Color",
     "ridgeplot._colors.ColorScale",
-    "ridgeplot._colors._Color",
+    # ------- ._colormodes -------------------------
+    "ridgeplot._colormodes.Colormode",
+    "ridgeplot._colormodes.ColorsArray",
+    "ridgeplot._colormodes.MidpointsArray",
     # ------- ._figure_factory ---------------------
     "ridgeplot._figure_factory.LabelsArray",
     "ridgeplot._figure_factory.ShallowLabelsArray",
-    "ridgeplot._figure_factory.ColorsArray",
-    "ridgeplot._figure_factory.ShallowColorsArray",
-    "ridgeplot._figure_factory.MidpointsArray",
-    # "ridgeplot._figure_factory.Colormode",
     # ------- ._kde --------------------------------
     "ridgeplot._kde.KDEPoints",
     "ridgeplot._kde.KDEBandwidth",

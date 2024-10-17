@@ -10,10 +10,7 @@ if TYPE_CHECKING:
 
 def main() -> go.Figure:
     fig = lincoln_weather(
-        colorscale=(
-            (0, "orangered"),
-            (1, "deepskyblue"),
-        ),
+        colorscale=["orangered", "deepskyblue"],
         colormode="trace-index-row-wise",
     )
     return fig

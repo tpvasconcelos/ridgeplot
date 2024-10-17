@@ -65,7 +65,7 @@ def test_colorscale_by_name(name: str) -> None:
 
 
 def test_colorscale_invalid_name() -> None:
-    with pytest.raises(ValueError, match="Unknown colorscale name"):
+    with pytest.raises(ValueError, match="Unknown color scale name"):
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale="whodis")
 
 
