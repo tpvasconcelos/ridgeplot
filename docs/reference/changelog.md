@@ -10,9 +10,14 @@ Unreleased changes
 - Add support for named CSS colors ({gh-pr}`229`)
 - Allow users to define color scales as a collection of colors (`Collection[Color]`) ({gh-pr}`231`)
 
+### Documentation
+
+- Improve the documentation for the `colormode` parameter ({gh-pr}`232`)
+
 ### Internal
 
 - Refactor `_figure_factory.py` to use a functional approach ({gh-pr}`228`)
+- Stop using the term "midpoints" to refer to the "interpolation values" when dealing with continuous color scales ({gh-pr}`232`)
 
 ---
 
