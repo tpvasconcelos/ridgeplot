@@ -29,14 +29,13 @@ Example
 ... ]
 """
 
-MidpointsArray = CollectionL2[float]
-"""A :data:`MidpointsArray` represents the midpoints of color scales in a
-ridgeplot.
+ColorscaleInterpolants = CollectionL2[float]
+"""A :data:`ColorscaleInterpolants` contains the interpolants for a :data:`ColorScale`.
 
 Example
 -------
 
->>> midpoints_array: MidpointsArray = [
+>>> interpolants: ColorscaleInterpolants = [
 ...     [0.2, 0.5, 1],
 ...     [0.3, 0.7],
 ... ]
@@ -44,7 +43,7 @@ Example
 
 
 @dataclass
-class MidpointsContext:
+class InterpolationContext:
     densities: Densities
     n_rows: int
     n_traces: int
@@ -52,7 +51,7 @@ class MidpointsContext:
     x_max: Numeric
 
     @classmethod
-    def from_densities(cls, densities: Densities) -> MidpointsContext:
+    def from_densities(cls, densities: Densities) -> InterpolationContext:
         x_min, x_max, _, _ = map(float, get_xy_extrema(densities=densities))
         return cls(
             densities=densities,
@@ -63,8 +62,8 @@ class MidpointsContext:
         )
 
 
-class MidpointsFunc(Protocol):
-    def __call__(self, ctx: MidpointsContext) -> MidpointsArray: ...
+class InterpolationFunc(Protocol):
+    def __call__(self, ctx: InterpolationContext) -> ColorscaleInterpolants: ...
 
 
 def _mul(a: tuple[Numeric, ...], b: tuple[Numeric, ...]) -> tuple[Numeric, ...]:
@@ -72,46 +71,46 @@ def _mul(a: tuple[Numeric, ...], b: tuple[Numeric, ...]) -> tuple[Numeric, ...]:
     return tuple(a_i * b_i for a_i, b_i in zip(a, b))
 
 
-def _compute_midpoints_row_index(ctx: MidpointsContext) -> MidpointsArray:
+def _interpolate_row_index(ctx: InterpolationContext) -> ColorscaleInterpolants:
     return [
         [((ctx.n_rows - 1) - ith_row) / (ctx.n_rows - 1)] * len(row)
         for ith_row, row in enumerate(ctx.densities)
     ]
 
 
-def _compute_midpoints_trace_index(ctx: MidpointsContext) -> MidpointsArray:
-    midpoints = []
+def _interpolate_trace_index(ctx: InterpolationContext) -> ColorscaleInterpolants:
+    ps = []
     ith_trace = 0
     for row in ctx.densities:
-        midpoints_row = []
+        ps_row = []
         for _ in row:
-            midpoints_row.append(((ctx.n_traces - 1) - ith_trace) / (ctx.n_traces - 1))
+            ps_row.append(((ctx.n_traces - 1) - ith_trace) / (ctx.n_traces - 1))
             ith_trace += 1
-        midpoints.append(midpoints_row)
-    return midpoints
+        ps.append(ps_row)
+    return ps
 
 
-def _compute_midpoints_trace_index_row_wise(ctx: MidpointsContext) -> MidpointsArray:
+def _interpolate_trace_index_row_wise(ctx: InterpolationContext) -> ColorscaleInterpolants:
     return [
         [((len(row) - 1) - ith_row_trace) / (len(row) - 1) for ith_row_trace in range(len(row))]
         for row in ctx.densities
     ]
 
 
-def _compute_midpoints_mean_minmax(ctx: MidpointsContext) -> MidpointsArray:
-    midpoints = []
+def _interpolate_mean_minmax(ctx: InterpolationContext) -> ColorscaleInterpolants:
+    ps = []
     for row in ctx.densities:
-        midpoints_row = []
+        ps_row = []
         for trace in row:
             x, y = zip(*trace)
-            midpoints_row.append(
+            ps_row.append(
                 normalise_min_max(sum(_mul(x, y)) / sum(y), min_=ctx.x_min, max_=ctx.x_max)
             )
-        midpoints.append(midpoints_row)
-    return midpoints
+        ps.append(ps_row)
+    return ps
 
 
-def _compute_midpoints_mean_means(ctx: MidpointsContext) -> MidpointsArray:
+def _interpolate_mean_means(ctx: InterpolationContext) -> ColorscaleInterpolants:
     means = []
     for row in ctx.densities:
         means_row = []
@@ -130,14 +129,14 @@ def compute_trace_colors(
     colorscale: ColorScale | Collection[Color] | str,
     colormode: Colormode,
     coloralpha: float | None,
-    midpoints_context: MidpointsContext,
+    interpolation_ctx: InterpolationContext,
 ) -> ColorsArray:
     colorscale = normalise_colorscale(colorscale)
     if coloralpha is not None:
         coloralpha = float(coloralpha)
 
-    def _get_color(mp: float) -> str:
-        color = interpolate_color(colorscale, midpoint=mp)
+    def _get_color(p: float) -> str:
+        color = interpolate_color(colorscale, p=p)
         if coloralpha is not None:
             color = apply_alpha(color, alpha=coloralpha)
         return color
@@ -148,15 +147,15 @@ def compute_trace_colors(
             f"{tuple(COLORMODE_MAPS)}, got {colormode} instead."
         )
 
-    midpoints_func = COLORMODE_MAPS[colormode]
-    midpoints = midpoints_func(ctx=midpoints_context)
-    return [[_get_color(midpoint) for midpoint in row] for row in midpoints]
+    interpolate_func = COLORMODE_MAPS[colormode]
+    interpolants = interpolate_func(ctx=interpolation_ctx)
+    return [[_get_color(p) for p in row] for row in interpolants]
 
 
-COLORMODE_MAPS: dict[Colormode, MidpointsFunc] = {
-    "row-index": _compute_midpoints_row_index,
-    "trace-index": _compute_midpoints_trace_index,
-    "trace-index-row-wise": _compute_midpoints_trace_index_row_wise,
-    "mean-minmax": _compute_midpoints_mean_minmax,
-    "mean-means": _compute_midpoints_mean_means,
+COLORMODE_MAPS: dict[Colormode, InterpolationFunc] = {
+    "row-index": _interpolate_row_index,
+    "trace-index": _interpolate_trace_index,
+    "trace-index-row-wise": _interpolate_trace_index_row_wise,
+    "mean-minmax": _interpolate_mean_minmax,
+    "mean-means": _interpolate_mean_means,
 }

@@ -11,11 +11,11 @@ from ridgeplot._colors import (
     ColorScale,
     _any_to_rgb,
     _colormap_loader,
-    _is_canonical_colorscale,
     apply_alpha,
     canonical_colorscale_from_list,
     get_colorscale,
     interpolate_color,
+    is_canonical_colorscale,
     list_all_colorscale_names,
     normalise_colorscale,
     validate_canonical_colorscale,
@@ -38,23 +38,37 @@ VIRIDIS = (
     (1.0, "rgb(253, 231, 37)"),
 )
 
-# ==============================================================
-# ---  _is_canonical_colorscale()
-# ==============================================================
-
-
-@pytest.mark.parametrize(
-    ("colorscale", "expected"),
+VALID_COLORSCALES = [
+    VIRIDIS,
+    # tuple of tuples of rgb colors
+    (
+        (0.0, "rgb(68, 1, 84)"),
+        (0.4444444444444444, "rgb(38, 130, 142)"),
+        (1.0, "rgb(253, 231, 37)"),
+    ),
+    # list of lists of hex colors
     [
-        (VIRIDIS, True),
-        (VIRIDIS[0], False),
-        ("viridis", False),
-        (["red", "blue", "green"], False),
-        (((0, "red"), (1, "blue")), True),
+        [0, "#440154"],
+        [0.5019607843137255, "#21918c"],
+        [1, "#fde725"],
     ],
-)
-def test_is_canonical_colorscale(colorscale: ColorScale | Any, expected: bool) -> None:
-    assert _is_canonical_colorscale(colorscale) == expected
+    # Another simple example
+    ((0, "red"), (1, "blue")),
+]
+
+INVALID_COLORSCALES = [
+    # is not collection
+    (1, TypeError),
+    ("viridis", TypeError),
+    # is not collection of tuples
+    ((1, 2, 3), TypeError),
+    (["red", "blue", "green"], TypeError),
+    (VIRIDIS[0], TypeError),
+    # inner tuples should have length 2 (for the scale and color values)
+    (((1, 2, 3), (4, 5, 6)), TypeError),
+    # Wrong order of scale and color values for the inner tuples
+    ((("a", 1), ("b", 2)), TypeError),
+]
 
 
 # ==============================================================
@@ -80,52 +94,47 @@ def test_plotly_colorscale_mapping() -> None:
 
 
 # ==============================================================
-# ---  validate_colorscale()
+# ---  is_canonical_colorscale()
 # ==============================================================
 
 
 @pytest.mark.parametrize(
-    "colorscale",
+    ("colorscale", "expected"),
     [
-        # tuple of tuples of rgb colors
-        (
-            (0.0, "rgb(68, 1, 84)"),
-            (0.4444444444444444, "rgb(38, 130, 142)"),
-            (1.0, "rgb(253, 231, 37)"),
-        ),
-        # list of lists of hex colors
-        [
-            [0, "#440154"],
-            [0.5019607843137255, "#21918c"],
-            [1, "#fde725"],
-        ],
+        *[(cs, True) for cs in VALID_COLORSCALES],
+        *[(cs[0], False) for cs in INVALID_COLORSCALES],
     ],
 )
-def test_validate_colorscale(colorscale: ColorScale) -> None:
+def test_is_canonical_colorscale(colorscale: ColorScale | Any, expected: bool) -> None:
+    assert is_canonical_colorscale(colorscale) == expected
+
+
+# ==============================================================
+# ---  validate_canonical_colorscale()
+# ==============================================================
+
+
+@pytest.mark.parametrize("colorscale", VALID_COLORSCALES)
+def test_validate_canonical_colorscale(colorscale: ColorScale) -> None:
     validate_canonical_colorscale(colorscale=colorscale)
 
 
 @pytest.mark.parametrize(
     ("colorscale", "expected_exception"),
     [
-        # is not collection
-        (1, TypeError),
-        # is not collection of tuples
-        ((1, 2, 3), TypeError),
-        # inner tuples should have length 2 (for the scale and color values)
-        (((1, 2, 3), (4, 5, 6)), ValueError),
+        *INVALID_COLORSCALES,
         # Invalid scale values: first and last numbers
         # in the scale must be 0.0 and 1.0 respectively
-        ((("a", 1), ("b", 2)), PlotlyError),
         (((1, "a"), (2, "b")), PlotlyError),
         (((1, "a"), (0, "a")), PlotlyError),
     ],
 )
-def test_validate_colorscale_fails_for_invalid_colorscale(
+def test_validate_canonical_colorscale_fails_for_invalid_colorscale(
     colorscale: Any,
     expected_exception: type[Exception],
 ) -> None:
-    pytest.raises(expected_exception, validate_canonical_colorscale, colorscale=colorscale)
+    with pytest.raises(expected_exception):
+        validate_canonical_colorscale(colorscale)
 
 
 # ==============================================================
@@ -269,20 +278,20 @@ def test_normalise_colorscale(
 # ==============================================================
 
 
-def test_interpolate_color_midpoint_in_scale() -> None:
-    assert interpolate_color(colorscale=VIRIDIS, midpoint=0) == VIRIDIS[0][1]
-    assert interpolate_color(colorscale=VIRIDIS, midpoint=1) == VIRIDIS[-1][1]
+def test_interpolate_color_p_in_scale() -> None:
+    assert interpolate_color(colorscale=VIRIDIS, p=0) == VIRIDIS[0][1]
+    assert interpolate_color(colorscale=VIRIDIS, p=1) == VIRIDIS[-1][1]
 
 
-def test_interpolate_color_midpoint_not_in_scale() -> None:
+def test_interpolate_color_p_not_in_scale() -> None:
     # Hard-coded test case.
-    assert interpolate_color(colorscale=VIRIDIS, midpoint=0.5) == "rgb(34.5, 144.0, 139.5)"
+    assert interpolate_color(colorscale=VIRIDIS, p=0.5) == "rgb(34.5, 144.0, 139.5)"
 
 
-@pytest.mark.parametrize("midpoint", [-10.0, -1.3, 1.9, 100.0])
-def test_interpolate_color_fails_for_midpoint_out_of_bounds(midpoint: float) -> None:
+@pytest.mark.parametrize("p", [-10.0, -1.3, 1.9, 100.0])
+def test_interpolate_color_fails_for_p_out_of_bounds(p: float) -> None:
     with pytest.raises(ValueError, match="should be a float value between 0 and 1"):
-        interpolate_color(colorscale=..., midpoint=midpoint)  # type: ignore[arg-type]
+        interpolate_color(colorscale=..., p=p)  # type: ignore[arg-type]
 
 
 # ==============================================================
