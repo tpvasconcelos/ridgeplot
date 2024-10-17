@@ -3,11 +3,11 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, cast
 
+from ridgeplot._colormodes import Colormode
 from ridgeplot._figure_factory import (
-    Colormode,
     LabelsArray,
-    RidgeplotFigureFactory,
     ShallowLabelsArray,
+    create_ridgeplot,
 )
 from ridgeplot._kde import estimate_densities
 from ridgeplot._missing import MISSING, MissingType
@@ -197,7 +197,7 @@ def ridgeplot(
         If None (default), this argument will be ignored and the transparency
         values of the specifies color-scale will remain untouched. Otherwise,
         if a float value is passed, it will be used to overwrite the
-        transparency (alpha) of the color-scale's colors.
+        opacity/transparency of the color-scale's colors.
 
     labels : LabelsArray or ShallowLabelsArray, optional
         A list of string labels for each trace. The default value is None,
@@ -277,7 +277,7 @@ def ridgeplot(
         )
         show_yticklabels = show_annotations
 
-    ridgeplot_figure_factory = RidgeplotFigureFactory(
+    fig = create_ridgeplot(
         densities=densities,
         trace_labels=labels,
         colorscale=colorscale,
@@ -288,4 +288,4 @@ def ridgeplot(
         show_yticklabels=show_yticklabels,
         xpad=xpad,
     )
-    return ridgeplot_figure_factory.make_figure()
+    return fig

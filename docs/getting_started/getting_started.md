@@ -261,8 +261,8 @@ To demonstrate how these options can be used, we can try to adjust the output fr
 fig = ridgeplot(
     # ... same options as before
     colorscale=(
-        (0.0, "rgb(20, 20, 255)"),
-        (1.0, "rgb(255, 20, 20)"),
+        (0, "orangered"),
+        (1, "deepskyblue"),
     ),
     colormode="trace-index-row-wise",
 )
