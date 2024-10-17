@@ -30,7 +30,7 @@ Example
 """
 
 MidpointsArray = CollectionL2[float]
-"""A :data:`MidpointsArray` represents the midpoints of colorscales in a
+"""A :data:`MidpointsArray` represents the midpoints of color scales in a
 ridgeplot.
 
 Example

@@ -20,14 +20,14 @@ Color = Union[str, tuple[float, float, float]]
 CSS color string - including hex, rgb/a, hsl/a, hsv/a, and named CSS colors."""
 
 ColorScale = Collection[tuple[float, Color]]
-"""The canonical form for a colorscale represented by a collection of tuples of
+"""The canonical form for a color scale represented by a collection of tuples of
 two elements:
 
 0. the first element (a *scale value*) is a float bounded to the
    interval ``[0, 1]``
 1. the second element should be a valid :data:`Color` representation.
 
-For instance, the Viridis colorscale can be represented as:
+For instance, the Viridis color scale can be represented as:
 
 >>> get_colorscale("Viridis")
 ((0.0, 'rgb(68, 1, 84)'),
