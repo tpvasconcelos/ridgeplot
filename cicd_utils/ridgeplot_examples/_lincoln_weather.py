@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import plotly.graph_objects as go
 
+    from ridgeplot._colormodes import Colormode
     from ridgeplot._colors import ColorScale
-    from ridgeplot._figure_factory import Colormode
 
 
 def main(

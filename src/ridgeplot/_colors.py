@@ -8,19 +8,24 @@ from typing import Union, cast
 from _plotly_utils.colors import validate_colors, validate_scale_values
 from plotly.colors import find_intermediate_color, hex_to_rgb
 
+from ridgeplot._css_colors import CSS_NAMED_COLORS, CssNamedColor
 from ridgeplot._utils import LazyMapping, normalise_min_max
 
 _PATH_TO_COLORS_JSON = Path(__file__).parent.joinpath("colors.json")
 
-ColorScale = Iterable[tuple[float, str]]
+
+_Color = Union[str, tuple[float, float, float]]
+"""A color can be represented by a tuple of ``(r, g, b)`` values or any valid
+CSS color string - including hex, rgb/a, hsl/a, hsv/a, and named CSS colors."""
+
+ColorScale = Iterable[tuple[float, _Color]]
 """A colorscale is an iterable of tuples of two elements:
 
 0. the first element (a *scale value*) is a float bounded to the
    interval ``[0, 1]``
-1. the second element (a *color*) is a string representation of a color parsable
-   by Plotly
+1. the second element should be a valid :data:`_Color` representation.
 
-For instance, the Viridis colorscale would be defined as
+For instance, the Viridis colorscale can be represented as:
 
 >>> get_colorscale("viridis")
 ((0.0, 'rgb(68, 1, 84)'),
@@ -34,10 +39,6 @@ For instance, the Viridis colorscale would be defined as
  (0.8888888888888888, 'rgb(181, 222, 43)'),
  (1.0, 'rgb(253, 231, 37)'))
 """
-
-_Color = Union[str, tuple[float, float, float]]
-"""A color can be represented as an rgb(a) or hex string or a tuple of
-``(r, g, b)`` values."""
 
 
 def _colormap_loader() -> dict[str, ColorScale]:
@@ -55,6 +56,8 @@ def validate_colorscale(colorscale: ColorScale) -> None:
 
     Adapted from ``_plotly_utils.colors.validate_colorscale``.
     """
+    # TODO: Plotly assumes that a colorscale is a list of lists. For consistency,
+    #       should we also use this structure as the canonical format?
     scale, colors = zip(*colorscale)
     validate_scale_values(scale=scale)
     validate_colors(colors=colors)
@@ -90,6 +93,9 @@ def _any_to_rgb(color: _Color) -> str:
         return _any_to_rgb(cast(str, hex_to_rgb(color)))
     elif color.startswith("rgb("):
         rgb = color
+    elif color in CSS_NAMED_COLORS:
+        color = cast(CssNamedColor, color)
+        return _any_to_rgb(CSS_NAMED_COLORS[color])
     else:
         raise ValueError(
             f"color should be a tuple or a str representation "
@@ -142,7 +148,17 @@ def get_colorscale(name: str) -> ColorScale:
     return _COLORSCALE_MAPPING[name]
 
 
-def get_color(colorscale: ColorScale, midpoint: float) -> str:
+def normalise_colorscale(colorscale: ColorScale | str) -> ColorScale:
+    """Convert mixed colorscale representations to the canonical
+    :data:`ColorScale` format."""
+    if isinstance(colorscale, str):
+        colorscale = get_colorscale(name=colorscale)
+    else:
+        validate_colorscale(colorscale)
+    return colorscale
+
+
+def interpolate_color(colorscale: ColorScale, midpoint: float) -> str:
     """Get a color from a colorscale at a given midpoint.
 
     Given a colorscale, it interpolates the expected color at a given midpoint,
