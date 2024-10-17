@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 import json
+import sys
 from collections.abc import Collection
 from pathlib import Path
 from typing import Union, cast
 
 from _plotly_utils.colors import validate_colors, validate_scale_values
 from plotly.colors import find_intermediate_color, hex_to_rgb
-from typing_extensions import TypeIs
+
+if sys.version_info >= (3, 13):
+    from typing import TypeIs
+else:
+    from typing_extensions import TypeIs
 
 from ridgeplot._css_colors import CSS_NAMED_COLORS, CssNamedColor
 from ridgeplot._utils import LazyMapping, get_collection_array_shape, normalise_min_max
