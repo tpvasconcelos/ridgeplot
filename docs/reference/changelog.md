@@ -8,6 +8,7 @@ Unreleased changes
 ### Features
 
 - Add support for named CSS colors ({gh-pr}`229`)
+- Allow users to define color scales as a collection of colors (`Collection[Color]`) ({gh-pr}`231`)
 
 ### Internal
 
