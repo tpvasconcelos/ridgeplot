@@ -30,7 +30,7 @@ class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
 
     def validate_coerce(self, v: Any) -> ColorScale:
         coerced = super().validate_coerce(v)
-        if coerced is None:
+        if coerced is None:  # pragma: no cover
             self.raise_invalid_val(coerced)
         return cast(ColorScale, tuple(tuple(c) for c in coerced))
 
