@@ -144,7 +144,7 @@ def interpolate_color(colorscale: ColorScale, p: float) -> Color:
 
 
 def compute_trace_colors(
-    colorscale: ColorScale | Collection[Color] | str,
+    colorscale: ColorScale | Collection[Color] | str | None,
     colormode: Colormode,
     coloralpha: float | None,
     interpolation_ctx: InterpolationContext,

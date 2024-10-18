@@ -70,7 +70,7 @@ def ridgeplot(
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
     kde_points: KDEPoints = 500,
-    colorscale: ColorScale | Collection[Color] | str = "plasma",
+    colorscale: ColorScale | Collection[Color] | str | None = None,
     colormode: Colormode = "mean-minmax",
     coloralpha: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
