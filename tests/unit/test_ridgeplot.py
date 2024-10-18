@@ -1,11 +1,16 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
-from _plotly_utils.exceptions import PlotlyError
 
 from ridgeplot import ridgeplot
-from ridgeplot._colors import get_colorscale
 from ridgeplot._types import nest_shallow_collection
+
+if TYPE_CHECKING:
+    from collections.abc import Collection
+
+    from ridgeplot._colors import Color, ColorScale
 
 
 def test_fails_when_both_samples_and_densities_are_passed() -> None:
@@ -56,40 +61,25 @@ def test_y_labels_dedup() -> None:
     )  # fmt: skip
 
 
-@pytest.mark.parametrize("name", ["default", "bluered", "viridis", "plasma"])
-def test_colorscale_by_name(name: str) -> None:
-    assert (
-        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=name) ==
-        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=get_colorscale(name))
-    )  # fmt: skip
+# ==============================================================
+# ---  param: colorscale
+# ==============================================================
 
 
-def test_colorscale_invalid_name() -> None:
-    with pytest.raises(ValueError, match="Unknown color scale name"):
-        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale="whodis")
-
-
-def test_colorscale_invalid_values() -> None:
-    colorscale = (
-        (0.0, "rgb(0, 0, 0)"),
-        (1.2, "rgb(0, 0, 0)"),
+def test_colorscale_coercion(
+    valid_colorscale: tuple[ColorScale | Collection[Color] | str, ColorScale]
+) -> None:
+    colorscale, coerced = valid_colorscale
+    assert ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=colorscale) == ridgeplot(
+        samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=coerced
     )
-    with pytest.raises(
-        PlotlyError,
-        match=r"The first and last number in your scale must be 0\.0 and 1\.0 respectively",
-    ):
-        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=colorscale)
 
 
-def test_colorscale_invalid_colors() -> None:
-    colorscale = (
-        (0.0, "rgb(0, 0, 0)"),
-        (1.0, "not a valid color"),
-    )
+def test_colorscale_invalid(invalid_colorscale: ColorScale | Collection[Color] | str) -> None:
     with pytest.raises(
-        ValueError, match="color should be a tuple or a str representation of a hex or rgb color"
+        ValueError, match=r"Invalid value .* received for the 'colorscale' property"
     ):
-        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=colorscale)
+        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=invalid_colorscale)
 
 
 def test_coloralpha() -> None:
