@@ -18,6 +18,8 @@ Unreleased changes
 
 - Refactor `_figure_factory.py` to use a functional approach ({gh-pr}`228`)
 - Stop using the term "midpoints" to refer to the "interpolation values" when dealing with continuous color scales ({gh-pr}`232`)
+- Refactor color validation logic to use helpers provided by Plotly ({gh-pr}`233`)
+- Drop `colors.json` and use Plotly's `ColorscaleValidator` and `named_colorscales` directly ({gh-pr}`234`)
 
 ---
 
@@ -41,7 +43,6 @@ Unreleased changes
 - Eagerly validate input shapes in `RidgeplotFigureFactory` ({gh-pr}`222`)
 - Vendor `_zip_equal()` from [more-itertools](https://github.com/more-itertools/more-itertools/) ({gh-pr}`222`)
 - Improve overall test coverage ({gh-pr}`222`)
-- Refactor color validation logic to use helpers provided by Plotly ({gh-pr}`233`)
 
 ### Bug fixes
 
