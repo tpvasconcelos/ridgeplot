@@ -6,7 +6,7 @@ from typing import Any, Union, cast
 import plotly.express as px
 from _plotly_utils.basevalidators import ColorscaleValidator as _ColorscaleValidator
 
-from ridgeplot._css_colors import CSS_NAMED_COLORS, CssNamedColor
+from ridgeplot._coloring.css_colors import CSS_NAMED_COLORS, CssNamedColor
 from ridgeplot._utils import normalise_min_max
 
 Color = Union[str, tuple[float, float, float]]

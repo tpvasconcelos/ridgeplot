@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any
 import pytest
 from _plotly_utils.exceptions import PlotlyError
 
-from ridgeplot._colors import (
+from ridgeplot._coloring.colors import (
     Color,
     ColorScale,
     apply_alpha,

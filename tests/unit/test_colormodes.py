@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from ridgeplot import ridgeplot
-from ridgeplot._colormodes import InterpolationContext, _interpolate_mean_means
+from ridgeplot._coloring.colormodes import InterpolationContext, _interpolate_mean_means
 
 
 def test_colormode_invalid() -> None:

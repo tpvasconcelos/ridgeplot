@@ -10,7 +10,7 @@ from ridgeplot._types import nest_shallow_collection
 if TYPE_CHECKING:
     from collections.abc import Collection
 
-    from ridgeplot._colors import Color, ColorScale
+    from ridgeplot._coloring.colors import Color, ColorScale
 
 
 def test_fails_when_both_samples_and_densities_are_passed() -> None:

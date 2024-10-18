@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, cast
 
-from ridgeplot._colormodes import Colormode
+from ridgeplot._coloring.colormodes import Colormode
 from ridgeplot._figure_factory import (
     LabelsArray,
     ShallowLabelsArray,
@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
     import plotly.graph_objects as go
 
-    from ridgeplot._colors import Color, ColorScale
+    from ridgeplot._coloring.colors import Color, ColorScale
     from ridgeplot._kde import KDEBandwidth, KDEPoints
 
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal, Protocol
 
-from ridgeplot._colors import (
+from ridgeplot._coloring.colors import (
     ColorScale,
     apply_alpha,
     interpolate_color,
@@ -16,7 +16,7 @@ from ridgeplot._utils import get_xy_extrema, normalise_min_max
 if TYPE_CHECKING:
     from collections.abc import Collection
 
-    from ridgeplot._colors import Color
+    from ridgeplot._coloring.colors import Color
     from ridgeplot._types import Densities, Numeric
 
 Colormode = Literal["row-index", "trace-index", "trace-index-row-wise", "mean-minmax", "mean-means"]
