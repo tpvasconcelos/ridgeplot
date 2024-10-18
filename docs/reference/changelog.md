@@ -20,6 +20,7 @@ Unreleased changes
 - Stop using the term "midpoints" to refer to the "interpolation values" when dealing with continuous color scales ({gh-pr}`232`)
 - Refactor color validation logic to use helpers provided by Plotly ({gh-pr}`233`)
 - Drop `colors.json` and use Plotly's `ColorscaleValidator` and `named_colorscales` directly ({gh-pr}`234`)
+- Refactor color utilities into `ridgeplot._color` ({gh-pr}`235`)
 
 ---
 
