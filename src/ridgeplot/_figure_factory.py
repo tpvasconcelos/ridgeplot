@@ -201,7 +201,7 @@ def update_layout(
 
 def create_ridgeplot(
     densities: Densities,
-    colorscale: ColorScale | Collection[Color] | str,
+    colorscale: ColorScale | Collection[Color] | str | None,
     coloralpha: float | None,
     colormode: Colormode,
     trace_labels: LabelsArray | ShallowLabelsArray | None,

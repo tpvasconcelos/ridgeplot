@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from ridgeplot._color.colorscale import (
+    infer_default_colorscale,
     list_all_colorscale_names,
     validate_and_coerce_colorscale,
 )
@@ -16,17 +17,12 @@ if TYPE_CHECKING:
 
 
 # ==============================================================
-# --- list_all_colorscale_names()
+# ---  infer_default_colorscale()
 # ==============================================================
 
 
-def test_list_all_colorscale_names() -> None:
-    all_colorscale_names = list_all_colorscale_names()
-    assert all(isinstance(name, str) for name in all_colorscale_names)
-    assert "viridis" in all_colorscale_names
-    assert "default" in all_colorscale_names
-    for name in all_colorscale_names:
-        validate_and_coerce_colorscale(name)
+def test_infer_default_colorscale() -> None:
+    assert infer_default_colorscale() == validate_and_coerce_colorscale("plasma")
 
 
 # ==============================================================
@@ -52,3 +48,17 @@ def test_validate_and_coerce_colorscale_fails(
         ValueError, match=r"Invalid value .* received for the 'colorscale' property"
     ):
         validate_and_coerce_colorscale(invalid_colorscale)
+
+
+# ==============================================================
+# --- list_all_colorscale_names()
+# ==============================================================
+
+
+def test_list_all_colorscale_names() -> None:
+    all_colorscale_names = list_all_colorscale_names()
+    assert all(isinstance(name, str) for name in all_colorscale_names)
+    assert "viridis" in all_colorscale_names
+    assert "default" in all_colorscale_names
+    for name in all_colorscale_names:
+        validate_and_coerce_colorscale(name)

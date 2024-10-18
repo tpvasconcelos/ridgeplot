@@ -9,6 +9,8 @@ Unreleased changes
 
 - Add support for named CSS colors ({gh-pr}`229`)
 - Allow users to define color scales as a collection of colors (`Collection[Color]`) ({gh-pr}`231`)
+- Dynamically infer the default colorscale from the active Plotly template ({gh-pr}`237`)
+
 
 ### Documentation
 

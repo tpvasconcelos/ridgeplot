@@ -54,7 +54,6 @@ def valid_colorscale(
 
 
 INVALID_COLOR_SCALES = [
-    None,
     1,
     (1, 2, 3),
     VIRIDIS[0],
