@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import plotly.express as px
 import pytest
 
 if TYPE_CHECKING:
     from collections.abc import Collection
 
-    from ridgeplot._colors import Color, ColorScale
+    from ridgeplot._types import Color, ColorScale
 
 VIRIDIS = (
     (0.0, "#440154"),
@@ -40,6 +41,8 @@ VALID_COLOR_SCALES = [
     tuple([((0, "red"), (1, "green"))] * 2),
     # List of tuples
     tuple([[(0, "red"), (0.5, "blue"), (1, "green")]] * 2),
+    # Use Plotly colorscales directly
+    (px.colors.sequential.Viridis, VIRIDIS),
 ]
 
 

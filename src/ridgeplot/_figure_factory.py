@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, cast
 
 from plotly import graph_objects as go
 
-from ridgeplot._colormodes import (
+from ridgeplot._color.interpolation import (
     Colormode,
     InterpolationContext,
     compute_trace_colors,
@@ -13,6 +13,8 @@ from ridgeplot._colormodes import (
 from ridgeplot._types import (
     CollectionL1,
     CollectionL2,
+    Color,
+    ColorScale,
     DensityTrace,
     is_flat_str_collection,
     nest_shallow_collection,
@@ -28,7 +30,6 @@ from ridgeplot._vendor.more_itertools import zip_strict
 if TYPE_CHECKING:
     from collections.abc import Collection
 
-    from ridgeplot._colors import Color, ColorScale
     from ridgeplot._types import Densities, Numeric
 
 
