@@ -1,19 +1,13 @@
 from __future__ import annotations
 
-import json
 from collections.abc import Collection
-from pathlib import Path
 from typing import Any, Union, cast
 
+import plotly.express as px
 from _plotly_utils.basevalidators import ColorscaleValidator as _ColorscaleValidator
-from _plotly_utils.colors import validate_colors
-from plotly.colors import find_intermediate_color, hex_to_rgb
 
 from ridgeplot._css_colors import CSS_NAMED_COLORS, CssNamedColor
-from ridgeplot._utils import LazyMapping, normalise_min_max
-
-_PATH_TO_COLORS_JSON = Path(__file__).parent.joinpath("colors.json")
-
+from ridgeplot._utils import normalise_min_max
 
 Color = Union[str, tuple[float, float, float]]
 """A color can be represented by a tuple of ``(r, g, b)`` values or any valid
@@ -44,16 +38,6 @@ For instance, the Viridis color scale can be represented as:
 """
 
 
-def _colormap_loader() -> dict[str, ColorScale]:
-    colors: dict[str, ColorScale] = json.loads(_PATH_TO_COLORS_JSON.read_text())
-    for name, colorscale in colors.items():
-        colors[name] = tuple((s, c) for s, c in colorscale)
-    return colors
-
-
-_COLORSCALE_MAPPING: LazyMapping[str, ColorScale] = LazyMapping(loader=_colormap_loader)
-
-
 def list_all_colorscale_names() -> list[str]:
     """Get a list with all available colorscale names.
 
@@ -65,7 +49,9 @@ def list_all_colorscale_names() -> list[str]:
     list[str]
         A list with all available colorscale names.
     """
-    return sorted(_COLORSCALE_MAPPING.keys())
+    # Add 'default' for backwards compatibility
+    px_colorscales = px.colors.named_colorscales()
+    return sorted({"default", *px_colorscales, *(f"{name}_r" for name in px_colorscales)})
 
 
 class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
@@ -73,10 +59,12 @@ class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
         super().__init__("colorscale", "ridgeplot")
 
     @property
-    def named_colorscales(self) -> dict[str, list[Color]]:
-        return {
-            name: [c for _, c in colorscale] for name, colorscale in _COLORSCALE_MAPPING.items()
-        }
+    def named_colorscales(self) -> dict[str, list[str]]:
+        named_colorscales = cast(dict[str, list[str]], super().named_colorscales)
+        if "default" not in named_colorscales:
+            # Add 'default' for backwards compatibility
+            named_colorscales["default"] = px.colors.DEFAULT_PLOTLY_COLORS
+        return named_colorscales
 
     def validate_coerce(self, v: Any) -> ColorScale:
         coerced = super().validate_coerce(v)
@@ -91,65 +79,46 @@ def validate_and_coerce_colorscale(colorscale: ColorScale | Collection[Color] | 
     return ColorscaleValidator().validate_coerce(colorscale)
 
 
-def _any_to_rgb(color: Color) -> str:
-    """Convert any color to an rgb string.
-
-    Parameters
-    ----------
-    color
-        A color. This can be a tuple of ``(r, g, b)`` values, a hex string,
-        or an rgb string.
-
-    Returns
-    -------
-    str
-        An rgb string.
-
-    Raises
-    ------
-    TypeError
-        If ``color`` is not a tuple or a string.
-    ValueError
-        If ``color`` is a string that does not represent a hex or rgb color.
-    """
+def to_rgb(color: Color) -> str:
     if not isinstance(color, (str, tuple)):
         raise TypeError(f"Expected str or tuple for color, got {type(color)} instead.")
     if isinstance(color, tuple):
         r, g, b = color
         rgb = f"rgb({r}, {g}, {b})"
     elif color.startswith("#"):
-        return _any_to_rgb(cast(str, hex_to_rgb(color)))
+        return to_rgb(cast(str, px.colors.hex_to_rgb(color)))
     elif color.startswith(("rgb(", "rgba(")):
         rgb = color
     elif color in CSS_NAMED_COLORS:
         color = cast(CssNamedColor, color)
-        return _any_to_rgb(CSS_NAMED_COLORS[color])
+        return to_rgb(CSS_NAMED_COLORS[color])
     else:
         raise ValueError(
             f"color should be a tuple or a str representation "
             f"of a hex or rgb color, got {color!r} instead."
         )
-    validate_colors(rgb)
+    px.colors.validate_colors(rgb)
     return rgb
 
 
-def interpolate_color(colorscale: ColorScale, p: float) -> str:
+def interpolate_color(colorscale: ColorScale, p: float) -> Color:
     """Get a color from a colorscale at a given interpolation point ``p``."""
     if not (0 <= p <= 1):
         raise ValueError(
             f"The interpolation point 'p' should be a float value between 0 and 1, not {p}."
         )
     scale = [s for s, _ in colorscale]
-    colors = [_any_to_rgb(c) for _, c in colorscale]
+    colors = [c for _, c in colorscale]
     del colorscale
     if p in scale:
         return colors[scale.index(p)]
+    colors = [to_rgb(c) for c in colors]
     ceil = min(filter(lambda s: s > p, scale))
     floor = max(filter(lambda s: s < p, scale))
     p_normalised = normalise_min_max(p, min_=floor, max_=ceil)
     return cast(
         str,
-        find_intermediate_color(
+        px.colors.find_intermediate_color(
             lowcolor=colors[scale.index(floor)],
             highcolor=colors[scale.index(ceil)],
             intermed=p_normalised,
@@ -166,12 +135,12 @@ def _unpack_rgb(rgb: str) -> tuple[float, float, float, float] | tuple[float, fl
 
 
 def apply_alpha(color: Color, alpha: float) -> str:
-    values = _unpack_rgb(_any_to_rgb(color))
+    values = _unpack_rgb(to_rgb(color))
     return f"rgba({', '.join(map(str, values[:3]))}, {alpha})"
 
 
 def round_color(color: Color, ndigits: int) -> str:
-    color = _any_to_rgb(color)
+    color = to_rgb(color)
     prefix = color.split("(")[0] + "("
     values_round = tuple(v if isinstance(v, int) else round(v, ndigits) for v in _unpack_rgb(color))
     return f"{prefix}{', '.join(map(str, values_round))})"

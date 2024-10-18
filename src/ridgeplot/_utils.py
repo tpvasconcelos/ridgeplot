@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-from collections.abc import Collection, Mapping
+from collections.abc import Collection
 from typing import (
     TYPE_CHECKING,
     TypeVar,
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
-    from typing import Any, Callable
+    from typing import Any
 
     from ridgeplot._types import CollectionL2, Densities, Numeric
 
@@ -268,55 +267,3 @@ def normalise_row_attrs(attrs: CollectionL2[_V], densities: Densities) -> Collec
             row_attr = list(row_attr) * n_traces  # noqa: PLW2901
         norm_attrs.append(row_attr)
     return norm_attrs
-
-
-_KT = TypeVar("_KT")  # Mapping key type
-_VT = TypeVar("_VT")  # Mapping value type
-
-
-class LazyMapping(Mapping[_KT, _VT]):
-    """A lazy mapping that loads its contents only when first needed.
-
-    Parameters
-    ----------
-    loader
-        A callable that returns a mapping.
-
-    Examples
-    --------
-    >>> def my_io_loader() -> dict[str, int]:
-    ...     print("Loading...")
-    ...     return {"a": 1, "b": 2}
-    ...
-    >>> lazy_mapping = LazyMapping(my_io_loader)
-    >>> lazy_mapping
-    Loading...
-    {'a': 1, 'b': 2}
-    """
-
-    __slots__ = ("_loader", "_inner_mapping")
-
-    def __init__(self, loader: Callable[[], Mapping[_KT, _VT]]):
-        self._loader = loader
-        self._inner_mapping: Mapping[_KT, _VT] | None = None
-
-    @property
-    def _mapping(self) -> Mapping[_KT, _VT]:
-        if self._inner_mapping is None:
-            self._inner_mapping = self._loader()
-        return self._inner_mapping
-
-    def __getitem__(self, item: _KT) -> _VT:
-        return self._mapping.__getitem__(item)
-
-    def __iter__(self) -> Iterator[_KT]:
-        return self._mapping.__iter__()
-
-    def __len__(self) -> int:
-        return self._mapping.__len__()
-
-    def __str__(self) -> str:
-        return self._mapping.__str__()
-
-    def __repr__(self) -> str:
-        return self._mapping.__repr__()

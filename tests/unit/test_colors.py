@@ -6,47 +6,22 @@ import pytest
 from _plotly_utils.exceptions import PlotlyError
 
 from ridgeplot._colors import (
-    _COLORSCALE_MAPPING,
     Color,
     ColorScale,
-    _any_to_rgb,
-    _colormap_loader,
     apply_alpha,
     interpolate_color,
     list_all_colorscale_names,
     round_color,
+    to_rgb,
     validate_and_coerce_colorscale,
 )
-from ridgeplot._utils import LazyMapping
 
 if TYPE_CHECKING:
     from collections.abc import Collection
 
 
 # ==============================================================
-# ---  _colormap_loader()
-# ==============================================================
-
-
-def test_colormap_loader(viridis_colorscale: ColorScale) -> None:
-    colorscale_mapping = _colormap_loader()
-    assert colorscale_mapping["viridis"] == viridis_colorscale
-
-
-# ==============================================================
-# ---  _COLORSCALE_MAPPING
-# ==============================================================
-
-
-def test_plotly_colorscale_mapping() -> None:
-    assert isinstance(_COLORSCALE_MAPPING, LazyMapping)
-    for name, colorscale in _COLORSCALE_MAPPING.items():
-        assert isinstance(name, str)
-        validate_and_coerce_colorscale(colorscale=colorscale)
-
-
-# ==============================================================
-# ---  _any_to_rgb()
+# ---  to_rgb()
 # ==============================================================
 
 
@@ -60,8 +35,8 @@ def test_plotly_colorscale_mapping() -> None:
         ("forestgreen", "rgb(34, 139, 34)"),  # valid CSS named color
     ],
 )
-def test_any_to_rgb(color: Color, expected: str) -> None:
-    assert _any_to_rgb(color=color) == expected
+def test_to_rgb(color: Color, expected: str) -> None:
+    assert to_rgb(color=color) == expected
 
 
 @pytest.mark.parametrize(
@@ -82,13 +57,13 @@ def test_any_to_rgb(color: Color, expected: str) -> None:
         ((1, 2, 3, 4), ValueError, r"too many values to unpack \(expected 3\)"),
     ],
 )
-def test_any_to_rgb_fails_for_invalid_color(
+def test_to_rgb_fails_for_invalid_color(
     color: Any,
     expected_exception: type[Exception],
     exception_match: str | None,
 ) -> None:
     with pytest.raises(expected_exception, match=exception_match or ""):
-        _any_to_rgb(color)
+        to_rgb(color)
 
 
 @pytest.mark.xfail(reason="Incomplete implementation of RGB string validation from Plotly.")
@@ -99,13 +74,13 @@ def test_any_to_rgb_fails_for_invalid_color(
         ("rgb(0,0,-2)", PlotlyError, r"rgb colors tuples cannot exceed 255"),
     ],
 )
-def test_any_to_rgb_bug_in_validation_incomplete(
+def test_to_rgb_bug_in_validation_incomplete(
     color: Any,
     expected_exception: type[Exception],
     exception_match: str | None,
 ) -> None:
     with pytest.raises(expected_exception, match=exception_match or ""):
-        _any_to_rgb(color=color)
+        to_rgb(color=color)
 
 
 # ==============================================================
@@ -117,6 +92,7 @@ def test_list_all_colorscale_names() -> None:
     all_colorscale_names = list_all_colorscale_names()
     assert all(isinstance(name, str) for name in all_colorscale_names)
     assert "viridis" in all_colorscale_names
+    assert "default" in all_colorscale_names
     for name in all_colorscale_names:
         validate_and_coerce_colorscale(name)
 
