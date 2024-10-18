@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, cast
 
-from ridgeplot._coloring.colormodes import Colormode
+from ridgeplot._color.interpolation import Colormode
 from ridgeplot._figure_factory import (
     LabelsArray,
     ShallowLabelsArray,
@@ -12,6 +12,8 @@ from ridgeplot._figure_factory import (
 from ridgeplot._kde import estimate_densities
 from ridgeplot._missing import MISSING, MissingType
 from ridgeplot._types import (
+    Color,
+    ColorScale,
     Densities,
     Samples,
     ShallowDensities,
@@ -26,7 +28,6 @@ if TYPE_CHECKING:
 
     import plotly.graph_objects as go
 
-    from ridgeplot._coloring.colors import Color, ColorScale
     from ridgeplot._kde import KDEBandwidth, KDEPoints
 
 

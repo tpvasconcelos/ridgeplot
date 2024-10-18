@@ -1,22 +1,20 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal, Protocol
+from typing import TYPE_CHECKING, Literal, Protocol, cast
 
-from ridgeplot._coloring.colors import (
-    ColorScale,
-    apply_alpha,
-    interpolate_color,
-    round_color,
+from plotly import express as px
+
+from ridgeplot._color.colorscale import (
     validate_and_coerce_colorscale,
 )
-from ridgeplot._types import CollectionL2
+from ridgeplot._color.utils import apply_alpha, round_color, to_rgb
+from ridgeplot._types import CollectionL2, Color, ColorScale
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
 if TYPE_CHECKING:
     from collections.abc import Collection
 
-    from ridgeplot._coloring.colors import Color
     from ridgeplot._types import Densities, Numeric
 
 Colormode = Literal["row-index", "trace-index", "trace-index-row-wise", "mean-minmax", "mean-means"]
@@ -117,6 +115,32 @@ def _interpolate_mean_means(ctx: InterpolationContext) -> ColorscaleInterpolants
     return [
         [normalise_min_max(mean, min_=min_mean, max_=max_mean) for mean in row] for row in means
     ]
+
+
+def interpolate_color(colorscale: ColorScale, p: float) -> Color:
+    """Get a color from a colorscale at a given interpolation point ``p``."""
+    if not (0 <= p <= 1):
+        raise ValueError(
+            f"The interpolation point 'p' should be a float value between 0 and 1, not {p}."
+        )
+    scale = [s for s, _ in colorscale]
+    colors = [c for _, c in colorscale]
+    del colorscale
+    if p in scale:
+        return colors[scale.index(p)]
+    colors = [to_rgb(c) for c in colors]
+    ceil = min(filter(lambda s: s > p, scale))
+    floor = max(filter(lambda s: s < p, scale))
+    p_normalised = normalise_min_max(p, min_=floor, max_=ceil)
+    return cast(
+        str,
+        px.colors.find_intermediate_color(
+            lowcolor=colors[scale.index(floor)],
+            highcolor=colors[scale.index(ceil)],
+            intermed=p_normalised,
+            colortype="rgb",
+        ),
+    )
 
 
 def compute_trace_colors(

@@ -26,7 +26,7 @@ environment.
 
 from __future__ import annotations
 
-from ridgeplot._coloring.colors import list_all_colorscale_names
+from ridgeplot._color.colorscale import list_all_colorscale_names
 from ridgeplot._ridgeplot import ridgeplot
 from ridgeplot._version import __version__
 

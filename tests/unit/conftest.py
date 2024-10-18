@@ -7,7 +7,7 @@ import pytest
 if TYPE_CHECKING:
     from collections.abc import Collection
 
-    from ridgeplot._coloring.colors import Color, ColorScale
+    from ridgeplot._types import Color, ColorScale
 
 VIRIDIS = (
     (0.0, "#440154"),

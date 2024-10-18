@@ -7,8 +7,8 @@ if TYPE_CHECKING:
 
     import plotly.graph_objects as go
 
-    from ridgeplot._coloring.colormodes import Colormode
-    from ridgeplot._coloring.colors import Color, ColorScale
+    from ridgeplot._color.interpolation import Colormode
+    from ridgeplot._types import Color, ColorScale
 
 
 def main(

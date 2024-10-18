@@ -5,12 +5,10 @@ from typing import TYPE_CHECKING
 import pytest
 
 from ridgeplot import ridgeplot
-from ridgeplot._types import nest_shallow_collection
+from ridgeplot._types import Color, ColorScale, nest_shallow_collection
 
 if TYPE_CHECKING:
     from collections.abc import Collection
-
-    from ridgeplot._coloring.colors import Color, ColorScale
 
 
 def test_fails_when_both_samples_and_densities_are_passed() -> None:
