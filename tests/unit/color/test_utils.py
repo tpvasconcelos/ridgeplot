@@ -5,11 +5,22 @@ from typing import TYPE_CHECKING, Any
 import pytest
 from _plotly_utils.exceptions import PlotlyError
 
-from ridgeplot._color.utils import apply_alpha, round_color, to_rgb
+from ridgeplot._color.utils import apply_alpha, default_plotly_template, round_color, to_rgb
 
 if TYPE_CHECKING:
 
     from ridgeplot._types import Color
+
+
+# ==============================================================
+# ---  default_plotly_template()
+# ==============================================================
+
+
+def test_default_plotly_template() -> None:
+    template = default_plotly_template()
+    assert template.layout.colorscale.sequential is not None
+    assert template.layout.colorway is not None
 
 
 # ==============================================================
