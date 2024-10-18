@@ -41,6 +41,7 @@ Unreleased changes
 - Eagerly validate input shapes in `RidgeplotFigureFactory` ({gh-pr}`222`)
 - Vendor `_zip_equal()` from [more-itertools](https://github.com/more-itertools/more-itertools/) ({gh-pr}`222`)
 - Improve overall test coverage ({gh-pr}`222`)
+- Refactor color validation logic to use helpers provided by Plotly ({gh-pr}`233`)
 
 ### Bug fixes
 

@@ -3,7 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal, Protocol
 
-from ridgeplot._colors import ColorScale, apply_alpha, interpolate_color, normalise_colorscale
+from ridgeplot._colors import (
+    ColorScale,
+    apply_alpha,
+    interpolate_color,
+    round_color,
+    validate_and_coerce_colorscale,
+)
 from ridgeplot._types import CollectionL2
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
@@ -131,7 +137,7 @@ def compute_trace_colors(
     coloralpha: float | None,
     interpolation_ctx: InterpolationContext,
 ) -> ColorsArray:
-    colorscale = normalise_colorscale(colorscale)
+    colorscale = validate_and_coerce_colorscale(colorscale)
     if coloralpha is not None:
         coloralpha = float(coloralpha)
 
@@ -139,6 +145,10 @@ def compute_trace_colors(
         color = interpolate_color(colorscale, p=p)
         if coloralpha is not None:
             color = apply_alpha(color, alpha=coloralpha)
+        # This helps us avoid floating point errors when making
+        # comparisons in our test suite. The user should not
+        # be able to notice *any* difference in the output
+        color = round_color(color, ndigits=12)
         return color
 
     if colormode not in COLORMODE_MAPS:
