@@ -5,6 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.1.30
+------
+
 ### Features
 
 - Add support for named CSS colors ({gh-pr}`229`)
