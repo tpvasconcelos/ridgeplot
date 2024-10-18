@@ -11,22 +11,6 @@ if TYPE_CHECKING:
     from collections.abc import Collection
 
 
-def list_all_colorscale_names() -> list[str]:
-    """Get a list with all available colorscale names.
-
-    .. versionadded:: 0.1.21
-        Replaced the deprecated function ``get_all_colorscale_names()``.
-
-    Returns
-    -------
-    list[str]
-        A list with all available colorscale names.
-    """
-    # Add 'default' for backwards compatibility
-    px_colorscales = px.colors.named_colorscales()
-    return sorted({"default", *px_colorscales, *(f"{name}_r" for name in px_colorscales)})
-
-
 class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
     def __init__(self) -> None:
         super().__init__("colorscale", "ridgeplot")
@@ -44,6 +28,21 @@ class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
         if coerced is None:
             self.raise_invalid_val(coerced)
         return cast(ColorScale, [tuple(c) for c in coerced])
+
+
+def list_all_colorscale_names() -> list[str]:
+    """Get a list with all available colorscale names.
+
+    .. versionadded:: 0.1.21
+        Replaced the deprecated function ``get_all_colorscale_names()``.
+
+    Returns
+    -------
+    list[str]
+        A list with all available colorscale names.
+    """
+    # Add 'default' for backwards compatibility
+    return sorted(ColorscaleValidator().named_colorscales)
 
 
 def validate_and_coerce_colorscale(colorscale: ColorScale | Collection[Color] | str) -> ColorScale:
