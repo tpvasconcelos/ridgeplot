@@ -23,18 +23,6 @@ Colormode = Literal["row-index", "trace-index", "trace-index-row-wise", "mean-mi
 """The :paramref:`ridgeplot.ridgeplot.colormode` argument in
 :func:`ridgeplot.ridgeplot()`."""
 
-ColorsArray = CollectionL2[str]
-"""A :data:`ColorsArray` represents the colors of traces in a ridgeplot.
-
-Example
--------
-
->>> colors_array: ColorsArray = [
-...     ["red", "blue", "green"],
-...     ["orange", "purple"],
-... ]
-"""
-
 ColorscaleInterpolants = CollectionL2[float]
 """A :data:`ColorscaleInterpolants` contains the interpolants for a :data:`ColorScale`.
 
@@ -136,7 +124,7 @@ def compute_trace_colors(
     colormode: Colormode,
     coloralpha: float | None,
     interpolation_ctx: InterpolationContext,
-) -> ColorsArray:
+) -> list[list[str]]:
     colorscale = validate_and_coerce_colorscale(colorscale)
     if coloralpha is not None:
         coloralpha = float(coloralpha)
