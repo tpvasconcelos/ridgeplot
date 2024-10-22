@@ -5,7 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+### Optimizations
+
+- Importing statsmodels, scipy, and numpy can be slow, so we now only import the `ridgeplot._kde` module when the user needs this functionality. ({gh-pr}`242`)
+
+### Miscellaneous
+
+- Add the reference jupyter notebook used to generate the ridgeplot logo. ({gh-pr}`242`)
 
 ---
 

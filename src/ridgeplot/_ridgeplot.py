@@ -9,7 +9,6 @@ from ridgeplot._figure_factory import (
     ShallowLabelsArray,
     create_ridgeplot,
 )
-from ridgeplot._kde import estimate_densities
 from ridgeplot._missing import MISSING, MissingType
 from ridgeplot._types import (
     Color,
@@ -38,6 +37,11 @@ def _normalise_densities(
     bandwidth: KDEBandwidth,
     kde_points: KDEPoints,
 ) -> Densities:
+    # Importing statsmodels, scipy, and numpy can be slow,
+    # so we're hiding the kde import here to only incur
+    # this cost if the user actually needs this it...
+    from ridgeplot._kde import estimate_densities
+
     has_samples = samples is not None
     has_densities = densities is not None
     if has_samples and has_densities:

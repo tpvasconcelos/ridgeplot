@@ -58,6 +58,11 @@ repos:
     hooks:
       - id: actionlint
 
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.7.1
+    hooks:
+      - id: nbstripout
+
   - repo: https://github.com/codespell-project/codespell
     rev: v2.3.0
     hooks:
