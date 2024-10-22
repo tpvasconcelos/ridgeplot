@@ -260,10 +260,7 @@ To demonstrate how these options can be used, we can try to adjust the output fr
 ```python
 fig = ridgeplot(
     # ... same options as before
-    colorscale=(
-        (0, "orangered"),
-        (1, "deepskyblue"),
-    ),
+    colorscale=["orangered", "deepskyblue"],
     colormode="trace-index-row-wise",
 )
 ```
