@@ -95,7 +95,6 @@ ignore = [
     "SLF001", # Private member accessed: `_X`
 ]
 "misc/brand/logo.ipynb" = [
-    "TCH002", #  Move third-party import `x` into a type-checking block
     "E501", # Line too long
     "W505", # Doc line too long
 ]
