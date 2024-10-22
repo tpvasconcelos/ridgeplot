@@ -139,7 +139,6 @@ html_title = f"{project_name} docs ({release})"
 html_short_title = project_name
 
 html_favicon = "_static/favicon.ico"  # 32x32 pixel .ico file
-html_logo = "_static/img/logo-wide.png"
 html_sourcelink_suffix = ""
 html_last_updated_fmt = "%B %d, %Y"
 
@@ -151,8 +150,8 @@ repo_url = project_urls["Source code"]
 docs_url = project_urls["Documentation"]
 
 html_theme_options = {
-    "light_logo": "_static/img/logo-wide.png",
-    "dark_logo": "_static/img/logo-wide-dark.png",
+    "light_logo": "img/logo-wide.png",
+    "dark_logo": "img/logo-wide-dark.png",
     "sidebar_hide_name": True,
     "source_repository": repo_url,
     "source_branch": "main",
