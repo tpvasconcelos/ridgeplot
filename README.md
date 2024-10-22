@@ -1,5 +1,6 @@
 <p align="center">
-    <img src="docs/_static/img/logo-wide.png" alt="ridgeplot - beautiful ridgeline plots in Python">
+    <img src="docs/_static/img/logo-wide.png#gh-light-mode-only" alt="ridgeplot - beautiful ridgeline plots in Python">
+    <img src="docs/_static/img/logo-wide-dark.png#gh-dark-mode-only" alt="ridgeplot - beautiful ridgeline plots in Python">
 </p>
 
 <h1 id="ridgeplot" align="center">
