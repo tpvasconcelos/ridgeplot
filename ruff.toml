@@ -94,6 +94,10 @@ ignore = [
     "S101",   # Use of assert detected
     "SLF001", # Private member accessed: `_X`
 ]
+"misc/brand/logo.ipynb" = [
+    "E501", # Line too long
+    "W505", # Doc line too long
+]
 
 [lint.flake8-annotations]
 mypy-init-return = true

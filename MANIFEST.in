@@ -31,9 +31,9 @@ prune docs/build
 # Misc
 recursive-include .github *.yml *.yaml
 recursive-include cicd_utils README.md *.py
-recursive-include misc *.py *.ipynb
+recursive-include misc *.py *.ipynb *.txt *.png
 recursive-include requirements *.txt
 recursive-include tests *.py
 
 # Globally excluded patterns
-recursive-exclude * *.py[cod] *.egg-info __pycache__
+recursive-exclude * *.py[cod] *.egg-info __pycache__ .ipynb_checkpoints/*
