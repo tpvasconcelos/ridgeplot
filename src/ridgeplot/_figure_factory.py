@@ -5,14 +5,16 @@ from typing import TYPE_CHECKING, cast
 
 from plotly import graph_objects as go
 
-from ridgeplot._colormodes import (
+from ridgeplot._color.interpolation import (
     Colormode,
-    MidpointsContext,
+    InterpolationContext,
     compute_trace_colors,
 )
 from ridgeplot._types import (
     CollectionL1,
     CollectionL2,
+    Color,
+    ColorScale,
     DensityTrace,
     is_flat_str_collection,
     nest_shallow_collection,
@@ -28,7 +30,6 @@ from ridgeplot._vendor.more_itertools import zip_strict
 if TYPE_CHECKING:
     from collections.abc import Collection
 
-    from ridgeplot._colors import ColorScale
     from ridgeplot._types import Densities, Numeric
 
 
@@ -52,16 +53,6 @@ Example
 
 >>> labels_array: ShallowLabelsArray = ["trace 1", "trace 2", "trace 3"]
 """
-
-ShallowColorsArray = CollectionL1[str]
-"""Shallow type for :data:`ColorsArray`.
-
-Example
--------
-
->>> colors_array: ShallowColorsArray = ["red", "blue", "green"]
-"""
-
 
 _D3HF = ".7"
 """Default (d3-format) format for floats in hover labels.
@@ -210,7 +201,7 @@ def update_layout(
 
 def create_ridgeplot(
     densities: Densities,
-    colorscale: str | ColorScale,
+    colorscale: ColorScale | Collection[Color] | str | None,
     coloralpha: float | None,
     colormode: Colormode,
     trace_labels: LabelsArray | ShallowLabelsArray | None,
@@ -251,7 +242,7 @@ def create_ridgeplot(
         colorscale=colorscale,
         colormode=colormode,
         coloralpha=coloralpha,
-        midpoints_context=MidpointsContext(
+        interpolation_ctx=InterpolationContext(
             densities=densities,
             n_rows=n_rows,
             n_traces=n_traces,

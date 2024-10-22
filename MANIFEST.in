@@ -13,7 +13,6 @@ include *.yaml
 recursive-include src py.typed *.pyi
 
 # Data files
-include src/ridgeplot/colors.json
 recursive-include src/ridgeplot/datasets/data *.csv
 
 # Docs

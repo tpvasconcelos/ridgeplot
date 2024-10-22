@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, cast
 
-from ridgeplot._colormodes import Colormode
+from ridgeplot._color.interpolation import Colormode
 from ridgeplot._figure_factory import (
     LabelsArray,
     ShallowLabelsArray,
@@ -12,6 +12,8 @@ from ridgeplot._figure_factory import (
 from ridgeplot._kde import estimate_densities
 from ridgeplot._missing import MISSING, MissingType
 from ridgeplot._types import (
+    Color,
+    ColorScale,
     Densities,
     Samples,
     ShallowDensities,
@@ -22,10 +24,10 @@ from ridgeplot._types import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Collection
 
     import plotly.graph_objects as go
 
-    from ridgeplot._colors import ColorScale
     from ridgeplot._kde import KDEBandwidth, KDEPoints
 
 
@@ -68,7 +70,7 @@ def ridgeplot(
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
     kde_points: KDEPoints = 500,
-    colorscale: str | ColorScale = "plasma",
+    colorscale: ColorScale | Collection[Color] | str | None = None,
     colormode: Colormode = "mean-minmax",
     coloralpha: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
@@ -164,34 +166,52 @@ def ridgeplot(
         set of samples. Optionally, you can also pass a custom 1D numerical
         array, which will be used for all traces.
 
-    colorscale : str or ColorScale
-        Any valid Plotly color-scale or a str with a valid named color-scale.
-        Use :func:`~ridgeplot.list_all_colorscale_names()` to see which names
-        are available or check out `Plotly's built-in color-scales`_.
+    colorscale : ColorScale or Collection[Color] or str
+        A continuous color scale used to color the different traces in the
+        ridgeline plot. It can be represented by a string name (e.g.,
+        ``"viridis"``), a :data:`~ridgeplot._colors.ColorScale` object, or a
+        list of colors (see :data:`~ridgeplot._colors.Color`). If a string name
+        is provided, it must be one of the built-in color scales (see
+        :func:`~ridgeplot.list_all_colorscale_names()` and
+        `Plotly's built-in color-scales`_). If a list of colors is provided, it
+        must be a list of valid CSS colors (e.g.,
+        ``["rgb(255, 0, 0)", "blue", "hsl(120, 100%, 50%)"]``). The list will
+        ultimately be converted to a :data:`~ridgeplot._colors.ColorScale` object, assuming the
+        colors are evenly spaced.
 
     colormode : Colormode
-        This argument controls the logic for choosing the color filling of each
+        This argument controls the logic used for choosing the color of each
         ridgeline trace. Each option provides a different method for
-        calculating the :paramref:`colorscale` midpoint of each trace. The
-        default is mode is ``"mean-means"``. Choices are:
+        calculating the interpolation value from a :paramref:`colorscale`
+        (i.e., a float value between 0 and 1) for each trace. The default is
+        mode is ``"mean-means"``. Choices are:
 
-        - ``"row-index"`` - uses the row's index. e.g., if the ridgeplot has 3
-          rows of traces, then the midpoints will be
-          ``[[0, ...], [0.5, ...], [1, ...]]``.
-        - ``"trace-index"`` - uses the trace's index. e.g., if the ridgeplot has
-          a total of 3 traces (across all rows), then the midpoints will be
-          0, 0.5, and 1, respectively.
-        - ``"trace-index-row-wise"`` - uses the row-wise trace index. e.g., if
-          the ridgeplot has a row with only one trace and another with two,
-          the midpoints will be ``[[0], [0, 1]]``.
+        - ``"row-index"`` - uses the row's index. This is useful when the
+          desired effect is to have the same color for all traces on the same
+          row. e.g., if a ridgeplot has 3 rows of traces, then the color scale
+          interpolation values will be ``[[0, ...], [0.5, ...], [1, ...]]``,
+          respectively.
+        - ``"trace-index"`` - uses the trace's index. e.g., if a ridgeplot has
+          a total of 3 traces (across all rows), then the color scale
+          interpolation values will be 0, 0.5, and 1, respectively, and
+          regardless of each trace's row.
+        - ``"trace-index-row-wise"`` - uses the row-wise trace index. This is
+          similar to the ``"trace-index"`` mode, but the trace index is reset
+          for each row. e.g., if a ridgeplot has a row with only one trace and
+          another with two traces, then the color scale interpolation values
+          will be ``[[0], [0, 1]]``, respectively.
         - ``"mean-minmax"`` - uses the min-max normalized (weighted) mean of
-          each density to calculate the midpoints. The normalization min
-          and max values are the *absolute* minimum and maximum x-values over
-          all densities, respectively.
-        - ``"mean-means"`` - uses the min-max normalized (weighted) mean of
-          each density to calculate the midpoints. The normalization min
-          and max values are the minimum and maximum *mean* values over all
-          densities, respectively.
+          each density to calculate the interpolation values. The normalization
+          min and max values are the *absolute* minimum and maximum x-values
+          over all densities. This mode is useful when the desired effect is to
+          have the color of each trace reflect the mean of the distribution,
+          while also taking into account the distributions' spread.
+        - ``"mean-means"`` - similar to the ``"mean-minmax"`` mode, but where
+          the normalization min and max values are the minimum and maximum
+          *mean* x-values over all densities. This mode is useful when the
+          desired effect is to have the color of each trace reflect the mean of
+          the distribution, but without taking into account the entire
+          variability of the distributions.
 
     coloralpha : float, optional
         If None (default), this argument will be ignored and the transparency

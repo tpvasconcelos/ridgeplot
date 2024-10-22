@@ -32,6 +32,38 @@ if TYPE_CHECKING:
 
 
 # ========================================================
+# ---  Miscellaneous types
+# ========================================================
+
+Color = Union[str, tuple[float, float, float]]
+"""A color can be represented by a tuple of ``(r, g, b)`` values or any valid
+CSS color string - including hex, rgb/a, hsl/a, hsv/a, and named CSS colors."""
+
+ColorScale = Collection[tuple[float, Color]]
+"""The canonical form for a color scale is represented by a list of tuples of
+two elements:
+
+0. the first element (a *scale value*) is a float bounded to the
+   interval ``[0, 1]``
+1. the second element should be a valid :data:`Color` representation.
+
+For instance, the Viridis color scale can be represented as:
+
+>>> viridis: ColorScale = [
+  (0.0, 'rgb(68, 1, 84)'),
+  (0.1111111111111111, 'rgb(72, 40, 120)'),
+  (0.2222222222222222, 'rgb(62, 73, 137)'),
+  (0.3333333333333333, 'rgb(49, 104, 142)'),
+  (0.4444444444444444, 'rgb(38, 130, 142)'),
+  (0.5555555555555556, 'rgb(31, 158, 137)'),
+  (0.6666666666666666, 'rgb(53, 183, 121)'),
+  (0.7777777777777777, 'rgb(110, 206, 88)'),
+  (0.8888888888888888, 'rgb(181, 222, 43)'),
+  (1.0, 'rgb(253, 231, 37)')
+]
+"""
+
+# ========================================================
 # ---  Base nested Collection types (ragged arrays)
 # ========================================================
 

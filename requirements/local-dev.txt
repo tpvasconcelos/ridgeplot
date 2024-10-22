@@ -7,7 +7,6 @@ setuptools-scm>=8
 
 # Tox
 tox
-tox-uv
 
 # pre-commit
 pre-commit
