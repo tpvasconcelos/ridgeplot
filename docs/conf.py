@@ -151,6 +151,8 @@ repo_url = project_urls["Source code"]
 docs_url = project_urls["Documentation"]
 
 html_theme_options = {
+    "light_logo": "_static/img/logo-wide.png",
+    "dark_logo": "_static/img/logo-wide-dark.png",
     "sidebar_hide_name": True,
     "source_repository": repo_url,
     "source_branch": "main",
