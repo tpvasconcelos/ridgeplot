@@ -166,28 +166,6 @@ html_theme_options = {
         },
     ],
 }
-# html_theme_options for the 'sphinx_book_theme' theme:
-# html_theme_options = {
-#     "repository_url": repo_url,
-#     "path_to_docs": "docs",
-#     "use_edit_page_button": True,
-#     "use_issues_button": True,
-#     "use_repository_button": True,
-#     "use_download_button": True,
-#     "show_toc_level": 2,
-#     "logo_only": True,
-#     # "launch_buttons": {
-#     #     "binderhub_url": "https://mybinder.org",
-#     #     "colab_url": "https://colab.research.google.com/",
-#     #     "deepnote_url": "https://deepnote.com/",
-#     #     "notebook_interface": "jupyterlab",
-#     #     "thebe": True,
-#     # },
-#     # "announcement": (
-#     #     "⚠️The latest release refactored our HTML, "
-#     #     "so double-check your custom CSS rules!⚠️"
-#     # ),
-# }
 
 # If true, figures, tables and code-blocks are automatically numbered if they have a caption
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-numfig
