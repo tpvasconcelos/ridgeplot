@@ -1,5 +1,6 @@
 # pytest and plugins
 pytest
+pytest-icdiff
 pytest-socket
 
 # Coverage

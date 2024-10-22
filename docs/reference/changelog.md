@@ -5,13 +5,31 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.1.30
+------
+
 ### Features
 
 - Add support for named CSS colors ({gh-pr}`229`)
+- Allow users to define color scales as a collection of colors (`Collection[Color]`) ({gh-pr}`231`)
+- Dynamically infer the default colorscale from the active Plotly template ({gh-pr}`237`)
+
+
+### Documentation
+
+- Improve the documentation for the `colormode` parameter ({gh-pr}`232`)
 
 ### Internal
 
 - Refactor `_figure_factory.py` to use a functional approach ({gh-pr}`228`)
+- Stop using the term "midpoints" to refer to the "interpolation values" when dealing with continuous color scales ({gh-pr}`232`)
+- Refactor color validation logic to use helpers provided by Plotly ({gh-pr}`233`)
+- Drop `colors.json` and use Plotly's `ColorscaleValidator` and `named_colorscales` directly ({gh-pr}`234`)
+- Refactor color utilities into `ridgeplot._color` ({gh-pr}`235`)
 
 ---
 

@@ -3,14 +3,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from collections.abc import Collection
+
     import plotly.graph_objects as go
 
-    from ridgeplot._colormodes import Colormode
-    from ridgeplot._colors import ColorScale
+    from ridgeplot._color.interpolation import Colormode
+    from ridgeplot._types import Color, ColorScale
 
 
 def main(
-    colorscale: str | ColorScale = "plasma",
+    colorscale: ColorScale | Collection[Color] | str = "plasma",
     colormode: Colormode = "mean-minmax",
 ) -> go.Figure:
     import numpy as np
