@@ -139,7 +139,6 @@ html_title = f"{project_name} docs ({release})"
 html_short_title = project_name
 
 html_favicon = "_static/favicon.ico"  # 32x32 pixel .ico file
-html_logo = "_static/img/logo-wide.png"
 html_sourcelink_suffix = ""
 html_last_updated_fmt = "%B %d, %Y"
 
@@ -151,6 +150,8 @@ repo_url = project_urls["Source code"]
 docs_url = project_urls["Documentation"]
 
 html_theme_options = {
+    "light_logo": "img/logo-wide.png",
+    "dark_logo": "img/logo-wide-dark.png",
     "sidebar_hide_name": True,
     "source_repository": repo_url,
     "source_branch": "main",
@@ -164,28 +165,6 @@ html_theme_options = {
         },
     ],
 }
-# html_theme_options for the 'sphinx_book_theme' theme:
-# html_theme_options = {
-#     "repository_url": repo_url,
-#     "path_to_docs": "docs",
-#     "use_edit_page_button": True,
-#     "use_issues_button": True,
-#     "use_repository_button": True,
-#     "use_download_button": True,
-#     "show_toc_level": 2,
-#     "logo_only": True,
-#     # "launch_buttons": {
-#     #     "binderhub_url": "https://mybinder.org",
-#     #     "colab_url": "https://colab.research.google.com/",
-#     #     "deepnote_url": "https://deepnote.com/",
-#     #     "notebook_interface": "jupyterlab",
-#     #     "thebe": True,
-#     # },
-#     # "announcement": (
-#     #     "⚠️The latest release refactored our HTML, "
-#     #     "so double-check your custom CSS rules!⚠️"
-#     # ),
-# }
 
 # If true, figures, tables and code-blocks are automatically numbered if they have a caption
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-numfig

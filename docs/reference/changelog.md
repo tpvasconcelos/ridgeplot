@@ -12,6 +12,7 @@ Unreleased changes
 ### Miscellaneous
 
 - Add the reference jupyter notebook used to generate the ridgeplot logo. ({gh-pr}`242`)
+- Update ridgeplot's logo to use Plotly's official colors. ({gh-pr}`243`)
 
 ---
 
