@@ -125,7 +125,6 @@ def interpolate_color(colorscale: ColorScale, p: float) -> Color:
         )
     scale = [s for s, _ in colorscale]
     colors = [c for _, c in colorscale]
-    del colorscale
     if p in scale:
         return colors[scale.index(p)]
     colors = [to_rgb(c) for c in colors]

@@ -9,6 +9,10 @@ Unreleased changes
 
 - Importing statsmodels, scipy, and numpy can be slow, so we now only import the `ridgeplot._kde` module when the user needs this functionality. ({gh-pr}`242`)
 
+### Documentation
+
+- Fix API reference for the internal `ridgeplot._color` package. ({gh-pr}`???`)
+
 ### Miscellaneous
 
 - Add the reference jupyter notebook used to generate the ridgeplot logo. ({gh-pr}`242`)
