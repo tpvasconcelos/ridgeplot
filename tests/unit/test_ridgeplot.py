@@ -80,7 +80,7 @@ def test_colorscale_invalid(invalid_colorscale: ColorScale | Collection[Color] |
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=invalid_colorscale)
 
 
-def test_coloralpha() -> None:
+def test_opacity() -> None:
     fig = ridgeplot(
         samples=[[[1, 2, 3], [4, 5, 6]]],
         colorscale=(
@@ -88,7 +88,7 @@ def test_coloralpha() -> None:
             (1.0, "rgb(20, 20, 20)"),
         ),
         colormode="trace-index",
-        coloralpha=0.5,
+        opacity=0.5,
     )
     assert fig.data[1].fillcolor == "rgba(20, 20, 20, 0.5)"
     assert fig.data[3].fillcolor == "rgba(10, 10, 10, 0.5)"
@@ -132,6 +132,22 @@ def test_deprecated_colormode_index() -> None:
 def test_deprecated_show_annotations_is_not_missing() -> None:
     with pytest.warns(
         DeprecationWarning,
-        match="The show_annotations argument has been deprecated in favor of show_yticklabels",
+        match="The 'show_annotations' argument has been deprecated in favor of 'show_yticklabels'",
     ):
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_annotations=True)
+
+
+def test_deprecated_coloralpha_is_not_missing() -> None:
+    with pytest.warns(
+        DeprecationWarning,
+        match="The 'coloralpha' argument has been deprecated in favor of 'opacity'",
+    ):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], coloralpha=0.5)
+
+
+def test_deprecated_coloralpha_and_opacity_together_raises() -> None:
+    with pytest.raises(
+        ValueError,
+        match="You may not specify both the 'coloralpha' and 'opacity' arguments!",
+    ):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], coloralpha=0.4, opacity=0.6)

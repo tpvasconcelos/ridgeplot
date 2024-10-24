@@ -36,7 +36,7 @@ def main() -> go.Figure:
         kde_points=np.linspace(-12.5, 112.5, 500),
         colorscale="viridis",
         colormode="row-index",
-        coloralpha=0.65,
+        opacity=0.65,
         labels=column_names,
         linewidth=2,
         spacing=5 / 9,

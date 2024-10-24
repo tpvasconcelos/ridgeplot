@@ -140,7 +140,6 @@ def interpolate_color(colorscale: ColorScale, p: float) -> Color:
         )
     scale = [s for s, _ in colorscale]
     colors = [c for _, c in colorscale]
-    del colorscale
     if p in scale:
         return colors[scale.index(p)]
     colors = [to_rgb(c) for c in colors]
@@ -161,7 +160,7 @@ def interpolate_color(colorscale: ColorScale, p: float) -> Color:
 def compute_trace_colors(
     colorscale: ColorScale | Collection[Color] | str | None,
     colormode: Literal["fillgradient"] | SolidColormode,
-    coloralpha: float | None,
+    opacity: float | None,
     interpolation_ctx: InterpolationContext,
 ) -> Generator[Generator[dict[str, Any]]]:
     colorscale = validate_and_coerce_colorscale(colorscale)
@@ -169,9 +168,9 @@ def compute_trace_colors(
     # Plotly doesn't support setting the opacity for the `fillcolor`
     # or `fillgradient`, so we need to manually override the colorscale
     # color values and add the corresponding alpha channel to the colors.
-    if coloralpha is not None:
-        coloralpha = float(coloralpha)
-        colorscale = [(v, apply_alpha(c, coloralpha)) for v, c in colorscale]
+    if opacity is not None:
+        opacity = float(opacity)
+        colorscale = [(v, apply_alpha(c, opacity)) for v, c in colorscale]
 
     if colormode == "fillgradient":
         return (
@@ -191,9 +190,9 @@ def compute_trace_colors(
 
     def _get_fill_color(p: float) -> str:
         fill_color = interpolate_color(colorscale, p=p)
-        if coloralpha is not None:
+        if opacity is not None:
             # Sometimes the interpolation logic can drop the alpha channel
-            fill_color = apply_alpha(fill_color, alpha=coloralpha)
+            fill_color = apply_alpha(fill_color, alpha=opacity)
         # This helps us avoid floating point errors when making
         # comparisons in our test suite. The user should not
         # be able to notice *any* difference in the output

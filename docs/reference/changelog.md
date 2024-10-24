@@ -9,6 +9,10 @@ Unreleased changes
 
 - The new default colormode is `"fillgradient"` ({gh-pr}`244`)
 
+### Deprecations
+
+- Rename `coloralpha` to `opacity` for consistently with Plotly Express and deprecate the old parameter name. ({gh-pr}`245`)
+
 ### Features
 
 - Implement new `"fillgradient"` colormode ({gh-pr}`244`)
