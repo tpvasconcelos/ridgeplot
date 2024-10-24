@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal, Protocol, cast
+from typing import TYPE_CHECKING, Any, Literal, Protocol, cast
 
 from plotly import express as px
 
@@ -13,11 +13,13 @@ from ridgeplot._types import CollectionL2, Color, ColorScale
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
 if TYPE_CHECKING:
-    from collections.abc import Collection
+    from collections.abc import Collection, Generator
 
     from ridgeplot._types import Densities, Numeric
 
-Colormode = Literal["row-index", "trace-index", "trace-index-row-wise", "mean-minmax", "mean-means"]
+Colormode = Literal[
+    "row-index", "trace-index", "trace-index-row-wise", "mean-minmax", "mean-means", "fillgradient"
+]
 """The :paramref:`ridgeplot.ridgeplot.colormode` argument in
 :func:`ridgeplot.ridgeplot()`."""
 
@@ -148,14 +150,20 @@ def compute_trace_colors(
     colormode: Colormode,
     coloralpha: float | None,
     interpolation_ctx: InterpolationContext,
-) -> list[list[str]]:
+) -> Generator[Generator[dict[str, Any]]]:
     colorscale = validate_and_coerce_colorscale(colorscale)
+
+    # Plotly doesn't support setting the opacity for the `fillcolor`
+    # or `fillgradient`, so we need to manually override the colorscale
+    # color values and add the corresponding alpha channel to the colors.
     if coloralpha is not None:
         coloralpha = float(coloralpha)
+        colorscale = [(v, apply_alpha(c, coloralpha)) for v, c in colorscale]
 
     def _get_color(p: float) -> str:
         color = interpolate_color(colorscale, p=p)
         if coloralpha is not None:
+            # Sometimes the interpolation logic can drop the alpha channel
             color = apply_alpha(color, alpha=coloralpha)
         # This helps us avoid floating point errors when making
         # comparisons in our test suite. The user should not
@@ -163,15 +171,30 @@ def compute_trace_colors(
         color = round_color(color, ndigits=12)
         return color
 
+    if colormode == "fillgradient":
+        return (
+            (
+                dict(
+                    fillgradient=dict(
+                        colorscale=colorscale,
+                        start=interpolation_ctx.x_min,
+                        stop=interpolation_ctx.x_max,
+                        type="horizontal",
+                    )
+                )
+                for _ in row
+            )
+            for row in interpolation_ctx.densities
+        )
+
     if colormode not in COLORMODE_MAPS:
         raise ValueError(
             f"The colormode argument should be one of "
             f"{tuple(COLORMODE_MAPS)}, got {colormode} instead."
         )
-
     interpolate_func = COLORMODE_MAPS[colormode]
     interpolants = interpolate_func(ctx=interpolation_ctx)
-    return [[_get_color(p) for p in row] for row in interpolants]
+    return ((dict(fillcolor=_get_color(p)) for p in row) for row in interpolants)
 
 
 COLORMODE_MAPS: dict[Colormode, InterpolationFunc] = {

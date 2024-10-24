@@ -271,8 +271,8 @@ _TYPE_ALIASES_FULLY_QUALIFIED = {
     "ridgeplot._missing.MISSING",
     "ridgeplot._missing.MissingType",
     # ------- ._types ------------------------------
-    "ridgeplot._colors.Color",
-    "ridgeplot._colors.ColorScale",
+    "ridgeplot._types.Color",
+    "ridgeplot._types.ColorScale",
     "ridgeplot._types.CollectionL1",
     "ridgeplot._types.CollectionL2",
     "ridgeplot._types.CollectionL3",

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Any, cast
 
 from plotly import graph_objects as go
 
@@ -98,7 +98,7 @@ def normalise_y_labels(trace_labels: LabelsArray) -> LabelsArray:
 class RidgeplotTrace:
     trace: DensityTrace
     label: str
-    color: str
+    color: dict[str, Any]
 
 
 @dataclass
@@ -137,7 +137,7 @@ def draw_density_trace(
     y: Collection[Numeric],
     y_shifted: float,
     label: str,
-    color: str,
+    color: dict[str, Any],
     linewidth: float,
 ) -> go.Figure:
     """Draw a density trace.
@@ -151,7 +151,7 @@ def draw_density_trace(
         go.Scatter(
             x=x,
             y=[y_i + y_shifted for y_i in y],
-            fillcolor=color,
+            **color,
             name=label,
             fill="tonexty",
             mode="lines",

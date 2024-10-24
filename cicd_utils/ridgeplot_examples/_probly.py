@@ -36,7 +36,7 @@ def main() -> go.Figure:
         kde_points=np.linspace(-12.5, 112.5, 500),
         colorscale="viridis",
         colormode="row-index",
-        coloralpha=0.6,
+        coloralpha=0.65,
         labels=column_names,
         linewidth=2,
         spacing=5 / 9,
@@ -45,7 +45,7 @@ def main() -> go.Figure:
     # And you can still update and extend the final
     # Plotly Figure using standard Plotly methods
     fig.update_layout(
-        height=600,
+        height=560,
         width=800,
         font_size=16,
         plot_bgcolor="white",

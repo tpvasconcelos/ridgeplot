@@ -75,7 +75,7 @@ def ridgeplot(
     bandwidth: KDEBandwidth = "normal_reference",
     kde_points: KDEPoints = 500,
     colorscale: ColorScale | Collection[Color] | str | None = None,
-    colormode: Colormode = "mean-minmax",
+    colormode: Colormode = "fillgradient",
     coloralpha: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
     linewidth: float = 1.0,
@@ -184,11 +184,18 @@ def ridgeplot(
         colors are evenly spaced.
 
     colormode : Colormode
-        This argument controls the logic used for choosing the color of each
-        ridgeline trace. Each option provides a different method for
-        calculating the interpolation value from a :paramref:`colorscale`
-        (i.e., a float value between 0 and 1) for each trace. The default is
-        mode is ``"mean-means"``. Choices are:
+        This argument controls the logic used for the coloring of each
+        ridgeline trace.
+
+        The ``"fillgradient"`` mode (default) will fill each trace with a
+        gradient using the specified :paramref:`colorscale`. The gradient
+        normalization is done using the minimum and maximum x-values over all
+        densities.
+
+        All other modes provide different methods for calculating interpolation
+        values from the specified :paramref:`colorscale` (i.e., a float value
+        between 0 and 1) for each trace. The interpolated color will be used to
+        color each trace with a solid color. The available modes are:
 
         - ``"row-index"`` - uses the row's index. This is useful when the
           desired effect is to have the same color for all traces on the same

@@ -12,8 +12,8 @@ if TYPE_CHECKING:
 
 
 def main(
-    colorscale: ColorScale | Collection[Color] | str = "plasma",
-    colormode: Colormode = "mean-minmax",
+    colorscale: ColorScale | Collection[Color] | str | None = "Inferno",
+    colormode: Colormode = "fillgradient",
 ) -> go.Figure:
     import numpy as np
 
@@ -36,10 +36,9 @@ def main(
         labels=months,
         colorscale=colorscale,
         colormode=colormode,
-        coloralpha=0.98,
         bandwidth=4,
-        kde_points=np.linspace(-25, 110, 400),
-        spacing=0.33,
+        kde_points=np.linspace(-40, 110, 400),
+        spacing=0.3,
         linewidth=2,
     )
     fig.update_layout(
