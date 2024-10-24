@@ -59,6 +59,9 @@ def apply_alpha(color: Color, alpha: float) -> str:
 
 
 def round_color(color: Color, ndigits: int) -> str:
+    # TODO: Since this is only used in the `interpolation` module,
+    #       (and should probably *only* be used there) we should
+    #       move this function to that module to improve cohesion.
     color = to_rgb(color)
     prefix = color.split("(")[0] + "("
     values_round = tuple(v if isinstance(v, int) else round(v, ndigits) for v in unpack_rgb(color))

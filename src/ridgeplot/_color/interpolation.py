@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Literal, Protocol, cast
+from typing import TYPE_CHECKING, Any, Literal, Protocol
 
-import plotly.express as px
 import plotly.graph_objs as go
 
 from ridgeplot._color.colorscale import (
     validate_and_coerce_colorscale,
 )
-from ridgeplot._color.utils import apply_alpha, round_color, to_rgb
+from ridgeplot._color.utils import apply_alpha, round_color, to_rgb, unpack_rgb
 from ridgeplot._types import CollectionL2, Color, ColorScale
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
@@ -132,29 +131,41 @@ SOLID_COLORMODE_MAPS: dict[SolidColormode, InterpolationFunc] = {
 }
 
 
-def interpolate_color(colorscale: ColorScale, p: float) -> Color:
-    """Get a color from a colorscale at a given interpolation point ``p``."""
+def interpolate_color(colorscale: ColorScale, p: float) -> str:
+    """Get a color from a colorscale at a given interpolation point ``p``.
+
+    This function always returns a color in the RGB format, even if the input
+    colorscale contains colors in other formats.
+    """
     if not (0 <= p <= 1):
         raise ValueError(
             f"The interpolation point 'p' should be a float value between 0 and 1, not {p}."
         )
     scale = [s for s, _ in colorscale]
-    colors = [c for _, c in colorscale]
+    colors = [to_rgb(c) for _, c in colorscale]
     if p in scale:
         return colors[scale.index(p)]
-    colors = [to_rgb(c) for c in colors]
     ceil = min(filter(lambda s: s > p, scale))
     floor = max(filter(lambda s: s < p, scale))
-    p_normalised = normalise_min_max(p, min_=floor, max_=ceil)
-    return cast(
-        str,
-        px.colors.find_intermediate_color(
-            lowcolor=colors[scale.index(floor)],
-            highcolor=colors[scale.index(ceil)],
-            intermed=p_normalised,
-            colortype="rgb",
-        ),
+    color_floor = unpack_rgb(colors[scale.index(floor)])
+    color_ceil = unpack_rgb(colors[scale.index(ceil)])
+    p_norm = normalise_min_max(p, min_=floor, max_=ceil)
+    rgb = to_rgb(
+        (
+            color_floor[0] + (p_norm * (color_ceil[0] - color_floor[0])),
+            color_floor[1] + (p_norm * (color_ceil[1] - color_floor[1])),
+            color_floor[2] + (p_norm * (color_ceil[2] - color_floor[2])),
+        )
     )
+    alpha_floor = color_floor[3] if len(color_floor) == 4 else 1
+    alpha_ceil = color_ceil[3] if len(color_ceil) == 4 else 1
+    alpha = alpha_floor + (p_norm * (alpha_ceil - alpha_floor))
+    if alpha < 1:
+        rgb = apply_alpha(rgb, alpha)
+    # To address floating point errors, we round all color channels to a
+    # reasonable precision, which should result in the exact some result
+    # being rendered by any browsers and most Plotly output formats.
+    return round_color(rgb, 5)
 
 
 def compute_trace_colors(
@@ -197,10 +208,6 @@ def compute_trace_colors(
         if opacity is not None:
             # Sometimes the interpolation logic can drop the alpha channel
             fill_color = apply_alpha(fill_color, alpha=opacity)
-        # This helps us avoid floating point errors when making
-        # comparisons in our test suite. The user should not
-        # be able to notice *any* difference in the output
-        fill_color = round_color(fill_color, ndigits=12)
         return fill_color
 
     if colormode not in SOLID_COLORMODE_MAPS:
