@@ -38,7 +38,6 @@ def main() -> go.Figure:
         colormode="row-index",
         opacity=0.65,
         labels=column_names,
-        linewidth=2,
         spacing=5 / 9,
     )
 
