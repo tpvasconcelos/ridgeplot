@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal, Protocol, cast
+from typing import TYPE_CHECKING, Any, Literal, Protocol, cast
 
-from plotly import express as px
+import plotly.express as px
+import plotly.graph_objs as go
 
 from ridgeplot._color.colorscale import (
     validate_and_coerce_colorscale,
@@ -13,13 +14,18 @@ from ridgeplot._types import CollectionL2, Color, ColorScale
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
 if TYPE_CHECKING:
-    from collections.abc import Collection
+    from collections.abc import Collection, Generator
 
     from ridgeplot._types import Densities, Numeric
 
-Colormode = Literal["row-index", "trace-index", "trace-index-row-wise", "mean-minmax", "mean-means"]
-"""The :paramref:`ridgeplot.ridgeplot.colormode` argument in
-:func:`ridgeplot.ridgeplot()`."""
+SolidColormode = Literal[
+    "row-index",
+    "trace-index",
+    "trace-index-row-wise",
+    "mean-minmax",
+    "mean-means",
+]
+"""See :paramref:`ridgeplot.ridgeplot.colormode` for more information."""
 
 ColorscaleInterpolants = CollectionL2[float]
 """A :data:`ColorscaleInterpolants` contains the interpolants for a :data:`ColorScale`.
@@ -117,6 +123,15 @@ def _interpolate_mean_means(ctx: InterpolationContext) -> ColorscaleInterpolants
     ]
 
 
+SOLID_COLORMODE_MAPS: dict[SolidColormode, InterpolationFunc] = {
+    "row-index": _interpolate_row_index,
+    "trace-index": _interpolate_trace_index,
+    "trace-index-row-wise": _interpolate_trace_index_row_wise,
+    "mean-minmax": _interpolate_mean_minmax,
+    "mean-means": _interpolate_mean_means,
+}
+
+
 def interpolate_color(colorscale: ColorScale, p: float) -> Color:
     """Get a color from a colorscale at a given interpolation point ``p``."""
     if not (0 <= p <= 1):
@@ -144,39 +159,51 @@ def interpolate_color(colorscale: ColorScale, p: float) -> Color:
 
 def compute_trace_colors(
     colorscale: ColorScale | Collection[Color] | str | None,
-    colormode: Colormode,
+    colormode: Literal["fillgradient"] | SolidColormode,
     coloralpha: float | None,
     interpolation_ctx: InterpolationContext,
-) -> list[list[str]]:
+) -> Generator[Generator[dict[str, Any]]]:
     colorscale = validate_and_coerce_colorscale(colorscale)
+
+    # Plotly doesn't support setting the opacity for the `fillcolor`
+    # or `fillgradient`, so we need to manually override the colorscale
+    # color values and add the corresponding alpha channel to the colors.
     if coloralpha is not None:
         coloralpha = float(coloralpha)
+        colorscale = [(v, apply_alpha(c, coloralpha)) for v, c in colorscale]
 
-    def _get_color(p: float) -> str:
-        color = interpolate_color(colorscale, p=p)
+    if colormode == "fillgradient":
+        return (
+            (
+                dict(
+                    fillgradient=go.scatter.Fillgradient(
+                        colorscale=colorscale,
+                        start=interpolation_ctx.x_min,
+                        stop=interpolation_ctx.x_max,
+                        type="horizontal",
+                    )
+                )
+                for _ in row
+            )
+            for row in interpolation_ctx.densities
+        )
+
+    def _get_fill_color(p: float) -> str:
+        fill_color = interpolate_color(colorscale, p=p)
         if coloralpha is not None:
-            color = apply_alpha(color, alpha=coloralpha)
+            # Sometimes the interpolation logic can drop the alpha channel
+            fill_color = apply_alpha(fill_color, alpha=coloralpha)
         # This helps us avoid floating point errors when making
         # comparisons in our test suite. The user should not
         # be able to notice *any* difference in the output
-        color = round_color(color, ndigits=12)
-        return color
+        fill_color = round_color(fill_color, ndigits=12)
+        return fill_color
 
-    if colormode not in COLORMODE_MAPS:
+    if colormode not in SOLID_COLORMODE_MAPS:
         raise ValueError(
-            f"The colormode argument should be one of "
-            f"{tuple(COLORMODE_MAPS)}, got {colormode} instead."
+            f"The colormode argument should be 'fillgradient' or one of the solid colormodes "
+            f"{tuple(SOLID_COLORMODE_MAPS)}, got {colormode} instead."
         )
-
-    interpolate_func = COLORMODE_MAPS[colormode]
+    interpolate_func = SOLID_COLORMODE_MAPS[colormode]
     interpolants = interpolate_func(ctx=interpolation_ctx)
-    return [[_get_color(p) for p in row] for row in interpolants]
-
-
-COLORMODE_MAPS: dict[Colormode, InterpolationFunc] = {
-    "row-index": _interpolate_row_index,
-    "trace-index": _interpolate_trace_index,
-    "trace-index-row-wise": _interpolate_trace_index_row_wise,
-    "mean-minmax": _interpolate_mean_minmax,
-    "mean-means": _interpolate_mean_means,
-}
+    return ((dict(fillcolor=_get_fill_color(p)) for p in row) for row in interpolants)

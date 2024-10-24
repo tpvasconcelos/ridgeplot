@@ -53,7 +53,7 @@ fig = ridgeplot(
     kde_points=np.linspace(-12.5, 112.5, 500),
     colorscale="viridis",
     colormode="row-index",
-    coloralpha=0.65,
+    coloralpha=0.6,
     labels=column_names,
     linewidth=2,
     spacing=5 / 9,
@@ -62,15 +62,15 @@ fig = ridgeplot(
 # And you can still update and extend the final
 # Plotly Figure using standard Plotly methods
 fig.update_layout(
-    height=760,
-    width=900,
+    height=560,
+    width=800,
     font_size=16,
     plot_bgcolor="white",
     xaxis_tickvals=[-12.5, 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100, 112.5],
     xaxis_ticktext=["", "0", "", "25", "", "50", "", "75", "", "100", ""],
     xaxis_gridcolor="rgba(0, 0, 0, 0.1)",
     yaxis_gridcolor="rgba(0, 0, 0, 0.1)",
-    yaxis_title="Assigned Probability (%)",
+    yaxis_title=dict(text="Assigned Probability (%)", font_size=13),
     showlegend=False,
 )
 
@@ -125,16 +125,16 @@ samples = [
 fig = ridgeplot(
     samples=samples,
     labels=months,
-    coloralpha=0.98,
+    colorscale="Inferno",
     bandwidth=4,
-    kde_points=np.linspace(-25, 110, 400),
-    spacing=0.33,
+    kde_points=np.linspace(-40, 110, 400),
+    spacing=0.3,
     linewidth=2,
 )
 fig.update_layout(
     title="Minimum and maximum daily temperatures in Lincoln, NE (2016)",
-    height=650,
-    width=950,
+    height=600,
+    width=800,
     font_size=14,
     plot_bgcolor="rgb(245, 245, 245)",
     xaxis_gridcolor="white",
@@ -211,7 +211,7 @@ samples = [
 ```
 
 :::{note}
-For other use cases (like in the two previous examples), you could use a numpy ndarray to represent the samples. However, since different months have different number of days, we need to use a data container that can hold arrays of different lengths along the same dimension. Irregular arrays like this one are called [ragged arrays](https://en.wikipedia.org/wiki/Jagged_array). There are many different ways you can represent irregular arrays in Python. In this specific example, we used a list of lists of pandas Series. However,`ridgeplot` is designed to handle any object that implements the {py:class}`~typing.Collection`\[{py:class}`~typing.Collection`\[{py:class}`~typing.Collection`\[{py:data}`~ridgeplot._types.Numeric`\]]] protocol (i.e. any numeric 3D ragged array).
+For other use cases (like in the two previous examples), you could use a numpy ndarray to represent the samples. However, since different months have different number of days, we need to use a data container that can hold arrays of different lengths along the same dimension. Irregular arrays like this one are called [ragged arrays](https://en.wikipedia.org/wiki/Jagged_array). There are many different ways you can represent irregular arrays in Python. In this specific example, we used a list of lists of pandas Series. However,`ridgeplot` is designed to handle any object that implements the {py:class}`~typing.Collection`\[{py:class}`~typing.Collection`\[{py:class}`~typing.Collection`\[{py:data}`~ridgeplot._types.Numeric`\]]] protocol (_i.e.,_ any numeric 3D ragged array).
 :::
 
 Finally, we can pass the `samples` list to the {py:func}`~ridgeplot.ridgeplot()` function and specify any other arguments we want to customize the plot, like adjusting the KDE's bandwidth, the vertical spacing between rows, etc.
@@ -220,10 +220,10 @@ Finally, we can pass the `samples` list to the {py:func}`~ridgeplot.ridgeplot()`
 fig = ridgeplot(
     samples=samples,
     labels=months,
-    coloralpha=0.98,
+    colorscale="Inferno",
     bandwidth=4,
-    kde_points=np.linspace(-25, 110, 400),
-    spacing=0.33,
+    kde_points=np.linspace(-40, 110, 400),
+    spacing=0.3,
     linewidth=2,
 )
 
@@ -259,7 +259,7 @@ To demonstrate how these options can be used, we can try to adjust the output fr
 
 ```python
 fig = ridgeplot(
-    # ... same options as before
+    # Same options as before, with only the following changes:
     colorscale=["orangered", "deepskyblue"],
     colormode="trace-index-row-wise",
 )

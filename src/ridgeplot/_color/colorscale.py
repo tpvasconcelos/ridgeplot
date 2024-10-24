@@ -12,10 +12,6 @@ if TYPE_CHECKING:
     from collections.abc import Collection
 
 
-def infer_default_colorscale() -> ColorScale | Collection[Color] | str:
-    return default_plotly_template().layout.colorscale.sequential or px.colors.sequential.Viridis  # type: ignore[no-any-return]
-
-
 class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
     def __init__(self) -> None:
         super().__init__("colorscale", "ridgeplot")
@@ -32,7 +28,17 @@ class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
         coerced = super().validate_coerce(v)
         if coerced is None:  # pragma: no cover
             self.raise_invalid_val(coerced)
-        return cast(ColorScale, tuple(tuple(c) for c in coerced))
+        # This helps us avoid floating point errors when making
+        # comparisons in our test suite. The user should not
+        # be able to notice *any* difference in the output
+        coerced = tuple((round(v, ndigits=12), c) for v, c in coerced)
+        return cast(ColorScale, coerced)
+
+
+def infer_default_colorscale() -> ColorScale | Collection[Color] | str:
+    return validate_and_coerce_colorscale(
+        default_plotly_template().layout.colorscale.sequential or px.colors.sequential.Viridis
+    )
 
 
 def validate_and_coerce_colorscale(
