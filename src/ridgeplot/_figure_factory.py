@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from plotly import graph_objects as go
 
 from ridgeplot._color.interpolation import (
-    Colormode,
     InterpolationContext,
+    SolidColormode,
     compute_trace_colors,
 )
 from ridgeplot._types import (
@@ -203,7 +203,7 @@ def create_ridgeplot(
     densities: Densities,
     colorscale: ColorScale | Collection[Color] | str | None,
     coloralpha: float | None,
-    colormode: Colormode,
+    colormode: Literal["fillgradient"] | SolidColormode,
     trace_labels: LabelsArray | ShallowLabelsArray | None,
     linewidth: float,
     spacing: float,

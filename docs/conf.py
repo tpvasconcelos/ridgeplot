@@ -259,7 +259,7 @@ napoleon_attr_annotations = True
 # Type aliases
 _TYPE_ALIASES_FULLY_QUALIFIED = {
     # ------- ._colormodes -------------------------
-    "ridgeplot._color.interpolation.Colormode",
+    "ridgeplot._color.interpolation.SolidColormode",
     "ridgeplot._color.interpolation.ColorscaleInterpolants",
     # ------- ._figure_factory ---------------------
     "ridgeplot._figure_factory.LabelsArray",

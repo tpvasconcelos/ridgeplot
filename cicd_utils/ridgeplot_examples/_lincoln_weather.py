@@ -1,19 +1,19 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
     from collections.abc import Collection
 
     import plotly.graph_objects as go
 
-    from ridgeplot._color.interpolation import Colormode
+    from ridgeplot._color.interpolation import SolidColormode
     from ridgeplot._types import Color, ColorScale
 
 
 def main(
     colorscale: ColorScale | Collection[Color] | str | None = "Inferno",
-    colormode: Colormode = "fillgradient",
+    colormode: SolidColormode | Literal["fillgradient"] = "fillgradient",
 ) -> go.Figure:
     import numpy as np
 
