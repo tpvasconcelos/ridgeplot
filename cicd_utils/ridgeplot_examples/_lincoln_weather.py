@@ -39,7 +39,6 @@ def main(
         bandwidth=4,
         kde_points=np.linspace(-40, 110, 400),
         spacing=0.3,
-        linewidth=2,
     )
     fig.update_layout(
         title="Minimum and maximum daily temperatures in Lincoln, NE (2016)",

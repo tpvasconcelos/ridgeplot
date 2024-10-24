@@ -155,10 +155,7 @@ def draw_density_trace(
             name=label,
             fill="tonexty",
             mode="lines",
-            line=dict(
-                color="rgba(0,0,0,0.6)" if color is not None else None,
-                width=linewidth,
-            ),
+            line=dict(width=linewidth),
             # Hover information
             customdata=[[y_i] for y_i in y],
             hovertemplate=_DEFAULT_HOVERTEMPLATE,

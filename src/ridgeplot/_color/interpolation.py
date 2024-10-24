@@ -165,23 +165,27 @@ def compute_trace_colors(
 ) -> Generator[Generator[dict[str, Any]]]:
     colorscale = validate_and_coerce_colorscale(colorscale)
 
+    line_color = "rgb(0, 0, 0)"
+
     # Plotly doesn't support setting the opacity for the `fillcolor`
     # or `fillgradient`, so we need to manually override the colorscale
     # color values and add the corresponding alpha channel to the colors.
     if opacity is not None:
         opacity = float(opacity)
+        line_color = apply_alpha(line_color, opacity)
         colorscale = [(v, apply_alpha(c, opacity)) for v, c in colorscale]
 
     if colormode == "fillgradient":
         return (
             (
                 dict(
+                    line_color=line_color,
                     fillgradient=go.scatter.Fillgradient(
                         colorscale=colorscale,
                         start=interpolation_ctx.x_min,
                         stop=interpolation_ctx.x_max,
                         type="horizontal",
-                    )
+                    ),
                 )
                 for _ in row
             )
@@ -206,4 +210,7 @@ def compute_trace_colors(
         )
     interpolate_func = SOLID_COLORMODE_MAPS[colormode]
     interpolants = interpolate_func(ctx=interpolation_ctx)
-    return ((dict(fillcolor=_get_fill_color(p)) for p in row) for row in interpolants)
+    return (
+        (dict(line_color=line_color, fillcolor=_get_fill_color(p)) for p in row)
+        for row in interpolants
+    )

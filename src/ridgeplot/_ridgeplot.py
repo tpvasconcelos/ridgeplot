@@ -79,7 +79,7 @@ def ridgeplot(
     coloralpha: float | None | MissingType = MISSING,
     opacity: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
-    linewidth: float = 1.0,
+    linewidth: float = 2.0,
     spacing: float = 0.5,
     show_annotations: bool | MissingType = MISSING,
     show_yticklabels: bool = True,
@@ -225,6 +225,10 @@ def ridgeplot(
           the distribution, but without taking into account the entire
           variability of the distributions.
 
+        .. versionchanged:: 0.1.31
+            The default value changed from ``"mean-minmax"`` to
+            ``"fillgradient"``.
+
     coloralpha : float, optional
 
         .. deprecated:: 0.1.31
@@ -247,6 +251,9 @@ def ridgeplot(
 
     linewidth : float
         The traces' line width (in px).
+
+        .. versionchanged:: 0.1.31
+            The default value changed from 1 to 2.
 
     spacing : float
         The vertical spacing between density traces, which is defined in units

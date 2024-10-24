@@ -8,6 +8,7 @@ Unreleased changes
 ### Breaking changes
 
 - The new default colormode is `"fillgradient"` ({gh-pr}`244`)
+- The default value for `linewidth` changed from `1` to `2` for consistency with Plotly Express ({gh-pr}`248`)
 
 ### Deprecations
 
