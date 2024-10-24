@@ -202,7 +202,7 @@ def update_layout(
 def create_ridgeplot(
     densities: Densities,
     colorscale: ColorScale | Collection[Color] | str | None,
-    coloralpha: float | None,
+    opacity: float | None,
     colormode: Literal["fillgradient"] | SolidColormode,
     trace_labels: LabelsArray | ShallowLabelsArray | None,
     linewidth: float,
@@ -241,7 +241,7 @@ def create_ridgeplot(
     colors = compute_trace_colors(
         colorscale=colorscale,
         colormode=colormode,
-        coloralpha=coloralpha,
+        opacity=opacity,
         interpolation_ctx=InterpolationContext(
             densities=densities,
             n_rows=n_rows,

@@ -76,7 +76,8 @@ def ridgeplot(
     kde_points: KDEPoints = 500,
     colorscale: ColorScale | Collection[Color] | str | None = None,
     colormode: Literal["fillgradient"] | SolidColormode = "fillgradient",
-    coloralpha: float | None = None,
+    coloralpha: float | None | MissingType = MISSING,
+    opacity: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
     linewidth: float = 1.0,
     spacing: float = 0.5,
@@ -225,10 +226,18 @@ def ridgeplot(
           variability of the distributions.
 
     coloralpha : float, optional
+
+        .. deprecated:: 0.1.31
+            Use :paramref:`opacity` instead.
+
+    opacity : float, optional
         If None (default), this argument will be ignored and the transparency
         values of the specifies color-scale will remain untouched. Otherwise,
         if a float value is passed, it will be used to overwrite the
         opacity/transparency of the color-scale's colors.
+
+        .. versionadded:: 0.1.31
+            Replaces the deprecated :paramref:`coloralpha` argument.
 
     labels : LabelsArray or ShallowLabelsArray, optional
         A list of string labels for each trace. The default value is None,
@@ -244,7 +253,6 @@ def ridgeplot(
         of the highest distribution (i.e. the maximum y-value).
 
     show_annotations : bool
-        Whether to show the tick labels on the y-axis. The default is True.
 
         .. deprecated:: 0.1.21
             Use :paramref:`show_yticklabels` instead.
@@ -300,19 +308,33 @@ def ridgeplot(
         # TODO: Raise TypeError in an upcoming version
         # TODO: Drop support for the deprecated argument in 0.2.0
         warnings.warn(
-            "The show_annotations argument has been deprecated in favor of "
-            "show_yticklabels. Support for the deprecated argument will be "
+            "The 'show_annotations' argument has been deprecated in favor of "
+            "'show_yticklabels'. Support for the deprecated argument will be "
             "removed in a future version.",
             DeprecationWarning,
             stacklevel=2,
         )
         show_yticklabels = show_annotations
 
+    if coloralpha is not MISSING:
+        if opacity is not None:
+            raise ValueError(
+                "You may not specify both the 'coloralpha' and 'opacity' arguments! "
+                "HINT: Use the new 'opacity' argument instead of the deprecated 'coloralpha'."
+            )
+        warnings.warn(
+            "The 'coloralpha' argument has been deprecated in favor of 'opacity'. "
+            "Support for the deprecated argument will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        opacity = coloralpha
+
     fig = create_ridgeplot(
         densities=densities,
         trace_labels=labels,
         colorscale=colorscale,
-        coloralpha=coloralpha,
+        opacity=opacity,
         colormode=colormode,
         linewidth=linewidth,
         spacing=spacing,
