@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from plotly import graph_objects as go
 
 from ridgeplot._color.interpolation import (
-    Colormode,
     InterpolationContext,
+    SolidColormode,
     compute_trace_colors,
 )
 from ridgeplot._types import (
@@ -98,7 +98,7 @@ def normalise_y_labels(trace_labels: LabelsArray) -> LabelsArray:
 class RidgeplotTrace:
     trace: DensityTrace
     label: str
-    color: str
+    color: dict[str, Any]
 
 
 @dataclass
@@ -137,7 +137,7 @@ def draw_density_trace(
     y: Collection[Numeric],
     y_shifted: float,
     label: str,
-    color: str,
+    color: dict[str, Any],
     linewidth: float,
 ) -> go.Figure:
     """Draw a density trace.
@@ -151,7 +151,7 @@ def draw_density_trace(
         go.Scatter(
             x=x,
             y=[y_i + y_shifted for y_i in y],
-            fillcolor=color,
+            **color,
             name=label,
             fill="tonexty",
             mode="lines",
@@ -203,7 +203,7 @@ def create_ridgeplot(
     densities: Densities,
     colorscale: ColorScale | Collection[Color] | str | None,
     coloralpha: float | None,
-    colormode: Colormode,
+    colormode: Literal["fillgradient"] | SolidColormode,
     trace_labels: LabelsArray | ShallowLabelsArray | None,
     linewidth: float,
     spacing: float,

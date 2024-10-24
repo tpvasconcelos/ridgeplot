@@ -43,7 +43,7 @@ from itertools import zip_longest
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from collections.abc import Collection, Iterable
+    from collections.abc import Iterable
 
 _marker = object()
 
@@ -65,16 +65,17 @@ def _zip_equal_generator(iterables: Iterable[Any]) -> Iterable[tuple[Any, ...]]:
         yield combo
 
 
-def _zip_equal(*iterables: Collection[Any]) -> Iterable[tuple[Any, ...]]:
+def _zip_equal(*iterables: Iterable[Any]) -> Iterable[tuple[Any, ...]]:
     # Check whether the iterables are all the same size.
+    iterlist = [list(it) for it in iterables]
     try:
-        first_size = len(iterables[0])
-        for i, it in enumerate(iterables[1:], 1):
+        first_size = len(iterlist[0])
+        for i, it in enumerate(iterlist[1:], 1):
             size = len(it)
             if size != first_size:
                 raise UnequalIterablesError(details=(first_size, i, size))
         # All sizes are equal, we can use the built-in zip.
-        return zip(*iterables)
+        return zip(*iterlist)
     # If any one of the iterables didn't have a length, start reading
     # them until one runs out.
     except TypeError:

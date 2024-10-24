@@ -106,7 +106,7 @@ mypy-init-return = true
 allow-dict-calls-with-keyword-arguments = true
 
 [lint.flake8-import-conventions]
-extend-aliases = { "numpy.typing" = "npt", "plotly.graph_objects" = "go" }
+extend-aliases = { "numpy.typing" = "npt", "plotly.graph_objects" = "go", "plotly.express" = "px" }
 banned-from = ["pandas", "numpy"]
 
 [lint.isort]

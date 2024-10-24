@@ -5,9 +5,27 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Breaking changes
+
+- The new default colormode is `"fillgradient"` ({gh-pr}`244`)
+
+### Features
+
+- Implement new `"fillgradient"` colormode ({gh-pr}`244`)
+
+### Dependencies
+
+- The new minimum version of Plotly is `5.20` to leverage the new `fillgradient` feature. ({gh-pr}`244`)
+
 ### Optimizations
 
 - Importing statsmodels, scipy, and numpy can be slow, so we now only import the `ridgeplot._kde` module when the user needs this functionality. ({gh-pr}`242`)
+
+### Documentation
+
+- Update examples in the getting-started guide to reflect the new default colormode ({gh-pr}`244`)
+- Update the `plotly.min.js` version from `2.27` to `2.35.2` to leverage the `fillgradient` feature. ({gh-pr}`244`)
+- Fix the API reference docs for the internal `ridgeplot._color` module. ({gh-pr}`244`)
 
 ### Miscellaneous
 

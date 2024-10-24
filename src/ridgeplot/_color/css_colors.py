@@ -303,3 +303,4 @@ CSS_NAMED_COLORS: dict[CssNamedColor, tuple[float, float, float]] = {
     "yellow": (255, 255, 0),
     "yellowgreen": (154, 205, 50),
 }
+"""Mapping of CSS named colors to RGB tuples."""

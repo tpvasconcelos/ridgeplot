@@ -1,7 +1,10 @@
-ridgeplot._colors
-=================
+ridgeplot._color
+================
 
 Color utilities.
 
-.. automodule:: ridgeplot._colors
-   :private-members:
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   _color/*
