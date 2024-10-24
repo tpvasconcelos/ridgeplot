@@ -1,5 +1,5 @@
 ridgeplot._color
-=================
+================
 
 Color utilities.
 
