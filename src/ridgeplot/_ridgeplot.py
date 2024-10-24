@@ -79,7 +79,7 @@ def ridgeplot(
     coloralpha: float | None | MissingType = MISSING,
     opacity: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
-    linewidth: float = 1.0,
+    linewidth: float = 2.0,
     spacing: float = 0.5,
     show_annotations: bool | MissingType = MISSING,
     show_yticklabels: bool = True,
