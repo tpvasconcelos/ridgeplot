@@ -71,12 +71,27 @@ def _to_html(fig: go.Figure, plot_id: str, minify_html: bool) -> None:
 def _to_webp(fig: go.Figure, plot_id: str) -> None:
     out_image = PATH_STATIC_CHARTS / f"{plot_id}.webp"
     print(f"Writing WebP artefact to {out_image}...")
+    fig = tighten_margins(fig, px=40)
     fig.write_image(
         out_image,
         format="webp",
         width=fig.layout.width,
         height=fig.layout.height,
         scale=3,
+        engine="kaleido",
+    )
+
+
+def _to_jpeg(fig: go.Figure, plot_id: str) -> None:
+    out_image = PATH_STATIC_CHARTS / f"{plot_id}.jpeg"
+    print(f"Writing JPEG artefact to {out_image}...")
+    fig = tighten_margins(fig, px=40)
+    fig.write_image(
+        out_image,
+        format="jpeg",
+        width=fig.layout.width,
+        height=fig.layout.height,
+        scale=1,
         engine="kaleido",
     )
 
@@ -89,6 +104,7 @@ def _compile_plotly_fig(
     fig = example_loader()
     _to_html(fig, plot_id=plot_id, minify_html=minify_html)
     _to_webp(fig, plot_id=plot_id)
+    _to_jpeg(fig, plot_id=plot_id)
 
 
 def _write_plotlyjs_bundle() -> None:
