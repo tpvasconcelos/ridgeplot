@@ -13,6 +13,7 @@ from ridgeplot._types import (
     Color,
     ColorScale,
     Densities,
+    NormalisationOption,
     Samples,
     ShallowDensities,
     ShallowSamples,
@@ -20,6 +21,7 @@ from ridgeplot._types import (
     is_shallow_samples,
     nest_shallow_collection,
 )
+from ridgeplot._utils import normalise_densities
 
 if TYPE_CHECKING:
     from collections.abc import Collection
@@ -30,7 +32,7 @@ if TYPE_CHECKING:
     from ridgeplot._kde import KDEBandwidth, KDEPoints
 
 
-def _normalise_densities(
+def _coerce_to_densities(
     samples: Samples | ShallowSamples | None,
     densities: Densities | ShallowDensities | None,
     kernel: str,
@@ -76,15 +78,17 @@ def ridgeplot(
     kde_points: KDEPoints = 500,
     colorscale: ColorScale | Collection[Color] | str | None = None,
     colormode: Literal["fillgradient"] | SolidColormode = "fillgradient",
-    coloralpha: float | None | MissingType = MISSING,
     opacity: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
+    norm: NormalisationOption | None = None,
     line_color: Color | Literal["fill-color"] = "black",
-    linewidth: float | MissingType = MISSING,
     line_width: float = 1.5,
     spacing: float = 0.5,
     show_yticklabels: bool = True,
     xpad: float = 0.05,
+    # Deprecated arguments
+    coloralpha: float | None | MissingType = MISSING,
+    linewidth: float | MissingType = MISSING,
 ) -> go.Figure:
     r"""Return an interactive ridgeline (Plotly) |~go.Figure|.
 
@@ -191,7 +195,7 @@ def ridgeplot(
 
         The ``"fillgradient"`` mode (default) will fill each trace with a
         gradient using the specified :paramref:`colorscale`. The gradient
-        normalization is done using the minimum and maximum x-values over all
+        normalisation is done using the minimum and maximum x-values over all
         densities.
 
         All other modes provide different methods for calculating interpolation
@@ -213,14 +217,14 @@ def ridgeplot(
           for each row. e.g., if a ridgeplot has a row with only one trace and
           another with two traces, then the color scale interpolation values
           will be ``[[0], [0, 1]]``, respectively.
-        - ``"mean-minmax"`` - uses the min-max normalized (weighted) mean of
-          each density to calculate the interpolation values. The normalization
+        - ``"mean-minmax"`` - uses the min-max normalised (weighted) mean of
+          each density to calculate the interpolation values. The normalisation
           min and max values are the *absolute* minimum and maximum x-values
           over all densities. This mode is useful when the desired effect is to
           have the color of each trace reflect the mean of the distribution,
           while also taking into account the distributions' spread.
         - ``"mean-means"`` - similar to the ``"mean-minmax"`` mode, but where
-          the normalization min and max values are the minimum and maximum
+          the normalisation min and max values are the minimum and maximum
           *mean* x-values over all densities. This mode is useful when the
           desired effect is to have the color of each trace reflect the mean of
           the distribution, but without taking into account the entire
@@ -229,11 +233,6 @@ def ridgeplot(
         .. versionchanged:: 0.1.31
             The default value changed from ``"mean-minmax"`` to
             ``"fillgradient"``.
-
-    coloralpha : float, optional
-
-        .. deprecated:: 0.1.31
-            Use :paramref:`opacity` instead.
 
     opacity : float, optional
         If None (default), this argument will be ignored and the transparency
@@ -250,6 +249,19 @@ def ridgeplot(
         instead, a list of labels is specified, it must be of the same
         size/length as the number of traces.
 
+    norm : NormalisationOption, optional
+        The normalisation option to use when normalising the densities. The
+        default is None, which means no normalisation will be applied and the
+        densities will be used as is. The following normalisation options are
+        available:
+
+        - ``"probability"`` - normalise the densities by dividing each trace by
+          its sum.
+        - ``"percent"`` - same as ``"probability"``, but the normalised values
+          are multiplied by 100.
+
+        .. versionadded:: 0.1.31
+
     line_color : Color or "fill-color", optional
         The color of the traces' lines. Any valid CSS color is allowed
         (default: ``"black"``). If the value is set to "fill-color", the line
@@ -258,10 +270,7 @@ def ridgeplot(
         will be the mean color of the fill gradient (i.e., equivalent to the
         fill color when ``colormode='mean-minmax'``).
 
-    linewidth : float
-
-        .. deprecated:: 0.1.31
-            Use :paramref:`line_width` instead.
+        .. versionadded:: 0.1.31
 
     line_width : float
         The traces' line width (in px).
@@ -287,6 +296,16 @@ def ridgeplot(
         units of the range between the minimum and maximum x-values from all
         distributions.
 
+    coloralpha : float, optional
+
+        .. deprecated:: 0.1.31
+            Use :paramref:`opacity` instead.
+
+    linewidth : float
+
+        .. deprecated:: 0.1.31
+            Use :paramref:`line_width` instead.
+
     Returns
     -------
     :class:`plotly.graph_objects.Figure`
@@ -301,7 +320,7 @@ def ridgeplot(
         if neither of them is specified. i.e. you may only specify one of them.
 
     """
-    densities = _normalise_densities(
+    densities = _coerce_to_densities(
         samples=samples,
         densities=densities,
         kernel=kernel,
@@ -309,6 +328,9 @@ def ridgeplot(
         kde_points=kde_points,
     )
     del samples, kernel, bandwidth, kde_points
+
+    if norm:
+        densities = normalise_densities(densities, norm=norm)
 
     if coloralpha is not MISSING:
         if opacity is not None:

@@ -1,13 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import Collection
-from typing import TYPE_CHECKING, Any, TypeVar, Union, overload
+from typing import Any, Literal, TypeVar, Union, overload
 
 import numpy as np
-
-if TYPE_CHECKING:
-    from typing import Literal
-
 
 # Snippet used to generate and store the image artefacts:
 # >>> def save_fig(fig, name):
@@ -62,6 +58,11 @@ For instance, the Viridis color scale can be represented as:
   (1.0, 'rgb(253, 231, 37)')
 ]
 """
+
+NormalisationOption = Literal["probability", "percent"]
+"""A :data:`~typing.Literal` type that represents the normalisation options
+available for the ridgeplot. See :param:`ridgeplot.ridgeplot.norm` for more
+details."""
 
 # ========================================================
 # ---  Base nested Collection types (ragged arrays)
@@ -471,6 +472,6 @@ def nest_shallow_collection(shallow_collection: Collection[_T]) -> Collection[Co
     """Convert a *shallow* collection type into a *deep* collection type.
 
     This function should really only be used in the :mod:`ridgeplot._ridgeplot`
-    module to normalize user input.
+    module to normalise user input.
     """
     return [[x] for x in shallow_collection]

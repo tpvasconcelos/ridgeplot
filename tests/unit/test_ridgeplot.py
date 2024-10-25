@@ -102,6 +102,31 @@ def test_opacity() -> None:
 
 
 # ==============================================================
+# ---  param: norm
+# ==============================================================
+
+
+def test_norm() -> None:
+    densities = [
+        [
+            [(0, 0), (1, 1), (2, 0)],  # Trace 1
+            [(1, 0), (2, 2), (3, 0)],  # Trace 2
+            [(2, 1), (3, 2), (4, 1)],  # Trace 3
+        ],
+        [
+            [(0, 4), (1, 4), (2, 8)],  # Trace 4
+            [(1, 4), (2, 4), (3, 2)],  # Trace 5
+        ],
+    ]
+    fig = ridgeplot(densities=densities, norm="percent")
+    assert fig.data[1].customdata == ([0], [100], [0])
+    assert fig.data[3].customdata == ([0], [100], [0])
+    assert fig.data[5].customdata == ([25], [50], [25])
+    assert fig.data[7].customdata == ([25], [25], [50])
+    assert fig.data[9].customdata == ([40], [40], [20])
+
+
+# ==============================================================
 # ---  param: line_color
 # ==============================================================
 
