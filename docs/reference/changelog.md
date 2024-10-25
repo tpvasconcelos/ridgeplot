@@ -9,6 +9,7 @@ Unreleased changes
 
 - The new default colormode is `"fillgradient"` ({gh-pr}`244`)
 - The default value for `line_width` changed from `1` to `1.5` ({gh-pr}`253`)
+- Remove support for the deprecated `show_annotations` parameter and `colormode='index'` value ({gh-pr}`254`)
 
 ### Features
 
