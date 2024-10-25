@@ -71,6 +71,7 @@ def _to_html(fig: go.Figure, plot_id: str, minify_html: bool) -> None:
 def _to_webp(fig: go.Figure, plot_id: str) -> None:
     out_image = PATH_STATIC_CHARTS / f"{plot_id}.webp"
     print(f"Writing WebP artefact to {out_image}...")
+    fig = tighten_margins(fig, px=40)
     fig.write_image(
         out_image,
         format="webp",
@@ -84,6 +85,7 @@ def _to_webp(fig: go.Figure, plot_id: str) -> None:
 def _to_jpeg(fig: go.Figure, plot_id: str) -> None:
     out_image = PATH_STATIC_CHARTS / f"{plot_id}.jpeg"
     print(f"Writing JPEG artefact to {out_image}...")
+    fig = tighten_margins(fig, px=40)
     fig.write_image(
         out_image,
         format="jpeg",
