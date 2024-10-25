@@ -52,7 +52,7 @@ def validate_and_coerce_colorscale(
 
 
 def list_all_colorscale_names() -> list[str]:
-    """Get a list with all available colorscale names.
+    """Get a list with all available continuous colorscale names.
 
     .. versionadded:: 0.1.21
         Replaced the deprecated function ``get_all_colorscale_names()``.
