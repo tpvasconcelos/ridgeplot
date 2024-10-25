@@ -168,25 +168,55 @@ def interpolate_color(colorscale: ColorScale, p: float) -> str:
     return round_color(rgb, 5)
 
 
+def _compute_solid_colors(
+    colorscale: ColorScale,
+    colormode: SolidColormode,
+    opacity: float | None,
+    interpolation_ctx: InterpolationContext,
+) -> Generator[Generator[str]]:
+    def _get_fill_color(p: float) -> str:
+        fill_color = interpolate_color(colorscale, p=p)
+        if opacity is not None:
+            # Sometimes the interpolation logic can drop the alpha channel
+            fill_color = apply_alpha(fill_color, alpha=float(opacity))
+        return fill_color
+
+    if colormode not in SOLID_COLORMODE_MAPS:
+        raise ValueError(
+            f"The colormode argument should be 'fillgradient' or one of the solid colormodes "
+            f"{tuple(SOLID_COLORMODE_MAPS)}, got {colormode} instead."
+        )
+    interpolate_func = SOLID_COLORMODE_MAPS[colormode]
+    interpolants = interpolate_func(ctx=interpolation_ctx)
+    return ((_get_fill_color(p) for p in row) for row in interpolants)
+
+
 def compute_trace_colors(
     colorscale: ColorScale | Collection[Color] | str | None,
     colormode: Literal["fillgradient"] | SolidColormode,
+    line_color: Color | Literal["fill-color"],
     opacity: float | None,
     interpolation_ctx: InterpolationContext,
 ) -> Generator[Generator[dict[str, Any]]]:
     colorscale = validate_and_coerce_colorscale(colorscale)
 
-    line_color = "rgb(0, 0, 0)"
-
-    # Plotly doesn't support setting the opacity for the `fillcolor`
-    # or `fillgradient`, so we need to manually override the colorscale
-    # color values and add the corresponding alpha channel to the colors.
-    if opacity is not None:
-        opacity = float(opacity)
-        line_color = apply_alpha(line_color, opacity)
-        colorscale = [(v, apply_alpha(c, opacity)) for v, c in colorscale]
-
     if colormode == "fillgradient":
+        solid_line_colors: Generator[Generator[Color]]
+        if line_color == "fill-color":
+            solid_line_colors = _compute_solid_colors(
+                colorscale=colorscale,
+                colormode="mean-minmax",
+                opacity=opacity,
+                interpolation_ctx=interpolation_ctx,
+            )
+        else:
+            solid_line_colors = ((line_color for _ in row) for row in interpolation_ctx.densities)
+        if opacity is not None:
+            # HACK: Plotly doesn't yet support setting the fill opacity
+            #       for traces with `fillgradient`. As a workaround, we
+            #       can override the color-scale's color values and add
+            #       the corresponding alpha channel to all colors.
+            colorscale = [(v, apply_alpha(c, float(opacity))) for v, c in colorscale]
         return (
             (
                 dict(
@@ -198,26 +228,23 @@ def compute_trace_colors(
                         type="horizontal",
                     ),
                 )
-                for _ in row
+                for line_color in row
             )
-            for row in interpolation_ctx.densities
+            for row in solid_line_colors
         )
 
-    def _get_fill_color(p: float) -> str:
-        fill_color = interpolate_color(colorscale, p=p)
-        if opacity is not None:
-            # Sometimes the interpolation logic can drop the alpha channel
-            fill_color = apply_alpha(fill_color, alpha=opacity)
-        return fill_color
-
-    if colormode not in SOLID_COLORMODE_MAPS:
-        raise ValueError(
-            f"The colormode argument should be 'fillgradient' or one of the solid colormodes "
-            f"{tuple(SOLID_COLORMODE_MAPS)}, got {colormode} instead."
-        )
-    interpolate_func = SOLID_COLORMODE_MAPS[colormode]
-    interpolants = interpolate_func(ctx=interpolation_ctx)
     return (
-        (dict(line_color=line_color, fillcolor=_get_fill_color(p)) for p in row)
-        for row in interpolants
+        (
+            dict(
+                line_color=fill_color if line_color == "fill-color" else line_color,
+                fillcolor=fill_color,
+            )
+            for fill_color in row
+        )
+        for row in _compute_solid_colors(
+            colorscale=colorscale,
+            colormode=colormode,
+            opacity=opacity,
+            interpolation_ctx=interpolation_ctx,
+        )
     )

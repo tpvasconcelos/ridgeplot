@@ -58,7 +58,7 @@ def apply_alpha(color: Color, alpha: float) -> str:
     return f"rgba({', '.join(map(str, values[:3]))}, {alpha})"
 
 
-def round_color(color: Color, ndigits: int) -> str:
+def round_color(color: Color, ndigits: int | None = None) -> str:
     # TODO: Since this is only used in the `interpolation` module,
     #       (and should probably *only* be used there) we should
     #       move this function to that module to improve cohesion.

@@ -138,7 +138,7 @@ def draw_density_trace(
     y_shifted: float,
     label: str,
     color: dict[str, Any],
-    linewidth: float,
+    line_width: float,
 ) -> go.Figure:
     """Draw a density trace.
 
@@ -155,7 +155,7 @@ def draw_density_trace(
             name=label,
             fill="tonexty",
             mode="lines",
-            line=dict(width=linewidth),
+            line=dict(width=line_width),
             # Hover information
             customdata=[[y_i] for y_i in y],
             hovertemplate=_DEFAULT_HOVERTEMPLATE,
@@ -202,7 +202,8 @@ def create_ridgeplot(
     opacity: float | None,
     colormode: Literal["fillgradient"] | SolidColormode,
     trace_labels: LabelsArray | ShallowLabelsArray | None,
-    linewidth: float,
+    line_color: Color | Literal["fill-color"],
+    line_width: float,
     spacing: float,
     show_yticklabels: bool,
     xpad: float,
@@ -226,7 +227,7 @@ def create_ridgeplot(
     y_labels = normalise_y_labels(trace_labels)
 
     # Force cast certain arguments to the expected types
-    linewidth = float(linewidth)
+    line_width = float(line_width)
     spacing = float(spacing)
     show_yticklabels = bool(show_yticklabels)
     xpad = float(xpad)
@@ -238,6 +239,7 @@ def create_ridgeplot(
     colors = compute_trace_colors(
         colorscale=colorscale,
         colormode=colormode,
+        line_color=line_color,
         opacity=opacity,
         interpolation_ctx=InterpolationContext(
             densities=densities,
@@ -271,7 +273,7 @@ def create_ridgeplot(
                 y_shifted=row.y_shifted,
                 label=trace.label,
                 color=trace.color,
-                linewidth=linewidth,
+                line_width=line_width,
             )
     fig = update_layout(
         fig,

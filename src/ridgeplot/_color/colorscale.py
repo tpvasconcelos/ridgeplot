@@ -31,7 +31,7 @@ class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
         # This helps us avoid floating point errors when making
         # comparisons in our test suite. The user should not
         # be able to notice *any* difference in the output
-        coerced = tuple((round(v, ndigits=12), c) for v, c in coerced)
+        coerced = tuple((v if isinstance(v, int) else round(v, ndigits=12), c) for v, c in coerced)
         return cast(ColorScale, coerced)
 
 
