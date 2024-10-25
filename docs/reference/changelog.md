@@ -36,6 +36,7 @@ Unreleased changes
 - Update examples in the getting-started guide to reflect the new default colormode ({gh-pr}`244`)
 - Update the `plotly.min.js` version from `2.27` to `2.35.2` to leverage the `fillgradient` feature. ({gh-pr}`244`)
 - Fix the API reference docs for the internal `ridgeplot._color` module. ({gh-pr}`244`)
+- Tighten margins in generated examples. ({gh-pr}`257`)
 
 ### Miscellaneous
 
