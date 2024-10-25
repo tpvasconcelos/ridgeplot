@@ -8,15 +8,18 @@ Unreleased changes
 ### Breaking changes
 
 - The new default colormode is `"fillgradient"` ({gh-pr}`244`)
-- The default value for `linewidth` changed from `1` to `2` for consistency with Plotly Express ({gh-pr}`248`)
-
-### Deprecations
-
-- Rename `coloralpha` to `opacity` for consistently with Plotly Express and deprecate the old parameter name. ({gh-pr}`245`)
+- The default value for `line_width` changed from `1` to `1.5` ({gh-pr}`253`)
 
 ### Features
 
 - Implement new `"fillgradient"` colormode ({gh-pr}`244`)
+- Add new `line_color` parameter to the `ridgeplot` function ({gh-pr}`253`)
+- Add a `line_color='fill-color'` option which automatically matches the trace's line color to the trace's fill color ({gh-pr}`253`)
+
+### Deprecations
+
+- Rename `coloralpha` to `opacity` for consistently with Plotly Express and deprecate the old parameter name. ({gh-pr}`245`)
+- Rename `linewidth` to `line_width` for consistency with Plotly's API and deprecate the old parameter name. ({gh-pr}`253`)
 
 ### Dependencies
 
@@ -36,6 +39,10 @@ Unreleased changes
 
 - Add the reference jupyter notebook used to generate the ridgeplot logo. ({gh-pr}`242`)
 - Update ridgeplot's logo to use Plotly's official colors. ({gh-pr}`243`)
+
+### Internal
+
+- Simplify and refactor `interpolate_color` to not depend on `px.colors.find_intermediate_color` ({gh-pr}`253`)
 
 ---
 
