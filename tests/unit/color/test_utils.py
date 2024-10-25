@@ -124,3 +124,8 @@ def test_apply_alpha(color: Color, alpha: float, expected: str) -> None:
 )
 def test_round_color(color: Color, expected: Color) -> None:
     assert round_color(color=color, ndigits=1) == expected
+
+
+def test_round_color_0_digits() -> None:
+    # Careful with this one since we also round the alpha channel!
+    assert round_color("rgba(1.19, 2.21, 3.99, 0.29") == "rgba(1, 2, 4, 0)"

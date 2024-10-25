@@ -11,6 +11,7 @@ from ridgeplot._color.interpolation import (
     _interpolate_mean_minmax,
     interpolate_color,
 )
+from ridgeplot._color.utils import to_rgb
 
 if TYPE_CHECKING:
     from ridgeplot._types import ColorScale
@@ -65,13 +66,22 @@ def test_interpolate_mean_means() -> None:
 
 def test_interpolate_color_p_in_scale(viridis_colorscale: ColorScale) -> None:
     viridis_colorscale = list(viridis_colorscale)
-    assert interpolate_color(colorscale=viridis_colorscale, p=0) == viridis_colorscale[0][1]
-    assert interpolate_color(colorscale=viridis_colorscale, p=1) == viridis_colorscale[-1][1]
+    assert interpolate_color(colorscale=viridis_colorscale, p=0) == to_rgb(viridis_colorscale[0][1])
+    assert interpolate_color(colorscale=viridis_colorscale, p=1) == to_rgb(
+        viridis_colorscale[-1][1]
+    )
+    # Test that the alpha channels are also properly handled here
+    cs = ((0, "rgba(0, 0, 0, 0)"), (1, "rgba(255, 255, 255, 1)"))
+    assert interpolate_color(colorscale=cs, p=0) == cs[0][1]
+    assert interpolate_color(colorscale=cs, p=1) == cs[-1][1]
 
 
 def test_interpolate_color_p_not_in_scale(viridis_colorscale: ColorScale) -> None:
-    # Hard-coded test case.
+    # Hard-coded test case for the Viridis colorscale
     assert interpolate_color(colorscale=viridis_colorscale, p=0.5) == "rgb(34.5, 144.0, 139.5)"
+    # Test that the alpha channels are also properly handled here
+    cs = ((0, "rgba(0, 0, 0, 0)"), (1, "rgba(255, 255, 255, 1)"))
+    assert interpolate_color(colorscale=cs, p=0.5) == "rgba(127.5, 127.5, 127.5, 0.5)"
 
 
 @pytest.mark.parametrize("p", [-10.0, -1.3, 1.9, 100.0])

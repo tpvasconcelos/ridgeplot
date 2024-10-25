@@ -79,7 +79,9 @@ def ridgeplot(
     coloralpha: float | None | MissingType = MISSING,
     opacity: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
-    linewidth: float = 2.0,
+    line_color: Color | Literal["fill-color"] = "black",
+    linewidth: float | MissingType = MISSING,
+    line_width: float = 1.5,
     spacing: float = 0.5,
     show_annotations: bool | MissingType = MISSING,
     show_yticklabels: bool = True,
@@ -249,11 +251,27 @@ def ridgeplot(
         instead, a list of labels is specified, it must be of the same
         size/length as the number of traces.
 
+    line_color : Color or "fill-color", optional
+        The color of the traces' lines. Any valid CSS color is allowed
+        (default: ``"black"``). If the value is set to "fill-color", the line
+        color will be the same as the fill color of the traces (see
+        :paramref:`colormode`). If ``colormode='fillgradient'``, the line color
+        will be the mean color of the fill gradient (i.e., equivalent to the
+        fill color when ``colormode='mean-minmax'``).
+
     linewidth : float
+
+        .. deprecated:: 0.1.31
+            Use :paramref:`line_width` instead.
+
+    line_width : float
         The traces' line width (in px).
 
+        .. versionadded:: 0.1.31
+            Replaces the deprecated :paramref:`linewidth` argument.
+
         .. versionchanged:: 0.1.31
-            The default value changed from 1 to 2.
+            The default value changed from 1 to 1.5
 
     spacing : float
         The vertical spacing between density traces, which is defined in units
@@ -311,6 +329,7 @@ def ridgeplot(
             stacklevel=2,
         )
         colormode = cast(SolidColormode, "row-index")
+
     if show_annotations is not MISSING:
         # TODO: Raise TypeError in an upcoming version
         # TODO: Drop support for the deprecated argument in 0.2.0
@@ -337,13 +356,25 @@ def ridgeplot(
         )
         opacity = coloralpha
 
+    if linewidth is not MISSING:
+        warnings.warn(
+            "The 'linewidth' argument has been deprecated in favor of 'line_width'. "
+            "Support for the deprecated argument will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        line_width = linewidth
+
+    del show_annotations, coloralpha, linewidth
+
     fig = create_ridgeplot(
         densities=densities,
         trace_labels=labels,
         colorscale=colorscale,
         opacity=opacity,
         colormode=colormode,
-        linewidth=linewidth,
+        line_color=line_color,
+        line_width=line_width,
         spacing=spacing,
         show_yticklabels=show_yticklabels,
         xpad=xpad,
