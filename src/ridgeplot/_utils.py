@@ -9,7 +9,7 @@ from typing import (
 if TYPE_CHECKING:
     from typing import Any
 
-    from ridgeplot._types import CollectionL2, Densities, Numeric
+    from ridgeplot._types import CollectionL2, Densities, NormalisationOption, Numeric
 
 
 def get_xy_extrema(densities: Densities) -> tuple[Numeric, Numeric, Numeric, Numeric]:
@@ -267,3 +267,68 @@ def normalise_row_attrs(attrs: CollectionL2[_V], densities: Densities) -> Collec
             row_attr = list(row_attr) * n_traces  # noqa: PLW2901
         norm_attrs.append(row_attr)
     return norm_attrs
+
+
+def normalise_densities(densities: Densities, norm: NormalisationOption) -> Densities:
+    """Normalise a densities array.
+
+    Parameters
+    ----------
+    densities
+        The densities array to normalise.
+    norm
+        The normalisation option. Can be either 'percent' or 'probability'.
+
+    Returns
+    -------
+    Densities
+        The normalised densities array.
+
+    Raises
+    ------
+    ValueError
+        If the normalisation option is invalid.
+
+    Examples
+    --------
+    >>> densities = [
+    ...     [
+    ...         [(0, 0), (1, 1), (2, 0)],  # Trace 1
+    ...         [(1, 0), (2, 2), (3, 0)],  # Trace 2
+    ...         [(2, 1), (3, 2), (4, 1)],  # Trace 3
+    ...     ],
+    ...     [
+    ...         [(0, 4), (1, 4), (2, 8)],  # Trace 4
+    ...         [(1, 4), (2, 4), (3, 2)],  # Trace 5
+    ...     ],
+    ... ]
+    >>> normalise_densities(densities, "probability")  # doctest: +NORMALIZE_WHITESPACE
+    [[[(0, 0.0), (1, 1.0), (2, 0.0)],
+      [(1, 0.0), (2, 1.0), (3, 0.0)],
+      [(2, 0.25), (3, 0.5), (4, 0.25)]],
+     [[(0, 0.25), (1, 0.25), (2, 0.5)], [(1, 0.4), (2, 0.4), (3, 0.2)]]]
+    >>> normalise_densities(densities, "percent")  # doctest: +NORMALIZE_WHITESPACE
+    [[[(0, 0.0), (1, 100.0), (2, 0.0)],
+      [(1, 0.0), (2, 100.0), (3, 0.0)],
+      [(2, 25.0), (3, 50.0), (4, 25.0)]],
+     [[(0, 25.0), (1, 25.0), (2, 50.0)], [(1, 40.0), (2, 40.0), (3, 20.0)]]]
+    >>> normalise_densities(densities, "invalid")
+    Traceback (most recent call last):
+    ...
+    ValueError: Invalid normalisation option 'invalid', expected 'percent' or 'probability'
+    """
+    if norm not in ("percent", "probability"):
+        raise ValueError(
+            f"Invalid normalisation option {norm!r}, expected 'percent' or 'probability'"
+        )
+
+    m = 100 if norm == "percent" else 1
+    densities_norm = []
+    for row in densities:
+        row_norm = []
+        for trace in row:
+            x, y = zip(*trace)
+            y = tuple(m * v / sum(y) for v in y)
+            row_norm.append(list(zip(x, y)))
+        densities_norm.append(row_norm)
+    return densities_norm
