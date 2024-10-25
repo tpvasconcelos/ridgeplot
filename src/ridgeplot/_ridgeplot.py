@@ -3,7 +3,6 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, Literal, cast
 
-from ridgeplot._color.interpolation import SolidColormode
 from ridgeplot._figure_factory import (
     LabelsArray,
     ShallowLabelsArray,
@@ -27,6 +26,7 @@ if TYPE_CHECKING:
 
     import plotly.graph_objects as go
 
+    from ridgeplot._color.interpolation import SolidColormode
     from ridgeplot._kde import KDEBandwidth, KDEPoints
 
 
@@ -83,7 +83,6 @@ def ridgeplot(
     linewidth: float | MissingType = MISSING,
     line_width: float = 1.5,
     spacing: float = 0.5,
-    show_annotations: bool | MissingType = MISSING,
     show_yticklabels: bool = True,
     xpad: float = 0.05,
 ) -> go.Figure:
@@ -277,11 +276,6 @@ def ridgeplot(
         The vertical spacing between density traces, which is defined in units
         of the highest distribution (i.e. the maximum y-value).
 
-    show_annotations : bool
-
-        .. deprecated:: 0.1.21
-            Use :paramref:`show_yticklabels` instead.
-
     show_yticklabels : bool
         Whether to show the tick labels on the y-axis. The default is True.
 
@@ -316,32 +310,6 @@ def ridgeplot(
     )
     del samples, kernel, bandwidth, kde_points
 
-    if colormode == "index":  # type: ignore[comparison-overlap]
-        # TODO: Raise ValueError in an upcoming version
-        # TODO: Drop support for the deprecated argument in 0.2.0
-        warnings.warn(  # type: ignore[unreachable]
-            "The colormode='index' value has been deprecated in favor of "
-            "colormode='row-index', which provides the same functionality but "
-            "is more explicit and allows to distinguish between the "
-            "'row-index' and 'trace-index' modes. Support for the "
-            "deprecated value will be removed in a future version.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        colormode = cast(SolidColormode, "row-index")
-
-    if show_annotations is not MISSING:
-        # TODO: Raise TypeError in an upcoming version
-        # TODO: Drop support for the deprecated argument in 0.2.0
-        warnings.warn(
-            "The 'show_annotations' argument has been deprecated in favor of "
-            "'show_yticklabels'. Support for the deprecated argument will be "
-            "removed in a future version.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        show_yticklabels = show_annotations
-
     if coloralpha is not MISSING:
         if opacity is not None:
             raise ValueError(
@@ -365,7 +333,7 @@ def ridgeplot(
         )
         line_width = linewidth
 
-    del show_annotations, coloralpha, linewidth
+    del coloralpha, linewidth
 
     fig = create_ridgeplot(
         densities=densities,

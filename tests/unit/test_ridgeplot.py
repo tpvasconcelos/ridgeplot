@@ -173,25 +173,6 @@ def test_spacing(spacing: float) -> None:
 # ==============================================================
 
 
-def test_deprecated_colormode_index() -> None:
-    with pytest.warns(
-        DeprecationWarning,
-        match="The colormode='index' value has been deprecated in favor of colormode='row-index'",
-    ):
-        ridgeplot(
-            samples=[[1, 2, 3], [1, 2, 3]],
-            colormode="index",  # type: ignore[arg-type]
-        )
-
-
-def test_deprecated_show_annotations_is_not_missing() -> None:
-    with pytest.warns(
-        DeprecationWarning,
-        match="The 'show_annotations' argument has been deprecated in favor of 'show_yticklabels'",
-    ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_annotations=True)
-
-
 def test_deprecated_coloralpha_is_not_missing() -> None:
     with pytest.warns(
         DeprecationWarning,
