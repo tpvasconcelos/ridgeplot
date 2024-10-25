@@ -11,6 +11,7 @@ from ridgeplot._color.colorscale import (
 from ridgeplot._color.utils import apply_alpha, round_color, to_rgb, unpack_rgb
 from ridgeplot._types import CollectionL2, Color, ColorScale
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
+from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     from collections.abc import Collection, Generator
@@ -65,7 +66,7 @@ class InterpolationFunc(Protocol):
 
 def _mul(a: tuple[Numeric, ...], b: tuple[Numeric, ...]) -> tuple[Numeric, ...]:
     """Multiply two tuples element-wise."""
-    return tuple(a_i * b_i for a_i, b_i in zip(a, b))
+    return tuple(a_i * b_i for a_i, b_i in zip_strict(a, b))
 
 
 def _interpolate_row_index(ctx: InterpolationContext) -> ColorscaleInterpolants:
@@ -191,6 +192,19 @@ def _compute_solid_colors(
     return ((_get_fill_color(p) for p in row) for row in interpolants)
 
 
+def slice_colorscale(
+    colorscale: ColorScale,
+    p_lower: float,
+    p_upper: float,
+    n: int = 300,
+) -> ColorScale:
+    import numpy as np
+
+    linspace_p = np.linspace(p_lower, p_upper, n)
+    linspace_v = np.linspace(0, 1, n)
+    return [(v, interpolate_color(colorscale, p=p)) for v, p in zip(linspace_v, linspace_p)]
+
+
 def compute_trace_colors(
     colorscale: ColorScale | Collection[Color] | str | None,
     colormode: Literal["fillgradient"] | SolidColormode,
@@ -222,15 +236,27 @@ def compute_trace_colors(
                 dict(
                     line_color=line_color,
                     fillgradient=go.scatter.Fillgradient(
-                        colorscale=colorscale,
-                        start=interpolation_ctx.x_min,
-                        stop=interpolation_ctx.x_max,
+                        colorscale=slice_colorscale(
+                            colorscale=colorscale,
+                            p_lower=normalise_min_max(
+                                min(next(zip(*trace))),
+                                min_=interpolation_ctx.x_min,
+                                max_=interpolation_ctx.x_max,
+                            ),
+                            p_upper=normalise_min_max(
+                                max(next(zip(*trace))),
+                                min_=interpolation_ctx.x_min,
+                                max_=interpolation_ctx.x_max,
+                            ),
+                        ),
                         type="horizontal",
                     ),
                 )
-                for line_color in row
+                for line_color, trace in zip_strict(line_colors_row, densities_row)
             )
-            for row in solid_line_colors
+            for line_colors_row, densities_row in zip_strict(
+                solid_line_colors, interpolation_ctx.densities
+            )
         )
 
     return (
