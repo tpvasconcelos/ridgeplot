@@ -10,6 +10,7 @@ from ridgeplot._color.interpolation import (
     _interpolate_mean_means,
     _interpolate_mean_minmax,
     interpolate_color,
+    slice_colorscale,
 )
 from ridgeplot._color.utils import to_rgb
 
@@ -88,3 +89,75 @@ def test_interpolate_color_p_not_in_scale(viridis_colorscale: ColorScale) -> Non
 def test_interpolate_color_fails_for_p_out_of_bounds(p: float) -> None:
     with pytest.raises(ValueError, match="should be a float value between 0 and 1"):
         interpolate_color(colorscale=..., p=p)  # type: ignore[arg-type]
+
+
+# ==============================================================
+# --- slice_colorscale()
+# ==============================================================
+
+
+def test_slice_colorscale_lower_less_than_upper() -> None:
+    with pytest.raises(ValueError, match="p_lower should be less than p_upper"):
+        slice_colorscale(colorscale=[(0, "...")], p_lower=1, p_upper=0)
+
+
+def test_slice_colorscale_lower_than_0() -> None:
+    with pytest.raises(ValueError, match="p_lower should be >= 0"):
+        slice_colorscale(colorscale=[(0, "...")], p_lower=-1, p_upper=0)
+
+
+def test_slice_colorscale_upper_than_1() -> None:
+    with pytest.raises(ValueError, match="p_upper should be <= 1"):
+        slice_colorscale(colorscale=[(0, "...")], p_lower=0, p_upper=1.1)
+
+
+def test_slice_colorscale_unchanged() -> None:
+    cs = ((0, "rgb(0, 0, 0)"), (1, "rgb(255, 255, 255)"))
+    assert slice_colorscale(colorscale=cs, p_lower=0, p_upper=1) == cs
+
+
+def test_slice_colorscale() -> None:
+    cs = (
+        (0, "rgb(0, 0, 0)"),
+        (0.5, "rgb(127.5, 127.5, 127.5)"),
+        (1, "rgb(255, 255, 255)"),
+    )
+    assert slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
+        (0.0, "rgb(63.75, 63.75, 63.75)"),
+        (0.5, "rgb(127.5, 127.5, 127.5)"),
+        (1.0, "rgb(191.25, 191.25, 191.25)"),
+    )
+
+
+def test_slice_colorscale_no_intermediate_values() -> None:
+    cs = ((0, "rgb(0, 0, 0)"), (1, "rgb(255, 255, 255)"))
+    assert slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
+        (0.0, "rgb(63.75, 63.75, 63.75)"),
+        (1.0, "rgb(191.25, 191.25, 191.25)"),
+    )
+
+
+def test_slice_colorscale_alpha() -> None:
+    cs = (
+        (0, "rgba(0, 0, 0, 0)"),
+        (0.5, "rgba(127.5, 127.5, 127.5, 0.5)"),
+        (1, "rgba(255, 255, 255, 1)"),
+    )
+    assert slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
+        (0.0, "rgba(63.75, 63.75, 63.75, 0.25)"),
+        (0.5, "rgba(127.5, 127.5, 127.5, 0.5)"),
+        (1.0, "rgba(191.25, 191.25, 191.25, 0.75)"),
+    )
+
+
+def test_slice_colorscale_mixed_alpha_channels() -> None:
+    cs = (
+        (0, "rgba(0, 0, 0, 0)"),
+        (0.5, "rgba(127.5, 127.5, 127.5, 1)"),
+        (1, "rgba(255, 255, 255, 0)"),
+    )
+    assert slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
+        (0.0, "rgba(63.75, 63.75, 63.75, 0.5)"),
+        (0.5, "rgba(127.5, 127.5, 127.5, 1)"),
+        (1.0, "rgba(191.25, 191.25, 191.25, 0.5)"),
+    )

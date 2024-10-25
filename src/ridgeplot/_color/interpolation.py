@@ -5,12 +5,11 @@ from typing import TYPE_CHECKING, Any, Literal, Protocol
 
 import plotly.graph_objs as go
 
-from ridgeplot._color.colorscale import (
-    validate_and_coerce_colorscale,
-)
+from ridgeplot._color.colorscale import validate_and_coerce_colorscale
 from ridgeplot._color.utils import apply_alpha, round_color, to_rgb, unpack_rgb
 from ridgeplot._types import CollectionL2, Color, ColorScale
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
+from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     from collections.abc import Collection, Generator
@@ -65,7 +64,7 @@ class InterpolationFunc(Protocol):
 
 def _mul(a: tuple[Numeric, ...], b: tuple[Numeric, ...]) -> tuple[Numeric, ...]:
     """Multiply two tuples element-wise."""
-    return tuple(a_i * b_i for a_i, b_i in zip(a, b))
+    return tuple(a_i * b_i for a_i, b_i in zip_strict(a, b))
 
 
 def _interpolate_row_index(ctx: InterpolationContext) -> ColorscaleInterpolants:
@@ -191,6 +190,51 @@ def _compute_solid_colors(
     return ((_get_fill_color(p) for p in row) for row in interpolants)
 
 
+def slice_colorscale(
+    colorscale: ColorScale,
+    p_lower: float,
+    p_upper: float,
+) -> ColorScale:
+    """Slice a continuous colorscale between two intermediate points.
+
+    Parameters
+    ----------
+    colorscale
+        The continuous colorscale to slice.
+    p_lower
+        The lower bound of the slicing interval. Must be >= 0 and < p_upper.
+    p_upper
+        The upper bound of the slicing interval. Must be <= 1 and > p_lower.
+
+    Returns
+    -------
+    ColorScale
+        The sliced colorscale.
+
+    Raises
+    ------
+    ValueError
+        If ``p_lower`` is >= ``p_upper``, or if either ``p_lower`` or ``p_upper``
+        are outside the range [0, 1].
+    """
+    if p_lower >= p_upper:
+        raise ValueError("p_lower should be less than p_upper.")
+    if p_lower < 0 or p_upper > 1:
+        raise ValueError("p_lower should be >= 0 and p_upper should be <= 1.")
+    if p_lower == 0 and p_upper == 1:
+        return colorscale
+
+    return (
+        (0.0, interpolate_color(colorscale, p=p_lower)),
+        *[
+            (normalise_min_max(v, min_=p_lower, max_=p_upper), c)
+            for v, c in colorscale
+            if p_lower < v < p_upper
+        ],
+        (1.0, interpolate_color(colorscale, p=p_upper)),
+    )
+
+
 def compute_trace_colors(
     colorscale: ColorScale | Collection[Color] | str | None,
     colormode: Literal["fillgradient"] | SolidColormode,
@@ -222,15 +266,27 @@ def compute_trace_colors(
                 dict(
                     line_color=line_color,
                     fillgradient=go.scatter.Fillgradient(
-                        colorscale=colorscale,
-                        start=interpolation_ctx.x_min,
-                        stop=interpolation_ctx.x_max,
+                        colorscale=slice_colorscale(
+                            colorscale=colorscale,
+                            p_lower=normalise_min_max(
+                                min(next(zip(*trace))),
+                                min_=interpolation_ctx.x_min,
+                                max_=interpolation_ctx.x_max,
+                            ),
+                            p_upper=normalise_min_max(
+                                max(next(zip(*trace))),
+                                min_=interpolation_ctx.x_min,
+                                max_=interpolation_ctx.x_max,
+                            ),
+                        ),
                         type="horizontal",
                     ),
                 )
-                for line_color in row
+                for line_color, trace in zip_strict(line_colors_row, densities_row)
             )
-            for row in solid_line_colors
+            for line_colors_row, densities_row in zip_strict(
+                solid_line_colors, interpolation_ctx.densities
+            )
         )
 
     return (
