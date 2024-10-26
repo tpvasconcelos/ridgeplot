@@ -107,11 +107,11 @@ def ridgeplot(
     ----------
     samples : Samples or ShallowSamples, optional
         If ``samples`` data is specified, Kernel Density Estimation (KDE) will
-        be computed. See :paramref:`kernel`, :paramref:`bandwidth`, and
-        :paramref:`kde_points` for more details and KDE configuration options.
-        The ``samples`` argument should be an array of shape
-        :math:`(R, T_r, S_t)`. Note that we support irregular (`ragged`_)
-        arrays, where:
+        be computed. See :paramref:`kernel`, :paramref:`bandwidth`,
+        :paramref:`kde_points`, and :paramref:`sample_weights` for more details
+        and KDE configuration options. The ``samples`` argument should be an
+        array of shape :math:`(R, T_r, S_t)`. Note that we support irregular
+        (`ragged`_) arrays, where:
 
         - :math:`R` is the number of rows in the plot
         - :math:`T_r` is the number of traces per row, where each row
