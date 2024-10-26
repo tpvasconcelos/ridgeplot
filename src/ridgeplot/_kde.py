@@ -106,7 +106,8 @@ def estimate_density_trace(
     For a given set of sample values, computes the kernel densities (KDE) at
     the given points.
     """
-    if not np.isfinite(trace_samples).all():  # type: ignore[call-overload]
+    trace_samples = np.asarray(trace_samples, dtype=float)
+    if not np.isfinite(trace_samples).all():
         raise ValueError("The samples array should not contain any infs or NaNs.")
     if isinstance(points, int):
         # By default, we'll use a 'hard' KDE span. That is, we'll
@@ -125,6 +126,12 @@ def estimate_density_trace(
                 f"The 'points' at which KDE is computed should be represented by a "
                 f"one-dimensional array, got an array of shape {density_x.shape} instead."
             )
+    if weights is not None:
+        weights = np.asarray(weights, dtype=float)
+        if len(weights) != len(trace_samples):
+            raise ValueError("The weights array should have the same length as the samples array.")
+        if not np.isfinite(weights).all():
+            raise ValueError("The weights array should not contain any infs or NaNs.")
 
     # ref: https://github.com/tpvasconcelos/ridgeplot/issues/116
     dens = sm.nonparametric.KDEUnivariate(trace_samples)
@@ -139,7 +146,7 @@ def estimate_density_trace(
     # directly to the ridgeplot() figure factory.
     dens.fit(
         kernel=kernel,
-        fft=kernel == "gau" and weights is not None,
+        fft=kernel == "gau" and weights is None,
         bw=bandwidth,
         weights=weights,
     )
