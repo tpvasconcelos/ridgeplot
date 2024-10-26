@@ -207,16 +207,16 @@ def ordered_dedup(seq: Collection[_V]) -> list[_V]:
     return list(dict.fromkeys(seq))
 
 
-def normalise_row_attrs(attrs: CollectionL2[_V], densities: Densities) -> CollectionL2[_V]:
-    """Normalise the attributes over a Density array such that the number of
-    attributes matches the number of traces in each row.
+def normalise_row_attrs(attrs: CollectionL2[_V], l2_target: CollectionL2[Any]) -> CollectionL2[_V]:
+    """Validate and normalise the attributes over a CollectionL2 array such
+    that the number of attributes matches the number of traces in each row.
 
     Parameters
     ----------
     attrs
         The attributes collection to normalise.
-    densities
-        The densities array to normalise the attributes over.
+    l2_target
+        The densities or samples array to normalise the attributes over.
 
     Returns
     -------
@@ -246,16 +246,33 @@ def normalise_row_attrs(attrs: CollectionL2[_V], densities: Densities) -> Collec
     [['A', 'A', 'A'], ['B', 'B']]
     >>> normalise_row_attrs([["A"], ["B", "C"]], densities)
     [['A', 'A', 'A'], ['B', 'C']]
-    >>> normalise_row_attrs([["A", "A", "A"], ["B", "B"]], densities)
-    [['A', 'A', 'A'], ['B', 'B']]
+    >>> normalise_row_attrs([["A", "D", "A"], ["B", "B"]], densities)
+    [['A', 'D', 'A'], ['B', 'B']]
     >>> normalise_row_attrs([["A", "B"], ["C"]], densities)
     Traceback (most recent call last):
     ...
     ValueError: Mismatch between number of traces (3) and number of attrs (2) for row 0.
 
+    >>> samples = [
+    ...     [                                # Row 1
+    ...         [0, 1, 1, 2, 2, 2, 3, 3, 4], # Trace 1
+    ...         [1, 2, 2, 3, 3, 3, 4, 4, 5], # Trace 2
+    ...         [3, 4, 4, 5, 5, 5, 6, 6, 7], # Trace 3
+    ...     ],
+    ...     [                                # Row 2
+    ...         [2, 3, 3, 4, 4, 4, 5, 5, 6], # Trace 4
+    ...         [3, 4, 4, 5, 5, 5, 6, 6, 7], # Trace 5
+    ...     ],
+    ... ]
+    >>> normalise_row_attrs([["A"], ["B"]], samples)
+    [['A', 'A', 'A'], ['B', 'B']]
+    >>> normalise_row_attrs([["A"], ["B", "C", "X"]], samples)
+    Traceback (most recent call last):
+    ...
+    ValueError: Mismatch between number of traces (2) and number of attrs (3) for row 1.
     """
     norm_attrs = []
-    for i, (row, row_attr) in enumerate(zip(densities, attrs)):
+    for i, (row, row_attr) in enumerate(zip(l2_target, attrs)):
         n_traces = len(row)
         n_attrs = len(row_attr)
         if n_traces != n_attrs:

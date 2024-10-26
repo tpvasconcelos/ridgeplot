@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal
 
 from plotly import graph_objects as go
 
@@ -84,9 +84,8 @@ def normalise_trace_labels(
         trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
     else:
         if is_flat_str_collection(trace_labels):
-            trace_labels = cast(ShallowLabelsArray, trace_labels)
-            trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
-        trace_labels = normalise_row_attrs(trace_labels, densities=densities)
+            trace_labels = nest_shallow_collection(trace_labels)
+        trace_labels = normalise_row_attrs(trace_labels, l2_target=densities)
     return trace_labels
 
 
