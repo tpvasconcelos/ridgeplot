@@ -37,19 +37,20 @@ KDEPoints = Union[int, CollectionL1[Numeric]]
 KDEBandwidth = Union[str, float, Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]]
 """The :paramref:`ridgeplot.ridgeplot.bandwidth` parameter."""
 
-Weights = Optional[CollectionL1[Numeric]]
+SampleWeights = Optional[CollectionL1[Numeric]]
+"""An array of KDE weights corresponding to each sample."""
 
-SampleWeights = CollectionL2[Weights]
-"""A :data:`SampleWeights` represents the weights of the datapoints in a
-:data:`Samples` array. The shape of the :data:`SampleWeights` array should
+SampleWeightsArray = CollectionL2[SampleWeights]
+"""A :data:`SampleWeightsArray` represents the weights of the datapoints in a
+:data:`Samples` array. The shape of the :data:`SampleWeightsArray` array should
 match the shape of the corresponding :data:`Samples` array."""
 
-ShallowSampleWeights = CollectionL1[Weights]
-"""Shallow type for :data:`SampleWeights`."""
+ShallowSampleWeightsArray = CollectionL1[SampleWeights]
+"""Shallow type for :data:`SampleWeightsArray`."""
 
 
-def _is_shallow_sample_weights(obj: Any) -> TypeIs[ShallowSampleWeights]:
-    """Type guard for :data:`ShallowSampleWeights`.
+def _is_shallow_sample_weights(obj: Any) -> TypeIs[ShallowSampleWeightsArray]:
+    """Type guard for :data:`ShallowSampleWeightsArray`.
 
     Examples
     --------
@@ -70,9 +71,9 @@ def _is_shallow_sample_weights(obj: Any) -> TypeIs[ShallowSampleWeights]:
 
 
 def normalize_sample_weights(
-    sample_weights: SampleWeights | ShallowSampleWeights | None,
+    sample_weights: SampleWeightsArray | ShallowSampleWeightsArray | SampleWeights,
     samples: Samples,
-) -> SampleWeights | CollectionL2[None]:
+) -> SampleWeightsArray:
     """Normalize the sample weights to the correct shape.
 
     Examples
@@ -80,14 +81,16 @@ def normalize_sample_weights(
     >>> samples = [[[1, 2], [3, 4]], [[5, 6]]]
     >>> normalize_sample_weights(None, samples)
     [[None, None], [None]]
+    >>> normalize_sample_weights([8, 9], samples)
+    [[[8, 9], [8, 9]], [[8, 9]]]
     >>> weights = [[[0, 1], None], [[2, 3]]]
     >>> normalize_sample_weights(weights, samples) == weights
     True
     >>> normalize_sample_weights([None, [0, 1]], samples)
     [[None, None], [[0, 1]]]
     """
-    if sample_weights is None:
-        return [[None] * len(row) for row in samples]
+    if sample_weights is None or is_flat_numeric_collection(sample_weights):
+        return [[sample_weights] * len(row) for row in samples]
     if _is_shallow_sample_weights(sample_weights):
         sample_weights = nest_shallow_collection(sample_weights)
     sample_weights = normalise_row_attrs(sample_weights, l2_target=samples)
@@ -99,7 +102,7 @@ def estimate_density_trace(
     points: KDEPoints,
     kernel: str,
     bandwidth: KDEBandwidth,
-    weights: Weights | None = None,
+    weights: SampleWeights = None,
 ) -> list[XYCoordinate[Float]]:
     """Estimates a density trace from a set of samples.
 
@@ -187,7 +190,7 @@ def estimate_densities(
     points: KDEPoints,
     kernel: str,
     bandwidth: KDEBandwidth,
-    sample_weights: SampleWeights | ShallowSampleWeights | None = None,
+    sample_weights: SampleWeightsArray | ShallowSampleWeightsArray | SampleWeights = None,
 ) -> Densities:
     """Perform KDE for a set of samples."""
     normalised_weights = normalize_sample_weights(sample_weights=sample_weights, samples=samples)
