@@ -1,9 +1,15 @@
 from __future__ import annotations
 
+import sys
 from collections.abc import Collection
-from typing import Any, Literal, TypeVar, Union, overload
+from typing import Any, Literal, TypeVar, Union
 
 import numpy as np
+
+if sys.version_info >= (3, 13):
+    from typing import TypeIs
+else:
+    from typing_extensions import TypeIs
 
 # Snippet used to generate and store the image artefacts:
 # >>> def save_fig(fig, name):
@@ -117,16 +123,28 @@ NumericT = TypeVar("NumericT", bound=Numeric)
 """A :class:`~typing.TypeVar` variable bound to :data:`Numeric` types."""
 
 
-@overload
-def _is_numeric(obj: Numeric) -> Literal[True]: ...
+def _is_numeric(obj: Any) -> TypeIs[Numeric]:
+    """Type guard for :data:`Numeric`.
 
-
-@overload
-def _is_numeric(obj: Any) -> bool: ...
-
-
-def _is_numeric(obj: Any) -> bool:
-    """Check if the given object is a :data:`Numeric` type."""
+    Examples
+    --------
+    >>> _is_numeric(42)
+    True
+    >>> _is_numeric(12.3)
+    True
+    >>> _is_numeric(np.int64(17))
+    True
+    >>> _is_numeric(np.float64(3.14))
+    True
+    >>> _is_numeric("42")
+    False
+    >>> _is_numeric("12.3")
+    False
+    >>> _is_numeric([42])
+    False
+    >>> _is_numeric(None)
+    False
+    """
     return isinstance(obj, (int, float, np.number))
 
 
@@ -284,25 +302,45 @@ Example
 """
 
 
-@overload
-def is_shallow_densities(obj: ShallowDensities) -> Literal[True]: ...
+def is_xy_coord(x: Any) -> bool:
+    """Type guard for :data:`XYCoordinate`."""
+    return isinstance(x, tuple) and len(x) == 2 and all(map(_is_numeric, x))
 
 
-@overload
-def is_shallow_densities(obj: Any) -> bool: ...
+def is_density_trace(x: Any) -> bool:
+    """Type guard for :data:`DensityTrace`."""
+    return isinstance(x, Collection) and all(map(is_xy_coord, x))
 
 
-def is_shallow_densities(obj: Any) -> bool:
-    """Check if the given object is a :data:`ShallowDensities` type."""
+def is_shallow_densities(obj: Any) -> TypeIs[ShallowDensities]:
+    """Type guard for :data:`ShallowDensities`.
 
-    def is_xy_coord(x: Any) -> bool:
-        """Check if the given object is a :data:`XYCoordinate` type."""
-        return isinstance(x, tuple) and len(x) == 2 and all(map(_is_numeric, x))
-
-    def is_density_trace(x: Any) -> bool:
-        """Check if the given object is a :data:`DensityTrace` type."""
-        return isinstance(x, Collection) and all(map(is_xy_coord, x))
-
+    Examples
+    --------
+    >>> is_shallow_densities("definitely not")
+    False
+    >>> is_shallow_densities([["also"], ["not"]])
+    False
+    >>> deep_density = [
+    ...     [
+    ...         [(0, 0), (1, 1), (2, 2), (3, 3)],
+    ...         [(0, 0), (1, 1), (2, 2)],
+    ...         [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)],
+    ...     ],
+    ...     [
+    ...         [(-2, 2), (-1, 1), (0, 1)],
+    ...         [(2, 2), (3, 1), (4, 1)],
+    ...     ],
+    ... ]
+    >>> is_shallow_densities(deep_density)
+    False
+    >>> shallow_density = [[(0, 0), (1, 1)], [(2, 2), (3, 1)]]
+    >>> is_shallow_densities(shallow_density)
+    True
+    >>> shallow_samples = [[0, 1, 2], [2, 3, 4]]
+    >>> is_shallow_densities(shallow_samples)
+    False
+    """
     return isinstance(obj, Collection) and all(map(is_density_trace, obj))
 
 
@@ -427,40 +465,67 @@ Example
 """
 
 
-@overload
-def is_shallow_samples(obj: ShallowSamples) -> Literal[True]: ...
+def is_trace_samples(x: Any) -> TypeIs[SamplesTrace]:
+    """Check if the given object is a :data:`SamplesTrace` type."""
+    return isinstance(x, Collection) and all(map(_is_numeric, x))
 
 
-@overload
-def is_shallow_samples(obj: Any) -> bool: ...
+def is_shallow_samples(obj: Any) -> TypeIs[ShallowSamples]:
+    """Type guard for :data:`ShallowSamples`.
 
-
-def is_shallow_samples(obj: Any) -> bool:
-    """Check if the given object is a :data:`ShallowSamples` type."""
-
-    def is_trace_samples(x: Any) -> bool:
-        """Check if the given object is a :data:`SamplesTrace` type."""
-        return isinstance(x, Collection) and all(map(_is_numeric, x))
-
+    Examples
+    --------
+    >>> is_shallow_samples("definitely not")
+    False
+    >>> is_shallow_samples([["also"], ["not"]])
+    False
+    >>> deep_samples = [
+    ...     [
+    ...         [0, 0, 1, 1, 2, 2, 3, 3],
+    ...         [0, 0, 1, 1, 2, 2],
+    ...         [0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
+    ...     ],
+    ...     [
+    ...         [-2, 2, -1, 1, 0, 1],
+    ...         [2, 2, 3, 1, 4, 1],
+    ...     ],
+    ... ]
+    >>> is_shallow_samples(deep_samples)
+    False
+    >>> shallow_samples = [[0, 1, 2], [2, 3, 4]]
+    >>> is_shallow_samples(shallow_samples)
+    True
+    >>> shallow_density = [[(0, 0), (1, 1)], [(2, 2), (3, 1)]]
+    >>> is_shallow_samples(shallow_density)
+    False
+    """
     return isinstance(obj, Collection) and all(map(is_trace_samples, obj))
 
 
 # ========================================================
-# ---  Shallow types
+# ---  More type guards and other utilities
 # ========================================================
 
 
-@overload
-def is_flat_str_collection(obj: Collection[str]) -> Literal[True]: ...
+def is_flat_str_collection(obj: Any) -> TypeIs[CollectionL1[str]]:
+    """Type guard for :data:`CollectionL1[str]`.
 
+    Note that this type-guard explicitly excludes the case where the object is
+    a string itself (which can be considered a collection of string characters).
 
-@overload
-def is_flat_str_collection(obj: Any) -> bool: ...
-
-
-def is_flat_str_collection(obj: Any) -> bool:
-    """Check if the given object is a :data:`CollectionL1[str]` type but not a
-    string itself."""
+    Examples
+    --------
+    >>> is_flat_str_collection(["a", "b", "c"])
+    True
+    >>> is_flat_str_collection("abc")
+    False
+    >>> is_flat_str_collection(["a", "b", 1])
+    False
+    >>> is_flat_str_collection({"also", "a", "collection"})
+    True
+    >>> is_flat_str_collection((1, 2))
+    False
+    """
     if isinstance(obj, str):
         # Catch edge case where the obj is actually a
         # str collection, but it is a string itself
@@ -473,5 +538,10 @@ def nest_shallow_collection(shallow_collection: Collection[_T]) -> Collection[Co
 
     This function should really only be used in the :mod:`ridgeplot._ridgeplot`
     module to normalise user input.
+
+    Examples
+    --------
+    >>> nest_shallow_collection([1, "2", {"a": 3}])
+    [[1], ['2'], [{'a': 3}]]
     """
     return [[x] for x in shallow_collection]
