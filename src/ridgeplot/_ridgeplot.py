@@ -52,15 +52,12 @@ def _coerce_to_densities(
         raise ValueError("You must specify either `samples` or `densities`")
     if has_densities:
         if is_shallow_densities(densities):
-            densities = cast(ShallowDensities, densities)
             densities = nest_shallow_collection(densities)
         densities = cast(Densities, densities)
     else:
         if is_shallow_samples(samples):
-            samples = cast(ShallowSamples, samples)
             samples = nest_shallow_collection(samples)
         samples = cast(Samples, samples)
-        # Convert samples to densities
         densities = estimate_densities(
             samples=samples,
             points=kde_points,
