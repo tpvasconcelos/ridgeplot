@@ -17,6 +17,7 @@ Unreleased changes
 - Add new `line_color` parameter to the `ridgeplot` function ({gh-pr}`253`)
 - Add a `line_color='fill-color'` option which automatically matches the trace's line color to the trace's fill color ({gh-pr}`253`)
 - Add new `norm` parameter to the `ridgeplot` function to allow users to normalize the data before plotting ({gh-pr}`255`)
+- Add `sample_weights` argument to `ridgeplot()` to allow users to pass sample weights to the KDE estimator ({gh-pr}`???`)
 
 ### Deprecations
 

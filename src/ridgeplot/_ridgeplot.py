@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     import plotly.graph_objects as go
 
     from ridgeplot._color.interpolation import SolidColormode
-    from ridgeplot._kde import KDEBandwidth, KDEPoints
+    from ridgeplot._kde import KDEBandwidth, KDEPoints, SampleWeights, ShallowSampleWeights
 
 
 def _coerce_to_densities(
@@ -38,6 +38,7 @@ def _coerce_to_densities(
     kernel: str,
     bandwidth: KDEBandwidth,
     kde_points: KDEPoints,
+    sample_weights: SampleWeights | ShallowSampleWeights | None,
 ) -> Densities:
     # Importing statsmodels, scipy, and numpy can be slow,
     # so we're hiding the kde import here to only incur
@@ -63,6 +64,7 @@ def _coerce_to_densities(
             points=kde_points,
             kernel=kernel,
             bandwidth=bandwidth,
+            sample_weights=sample_weights,
         )
     return densities
 
@@ -73,6 +75,7 @@ def ridgeplot(
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
     kde_points: KDEPoints = 500,
+    sample_weights: SampleWeights | ShallowSampleWeights | None = None,
     colorscale: ColorScale | Collection[Color] | str | None = None,
     colormode: Literal["fillgradient"] | SolidColormode = "fillgradient",
     opacity: float | None = None,
@@ -172,6 +175,11 @@ def ridgeplot(
         at ``kde_points`` evenly spaced points between the min and max of each
         set of samples. Optionally, you can also pass a custom 1D numerical
         array, which will be used for all traces.
+
+    sample_weights : SampleWeights or ShallowSampleWeights, optional
+        An (optional) array of weights corresponding to each sample. The
+        weights should be of the same shape as the samples array. If not
+        specified (default), all samples will be weighted equally.
 
     colorscale : ColorScale or Collection[Color] or str
         A continuous color scale used to color the different traces in the
@@ -323,6 +331,7 @@ def ridgeplot(
         kernel=kernel,
         bandwidth=bandwidth,
         kde_points=kde_points,
+        sample_weights=sample_weights,
     )
     del samples, kernel, bandwidth, kde_points
 

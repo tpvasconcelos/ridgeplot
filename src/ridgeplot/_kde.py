@@ -1,13 +1,29 @@
 from __future__ import annotations
 
+import sys
+from collections.abc import Collection
 from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Union
+from typing import TYPE_CHECKING, Any, Callable, Optional, Union
 
 import numpy as np
 import statsmodels.api as sm
 from statsmodels.sandbox.nonparametric.kernels import CustomKernel as StatsmodelsKernel
 
-from ridgeplot._types import CollectionL1, Float, Numeric
+if sys.version_info >= (3, 13):
+    from typing import TypeIs
+else:
+    from typing_extensions import TypeIs
+
+from ridgeplot._types import (
+    CollectionL1,
+    CollectionL2,
+    Float,
+    Numeric,
+    is_flat_numeric_collection,
+    nest_shallow_collection,
+)
+from ridgeplot._utils import normalise_row_attrs
+from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     import numpy.typing as npt
@@ -21,12 +37,69 @@ KDEPoints = Union[int, CollectionL1[Numeric]]
 KDEBandwidth = Union[str, float, Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]]
 """The :paramref:`ridgeplot.ridgeplot.bandwidth` parameter."""
 
+Weights = Optional[CollectionL1[Numeric]]
+
+SampleWeights = CollectionL2[Weights]
+"""A :data:`SampleWeights` represents the weights of the datapoints in a
+:data:`Samples` array. The shape of the :data:`SampleWeights` array should
+match the shape of the corresponding :data:`Samples` array."""
+
+ShallowSampleWeights = CollectionL1[Weights]
+"""Shallow type for :data:`SampleWeights`."""
+
+
+def _is_shallow_sample_weights(obj: Any) -> TypeIs[ShallowSampleWeights]:
+    """Type guard for :data:`ShallowSampleWeights`.
+
+    Examples
+    --------
+    >>> _is_shallow_sample_weights("definitely not")
+    False
+    >>> _is_shallow_sample_weights([1, 2, 3])
+    False
+    >>> _is_shallow_sample_weights([[1, 2, 3], [4, 5, 6]])
+    True
+    >>> _is_shallow_sample_weights([[1, 2, "3"], [4, 5, None]])
+    False
+    >>> _is_shallow_sample_weights([[1, 2, 3], None])
+    True
+    """
+    return isinstance(obj, Collection) and all(
+        x is None or is_flat_numeric_collection(x) for x in obj
+    )
+
+
+def normalize_sample_weights(
+    sample_weights: SampleWeights | ShallowSampleWeights | None,
+    samples: Samples,
+) -> SampleWeights | CollectionL2[None]:
+    """Normalize the sample weights to the correct shape.
+
+    Examples
+    --------
+    >>> samples = [[[1, 2], [3, 4]], [[5, 6]]]
+    >>> normalize_sample_weights(None, samples)
+    [[None, None], [None]]
+    >>> weights = [[[0, 1], None], [[2, 3]]]
+    >>> normalize_sample_weights(weights, samples) == weights
+    True
+    >>> normalize_sample_weights([None, [0, 1]], samples)
+    [[None, None], [[0, 1]]]
+    """
+    if sample_weights is None:
+        return [[None] * len(row) for row in samples]
+    if _is_shallow_sample_weights(sample_weights):
+        sample_weights = nest_shallow_collection(sample_weights)
+    sample_weights = normalise_row_attrs(sample_weights, l2_target=samples)
+    return sample_weights
+
 
 def estimate_density_trace(
     trace_samples: SamplesTrace,
     points: KDEPoints,
     kernel: str,
     bandwidth: KDEBandwidth,
+    weights: Weights | None = None,
 ) -> list[XYCoordinate[Float]]:
     """Estimates a density trace from a set of samples.
 
@@ -53,18 +126,23 @@ def estimate_density_trace(
                 f"one-dimensional array, got an array of shape {density_x.shape} instead."
             )
 
-    # I decided to use statsmodels' KDEUnivariate for KDE. There are many
-    # other supported alternatives in the python scientific computing
-    # ecosystem. See, for instance, scipy's alternative - on which
-    # statsmodels relies - `from scipy.stats import gaussian_kde`
+    # ref: https://github.com/tpvasconcelos/ridgeplot/issues/116
     dens = sm.nonparametric.KDEUnivariate(trace_samples)
 
-    # I'm hard-coding the `fft=self.kernel == "gau"` for convenience here.
-    # This avoids the need to expose yet another __init__ argument (fft)
-    # to this class. The drawback is that, if and when statsmodels
-    # implements another kernel with fft, this will fall back to
-    # using the unoptimised version (with fft = False).
-    dens.fit(kernel=kernel, fft=kernel == "gau", bw=bandwidth)
+    # I'm hard-coding `fft=kernel == "gau" and weights is not None`
+    # to avoid exposing yet another KDE parameter in ridgeplot()
+    # If we ever find any issues with this heuristic, I would
+    # prefer just leaving `fft=False` here and *not* expose
+    # this parameter to the user. If the user wants more
+    # control over the KDE estimation, they can always
+    # implement their own logic and pass `densities`
+    # directly to the ridgeplot() figure factory.
+    dens.fit(
+        kernel=kernel,
+        fft=kernel == "gau" and weights is not None,
+        bw=bandwidth,
+        weights=weights,
+    )
     density_y = dens.evaluate(density_x)
     _validate_densities(x=density_x, y=density_y, kernel=kernel)
 
@@ -102,7 +180,15 @@ def estimate_densities(
     points: KDEPoints,
     kernel: str,
     bandwidth: KDEBandwidth,
+    sample_weights: SampleWeights | ShallowSampleWeights | None = None,
 ) -> Densities:
     """Perform KDE for a set of samples."""
+    normalised_weights = normalize_sample_weights(sample_weights=sample_weights, samples=samples)
     kde = partial(estimate_density_trace, points=points, kernel=kernel, bandwidth=bandwidth)
-    return [[kde(trace_samples) for trace_samples in row] for row in samples]
+    return [
+        [
+            kde(samples_trace, weights=weights)
+            for samples_trace, weights in zip_strict(samples_row, weights_row)
+        ]
+        for samples_row, weights_row in zip_strict(samples, normalised_weights)
+    ]

@@ -533,6 +533,27 @@ def is_flat_str_collection(obj: Any) -> TypeIs[CollectionL1[str]]:
     return isinstance(obj, Collection) and all(isinstance(x, str) for x in obj)
 
 
+def is_flat_numeric_collection(obj: Any) -> TypeIs[CollectionL1[Numeric]]:
+    """Type guard for :data:`CollectionL1[Numeric]`.
+
+    Examples
+    --------
+    >>> is_flat_numeric_collection({1, 2, 3.14})
+    True
+    >>> is_flat_numeric_collection((1, np.nan, np.inf))
+    True
+    >>> is_flat_numeric_collection([3.14, np.float64(2.71), np.int64(42)])
+    True
+    >>> is_flat_numeric_collection([1, 2, "3"])
+    False
+    >>> is_flat_numeric_collection([1, 2, None])
+    False
+    >>> is_flat_numeric_collection("definitely not")
+    False
+    """
+    return isinstance(obj, Collection) and all(map(_is_numeric, obj))
+
+
 def nest_shallow_collection(shallow_collection: Collection[_T]) -> Collection[Collection[_T]]:
     """Convert a *shallow* collection type into a *deep* collection type.
 
