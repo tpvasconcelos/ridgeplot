@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Collection
 from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Optional, Union, cast
 
 import numpy as np
 import statsmodels.api as sm
@@ -49,6 +49,23 @@ ShallowSampleWeightsArray = CollectionL1[SampleWeights]
 """Shallow type for :data:`SampleWeightsArray`."""
 
 
+def _is_sample_weights(obj: Any) -> TypeIs[SampleWeights]:
+    """Type guard for :data:`SampleWeights`.
+
+    Examples
+    --------
+    >>> _is_sample_weights("definitely not")
+    False
+    >>> _is_sample_weights([1, 2, 3.14])
+    True
+    >>> _is_sample_weights([1, 2, "3"])
+    False
+    >>> _is_sample_weights(None)
+    True
+    """
+    return obj is None or is_flat_numeric_collection(obj)
+
+
 def _is_shallow_sample_weights(obj: Any) -> TypeIs[ShallowSampleWeightsArray]:
     """Type guard for :data:`ShallowSampleWeightsArray`.
 
@@ -65,9 +82,7 @@ def _is_shallow_sample_weights(obj: Any) -> TypeIs[ShallowSampleWeightsArray]:
     >>> _is_shallow_sample_weights([[1, 2, 3], None])
     True
     """
-    return isinstance(obj, Collection) and all(
-        x is None or is_flat_numeric_collection(x) for x in obj
-    )
+    return isinstance(obj, Collection) and all(map(_is_sample_weights, obj))
 
 
 def normalize_sample_weights(
@@ -89,8 +104,13 @@ def normalize_sample_weights(
     >>> normalize_sample_weights([None, [0, 1]], samples)
     [[None, None], [[0, 1]]]
     """
-    if sample_weights is None or is_flat_numeric_collection(sample_weights):
+    if _is_sample_weights(sample_weights):
         return [[sample_weights] * len(row) for row in samples]
+    # TODO: Investigate this issue with mypy's type narrowing...
+    sample_weights = cast(  # type: ignore[unreachable]
+        Union[SampleWeightsArray, ShallowSampleWeightsArray],
+        sample_weights,
+    )
     if _is_shallow_sample_weights(sample_weights):
         sample_weights = nest_shallow_collection(sample_weights)
     sample_weights = normalise_row_attrs(sample_weights, l2_target=samples)
