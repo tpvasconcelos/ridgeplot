@@ -177,7 +177,7 @@ def ridgeplot(
         array, which will be used for all traces.
 
     sample_weights : SampleWeights or ShallowSampleWeights, optional
-        An (optional) array of weights corresponding to each sample. The
+        An (optional) array of KDE weights corresponding to each sample. The
         weights should be of the same shape as the samples array. If not
         specified (default), all samples will be weighted equally.
 
