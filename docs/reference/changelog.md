@@ -17,7 +17,7 @@ Unreleased changes
 - Add new `line_color` parameter to the `ridgeplot` function ({gh-pr}`253`)
 - Add a `line_color='fill-color'` option which automatically matches the trace's line color to the trace's fill color ({gh-pr}`253`)
 - Add new `norm` parameter to the `ridgeplot` function to allow users to normalize the data before plotting ({gh-pr}`255`)
-- Add `sample_weights` argument to `ridgeplot()` to allow users to pass sample weights to the KDE estimator ({gh-pr}`???`)
+- Add `sample_weights` argument to `ridgeplot()` to allow users to pass sample weights to the KDE estimator ({gh-pr}`259`)
 
 ### Deprecations
 
@@ -47,7 +47,7 @@ Unreleased changes
 ### Internal
 
 - Simplify and refactor `interpolate_color` to not depend on `px.colors.find_intermediate_color` ({gh-pr}`253`)
-- Improve type narrowing using `typing.TypeIs` ({gh-pr}`???`)
+- Improve type narrowing using `typing.TypeIs` ({gh-pr}`259`)
 
 ---
 
