@@ -29,7 +29,13 @@ if TYPE_CHECKING:
     import plotly.graph_objects as go
 
     from ridgeplot._color.interpolation import SolidColormode
-    from ridgeplot._kde import KDEBandwidth, KDEPoints
+    from ridgeplot._kde import (
+        KDEBandwidth,
+        KDEPoints,
+        SampleWeights,
+        SampleWeightsArray,
+        ShallowSampleWeightsArray,
+    )
 
 
 def _coerce_to_densities(
@@ -38,6 +44,7 @@ def _coerce_to_densities(
     kernel: str,
     bandwidth: KDEBandwidth,
     kde_points: KDEPoints,
+    sample_weights: SampleWeightsArray | ShallowSampleWeightsArray | SampleWeights,
 ) -> Densities:
     # Importing statsmodels, scipy, and numpy can be slow,
     # so we're hiding the kde import here to only incur
@@ -52,20 +59,18 @@ def _coerce_to_densities(
         raise ValueError("You must specify either `samples` or `densities`")
     if has_densities:
         if is_shallow_densities(densities):
-            densities = cast(ShallowDensities, densities)
             densities = nest_shallow_collection(densities)
         densities = cast(Densities, densities)
     else:
         if is_shallow_samples(samples):
-            samples = cast(ShallowSamples, samples)
             samples = nest_shallow_collection(samples)
         samples = cast(Samples, samples)
-        # Convert samples to densities
         densities = estimate_densities(
             samples=samples,
             points=kde_points,
             kernel=kernel,
             bandwidth=bandwidth,
+            sample_weights=sample_weights,
         )
     return densities
 
@@ -76,6 +81,7 @@ def ridgeplot(
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
     kde_points: KDEPoints = 500,
+    sample_weights: SampleWeightsArray | ShallowSampleWeightsArray | SampleWeights = None,
     colorscale: ColorScale | Collection[Color] | str | None = None,
     colormode: Literal["fillgradient"] | SolidColormode = "fillgradient",
     opacity: float | None = None,
@@ -107,11 +113,11 @@ def ridgeplot(
     ----------
     samples : Samples or ShallowSamples, optional
         If ``samples`` data is specified, Kernel Density Estimation (KDE) will
-        be computed. See :paramref:`kernel`, :paramref:`bandwidth`, and
-        :paramref:`kde_points` for more details and KDE configuration options.
-        The ``samples`` argument should be an array of shape
-        :math:`(R, T_r, S_t)`. Note that we support irregular (`ragged`_)
-        arrays, where:
+        be computed. See :paramref:`kernel`, :paramref:`bandwidth`,
+        :paramref:`kde_points`, and :paramref:`sample_weights` for more details
+        and KDE configuration options. The ``samples`` argument should be an
+        array of shape :math:`(R, T_r, S_t)`. Note that we support irregular
+        (`ragged`_) arrays, where:
 
         - :math:`R` is the number of rows in the plot
         - :math:`T_r` is the number of traces per row, where each row
@@ -175,6 +181,11 @@ def ridgeplot(
         at ``kde_points`` evenly spaced points between the min and max of each
         set of samples. Optionally, you can also pass a custom 1D numerical
         array, which will be used for all traces.
+
+    sample_weights : SampleWeightsArray or ShallowSampleWeightsArray or SampleWeights, optional
+        An (optional) array of KDE weights corresponding to each sample. The
+        weights should be of the same shape as the samples array. If not
+        specified (default), all samples will be weighted equally.
 
     colorscale : ColorScale or Collection[Color] or str
         A continuous color scale used to color the different traces in the
@@ -326,6 +337,7 @@ def ridgeplot(
         kernel=kernel,
         bandwidth=bandwidth,
         kde_points=kde_points,
+        sample_weights=sample_weights,
     )
     del samples, kernel, bandwidth, kde_points
 

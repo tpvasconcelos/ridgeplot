@@ -75,6 +75,47 @@ def test_estimate_density_trace_fails_for_non_1d_points(points: KDEPoints) -> No
         )
 
 
+def test_estimate_density_trace_weights() -> None:
+    density_trace = estimate_density_trace(
+        trace_samples=[0, 1, 2, 2, 3, 3, 3, 4, 4, 5, 6],
+        points=7,
+        kernel="gau",
+        bandwidth="normal_reference",
+        weights=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9],
+    )
+    x, y = zip(*density_trace)
+    assert x == tuple(range(7))
+    assert x[np.argmax(y)] == 6
+
+
+def test_estimate_density_trace_weights_not_same_length() -> None:
+    with pytest.raises(
+        ValueError, match="The weights array should have the same length as the samples array"
+    ):
+        estimate_density_trace(
+            trace_samples=[0, 1, 2, 2, 3, 3, 3, 4, 4, 5, 6],
+            points=7,
+            kernel="gau",
+            bandwidth="normal_reference",
+            weights=[1, 1, 1],
+        )
+
+
+@pytest.mark.parametrize("non_finite_value", [np.inf, np.nan, float("inf"), float("nan")])
+def test_estimate_density_trace_weights_fails_for_non_finite_values(
+    non_finite_value: float,
+) -> None:
+    err_msg = "The weights array should not contain any infs or NaNs."
+    with pytest.raises(ValueError, match=err_msg):
+        estimate_density_trace(
+            trace_samples=[0, 1, 2, 2, 3, 3, 3, 4, 4, 5, 6],
+            points=7,
+            kernel="gau",
+            bandwidth="normal_reference",
+            weights=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, non_finite_value],
+        )
+
+
 # ==============================================================
 # ---  _validate_densities()
 # ==============================================================
