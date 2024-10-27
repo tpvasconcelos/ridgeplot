@@ -26,6 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     timeout-minutes: 1
+    permissions:
+      pull-requests: write
     steps:
       - uses: readthedocs/actions/preview@v1
         with:
