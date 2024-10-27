@@ -1,0 +1,30 @@
+# Build the Sphinx docs and update the PR description
+# w/ a link to the rendered version on Read the Docs
+# https://github.com/readthedocs/actions/tree/main/preview
+name: readthedocs (PR preview)
+
+on:
+  pull_request_target:
+    types: [ opened, synchronize ]
+    paths:
+      - '.github/workflows/readthedocs-preview.yml'
+      - 'cicd_utils/**'
+      - 'docs/**'
+      - 'src/**'
+      - '.readthedocs.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+
+jobs:
+  documentation-links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - uses: readthedocs/actions/preview@v1
+        with:
+          project-slug: "ridgeplot"
