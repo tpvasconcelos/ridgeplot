@@ -1,6 +1,6 @@
 # Support
 
-Thank you for using ridgeplot! 🚀
+Thank you for your interest in ridgeplot! 🚀
 
 I hope you can find the help you need in the following resources:
 
