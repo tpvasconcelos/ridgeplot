@@ -1,10 +1,8 @@
 # Run all CI checks on pushes to the main branch or pull-request updates.
 #
-# This includes: running static checks such as linting and type checking,
-# running the test suite on all supported Python versions, and uploading
-# coverage reports to Codecov and Codacy. Additionally, the Sphinx docs
-# are built, and a link to the docs will be added to the PR description
-#
+# This includes: static checks such as linting and type checking,
+# running the test suites on all supported Python versions,
+# and uploading coverage reports to Codecov and Codacy.
 name: CI checks
 
 on:

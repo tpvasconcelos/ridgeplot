@@ -1,4 +1,5 @@
-# Build the docs and update the PR description w/ a link to readthedocs
+# Build the Sphinx docs and update the PR description
+# w/ a link to the rendered version on Read the Docs
 # https://github.com/readthedocs/actions/tree/main/preview
 name: readthedocs (PR preview)
 
