@@ -56,15 +56,6 @@ def test_validate_and_coerce_colorscale_fails(
 
 
 def test_list_all_colorscale_names() -> None:
-    all_colorscale_names = list_all_colorscale_names()
-    assert all(isinstance(name, str) for name in all_colorscale_names)
-    assert "viridis" in all_colorscale_names
-    assert "default" in all_colorscale_names
-    for name in all_colorscale_names:
-        validate_and_coerce_colorscale(name)
-
-
-def test_list_all_colorscale_names_deprecation_warning() -> None:
     with pytest.warns(
         DeprecationWarning,
         match=(
@@ -72,4 +63,9 @@ def test_list_all_colorscale_names_deprecation_warning() -> None:
             r"and will be removed in a future version\."
         ),
     ):
-        list_all_colorscale_names()
+        all_colorscale_names = list_all_colorscale_names()
+    assert all(isinstance(name, str) for name in all_colorscale_names)
+    assert "viridis" in all_colorscale_names
+    assert "default" in all_colorscale_names
+    for name in all_colorscale_names:
+        validate_and_coerce_colorscale(name)
