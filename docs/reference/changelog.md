@@ -21,28 +21,28 @@ Unreleased changes
 
 ### Deprecations
 
-- Rename `coloralpha` to `opacity` for consistently with Plotly Express and deprecate the old parameter name. ({gh-pr}`245`)
-- Rename `linewidth` to `line_width` for consistency with Plotly's API and deprecate the old parameter name. ({gh-pr}`253`)
+- Rename `coloralpha` to `opacity` for consistently with Plotly Express and deprecate the old parameter name ({gh-pr}`245`)
+- Rename `linewidth` to `line_width` for consistency with Plotly's API and deprecate the old parameter name ({gh-pr}`253`)
 
 ### Dependencies
 
-- The new minimum version of Plotly is `5.20` to leverage the new `fillgradient` feature. ({gh-pr}`244`)
+- The new minimum version of Plotly is `5.20` to leverage the new `fillgradient` feature ({gh-pr}`244`)
 
 ### Optimizations
 
-- Importing statsmodels, scipy, and numpy can be slow, so we now only import the `ridgeplot._kde` module when the user needs this functionality. ({gh-pr}`242`)
+- Importing statsmodels, scipy, and numpy can be slow, so we now only import the `ridgeplot._kde` module when the user needs this functionality ({gh-pr}`242`)
 
 ### Documentation
 
 - Update examples in the getting-started guide to reflect the new default colormode ({gh-pr}`244`)
-- Update the `plotly.min.js` version from `2.27` to `2.35.2` to leverage the `fillgradient` feature. ({gh-pr}`244`)
-- Fix the API reference docs for the internal `ridgeplot._color` module. ({gh-pr}`244`)
-- Tighten margins in generated examples. ({gh-pr}`257`)
+- Update the `plotly.min.js` version from `2.27` to `2.35.2` to leverage the `fillgradient` feature ({gh-pr}`244`)
+- Fix the API reference docs for the internal `ridgeplot._color` module ({gh-pr}`244`)
+- Tighten margins in generated examples ({gh-pr}`257`)
 
 ### Miscellaneous
 
-- Add the reference jupyter notebook used to generate the ridgeplot logo. ({gh-pr}`242`)
-- Update ridgeplot's logo to use Plotly's official colors. ({gh-pr}`243`)
+- Add the reference jupyter notebook used to generate the ridgeplot logo ({gh-pr}`242`)
+- Update ridgeplot's logo to use Plotly's official colors ({gh-pr}`243`)
 
 ### Internal
 
@@ -58,7 +58,7 @@ Unreleased changes
 ### Features
 
 - Add support for named CSS colors ({gh-pr}`229`)
-- Allow users to define color scales as a collection of colors (`Collection[Color]`) ({gh-pr}`231`)
+- Allow users to define color scales as a collection of colors. (`Collection[Color]`) ({gh-pr}`231`)
 - Dynamically infer the default colorscale from the active Plotly template ({gh-pr}`237`)
 
 
@@ -124,7 +124,7 @@ Unreleased changes
 
 ### Breaking changes
 
-- Dropped support for Python 3.8, in accordance with the official Python support policy[^1]. ({gh-pr}`204`)
+- Dropped support for Python 3.8, in accordance with the official Python support policy[^1] ({gh-pr}`204`)
 - Removed deprecated function `get_all_colorscale_names()` in favor of `list_all_colorscale_names()` ({gh-pr}`200`)
 
 ### CI/CD
@@ -141,7 +141,7 @@ Unreleased changes
 
 ### Breaking changes
 
-- Dropped support for `statsmodels==0.14.2` due to import-time issue. See {gh-issue}`197` for more details. ({gh-pr}`198`)
+- Dropped support for `statsmodels==0.14.2` due to import-time issue. See {gh-issue}`197` for more details ({gh-pr}`198`)
 
 ### CI/CD
 
@@ -180,28 +180,28 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 
 ### Breaking changes
 
-- Dropped support for Python 3.7, in accordance with the official Python support policy[^1]. ({gh-pr}`154`)
+- Dropped support for Python 3.7, in accordance with the official Python support policy[^1] ({gh-pr}`154`)
 
 ### Features
 
-- Add hoverinfo by default to the Plotly traces. ({gh-pr}`174`)
+- Add hoverinfo by default to the Plotly traces ({gh-pr}`174`)
 
 ### Documentation
 
-- Use the `{raw} html :file: _static/charts/<PLOT-ID>.html` directive to load the interactive Plotly graphs in the generated Sphinx docs. The generated HTML artefacts only include a `<div>` wrapper block now and the plotly.min.js is now vendored and automatically loaded via the `html_js_files` Sphinx config. ({gh-pr}`132`)
-- Small adjustments to the example plots in the documentation. ({gh-pr}`132`)
-- Reformat markdown files, removing all line breaks. ({gh-pr}`132`)
+- Use the `{raw} html :file: _static/charts/<PLOT-ID>.html` directive to load the interactive Plotly graphs in the generated Sphinx docs. The generated HTML artefacts only include a `<div>` wrapper block now and the plotly.min.js is now vendored and automatically loaded via the `html_js_files` Sphinx config ({gh-pr}`132`)
+- Small adjustments to the example plots in the documentation ({gh-pr}`132`)
+- Reformat markdown files, removing all line breaks ({gh-pr}`132`)
 
 ### Internals
 
-- Define a `ridgeplot._missing.MISSING` sentinel object for internal use (this replaces the multiple module-level `_MISSING = object()` sentinels). ({gh-pr}`154`)
-- Add an internal `extras/` directory to place helper modules and packages used in different CI tasks. ({gh-pr}`154` and {gh-pr}`161`)
+- Define a `ridgeplot._missing.MISSING` sentinel object for internal use (this replaces the multiple module-level `_MISSING = object()` sentinels) ({gh-pr}`154`)
+- Add an internal `extras/` directory to place helper modules and packages used in different CI tasks ({gh-pr}`154` and {gh-pr}`161`)
 
 ### CI/CD
 
-- Replace `isort`, `flake8`, and `pyupgrade` with `ruff`. ({gh-pr}`131`)
-- Add regression tests for the figure artifacts generated by the examples in `ridgeplot_examples`. ({gh-pr}`154`)
-- Remove the Python locked dependency files. ({gh-pr}`163`)
+- Replace `isort`, `flake8`, and `pyupgrade` with `ruff` ({gh-pr}`131`)
+- Add regression tests for the figure artifacts generated by the examples in `ridgeplot_examples` ({gh-pr}`154`)
+- Remove the Python locked dependency files ({gh-pr}`163`)
 
 ---
 
@@ -217,25 +217,25 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 
 ### Deprecations
 
-- The `colormode='index'` value has been deprecated in favor of `colormode='row-index'`, which provides the same functionality but is more explicit and allows to distinguish between the `'row-index'` and `'trace-index'` modes. ({gh-pr}`114`)
-- The `show_annotations` argument has been deprecated in favor of `show_yticklabels`. ({gh-pr}`114`)
-- The `get_all_colorscale_names()` function has been deprecated in favor of `list_all_colorscale_names()`. ({gh-pr}`114`)
+- The `colormode='index'` value has been deprecated in favor of `colormode='row-index'`, which provides the same functionality but is more explicit and allows to distinguish between the `'row-index'` and `'trace-index'` modes ({gh-pr}`114`)
+- The `show_annotations` argument has been deprecated in favor of `show_yticklabels` ({gh-pr}`114`)
+- The `get_all_colorscale_names()` function has been deprecated in favor of `list_all_colorscale_names()` ({gh-pr}`114`)
 
 ### Features
 
-- Add functionality to allow plotting of multiple traces per row. ({gh-pr}`114`)
-- Add `ridgeplot.datasets.load_lincoln_weather()` helper function to load the "Lincoln Weather" toy dataset. ({gh-pr}`114`)
-- Add more versions of the _probly_ dataset (`"wadefagen"` and `"illinois"`). ({gh-pr}`114`)
+- Add functionality to allow plotting of multiple traces per row ({gh-pr}`114`)
+- Add `ridgeplot.datasets.load_lincoln_weather()` helper function to load the "Lincoln Weather" toy dataset ({gh-pr}`114`)
+- Add more versions of the _probly_ dataset (`"wadefagen"` and `"illinois"`) ({gh-pr}`114`)
 - Add support for Python 3.11.
 
 ### Documentation
 
-- Major update to the documentation, including more examples, interactive plots, script to generate the HTML and WebP images from the example scripts, improved API reference, and more. ({gh-pr}`114`)
+- Major update to the documentation, including more examples, interactive plots, script to generate the HTML and WebP images from the example scripts, improved API reference, and more ({gh-pr}`114`)
 
 ### Internal
 
-- Remove `mdformat` from the automated CI checks. It can still be triggered manually. ({gh-pr}`114`)
-- Improved type annotations and type checking. ({gh-pr}`114`)
+- Remove `mdformat` from the automated CI checks. It can still be triggered manually ({gh-pr}`114`)
+- Improved type annotations and type checking ({gh-pr}`114`)
 
 ---
 
@@ -244,21 +244,21 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 
 ### Features
 
-- Add `ridgeplot.datasets.load_probly()` helper function to load the `probly` toy dataset. The `probly.csv` file is now included in the package under `ridgeplot/datasets/data/`. ({gh-pr}`80`)
+- Add `ridgeplot.datasets.load_probly()` helper function to load the `probly` toy dataset. The `probly.csv` file is now included in the package under `ridgeplot/datasets/data/` ({gh-pr}`80`)
 
 ### Documentation
 
-- Change to numpydoc style docstrings. ({gh-pr}`81`)
-- Add a robots.txt to the docs site. ({gh-pr}`81`)
-- Auto-generate a site map for the docs site using `sphinx_sitemap`. ({gh-pr}`81`)
-- Change the sphinx theme to `furo`. ({gh-pr}`81`)
-- Improve the internal documentation and some of these internals to the API reference. ({gh-pr}`81`)
+- Change to numpydoc style docstrings ({gh-pr}`81`)
+- Add a robots.txt to the docs site ({gh-pr}`81`)
+- Auto-generate a site map for the docs site using `sphinx_sitemap` ({gh-pr}`81`)
+- Change the sphinx theme to `furo` ({gh-pr}`81`)
+- Improve the internal documentation and some of these internals to the API reference ({gh-pr}`81`)
 
 ### Internal
 
-- Fixed and improved some type annotations, including the introduction of `ridgeplot._types` module for type aliases such as `Numeric` and `NestedNumericSequence`. ({gh-pr}`80`)
-- Add the `blacken-docs` pre-commit hook and add the `pep8-naming`, `flake8-pytest-style`, `flake8-simplify`, `flake8-implicit-str-concat`, `flake8-bugbear`, `flake8-rst-docstrings`, `flake8-rst-docstrings`, etc... plugins to the `flake8` pre-commit hook. ({gh-pr}`81`)
-- Cleanup and improve some type annotations. ({gh-pr}`81`)
+- Fixed and improved some type annotations, including the introduction of `ridgeplot._types` module for type aliases such as `Numeric` and `NestedNumericSequence` ({gh-pr}`80`)
+- Add the `blacken-docs` pre-commit hook and add the `pep8-naming`, `flake8-pytest-style`, `flake8-simplify`, `flake8-implicit-str-concat`, `flake8-bugbear`, `flake8-rst-docstrings`, `flake8-rst-docstrings`, etc... plugins to the `flake8` pre-commit hook ({gh-pr}`81`)
+- Cleanup and improve some type annotations ({gh-pr}`81`)
 - Update deprecated `set-output` commands (GitHub Actions) ({gh-pr}`87`)
 
 ---
@@ -267,14 +267,14 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 ------
 
 - Automate the release process. See .github/workflows/release.yml, which issues a new GitHub release whenever a new git tag is pushed to the main branch by extracting the release notes from the changelog.
-- Fix automated release process to PyPI. ({gh-pr}`27`)
+- Fix automated release process to PyPI ({gh-pr}`27`)
 
 ---
 
 0.1.16
 ------
 
-- Upgrade project structure, improve testing and CI checks, and start basic Sphinx docs. ({gh-pr}`21`)
+- Upgrade project structure, improve testing and CI checks, and start basic Sphinx docs ({gh-pr}`21`)
 - Implement `LazyMapping` helper to allow `ridgeplot._colors.PLOTLY_COLORSCALES` to lazy-load from `colors.json` ({gh-pr}`20`)
 
 ---
