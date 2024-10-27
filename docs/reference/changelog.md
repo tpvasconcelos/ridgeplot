@@ -48,6 +48,7 @@ Unreleased changes
 
 - Simplify and refactor `interpolate_color` to not depend on `px.colors.find_intermediate_color` ({gh-pr}`253`)
 - Improve type narrowing using `typing.TypeIs` ({gh-pr}`259`)
+- Refactor community health files ({gh-pr}`260`)
 
 ---
 
