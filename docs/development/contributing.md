@@ -202,4 +202,4 @@ Here is a quick overview of ~~all~~ most of the CI tools and software used in th
 
 ## Code of Conduct
 
-Please remember to read and follow our standard {repo-file}`Code of Conduct <CODE_OF_CONDUCT.md>`. 🤝
+Please remember to read and follow our standard [Code of Conduct](https://github.com/tpvasconcelos/ridgeplot?tab=coc-ov-file#readme). 🤝

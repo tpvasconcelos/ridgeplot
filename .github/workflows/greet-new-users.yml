@@ -25,10 +25,6 @@ jobs:
 
             Our response times may vary, but we'll get back to you as soon as we can!
 
-            To help us help you, please make sure you have:
-            * Followed our [contributing guidelines](https://ridgeplot.readthedocs.io/en/latest/development/contributing.html).
-            * Provided all the necessary information in your pull request's description.
-            * All CI check are passing.
-            * You have reviewed your own code! 🤠
+            To help us help you, please make sure you have ticked all the boxes in the pull request template.
 
             Welcome aboard! 🚀
