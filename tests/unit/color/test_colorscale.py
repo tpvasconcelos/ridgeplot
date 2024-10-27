@@ -62,3 +62,14 @@ def test_list_all_colorscale_names() -> None:
     assert "default" in all_colorscale_names
     for name in all_colorscale_names:
         validate_and_coerce_colorscale(name)
+
+
+def test_list_all_colorscale_names_deprecation_warning() -> None:
+    with pytest.warns(
+        DeprecationWarning,
+        match=(
+            r'The "list_all_colorscale_names\(\)" function is deprecated '
+            r"and will be removed in a future version\."
+        ),
+    ):
+        list_all_colorscale_names()
