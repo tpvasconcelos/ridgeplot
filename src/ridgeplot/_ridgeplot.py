@@ -367,6 +367,15 @@ def ridgeplot(
         )
         line_width = linewidth
 
+    if colorscale == "default":
+        warnings.warn(
+            'The "default" colorscale is deprecated and will be removed in a future version. '
+            "Please use a valid colorscale from Plotly's px.colors.named_colorscales(). "
+            "For more details, see: https://plotly.com/python/builtin-colorscales/#named-builtin-continuous-color-scales",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
     del coloralpha, linewidth
 
     fig = create_ridgeplot(

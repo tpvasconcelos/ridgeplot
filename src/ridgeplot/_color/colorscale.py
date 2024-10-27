@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING, Any, cast
 
 import plotly.express as px
@@ -54,7 +55,17 @@ def validate_and_coerce_colorscale(
 def list_all_colorscale_names() -> list[str]:
     """Get a list of all available continuous colorscale names.
 
-    .. versionadded:: 0.1.21
-        Replaced the deprecated function ``get_all_colorscale_names()``.
+    .. deprecated:: 0.1.31
+       This function is deprecated and will be removed in a future version.
+       Please use ``px.colors.named_colorscales()`` from Plotly Express instead.
+       For more details, see: https://plotly.com/python/builtin-colorscales/#named-builtin-continuous-color-scales
+
     """
+    warnings.warn(
+        'The "list_all_colorscale_names()" function is deprecated and will be removed '
+        "in a future version. Please use px.colors.named_colorscales() from Plotly Express "
+        "instead. For more details, see: https://plotly.com/python/builtin-colorscales/#named-builtin-continuous-color-scales",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     return sorted(ColorscaleValidator().named_colorscales)
