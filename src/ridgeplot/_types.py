@@ -67,7 +67,7 @@ For instance, the Viridis color scale can be represented as:
 
 NormalisationOption = Literal["probability", "percent"]
 """A :data:`~typing.Literal` type that represents the normalisation options
-available for the ridgeplot. See :param:`ridgeplot.ridgeplot.norm` for more
+available for the ridgeplot. See :paramref:`ridgeplot.ridgeplot.norm` for more
 details."""
 
 # ========================================================
