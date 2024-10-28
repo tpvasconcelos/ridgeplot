@@ -24,7 +24,7 @@ from ridgeplot.datasets import load_probly
 df = load_probly()
 
 # %%
-# Let's grab only the subset of columns displayed in the example
+# Let's grab the subset of columns used in the example
 column_names = [
     "Almost Certainly",
     "Very Good Chance",
@@ -47,14 +47,14 @@ fig = ridgeplot(
     # We can specify the bandwidth used for KDE
     bandwidth=4,
     # and the range of points for which the KDE is evaluated
-    kde_points=np.linspace(-12.5, 112.5, 400),
+    kde_points=np.linspace(-12.5, 112.5, 500),
     # You can pass any plotly color scale here
     colorscale="viridis",
-    # In the example, the distributions seem to be colored
-    # by 'index'. Have a look at the other available options!
-    colormode="index",
+    # In the example, the distributions seem to be colored the
+    # row's index. Have a look at the other available options!
+    colormode="row-index",
     # Set the transparency level
-    coloralpha=0.6,
+    opacity=0.65,
     # Always label your plots! Don't be evil...
     labels=column_names,
     # Adjust the vertical spacing between the distributions
@@ -62,16 +62,20 @@ fig = ridgeplot(
 )
 
 # %%
-# Again, update the figure layout to your liking here
+# And you can still update and extend the final
+# Plotly Figure using standard Plotly methods
 fig.update_layout(
-    title="What probability would you assign to the phrase <i>“Highly likely”</i>?",
-    height=650,
+    height=560,
     width=800,
-    plot_bgcolor="rgba(255, 255, 255, 0.0)",
+    font_size=16,
+    plot_bgcolor="white",
+    xaxis_tickvals=[-12.5, 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100, 112.5],
+    xaxis_ticktext=["", "0", "", "25", "", "50", "", "75", "", "100", ""],
     xaxis_gridcolor="rgba(0, 0, 0, 0.1)",
     yaxis_gridcolor="rgba(0, 0, 0, 0.1)",
-    yaxis_title="Assigned Probability (%)",
+    yaxis_title=dict(text="Assigned Probability (%)", font_size=13),
+    showlegend=False,
 )
 
-# Or, simply: fig.show()
+# Show us the work!
 pio.show(fig)
