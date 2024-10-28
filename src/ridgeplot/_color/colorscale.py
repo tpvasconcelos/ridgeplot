@@ -57,8 +57,8 @@ def list_all_colorscale_names() -> list[str]:
 
     .. deprecated:: 0.1.31
        This function is deprecated and will be removed in a future version.
-       Please use ``px.colors.named_colorscales()`` from Plotly Express for
-       the same functionality. For more details, visit:
+       Please use :func:`px.colors.named_colorscales() <plotly.express.colors.named_colorscales>`
+       from Plotly Express for the same functionality. For more details, visit:
        https://plotly.com/python/builtin-colorscales/#named-builtin-continuous-color-scales
 
     """
