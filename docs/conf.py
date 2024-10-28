@@ -110,6 +110,7 @@ html_static_path = ["_static"]
 
 html_css_files = [
     "css/misc_overrides.css",
+    "css/sphinx_gallery_overwrite.css",
     "css/versionmodified_admonitions.css",
     # FontAwesome CSS for footer icons
     # https://fontawesome.com/search
@@ -384,11 +385,6 @@ def _fix_html_charts() -> None:
 def setup(app: Sphinx) -> None:
     compile_plotly_charts()
     # app.connect("html-page-context", register_jinja_functions)
-
-    # TODO: Check this!
-    # # html_css_files doesn't seem to be working...
-    # for css_path in Path("_static/css").glob("*.css"):
-    #     app.add_css_file(css_path.relative_to("_static").as_posix())
 
     app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())
     app.connect("build-finished", lambda *_: _fix_html_charts())

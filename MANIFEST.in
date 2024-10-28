@@ -26,7 +26,8 @@ recursive-include docs/_static/css *.css
 recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpg
 recursive-include docs/_static/js *.js
 recursive-include docs/_templates *.html
-recursive-include docs/examples_gallery_out *.html *.png *.md5 *.pickle *.ipynb *.json
+exclude docs/sg_execution_times.rst
+prune docs/examples_gallery_out
 prune docs/build
 
 # Misc
