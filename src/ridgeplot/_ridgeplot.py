@@ -369,9 +369,11 @@ def ridgeplot(
 
     if colorscale == "default":
         warnings.warn(
-            'The "default" colorscale is deprecated and will be removed in a future version. '
-            "Please use a valid colorscale from Plotly's px.colors.named_colorscales(). "
-            "For more details, see: https://plotly.com/python/builtin-colorscales/#named-builtin-continuous-color-scales",
+            "colorscale='default' is deprecated and support for it will be removed in a future "
+            "version. Please use colorscale=px.colors.DEFAULT_PLOTLY_COLORS for the same effect. "
+            "To list all supported colorscale names, please refer to Plotly's "
+            "px.colors.named_colorscales(), or visit: "
+            "https://plotly.com/python/builtin-colorscales/#named-builtin-continuous-color-scales",
             DeprecationWarning,
             stacklevel=2,
         )
