@@ -58,7 +58,7 @@ Notes for version 0.1.1...
 LATEST_NOTES_01 = """\
 Notes for version 0.1.2...
 
-Thanks to [@awesome_user](https:://github.com/awesome_user) for their contributions!
+Thanks to [@awesome_user](https://github.com/awesome_user) for their contributions!
 
 - Change 3 ([#3](https://github.com/tpvasconcelos/ridgeplot/pull/3))
 - Change 2 ([#2](example.com))
