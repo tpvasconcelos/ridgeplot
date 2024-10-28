@@ -226,7 +226,7 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 - The `colormode='index'` value has been deprecated in favor of `colormode='row-index'`, which provides the same functionality but is more explicit and allows to distinguish between the `'row-index'` and `'trace-index'` modes ({gh-pr}`114`)
 - The `show_annotations` argument has been deprecated in favor of `show_yticklabels` ({gh-pr}`114`)
 - The `get_all_colorscale_names()` function has been deprecated in favor of `list_all_colorscale_names()` ({gh-pr}`114`)
-- Deprecated `colorscale='default'` and `list_all_colorscale_names()` in favour or Plotly Express' `px.colors.named_colorscales()` ({gh-pr}`262`)
+- Deprecated `colorscale='default'` and `list_all_colorscale_names()` in favour of Plotly Express' `px.colors.named_colorscales()` ({gh-pr}`262`)
 
 ### Features
 
