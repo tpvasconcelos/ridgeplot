@@ -39,14 +39,14 @@ def test_examples_width_height_set(
 )
 @pytest.mark.parametrize(("plot_id", "example_loader"), ALL_EXAMPLES)
 def test_regressions(plot_id: str, example_loader: Callable[[], go.Figure]) -> None:
-    """Verify that the rendered WebP images match the current artifacts."""
+    """Verify that the rendered JPEG images match the current artifacts."""
     fig = example_loader()
     img = fig.to_image(
-        format="webp",
+        format="jpeg",
         width=fig.layout.width,
         height=fig.layout.height,
-        scale=3,
+        scale=1,
         engine="kaleido",
     )
-    expected = (PATH_CHARTS / f"{plot_id}.webp").read_bytes()
+    expected = (PATH_CHARTS / f"{plot_id}.jpeg").read_bytes()
     assert img == expected

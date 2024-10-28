@@ -9,7 +9,7 @@ from typing import (
 if TYPE_CHECKING:
     from typing import Any
 
-    from ridgeplot._types import CollectionL2, Densities, Numeric
+    from ridgeplot._types import CollectionL2, Densities, NormalisationOption, Numeric
 
 
 def get_xy_extrema(densities: Densities) -> tuple[Numeric, Numeric, Numeric, Numeric]:
@@ -207,16 +207,16 @@ def ordered_dedup(seq: Collection[_V]) -> list[_V]:
     return list(dict.fromkeys(seq))
 
 
-def normalise_row_attrs(attrs: CollectionL2[_V], densities: Densities) -> CollectionL2[_V]:
-    """Normalise the attributes over a Density array such that the number of
-    attributes matches the number of traces in each row.
+def normalise_row_attrs(attrs: CollectionL2[_V], l2_target: CollectionL2[Any]) -> CollectionL2[_V]:
+    """Validate and normalise the attributes over a CollectionL2 array such
+    that the number of attributes matches the number of traces in each row.
 
     Parameters
     ----------
     attrs
         The attributes collection to normalise.
-    densities
-        The densities array to normalise the attributes over.
+    l2_target
+        The densities or samples array to normalise the attributes over.
 
     Returns
     -------
@@ -246,16 +246,33 @@ def normalise_row_attrs(attrs: CollectionL2[_V], densities: Densities) -> Collec
     [['A', 'A', 'A'], ['B', 'B']]
     >>> normalise_row_attrs([["A"], ["B", "C"]], densities)
     [['A', 'A', 'A'], ['B', 'C']]
-    >>> normalise_row_attrs([["A", "A", "A"], ["B", "B"]], densities)
-    [['A', 'A', 'A'], ['B', 'B']]
+    >>> normalise_row_attrs([["A", "D", "A"], ["B", "B"]], densities)
+    [['A', 'D', 'A'], ['B', 'B']]
     >>> normalise_row_attrs([["A", "B"], ["C"]], densities)
     Traceback (most recent call last):
     ...
     ValueError: Mismatch between number of traces (3) and number of attrs (2) for row 0.
 
+    >>> samples = [
+    ...     [                                # Row 1
+    ...         [0, 1, 1, 2, 2, 2, 3, 3, 4], # Trace 1
+    ...         [1, 2, 2, 3, 3, 3, 4, 4, 5], # Trace 2
+    ...         [3, 4, 4, 5, 5, 5, 6, 6, 7], # Trace 3
+    ...     ],
+    ...     [                                # Row 2
+    ...         [2, 3, 3, 4, 4, 4, 5, 5, 6], # Trace 4
+    ...         [3, 4, 4, 5, 5, 5, 6, 6, 7], # Trace 5
+    ...     ],
+    ... ]
+    >>> normalise_row_attrs([["A"], ["B"]], samples)
+    [['A', 'A', 'A'], ['B', 'B']]
+    >>> normalise_row_attrs([["A"], ["B", "C", "X"]], samples)
+    Traceback (most recent call last):
+    ...
+    ValueError: Mismatch between number of traces (2) and number of attrs (3) for row 1.
     """
     norm_attrs = []
-    for i, (row, row_attr) in enumerate(zip(densities, attrs)):
+    for i, (row, row_attr) in enumerate(zip(l2_target, attrs)):
         n_traces = len(row)
         n_attrs = len(row_attr)
         if n_traces != n_attrs:
@@ -267,3 +284,68 @@ def normalise_row_attrs(attrs: CollectionL2[_V], densities: Densities) -> Collec
             row_attr = list(row_attr) * n_traces  # noqa: PLW2901
         norm_attrs.append(row_attr)
     return norm_attrs
+
+
+def normalise_densities(densities: Densities, norm: NormalisationOption) -> Densities:
+    """Normalise a densities array.
+
+    Parameters
+    ----------
+    densities
+        The densities array to normalise.
+    norm
+        The normalisation option. Can be either 'percent' or 'probability'.
+
+    Returns
+    -------
+    Densities
+        The normalised densities array.
+
+    Raises
+    ------
+    ValueError
+        If the normalisation option is invalid.
+
+    Examples
+    --------
+    >>> densities = [
+    ...     [
+    ...         [(0, 0), (1, 1), (2, 0)],  # Trace 1
+    ...         [(1, 0), (2, 2), (3, 0)],  # Trace 2
+    ...         [(2, 1), (3, 2), (4, 1)],  # Trace 3
+    ...     ],
+    ...     [
+    ...         [(0, 4), (1, 4), (2, 8)],  # Trace 4
+    ...         [(1, 4), (2, 4), (3, 2)],  # Trace 5
+    ...     ],
+    ... ]
+    >>> normalise_densities(densities, "probability")  # doctest: +NORMALIZE_WHITESPACE
+    [[[(0, 0.0), (1, 1.0), (2, 0.0)],
+      [(1, 0.0), (2, 1.0), (3, 0.0)],
+      [(2, 0.25), (3, 0.5), (4, 0.25)]],
+     [[(0, 0.25), (1, 0.25), (2, 0.5)], [(1, 0.4), (2, 0.4), (3, 0.2)]]]
+    >>> normalise_densities(densities, "percent")  # doctest: +NORMALIZE_WHITESPACE
+    [[[(0, 0.0), (1, 100.0), (2, 0.0)],
+      [(1, 0.0), (2, 100.0), (3, 0.0)],
+      [(2, 25.0), (3, 50.0), (4, 25.0)]],
+     [[(0, 25.0), (1, 25.0), (2, 50.0)], [(1, 40.0), (2, 40.0), (3, 20.0)]]]
+    >>> normalise_densities(densities, "invalid")
+    Traceback (most recent call last):
+    ...
+    ValueError: Invalid normalisation option 'invalid', expected 'percent' or 'probability'
+    """
+    if norm not in ("percent", "probability"):
+        raise ValueError(
+            f"Invalid normalisation option {norm!r}, expected 'percent' or 'probability'"
+        )
+
+    m = 100 if norm == "percent" else 1
+    densities_norm = []
+    for row in densities:
+        row_norm = []
+        for trace in row:
+            x, y = zip(*trace)
+            y = tuple(m * v / sum(y) for v in y)
+            row_norm.append(list(zip(x, y)))
+        densities_norm.append(row_norm)
+    return densities_norm

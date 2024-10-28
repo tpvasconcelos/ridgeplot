@@ -1,5 +1,6 @@
 <p align="center">
-    <img src="docs/_static/img/logo-wide.png" alt="ridgeplot - beautiful ridgeline plots in Python">
+    <img src="docs/_static/img/logo-wide.png#gh-light-mode-only" alt="ridgeplot - beautiful ridgeline plots in Python">
+    <img src="docs/_static/img/logo-wide-dark.png#gh-dark-mode-only" alt="ridgeplot - beautiful ridgeline plots in Python">
 </p>
 
 <h1 id="ridgeplot" align="center">
@@ -51,9 +52,8 @@ For those in a hurry, here's a very basic example on how to quickly get started 
 import numpy as np
 from ridgeplot import ridgeplot
 
-my_samples = [np.random.normal(n / 1.2, size=600) for n in range(8, 0, -1)]
+my_samples = [np.random.normal(n / 1.2, size=600) for n in range(7, 0, -1)]
 fig = ridgeplot(samples=my_samples)
-fig.update_layout(height=450, width=800)
 fig.show()
 ```
 
@@ -92,24 +92,23 @@ fig = ridgeplot(
     kde_points=np.linspace(-12.5, 112.5, 500),
     colorscale="viridis",
     colormode="row-index",
-    coloralpha=0.65,
+    opacity=0.6,
     labels=column_names,
-    linewidth=2,
     spacing=5 / 9,
 )
 
 # And you can still update and extend the final
 # Plotly Figure using standard Plotly methods
 fig.update_layout(
-    height=760,
-    width=900,
+    height=560,
+    width=800,
     font_size=16,
     plot_bgcolor="white",
     xaxis_tickvals=[-12.5, 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100, 112.5],
     xaxis_ticktext=["", "0", "", "25", "", "50", "", "75", "", "100", ""],
     xaxis_gridcolor="rgba(0, 0, 0, 0.1)",
     yaxis_gridcolor="rgba(0, 0, 0, 0.1)",
-    yaxis_title="Assigned Probability (%)",
+    yaxis_title=dict(text="Assigned Probability (%)", font_size=13),
     showlegend=False,
 )
 
@@ -146,16 +145,15 @@ samples = [
 fig = ridgeplot(
     samples=samples,
     labels=months,
-    coloralpha=0.98,
+    colorscale="Inferno",
     bandwidth=4,
-    kde_points=np.linspace(-25, 110, 400),
-    spacing=0.33,
-    linewidth=2,
+    kde_points=np.linspace(-40, 110, 400),
+    spacing=0.3,
 )
 fig.update_layout(
     title="Minimum and maximum daily temperatures in Lincoln, NE (2016)",
-    height=650,
-    width=950,
+    height=600,
+    width=800,
     font_size=14,
     plot_bgcolor="rgb(245, 245, 245)",
     xaxis_gridcolor="white",

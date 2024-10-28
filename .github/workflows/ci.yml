@@ -1,10 +1,9 @@
 # Run all CI checks on pushes to the main branch or pull-request updates.
 #
-# This includes: running static checks such as linting and type checking,
-# running the test suite on all supported Python versions, and uploading
-# coverage reports to Codecov and Codacy. Additionally, the Sphinx docs
-# are built, and a link to the docs will be added to the PR description
-#
+# This includes:
+# - running static checks, such as linting and type checking,
+# - running the test suites on all supported Python versions,
+# - and uploading coverage reports to the Codecov service.
 name: CI checks
 
 on:
@@ -16,21 +15,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-permissions:
-  pull-requests: write
-
 jobs:
-  # Build the docs and update the PR description w/ a link to readthedocs
-  # https://github.com/readthedocs/actions/tree/main/preview
-  documentation-links:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    timeout-minutes: 1
-    steps:
-      - uses: readthedocs/actions/preview@v1
-        with:
-          project-slug: "ridgeplot"
-
   # Run static checks only for Ubuntu and Python 3.9
   static-checks:
     name: Static checks
@@ -120,7 +105,7 @@ jobs:
         env:
           DIFF_AGAINST: HEAD
 
-      # Upload coverage reports to Codecov and Codacy.
+      # Upload coverage reports to Codecov
 
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v4
@@ -135,9 +120,3 @@ jobs:
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           verbose: true
-
-      - name: Upload coverage to codacy
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage.coverage-combine.xml

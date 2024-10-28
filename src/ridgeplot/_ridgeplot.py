@@ -1,20 +1,19 @@
 from __future__ import annotations
 
 import warnings
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Literal, cast
 
-from ridgeplot._color.interpolation import Colormode
 from ridgeplot._figure_factory import (
     LabelsArray,
     ShallowLabelsArray,
     create_ridgeplot,
 )
-from ridgeplot._kde import estimate_densities
 from ridgeplot._missing import MISSING, MissingType
 from ridgeplot._types import (
     Color,
     ColorScale,
     Densities,
+    NormalisationOption,
     Samples,
     ShallowDensities,
     ShallowSamples,
@@ -22,22 +21,36 @@ from ridgeplot._types import (
     is_shallow_samples,
     nest_shallow_collection,
 )
+from ridgeplot._utils import normalise_densities
 
 if TYPE_CHECKING:
     from collections.abc import Collection
 
     import plotly.graph_objects as go
 
-    from ridgeplot._kde import KDEBandwidth, KDEPoints
+    from ridgeplot._color.interpolation import SolidColormode
+    from ridgeplot._kde import (
+        KDEBandwidth,
+        KDEPoints,
+        SampleWeights,
+        SampleWeightsArray,
+        ShallowSampleWeightsArray,
+    )
 
 
-def _normalise_densities(
+def _coerce_to_densities(
     samples: Samples | ShallowSamples | None,
     densities: Densities | ShallowDensities | None,
     kernel: str,
     bandwidth: KDEBandwidth,
     kde_points: KDEPoints,
+    sample_weights: SampleWeightsArray | ShallowSampleWeightsArray | SampleWeights,
 ) -> Densities:
+    # Importing statsmodels, scipy, and numpy can be slow,
+    # so we're hiding the kde import here to only incur
+    # this cost if the user actually needs this it...
+    from ridgeplot._kde import estimate_densities
+
     has_samples = samples is not None
     has_densities = densities is not None
     if has_samples and has_densities:
@@ -46,20 +59,18 @@ def _normalise_densities(
         raise ValueError("You must specify either `samples` or `densities`")
     if has_densities:
         if is_shallow_densities(densities):
-            densities = cast(ShallowDensities, densities)
             densities = nest_shallow_collection(densities)
         densities = cast(Densities, densities)
     else:
         if is_shallow_samples(samples):
-            samples = cast(ShallowSamples, samples)
             samples = nest_shallow_collection(samples)
         samples = cast(Samples, samples)
-        # Convert samples to densities
         densities = estimate_densities(
             samples=samples,
             points=kde_points,
             kernel=kernel,
             bandwidth=bandwidth,
+            sample_weights=sample_weights,
         )
     return densities
 
@@ -70,15 +81,20 @@ def ridgeplot(
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
     kde_points: KDEPoints = 500,
+    sample_weights: SampleWeightsArray | ShallowSampleWeightsArray | SampleWeights = None,
     colorscale: ColorScale | Collection[Color] | str | None = None,
-    colormode: Colormode = "mean-minmax",
-    coloralpha: float | None = None,
+    colormode: Literal["fillgradient"] | SolidColormode = "fillgradient",
+    opacity: float | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
-    linewidth: float = 1.0,
+    norm: NormalisationOption | None = None,
+    line_color: Color | Literal["fill-color"] = "black",
+    line_width: float = 1.5,
     spacing: float = 0.5,
-    show_annotations: bool | MissingType = MISSING,
     show_yticklabels: bool = True,
     xpad: float = 0.05,
+    # Deprecated arguments
+    coloralpha: float | None | MissingType = MISSING,
+    linewidth: float | MissingType = MISSING,
 ) -> go.Figure:
     r"""Return an interactive ridgeline (Plotly) |~go.Figure|.
 
@@ -97,11 +113,11 @@ def ridgeplot(
     ----------
     samples : Samples or ShallowSamples, optional
         If ``samples`` data is specified, Kernel Density Estimation (KDE) will
-        be computed. See :paramref:`kernel`, :paramref:`bandwidth`, and
-        :paramref:`kde_points` for more details and KDE configuration options.
-        The ``samples`` argument should be an array of shape
-        :math:`(R, T_r, S_t)`. Note that we support irregular (`ragged`_)
-        arrays, where:
+        be computed. See :paramref:`kernel`, :paramref:`bandwidth`,
+        :paramref:`kde_points`, and :paramref:`sample_weights` for more details
+        and KDE configuration options. The ``samples`` argument should be an
+        array of shape :math:`(R, T_r, S_t)`. Note that we support irregular
+        (`ragged`_) arrays, where:
 
         - :math:`R` is the number of rows in the plot
         - :math:`T_r` is the number of traces per row, where each row
@@ -166,6 +182,11 @@ def ridgeplot(
         set of samples. Optionally, you can also pass a custom 1D numerical
         array, which will be used for all traces.
 
+    sample_weights : SampleWeightsArray or ShallowSampleWeightsArray or SampleWeights, optional
+        An (optional) array of KDE weights corresponding to each sample. The
+        weights should be of the same shape as the samples array. If not
+        specified (default), all samples will be weighted equally.
+
     colorscale : ColorScale or Collection[Color] or str
         A continuous color scale used to color the different traces in the
         ridgeline plot. It can be represented by a string name (e.g.,
@@ -179,12 +200,19 @@ def ridgeplot(
         ultimately be converted to a :data:`~ridgeplot._colors.ColorScale` object, assuming the
         colors are evenly spaced.
 
-    colormode : Colormode
-        This argument controls the logic used for choosing the color of each
-        ridgeline trace. Each option provides a different method for
-        calculating the interpolation value from a :paramref:`colorscale`
-        (i.e., a float value between 0 and 1) for each trace. The default is
-        mode is ``"mean-means"``. Choices are:
+    colormode : "fillgradient" or SolidColormode
+        This argument controls the logic used for the coloring of each
+        ridgeline trace.
+
+        The ``"fillgradient"`` mode (default) will fill each trace with a
+        gradient using the specified :paramref:`colorscale`. The gradient
+        normalisation is done using the minimum and maximum x-values over all
+        densities.
+
+        All other modes provide different methods for calculating interpolation
+        values from the specified :paramref:`colorscale` (i.e., a float value
+        between 0 and 1) for each trace. The interpolated color will be used to
+        color each trace with a solid color. The available modes are:
 
         - ``"row-index"`` - uses the row's index. This is useful when the
           desired effect is to have the same color for all traces on the same
@@ -200,24 +228,31 @@ def ridgeplot(
           for each row. e.g., if a ridgeplot has a row with only one trace and
           another with two traces, then the color scale interpolation values
           will be ``[[0], [0, 1]]``, respectively.
-        - ``"mean-minmax"`` - uses the min-max normalized (weighted) mean of
-          each density to calculate the interpolation values. The normalization
+        - ``"mean-minmax"`` - uses the min-max normalised (weighted) mean of
+          each density to calculate the interpolation values. The normalisation
           min and max values are the *absolute* minimum and maximum x-values
           over all densities. This mode is useful when the desired effect is to
           have the color of each trace reflect the mean of the distribution,
           while also taking into account the distributions' spread.
         - ``"mean-means"`` - similar to the ``"mean-minmax"`` mode, but where
-          the normalization min and max values are the minimum and maximum
+          the normalisation min and max values are the minimum and maximum
           *mean* x-values over all densities. This mode is useful when the
           desired effect is to have the color of each trace reflect the mean of
           the distribution, but without taking into account the entire
           variability of the distributions.
 
-    coloralpha : float, optional
+        .. versionchanged:: 0.1.31
+            The default value changed from ``"mean-minmax"`` to
+            ``"fillgradient"``.
+
+    opacity : float, optional
         If None (default), this argument will be ignored and the transparency
         values of the specifies color-scale will remain untouched. Otherwise,
         if a float value is passed, it will be used to overwrite the
         opacity/transparency of the color-scale's colors.
+
+        .. versionadded:: 0.1.31
+            Replaces the deprecated :paramref:`coloralpha` argument.
 
     labels : LabelsArray or ShallowLabelsArray, optional
         A list of string labels for each trace. The default value is None,
@@ -225,18 +260,41 @@ def ridgeplot(
         instead, a list of labels is specified, it must be of the same
         size/length as the number of traces.
 
-    linewidth : float
+    norm : NormalisationOption, optional
+        The normalisation option to use when normalising the densities. The
+        default is None, which means no normalisation will be applied and the
+        densities will be used as is. The following normalisation options are
+        available:
+
+        - ``"probability"`` - normalise the densities by dividing each trace by
+          its sum.
+        - ``"percent"`` - same as ``"probability"``, but the normalised values
+          are multiplied by 100.
+
+        .. versionadded:: 0.1.31
+
+    line_color : Color or "fill-color", optional
+        The color of the traces' lines. Any valid CSS color is allowed
+        (default: ``"black"``). If the value is set to "fill-color", the line
+        color will be the same as the fill color of the traces (see
+        :paramref:`colormode`). If ``colormode='fillgradient'``, the line color
+        will be the mean color of the fill gradient (i.e., equivalent to the
+        fill color when ``colormode='mean-minmax'``).
+
+        .. versionadded:: 0.1.31
+
+    line_width : float
         The traces' line width (in px).
+
+        .. versionadded:: 0.1.31
+            Replaces the deprecated :paramref:`linewidth` argument.
+
+        .. versionchanged:: 0.1.31
+            The default value changed from 1 to 1.5
 
     spacing : float
         The vertical spacing between density traces, which is defined in units
         of the highest distribution (i.e. the maximum y-value).
-
-    show_annotations : bool
-        Whether to show the tick labels on the y-axis. The default is True.
-
-        .. deprecated:: 0.1.21
-            Use :paramref:`show_yticklabels` instead.
 
     show_yticklabels : bool
         Whether to show the tick labels on the y-axis. The default is True.
@@ -248,6 +306,16 @@ def ridgeplot(
         Specifies the extra padding to use on the x-axis. It is defined in
         units of the range between the minimum and maximum x-values from all
         distributions.
+
+    coloralpha : float, optional
+
+        .. deprecated:: 0.1.31
+            Use :paramref:`opacity` instead.
+
+    linewidth : float
+
+        .. deprecated:: 0.1.31
+            Use :paramref:`line_width` instead.
 
     Returns
     -------
@@ -263,47 +331,52 @@ def ridgeplot(
         if neither of them is specified. i.e. you may only specify one of them.
 
     """
-    densities = _normalise_densities(
+    densities = _coerce_to_densities(
         samples=samples,
         densities=densities,
         kernel=kernel,
         bandwidth=bandwidth,
         kde_points=kde_points,
+        sample_weights=sample_weights,
     )
     del samples, kernel, bandwidth, kde_points
 
-    if colormode == "index":  # type: ignore[comparison-overlap]
-        # TODO: Raise ValueError in an upcoming version
-        # TODO: Drop support for the deprecated argument in 0.2.0
-        warnings.warn(  # type: ignore[unreachable]
-            "The colormode='index' value has been deprecated in favor of "
-            "colormode='row-index', which provides the same functionality but "
-            "is more explicit and allows to distinguish between the "
-            "'row-index' and 'trace-index' modes. Support for the "
-            "deprecated value will be removed in a future version.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        colormode = cast(Colormode, "row-index")
-    if show_annotations is not MISSING:
-        # TODO: Raise TypeError in an upcoming version
-        # TODO: Drop support for the deprecated argument in 0.2.0
+    if norm:
+        densities = normalise_densities(densities, norm=norm)
+
+    if coloralpha is not MISSING:
+        if opacity is not None:
+            raise ValueError(
+                "You may not specify both the 'coloralpha' and 'opacity' arguments! "
+                "HINT: Use the new 'opacity' argument instead of the deprecated 'coloralpha'."
+            )
         warnings.warn(
-            "The show_annotations argument has been deprecated in favor of "
-            "show_yticklabels. Support for the deprecated argument will be "
-            "removed in a future version.",
+            "The 'coloralpha' argument has been deprecated in favor of 'opacity'. "
+            "Support for the deprecated argument will be removed in a future version.",
             DeprecationWarning,
             stacklevel=2,
         )
-        show_yticklabels = show_annotations
+        opacity = coloralpha
+
+    if linewidth is not MISSING:
+        warnings.warn(
+            "The 'linewidth' argument has been deprecated in favor of 'line_width'. "
+            "Support for the deprecated argument will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        line_width = linewidth
+
+    del coloralpha, linewidth
 
     fig = create_ridgeplot(
         densities=densities,
         trace_labels=labels,
         colorscale=colorscale,
-        coloralpha=coloralpha,
+        opacity=opacity,
         colormode=colormode,
-        linewidth=linewidth,
+        line_color=line_color,
+        line_width=line_width,
         spacing=spacing,
         show_yticklabels=show_yticklabels,
         xpad=xpad,
