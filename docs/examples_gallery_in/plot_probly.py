@@ -15,7 +15,6 @@ used in the original post.
 from __future__ import annotations
 
 import numpy as np
-import plotly.io as pio
 
 from ridgeplot import ridgeplot
 from ridgeplot.datasets import load_probly
@@ -78,4 +77,4 @@ fig.update_layout(
 )
 
 # Show us the work!
-pio.show(fig)
+fig

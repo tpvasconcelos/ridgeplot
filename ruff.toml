@@ -86,13 +86,13 @@ ignore = [
 ]
 "docs/*" = [
     "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
-    "S101",   # Use of assert detected
-    "T201",   # `print` found
+]
+"docs/examples_gallery_in/*" = [
+    "B018", # Found useless expression. Either assign it to a variable or remove it.
 ]
 "tests/*" = [
     "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
     "S101",   # Use of assert detected
-    "SLF001", # Private member accessed: `_X`
 ]
 "misc/brand/logo.ipynb" = [
     "E501", # Line too long

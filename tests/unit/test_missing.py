@@ -43,7 +43,7 @@ def test_reloading() -> None:
     import ridgeplot._missing as types_module
     from ridgeplot._missing import MISSING
 
-    missing1 = ridgeplot._missing.MISSING
+    missing1 = ridgeplot._missing.MISSING  # noqa: SLF001
     missing2 = types_module.MISSING
     missing3 = MISSING
 
@@ -54,7 +54,7 @@ def test_reloading() -> None:
         missing1,
         missing2,
         missing3,
-        ridgeplot._missing.MISSING,
+        ridgeplot._missing.MISSING,  # noqa: SLF001
         types_module.MISSING,
         MISSING,
     )
@@ -64,7 +64,7 @@ def test_reloading() -> None:
         missing1,
         missing2,
         missing3,
-        ridgeplot._missing.MISSING,
+        ridgeplot._missing.MISSING,  # noqa: SLF001
         types_module.MISSING,
         MISSING,
     )
