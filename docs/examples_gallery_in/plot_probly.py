@@ -38,7 +38,7 @@ column_names = [
 df = df[column_names]
 
 # %%
-# Not only does 'ridgeplot(...)' come configured with sensible defaults
+# Not only does :func:`~ridgeplot.ridgeplot()` come configured with sensible defaults
 # but is also fully configurable to your own style and preference!
 
 fig = ridgeplot(
