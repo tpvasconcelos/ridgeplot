@@ -2,7 +2,8 @@
 #  Project specific
 # ============================================================================
 
-# add custom entries here...
+docs/examples_gallery_out/
+docs/sg_execution_times.rst
 
 
 # ============================================================================
