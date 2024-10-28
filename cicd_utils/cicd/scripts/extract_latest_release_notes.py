@@ -95,6 +95,14 @@ def replace_gh_links(tokens: list[Token]) -> list[Token]:
             )
             tokens_new.extend(link_tokens)
             continue
+        if token.type == "myst_role" and token.meta.get("name", "") == "gh-user":
+            gh_user = token.content
+            link_tokens = get_link_tokens(
+                text=f"@{gh_user}",
+                href=f"https://github.com/{gh_user}",
+            )
+            tokens_new.extend(link_tokens)
+            continue
         tokens_new.append(token)
     return tokens_new
 

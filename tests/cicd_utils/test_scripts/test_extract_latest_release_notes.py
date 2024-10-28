@@ -42,6 +42,8 @@ Unreleased changes notes...
 
 Notes for version 0.1.2...
 
+Thanks to {gh-user}`awesome_user` for their contributions!
+
 - Change 3 ({gh-pr}`3`)
 - Change 2 ([#2](example.com))
 
@@ -55,6 +57,8 @@ Notes for version 0.1.1...
 
 LATEST_NOTES_01 = """\
 Notes for version 0.1.2...
+
+Thanks to [@awesome_user](https:://github.com/awesome_user) for their contributions!
 
 - Change 3 ([#3](https://github.com/tpvasconcelos/ridgeplot/pull/3))
 - Change 2 ([#2](example.com))
@@ -76,7 +80,7 @@ def test_extract_latest_release_notes(
 
 
 def test_myst_roles() -> None:
-    whitelisted_roles = {"gh-pr", "gh-issue"}
+    whitelisted_roles = {"gh-pr", "gh-issue", "gh-user"}
 
     def validate_tokens(tkns: list[Token]) -> None:
         for token in tkns:
