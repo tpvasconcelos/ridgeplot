@@ -39,6 +39,10 @@ Unreleased changes
 - Fix the API reference docs for the internal `ridgeplot._color` module ({gh-pr}`244`)
 - Tighten margins in generated examples ({gh-pr}`257`)
 
+### CI/CD
+
+- Stop sending coverage reports to Codacy ({gh-pr}`265`)
+
 ### Miscellaneous
 
 - Add the reference jupyter notebook used to generate the ridgeplot logo ({gh-pr}`242`)
