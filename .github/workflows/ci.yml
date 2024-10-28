@@ -1,8 +1,9 @@
 # Run all CI checks on pushes to the main branch or pull-request updates.
 #
-# This includes: static checks such as linting and type checking,
-# running the test suites on all supported Python versions,
-# and uploading coverage reports to Codecov and Codacy.
+# This includes:
+# - running static checks, such as linting and type checking,
+# - running the test suites on all supported Python versions,
+# - and uploading coverage reports to the Codecov service.
 name: CI checks
 
 on:
@@ -104,7 +105,7 @@ jobs:
         env:
           DIFF_AGAINST: HEAD
 
-      # Upload coverage reports to Codecov and Codacy.
+      # Upload coverage reports to Codecov
 
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v4
@@ -119,9 +120,3 @@ jobs:
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           verbose: true
-
-      - name: Upload coverage to codacy
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage.coverage-combine.xml

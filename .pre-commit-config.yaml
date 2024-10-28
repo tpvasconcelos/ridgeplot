@@ -67,7 +67,7 @@ repos:
     rev: v2.3.0
     hooks:
       - id: codespell
-        args: [ "-L", "probly" ]
+        args: [ "-L", "probly", "-L", "mis" ]
         exclude: ^docs/_static/.*\.(js|html)$|^src/ridgeplot/.*\.c$
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
