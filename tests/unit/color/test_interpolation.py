@@ -91,6 +91,49 @@ def test_interpolate_color_fails_for_p_out_of_bounds(p: float) -> None:
         interpolate_color(colorscale=..., p=p)  # type: ignore[arg-type]
 
 
+@pytest.fixture
+def sample_data() -> list[list[int]]:
+    return [[1, 2, 2, 3]]
+
+
+@pytest.fixture
+def colormodes() -> list[str]:
+    return ["row-index", "trace-index", "trace-index-row-wise"]
+
+
+def test_no_zero_division_error_single_trace_single_row(
+    sample_data: list[list[int]], colormodes: list[str]
+) -> None:
+    try:
+        ridgeplot(sample_data, colormode=colormodes[0])
+    except ZeroDivisionError:
+        pytest.fail(
+            "ZeroDivisionError raised unexpectedly for row-index colormode with a single trace."
+        )
+
+
+def test_no_zero_division_error_ingle_trace_trace_index(
+    sample_data: list[list[int]], colormodes: list[str]
+) -> None:
+    try:
+        ridgeplot(sample_data, colormode=colormodes[1])
+    except ZeroDivisionError:
+        pytest.fail(
+            "ZeroDivisionError raised unexpectedly for row-index colormode with a single trace."
+        )
+
+
+def test_no_zero_division_error_single_trace_trace_index_row_wise(
+    sample_data: list[list[int]], colormodes: list[str]
+) -> None:
+    try:
+        ridgeplot(sample_data, colormode=colormodes[2])
+    except ZeroDivisionError:
+        pytest.fail(
+            "ZeroDivisionError raised unexpectedly for row-index colormode with a single trace."
+        )
+
+
 # ==============================================================
 # --- slice_colorscale()
 # ==============================================================
