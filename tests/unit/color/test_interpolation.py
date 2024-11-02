@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import pytest
 
@@ -91,18 +91,21 @@ def test_interpolate_color_fails_for_p_out_of_bounds(p: float) -> None:
         interpolate_color(colorscale=..., p=p)  # type: ignore[arg-type]
 
 
+ColormodeType = Literal["row-index", "trace-index", "trace-index-row-wise"]
+
+
 @pytest.fixture
 def sample_data() -> list[list[int]]:
     return [[1, 2, 2, 3]]
 
 
 @pytest.fixture
-def colormodes() -> list[str]:
+def colormodes() -> list[ColormodeType]:
     return ["row-index", "trace-index", "trace-index-row-wise"]
 
 
 def test_no_zero_division_error_single_trace_single_row(
-    sample_data: list[list[int]], colormodes: list[str]
+    sample_data: list[list[int]], colormodes: list[ColormodeType]
 ) -> None:
     try:
         ridgeplot(sample_data, colormode=colormodes[0])
@@ -113,7 +116,7 @@ def test_no_zero_division_error_single_trace_single_row(
 
 
 def test_no_zero_division_error_ingle_trace_trace_index(
-    sample_data: list[list[int]], colormodes: list[str]
+    sample_data: list[list[int]], colormodes: list[ColormodeType]
 ) -> None:
     try:
         ridgeplot(sample_data, colormode=colormodes[1])
@@ -124,7 +127,7 @@ def test_no_zero_division_error_ingle_trace_trace_index(
 
 
 def test_no_zero_division_error_single_trace_trace_index_row_wise(
-    sample_data: list[list[int]], colormodes: list[str]
+    sample_data: list[list[int]], colormodes: list[ColormodeType]
 ) -> None:
     try:
         ridgeplot(sample_data, colormode=colormodes[2])
