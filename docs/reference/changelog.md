@@ -241,6 +241,7 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 
 - Remove `mdformat` from the automated CI checks. It can still be triggered manually ({gh-pr}`114`)
 - Improved type annotations and type checking ({gh-pr}`114`)
+- Fixed a ZeroDivisionError in `index-based` colormodes for single-trace or single-row ridgeline plots by adding a check that assigns a default color when only one row is present ({gh-pr}`268`).
 
 ---
 
