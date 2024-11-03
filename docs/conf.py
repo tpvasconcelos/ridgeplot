@@ -307,16 +307,15 @@ remove_from_toctrees = ["api/internal/*"]
 
 
 # -- sphinx-gallery config -------------------------------------------------------------------------
-import plotly.io as pio  # noqa: E402
-from plotly.io._sg_scraper import plotly_sg_scraper  # noqa: E402
-
-pio.renderers.default = "sphinx_gallery_png"
 sphinx_gallery_conf = {
     "examples_dirs": "examples_gallery_in",
     "gallery_dirs": "examples_gallery_out",
-    "run_stale_examples": False,
+    "run_stale_examples": True,
     "download_all_examples": False,
-    "image_scrapers": (plotly_sg_scraper,),
+    "image_scrapers": ("plotly.io._sg_scraper.plotly_sg_scraper",),
+    "show_memory": False,
+    "show_signature": False,
+    "min_reported_time": 6,
 }
 
 # -- sphinx-paramlinks -----------------------------------------------------------------------------

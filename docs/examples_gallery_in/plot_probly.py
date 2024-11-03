@@ -19,6 +19,7 @@ import numpy as np
 from ridgeplot import ridgeplot
 from ridgeplot.datasets import load_probly
 
+# %%
 # Load the probly dataset
 df = load_probly()
 
@@ -76,5 +77,6 @@ fig.update_layout(
     showlegend=False,
 )
 
+# %%
 # Show us the work!
 fig

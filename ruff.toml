@@ -89,6 +89,7 @@ ignore = [
 ]
 "docs/examples_gallery_in/*" = [
     "B018", # Found useless expression. Either assign it to a variable or remove it.
+    "T201", # `print` found
 ]
 "tests/*" = [
     "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
