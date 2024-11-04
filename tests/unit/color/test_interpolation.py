@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
 import pytest
 
 from ridgeplot import ridgeplot
 from ridgeplot._color.interpolation import (
     InterpolationContext,
+    SolidColormode,
     _interpolate_color,
     _interpolate_mean_means,
     _interpolate_mean_minmax,
@@ -94,46 +95,15 @@ def test_interpolate_mean_means() -> None:
     assert ps == [[0.0], [0.5], [1.0]]
 
 
-ColormodeType = Literal["row-index", "trace-index", "trace-index-row-wise"]
-
-
-@pytest.fixture
-def sample_data() -> list[list[int]]:
-    return [[1, 2, 2, 3]]
-
-
-@pytest.fixture
-def colormodes() -> list[ColormodeType]:
-    return ["row-index", "trace-index", "trace-index-row-wise"]
-
-
-def test_no_zero_division_error_single_trace_single_row(
-    sample_data: list[list[int]], colormodes: list[ColormodeType]
-) -> None:
+@pytest.mark.parametrize(
+    "colormode",
+    ["row-index", "trace-index", "trace-index-row-wise"],
+)
+def test_no_zero_division_error(colormode: SolidColormode) -> None:
+    """ZeroDivisionError should never be raised, even when there is only one
+    trace, one row, or one trace per row."""
     try:
-        ridgeplot(sample_data, colormode=colormodes[0])
-    except ZeroDivisionError:
-        pytest.fail(
-            "ZeroDivisionError raised unexpectedly for row-index colormode with a single trace."
-        )
-
-
-def test_no_zero_division_error_ingle_trace_trace_index(
-    sample_data: list[list[int]], colormodes: list[ColormodeType]
-) -> None:
-    try:
-        ridgeplot(sample_data, colormode=colormodes[1])
-    except ZeroDivisionError:
-        pytest.fail(
-            "ZeroDivisionError raised unexpectedly for row-index colormode with a single trace."
-        )
-
-
-def test_no_zero_division_error_single_trace_trace_index_row_wise(
-    sample_data: list[list[int]], colormodes: list[ColormodeType]
-) -> None:
-    try:
-        ridgeplot(sample_data, colormode=colormodes[2])
+        ridgeplot([[1, 2, 2, 3]], colormode=colormode)
     except ZeroDivisionError:
         pytest.fail(
             "ZeroDivisionError raised unexpectedly for row-index colormode with a single trace."
