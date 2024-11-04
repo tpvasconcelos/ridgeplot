@@ -381,9 +381,25 @@ def _fix_html_charts() -> None:
         end_of_file_fixer(files)
 
 
+def rename_plotly_io_show() -> None:
+    """Rename usages of `plotly.io.show` to `fig.show`."""
+    from pathlib import Path
+
+    for file in Path("examples_gallery_out/").iterdir():
+        if file.suffix not in {".py", ".rst", ".ipynb"}:
+            continue
+        new_lines = []
+        for line in file.read_text().split("\n"):
+            if "import plotly.io as pio" in line:
+                continue
+            new_lines.append(line.replace("pio.show(fig)", "fig.show()"))
+        file.write_text("\n".join(new_lines))
+
+
 def setup(app: Sphinx) -> None:
     compile_plotly_charts()
     # app.connect("html-page-context", register_jinja_functions)
 
+    app.connect("builder-inited", lambda *_: rename_plotly_io_show())
     app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())
     app.connect("build-finished", lambda *_: _fix_html_charts())
