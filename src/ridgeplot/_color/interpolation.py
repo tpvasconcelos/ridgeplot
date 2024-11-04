@@ -16,6 +16,53 @@ if TYPE_CHECKING:
 
     from ridgeplot._types import Densities, Numeric
 
+
+# ==============================================================
+# --- Common interpolation utilities
+# ==============================================================
+
+
+def _interpolate_color(colorscale: ColorScale, p: float) -> str:
+    """Get a color from a colorscale at a given interpolation point ``p``.
+
+    This function always returns a color in the RGB format, even if the input
+    colorscale contains colors in other formats.
+    """
+    if not (0 <= p <= 1):
+        raise ValueError(
+            f"The interpolation point 'p' should be a float value between 0 and 1, not {p}."
+        )
+    scale = [s for s, _ in colorscale]
+    colors = [to_rgb(c) for _, c in colorscale]
+    if p in scale:
+        return colors[scale.index(p)]
+    ceil = min(filter(lambda s: s > p, scale))
+    floor = max(filter(lambda s: s < p, scale))
+    color_floor = unpack_rgb(colors[scale.index(floor)])
+    color_ceil = unpack_rgb(colors[scale.index(ceil)])
+    p_norm = normalise_min_max(p, min_=floor, max_=ceil)
+    rgb = to_rgb(
+        (
+            color_floor[0] + (p_norm * (color_ceil[0] - color_floor[0])),
+            color_floor[1] + (p_norm * (color_ceil[1] - color_floor[1])),
+            color_floor[2] + (p_norm * (color_ceil[2] - color_floor[2])),
+        )
+    )
+    alpha_floor = color_floor[3] if len(color_floor) == 4 else 1
+    alpha_ceil = color_ceil[3] if len(color_ceil) == 4 else 1
+    alpha = alpha_floor + (p_norm * (alpha_ceil - alpha_floor))
+    if alpha < 1:
+        rgb = apply_alpha(rgb, alpha)
+    # To address floating point errors, we round all color channels to a
+    # reasonable precision, which should result in the exact some result
+    # being rendered by any browsers and most Plotly output formats.
+    return round_color(rgb, 5)
+
+
+# ==============================================================
+# --- Solid color modes
+# ==============================================================
+
 SolidColormode = Literal[
     "row-index",
     "trace-index",
@@ -136,43 +183,6 @@ SOLID_COLORMODE_MAPS: dict[SolidColormode, InterpolationFunc] = {
 }
 
 
-def interpolate_color(colorscale: ColorScale, p: float) -> str:
-    """Get a color from a colorscale at a given interpolation point ``p``.
-
-    This function always returns a color in the RGB format, even if the input
-    colorscale contains colors in other formats.
-    """
-    if not (0 <= p <= 1):
-        raise ValueError(
-            f"The interpolation point 'p' should be a float value between 0 and 1, not {p}."
-        )
-    scale = [s for s, _ in colorscale]
-    colors = [to_rgb(c) for _, c in colorscale]
-    if p in scale:
-        return colors[scale.index(p)]
-    ceil = min(filter(lambda s: s > p, scale))
-    floor = max(filter(lambda s: s < p, scale))
-    color_floor = unpack_rgb(colors[scale.index(floor)])
-    color_ceil = unpack_rgb(colors[scale.index(ceil)])
-    p_norm = normalise_min_max(p, min_=floor, max_=ceil)
-    rgb = to_rgb(
-        (
-            color_floor[0] + (p_norm * (color_ceil[0] - color_floor[0])),
-            color_floor[1] + (p_norm * (color_ceil[1] - color_floor[1])),
-            color_floor[2] + (p_norm * (color_ceil[2] - color_floor[2])),
-        )
-    )
-    alpha_floor = color_floor[3] if len(color_floor) == 4 else 1
-    alpha_ceil = color_ceil[3] if len(color_ceil) == 4 else 1
-    alpha = alpha_floor + (p_norm * (alpha_ceil - alpha_floor))
-    if alpha < 1:
-        rgb = apply_alpha(rgb, alpha)
-    # To address floating point errors, we round all color channels to a
-    # reasonable precision, which should result in the exact some result
-    # being rendered by any browsers and most Plotly output formats.
-    return round_color(rgb, 5)
-
-
 def _compute_solid_colors(
     colorscale: ColorScale,
     colormode: SolidColormode,
@@ -180,23 +190,47 @@ def _compute_solid_colors(
     interpolation_ctx: InterpolationContext,
 ) -> Generator[Generator[str]]:
     def _get_fill_color(p: float) -> str:
-        fill_color = interpolate_color(colorscale, p=p)
+        fill_color = _interpolate_color(colorscale, p=p)
         if opacity is not None:
             # Sometimes the interpolation logic can drop the alpha channel
             fill_color = apply_alpha(fill_color, alpha=float(opacity))
         return fill_color
 
-    if colormode not in SOLID_COLORMODE_MAPS:
-        raise ValueError(
-            f"The colormode argument should be 'fillgradient' or one of the solid colormodes "
-            f"{tuple(SOLID_COLORMODE_MAPS)}, got {colormode} instead."
-        )
     interpolate_func = SOLID_COLORMODE_MAPS[colormode]
     interpolants = interpolate_func(ctx=interpolation_ctx)
     return ((_get_fill_color(p) for p in row) for row in interpolants)
 
 
-def slice_colorscale(
+def _compute_solid_trace_colors(
+    colorscale: ColorScale,
+    colormode: SolidColormode,
+    line_color: Color | Literal["fill-color"],
+    opacity: float | None,
+    interpolation_ctx: InterpolationContext,
+) -> Generator[Generator[dict[str, Any]]]:
+    return (
+        (
+            dict(
+                line_color=fill_color if line_color == "fill-color" else line_color,
+                fillcolor=fill_color,
+            )
+            for fill_color in row
+        )
+        for row in _compute_solid_colors(
+            colorscale=colorscale,
+            colormode=colormode,
+            opacity=opacity,
+            interpolation_ctx=interpolation_ctx,
+        )
+    )
+
+
+# ==============================================================
+# --- `fillgradient` color mode
+# ==============================================================
+
+
+def _slice_colorscale(
     colorscale: ColorScale,
     p_lower: float,
     p_upper: float,
@@ -231,14 +265,70 @@ def slice_colorscale(
         return colorscale
 
     return (
-        (0.0, interpolate_color(colorscale, p=p_lower)),
+        (0.0, _interpolate_color(colorscale, p=p_lower)),
         *[
             (normalise_min_max(v, min_=p_lower, max_=p_upper), c)
             for v, c in colorscale
             if p_lower < v < p_upper
         ],
-        (1.0, interpolate_color(colorscale, p=p_upper)),
+        (1.0, _interpolate_color(colorscale, p=p_upper)),
     )
+
+
+def _compute_fillgradient_trace_colors(
+    colorscale: ColorScale,
+    line_color: Color | Literal["fill-color"],
+    opacity: float | None,
+    interpolation_ctx: InterpolationContext,
+) -> Generator[Generator[dict[str, Any]]]:
+    solid_line_colors: Generator[Generator[Color]]
+    if line_color == "fill-color":
+        solid_line_colors = _compute_solid_colors(
+            colorscale=colorscale,
+            colormode="mean-minmax",
+            opacity=opacity,
+            interpolation_ctx=interpolation_ctx,
+        )
+    else:
+        solid_line_colors = ((line_color for _ in row) for row in interpolation_ctx.densities)
+    if opacity is not None:
+        # HACK: Plotly doesn't yet support setting the fill opacity
+        #       for traces with `fillgradient`. As a workaround, we
+        #       can override the color-scale's color values and add
+        #       the corresponding alpha channel to all colors.
+        colorscale = [(v, apply_alpha(c, float(opacity))) for v, c in colorscale]
+    return (
+        (
+            dict(
+                line_color=line_color,
+                fillgradient=go.scatter.Fillgradient(
+                    colorscale=_slice_colorscale(
+                        colorscale=colorscale,
+                        p_lower=normalise_min_max(
+                            min(next(zip(*trace))),
+                            min_=interpolation_ctx.x_min,
+                            max_=interpolation_ctx.x_max,
+                        ),
+                        p_upper=normalise_min_max(
+                            max(next(zip(*trace))),
+                            min_=interpolation_ctx.x_min,
+                            max_=interpolation_ctx.x_max,
+                        ),
+                    ),
+                    type="horizontal",
+                ),
+            )
+            for line_color, trace in zip_strict(line_colors_row, densities_row)
+        )
+        for line_colors_row, densities_row in zip_strict(
+            solid_line_colors, interpolation_ctx.densities
+        )
+    )
+
+
+# ==============================================================
+# --- Main public function
+# ==============================================================
 
 
 def compute_trace_colors(
@@ -250,63 +340,23 @@ def compute_trace_colors(
 ) -> Generator[Generator[dict[str, Any]]]:
     colorscale = validate_and_coerce_colorscale(colorscale)
 
-    if colormode == "fillgradient":
-        solid_line_colors: Generator[Generator[Color]]
-        if line_color == "fill-color":
-            solid_line_colors = _compute_solid_colors(
-                colorscale=colorscale,
-                colormode="mean-minmax",
-                opacity=opacity,
-                interpolation_ctx=interpolation_ctx,
-            )
-        else:
-            solid_line_colors = ((line_color for _ in row) for row in interpolation_ctx.densities)
-        if opacity is not None:
-            # HACK: Plotly doesn't yet support setting the fill opacity
-            #       for traces with `fillgradient`. As a workaround, we
-            #       can override the color-scale's color values and add
-            #       the corresponding alpha channel to all colors.
-            colorscale = [(v, apply_alpha(c, float(opacity))) for v, c in colorscale]
-        return (
-            (
-                dict(
-                    line_color=line_color,
-                    fillgradient=go.scatter.Fillgradient(
-                        colorscale=slice_colorscale(
-                            colorscale=colorscale,
-                            p_lower=normalise_min_max(
-                                min(next(zip(*trace))),
-                                min_=interpolation_ctx.x_min,
-                                max_=interpolation_ctx.x_max,
-                            ),
-                            p_upper=normalise_min_max(
-                                max(next(zip(*trace))),
-                                min_=interpolation_ctx.x_min,
-                                max_=interpolation_ctx.x_max,
-                            ),
-                        ),
-                        type="horizontal",
-                    ),
-                )
-                for line_color, trace in zip_strict(line_colors_row, densities_row)
-            )
-            for line_colors_row, densities_row in zip_strict(
-                solid_line_colors, interpolation_ctx.densities
-            )
+    valid_colormodes = ("fillgradient", *SOLID_COLORMODE_MAPS)
+    if colormode not in valid_colormodes:
+        raise ValueError(
+            f"The colormode argument should be one of {valid_colormodes}, got {colormode} instead."
         )
 
-    return (
-        (
-            dict(
-                line_color=fill_color if line_color == "fill-color" else line_color,
-                fillcolor=fill_color,
-            )
-            for fill_color in row
-        )
-        for row in _compute_solid_colors(
+    if colormode == "fillgradient":
+        return _compute_fillgradient_trace_colors(
             colorscale=colorscale,
-            colormode=colormode,
+            line_color=line_color,
             opacity=opacity,
             interpolation_ctx=interpolation_ctx,
         )
+    return _compute_solid_trace_colors(
+        colorscale=colorscale,
+        colormode=colormode,
+        line_color=line_color,
+        opacity=opacity,
+        interpolation_ctx=interpolation_ctx,
     )

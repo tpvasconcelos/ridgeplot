@@ -7,10 +7,11 @@ import pytest
 from ridgeplot import ridgeplot
 from ridgeplot._color.interpolation import (
     InterpolationContext,
+    _interpolate_color,
     _interpolate_mean_means,
     _interpolate_mean_minmax,
-    interpolate_color,
-    slice_colorscale,
+    _slice_colorscale,
+    compute_trace_colors,
 )
 from ridgeplot._color.utils import to_rgb
 
@@ -18,9 +19,42 @@ if TYPE_CHECKING:
     from ridgeplot._types import ColorScale
 
 
-def test_colormode_invalid() -> None:
-    with pytest.raises(ValueError, match="The colormode argument should be .* got INVALID instead"):
-        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colormode="INVALID")  # type: ignore[arg-type]
+# ==============================================================
+# ---  _interpolate_color()
+# ==============================================================
+
+
+def test_interpolate_color_p_in_scale(viridis_colorscale: ColorScale) -> None:
+    viridis_colorscale = list(viridis_colorscale)
+    assert _interpolate_color(colorscale=viridis_colorscale, p=0) == to_rgb(
+        viridis_colorscale[0][1]
+    )
+    assert _interpolate_color(colorscale=viridis_colorscale, p=1) == to_rgb(
+        viridis_colorscale[-1][1]
+    )
+    # Test that the alpha channels are also properly handled here
+    cs = ((0, "rgba(0, 0, 0, 0)"), (1, "rgba(255, 255, 255, 1)"))
+    assert _interpolate_color(colorscale=cs, p=0) == cs[0][1]
+    assert _interpolate_color(colorscale=cs, p=1) == cs[-1][1]
+
+
+def test_interpolate_color_p_not_in_scale(viridis_colorscale: ColorScale) -> None:
+    # Hard-coded test case for the Viridis colorscale
+    assert _interpolate_color(colorscale=viridis_colorscale, p=0.5) == "rgb(34.5, 144.0, 139.5)"
+    # Test that the alpha channels are also properly handled here
+    cs = ((0, "rgba(0, 0, 0, 0)"), (1, "rgba(255, 255, 255, 1)"))
+    assert _interpolate_color(colorscale=cs, p=0.5) == "rgba(127.5, 127.5, 127.5, 0.5)"
+
+
+@pytest.mark.parametrize("p", [-10.0, -1.3, 1.9, 100.0])
+def test_interpolate_color_fails_for_p_out_of_bounds(p: float) -> None:
+    with pytest.raises(ValueError, match="should be a float value between 0 and 1"):
+        _interpolate_color(colorscale=..., p=p)  # type: ignore[arg-type]
+
+
+# ==============================================================
+# --- Solid color modes
+# ==============================================================
 
 
 def test_colormode_trace_index_row_wise() -> None:
@@ -58,37 +92,6 @@ def test_interpolate_mean_means() -> None:
     )
     ps = _interpolate_mean_means(ctx)
     assert ps == [[0.0], [0.5], [1.0]]
-
-
-# ==============================================================
-# ---  interpolate_color()
-# ==============================================================
-
-
-def test_interpolate_color_p_in_scale(viridis_colorscale: ColorScale) -> None:
-    viridis_colorscale = list(viridis_colorscale)
-    assert interpolate_color(colorscale=viridis_colorscale, p=0) == to_rgb(viridis_colorscale[0][1])
-    assert interpolate_color(colorscale=viridis_colorscale, p=1) == to_rgb(
-        viridis_colorscale[-1][1]
-    )
-    # Test that the alpha channels are also properly handled here
-    cs = ((0, "rgba(0, 0, 0, 0)"), (1, "rgba(255, 255, 255, 1)"))
-    assert interpolate_color(colorscale=cs, p=0) == cs[0][1]
-    assert interpolate_color(colorscale=cs, p=1) == cs[-1][1]
-
-
-def test_interpolate_color_p_not_in_scale(viridis_colorscale: ColorScale) -> None:
-    # Hard-coded test case for the Viridis colorscale
-    assert interpolate_color(colorscale=viridis_colorscale, p=0.5) == "rgb(34.5, 144.0, 139.5)"
-    # Test that the alpha channels are also properly handled here
-    cs = ((0, "rgba(0, 0, 0, 0)"), (1, "rgba(255, 255, 255, 1)"))
-    assert interpolate_color(colorscale=cs, p=0.5) == "rgba(127.5, 127.5, 127.5, 0.5)"
-
-
-@pytest.mark.parametrize("p", [-10.0, -1.3, 1.9, 100.0])
-def test_interpolate_color_fails_for_p_out_of_bounds(p: float) -> None:
-    with pytest.raises(ValueError, match="should be a float value between 0 and 1"):
-        interpolate_color(colorscale=..., p=p)  # type: ignore[arg-type]
 
 
 ColormodeType = Literal["row-index", "trace-index", "trace-index-row-wise"]
@@ -138,28 +141,28 @@ def test_no_zero_division_error_single_trace_trace_index_row_wise(
 
 
 # ==============================================================
-# --- slice_colorscale()
+# --- _slice_colorscale()
 # ==============================================================
 
 
 def test_slice_colorscale_lower_less_than_upper() -> None:
     with pytest.raises(ValueError, match="p_lower should be less than p_upper"):
-        slice_colorscale(colorscale=[(0, "...")], p_lower=1, p_upper=0)
+        _slice_colorscale(colorscale=[(0, "...")], p_lower=1, p_upper=0)
 
 
 def test_slice_colorscale_lower_than_0() -> None:
     with pytest.raises(ValueError, match="p_lower should be >= 0"):
-        slice_colorscale(colorscale=[(0, "...")], p_lower=-1, p_upper=0)
+        _slice_colorscale(colorscale=[(0, "...")], p_lower=-1, p_upper=0)
 
 
 def test_slice_colorscale_upper_than_1() -> None:
     with pytest.raises(ValueError, match="p_upper should be <= 1"):
-        slice_colorscale(colorscale=[(0, "...")], p_lower=0, p_upper=1.1)
+        _slice_colorscale(colorscale=[(0, "...")], p_lower=0, p_upper=1.1)
 
 
 def test_slice_colorscale_unchanged() -> None:
     cs = ((0, "rgb(0, 0, 0)"), (1, "rgb(255, 255, 255)"))
-    assert slice_colorscale(colorscale=cs, p_lower=0, p_upper=1) == cs
+    assert _slice_colorscale(colorscale=cs, p_lower=0, p_upper=1) == cs
 
 
 def test_slice_colorscale() -> None:
@@ -168,7 +171,7 @@ def test_slice_colorscale() -> None:
         (0.5, "rgb(127.5, 127.5, 127.5)"),
         (1, "rgb(255, 255, 255)"),
     )
-    assert slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
+    assert _slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
         (0.0, "rgb(63.75, 63.75, 63.75)"),
         (0.5, "rgb(127.5, 127.5, 127.5)"),
         (1.0, "rgb(191.25, 191.25, 191.25)"),
@@ -177,7 +180,7 @@ def test_slice_colorscale() -> None:
 
 def test_slice_colorscale_no_intermediate_values() -> None:
     cs = ((0, "rgb(0, 0, 0)"), (1, "rgb(255, 255, 255)"))
-    assert slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
+    assert _slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
         (0.0, "rgb(63.75, 63.75, 63.75)"),
         (1.0, "rgb(191.25, 191.25, 191.25)"),
     )
@@ -189,7 +192,7 @@ def test_slice_colorscale_alpha() -> None:
         (0.5, "rgba(127.5, 127.5, 127.5, 0.5)"),
         (1, "rgba(255, 255, 255, 1)"),
     )
-    assert slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
+    assert _slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
         (0.0, "rgba(63.75, 63.75, 63.75, 0.25)"),
         (0.5, "rgba(127.5, 127.5, 127.5, 0.5)"),
         (1.0, "rgba(191.25, 191.25, 191.25, 0.75)"),
@@ -202,8 +205,26 @@ def test_slice_colorscale_mixed_alpha_channels() -> None:
         (0.5, "rgba(127.5, 127.5, 127.5, 1)"),
         (1, "rgba(255, 255, 255, 0)"),
     )
-    assert slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
+    assert _slice_colorscale(colorscale=cs, p_lower=0.25, p_upper=0.75) == (
         (0.0, "rgba(63.75, 63.75, 63.75, 0.5)"),
         (0.5, "rgba(127.5, 127.5, 127.5, 1)"),
         (1.0, "rgba(191.25, 191.25, 191.25, 0.5)"),
     )
+
+
+# ==============================================================
+# --- compute_trace_colors()
+# ==============================================================
+
+
+def test_colormode_invalid() -> None:
+    with pytest.raises(
+        ValueError, match="The colormode argument should be one of .* got INVALID instead"
+    ):
+        compute_trace_colors(
+            colorscale="Viridis",
+            colormode="INVALID",  # type: ignore[arg-type]
+            line_color="black",
+            opacity=None,
+            interpolation_ctx=InterpolationContext.from_densities([[[(0, 0)]]]),
+        )
