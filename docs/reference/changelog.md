@@ -5,6 +5,8 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+Thanks to {gh-user}`sstephanyy` for their contributions to this release! 🚀
+
 ### Breaking changes
 
 - The new default colormode is `"fillgradient"` ({gh-pr}`244`)
