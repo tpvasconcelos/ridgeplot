@@ -108,49 +108,49 @@ _EXAMPLE_DENSITY_02 = [(1, 1), (2, 2), (3, 1)]
         (
             "row-index",
             [[_EXAMPLE_DENSITY_01]],
-            [[0]],
+            [[0.0]],
         ),
         (
             "trace-index",
             [[_EXAMPLE_DENSITY_01]],
-            [[0]],
+            [[0.0]],
         ),
         (
             "trace-index-row-wise",
             [[_EXAMPLE_DENSITY_01]],
-            [[0]],
+            [[0.0]],
         ),
         # One row
         (
             "row-index",
             [[_EXAMPLE_DENSITY_01, _EXAMPLE_DENSITY_02]],
-            [[0, 0]],
+            [[0.0, 0.0]],
         ),
         (
             "trace-index",
             [[_EXAMPLE_DENSITY_01, _EXAMPLE_DENSITY_02]],
-            [[0, 1]],
+            [[1.0, 0.0]],
         ),
         (
             "trace-index-row-wise",
             [[_EXAMPLE_DENSITY_01, _EXAMPLE_DENSITY_02]],
-            [[0, 1]],
+            [[1.0, 0.0]],
         ),
         # One trace per row
         (
             "row-index",
             [[_EXAMPLE_DENSITY_01], [_EXAMPLE_DENSITY_02]],
-            [[0, 1]],
+            [[1.0], [0.0]],
         ),
         (
             "trace-index",
             [[_EXAMPLE_DENSITY_01], [_EXAMPLE_DENSITY_02]],
-            [[0, 1]],
+            [[1.0], [0.0]],
         ),
         (
             "trace-index-row-wise",
             [[_EXAMPLE_DENSITY_01], [_EXAMPLE_DENSITY_02]],
-            [[0, 1]],
+            [[1.0], [0.0]],
         ),
     ],
 )
