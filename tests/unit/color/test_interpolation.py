@@ -6,6 +6,8 @@ import pytest
 
 from ridgeplot import ridgeplot
 from ridgeplot._color.interpolation import (
+    SOLID_COLORMODE_MAPS,
+    ColorscaleInterpolants,
     InterpolationContext,
     SolidColormode,
     _interpolate_color,
@@ -17,7 +19,7 @@ from ridgeplot._color.interpolation import (
 from ridgeplot._color.utils import to_rgb
 
 if TYPE_CHECKING:
-    from ridgeplot._types import ColorScale
+    from ridgeplot._types import ColorScale, Densities
 
 
 # ==============================================================
@@ -95,19 +97,71 @@ def test_interpolate_mean_means() -> None:
     assert ps == [[0.0], [0.5], [1.0]]
 
 
+_EXAMPLE_DENSITY_01 = [(0, 1), (1, 2), (2, 1)]
+_EXAMPLE_DENSITY_02 = [(1, 1), (2, 2), (3, 1)]
+
+
 @pytest.mark.parametrize(
-    "colormode",
-    ["row-index", "trace-index", "trace-index-row-wise"],
+    ("colormode", "densities", "expected"),
+    [
+        # One trace
+        (
+            "row-index",
+            [[_EXAMPLE_DENSITY_01]],
+            [[0]],
+        ),
+        (
+            "trace-index",
+            [[_EXAMPLE_DENSITY_01]],
+            [[0]],
+        ),
+        (
+            "trace-index-row-wise",
+            [[_EXAMPLE_DENSITY_01]],
+            [[0]],
+        ),
+        # One row
+        (
+            "row-index",
+            [[_EXAMPLE_DENSITY_01, _EXAMPLE_DENSITY_02]],
+            [[0, 0]],
+        ),
+        (
+            "trace-index",
+            [[_EXAMPLE_DENSITY_01, _EXAMPLE_DENSITY_02]],
+            [[0, 1]],
+        ),
+        (
+            "trace-index-row-wise",
+            [[_EXAMPLE_DENSITY_01, _EXAMPLE_DENSITY_02]],
+            [[0, 1]],
+        ),
+        # One trace per row
+        (
+            "row-index",
+            [[_EXAMPLE_DENSITY_01], [_EXAMPLE_DENSITY_02]],
+            [[0, 1]],
+        ),
+        (
+            "trace-index",
+            [[_EXAMPLE_DENSITY_01], [_EXAMPLE_DENSITY_02]],
+            [[0, 1]],
+        ),
+        (
+            "trace-index-row-wise",
+            [[_EXAMPLE_DENSITY_01], [_EXAMPLE_DENSITY_02]],
+            [[0, 1]],
+        ),
+    ],
 )
-def test_no_zero_division_error(colormode: SolidColormode) -> None:
+def test_index_based_colormodes(
+    colormode: SolidColormode, densities: Densities, expected: ColorscaleInterpolants
+) -> None:
     """ZeroDivisionError should never be raised, even when there is only one
     trace, one row, or one trace per row."""
-    try:
-        ridgeplot([[1, 2, 2, 3]], colormode=colormode)
-    except ZeroDivisionError:
-        pytest.fail(
-            "ZeroDivisionError raised unexpectedly for row-index colormode with a single trace."
-        )
+    interpolate_func = SOLID_COLORMODE_MAPS[colormode]
+    interpolants = interpolate_func(ctx=InterpolationContext.from_densities(densities))
+    assert interpolants == expected
 
 
 # ==============================================================
