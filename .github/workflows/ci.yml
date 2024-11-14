@@ -108,7 +108,7 @@ jobs:
       # Upload coverage reports to Codecov
 
       - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         env:
           OS: "${{ matrix.os }}"
           PYTHON: "${{ matrix.python-version }}"
