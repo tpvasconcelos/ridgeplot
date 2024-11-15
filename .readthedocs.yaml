@@ -6,6 +6,11 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.9"
+  jobs:
+    pre_build:
+      # TODO: This is a workaround due to a bug in kaleido/scopes/plotly.py#L64
+      #       where `which_browser()` returns None.
+      - BROWSER_PATH='None'
 
 python:
   install:
