@@ -114,7 +114,7 @@ jobs:
           PYTHON: "${{ matrix.python-version }}"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.coverage-combine.xml
+          files: ./coverage.coverage-combine.xml
           disable_search: true
           flags: combined-src
           env_vars: OS,PYTHON
