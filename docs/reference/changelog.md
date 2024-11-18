@@ -44,6 +44,7 @@ Thanks to {gh-user}`sstephanyy` for their contributions to this release! 🚀
 ### CI/CD
 
 - Stop sending coverage reports to Codacy ({gh-pr}`265`)
+- Improve local development experience and optimise the CI pipeline ({gh-pr}`273`)
 
 ### Miscellaneous
 
