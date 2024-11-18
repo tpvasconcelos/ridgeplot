@@ -30,11 +30,13 @@ jobs:
       # Instead of running all checks in one task (i.e., `tox -m static`),
       # we'll instead run them one-by-one, so that it's easier to
       # identify and debug failing checks in the GitHub UI.
-      - name: Run static checks with pre-commit
-        shell: bash
-        env:
-          SKIP: "no-commit-to-branch"
-        run: tox -e pre-commit-all
+      # NOTE: We skip the pre-commit checks here since we
+      #       already use the pre-commit.ci service.
+      #- name: Run static checks with pre-commit
+      #  shell: bash
+      #  env:
+      #    SKIP: "no-commit-to-branch"
+      #  run: tox -e pre-commit-all
       - name: Run type checks with mypy
         shell: bash
         run: tox -e mypy-safe
