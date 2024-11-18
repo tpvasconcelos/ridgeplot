@@ -29,4 +29,4 @@ matplotlib
 pre_commit_hooks
 
 # TODO: revert this (https://github.com/plotly/Kaleido/issues/226)
-kaleido<0.4
+kaleido<0.5
