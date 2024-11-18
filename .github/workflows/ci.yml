@@ -30,14 +30,16 @@ jobs:
       # Instead of running all checks in one task (i.e., `tox -m static`),
       # we'll instead run them one-by-one, so that it's easier to
       # identify and debug failing checks in the GitHub UI.
-      - name: Run static checks with pre-commit
-        shell: bash
-        env:
-          SKIP: "no-commit-to-branch"
-        run: tox -e pre-commit
+      # NOTE: We skip the pre-commit checks here since we
+      #       already use the pre-commit.ci service.
+      #- name: Run static checks with pre-commit
+      #  shell: bash
+      #  env:
+      #    SKIP: "no-commit-to-branch"
+      #  run: tox -e pre-commit-all
       - name: Run type checks with mypy
         shell: bash
-        run: tox -e mypy
+        run: tox -e mypy-safe
 
   # Run test suits for all supported platforms and Python versions
   software-tests:
@@ -108,13 +110,13 @@ jobs:
       # Upload coverage reports to Codecov
 
       - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         env:
           OS: "${{ matrix.os }}"
           PYTHON: "${{ matrix.python-version }}"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.coverage-combine.xml
+          files: ./coverage.coverage-combine.xml
           disable_search: true
           flags: combined-src
           env_vars: OS,PYTHON

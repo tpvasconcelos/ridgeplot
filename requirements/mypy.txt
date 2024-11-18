@@ -8,3 +8,9 @@ types-PyYAML
 types-requests
 types-tqdm
 pandas-stubs
+
+# mypy also needs to inherit other environment dependencies in
+# order to correctly infer types for code in tests, docs, etc.
+-r cicd_utils.txt
+-r docs.txt
+-r tests.txt

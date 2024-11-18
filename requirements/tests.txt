@@ -6,3 +6,7 @@ pytest-socket
 # Coverage
 diff-cover
 pytest-cov
+
+# `cicd_utils` requirements also need to be
+# installed in order to test these utilities
+-r cicd_utils.txt

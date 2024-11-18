@@ -161,10 +161,10 @@ For more information on all the checks being run here, take a look inside the {r
 The only static check that is not run by pre-commit is [mypy](https://github.com/python/mypy), which is too expensive to run on every commit. To run mypy against all files, run:
 
 ```shell
-tox -e mypy
+tox -e mypy-incremental
 ```
 
-Just like with pytest, you can also pass extra positional arguments to mypy by running `tox -e mypy -- <MYPY_FLAGS>`.
+Just like with pytest, you can also pass extra positional arguments to mypy by running `tox -e mypy-incremental -- <MYPY_FLAGS>`.
 
 To trigger all static checks, run:
 
