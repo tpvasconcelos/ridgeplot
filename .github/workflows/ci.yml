@@ -108,13 +108,13 @@ jobs:
       # Upload coverage reports to Codecov
 
       - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         env:
           OS: "${{ matrix.os }}"
           PYTHON: "${{ matrix.python-version }}"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.coverage-combine.xml
+          files: ./coverage.coverage-combine.xml
           disable_search: true
           flags: combined-src
           env_vars: OS,PYTHON
