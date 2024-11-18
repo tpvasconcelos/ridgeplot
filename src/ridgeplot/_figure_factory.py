@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Any, Literal
 
 from plotly import graph_objects as go
 
 from ridgeplot._color.interpolation import (
-    Colormode,
     InterpolationContext,
+    SolidColormode,
     compute_trace_colors,
 )
 from ridgeplot._types import (
@@ -84,9 +84,8 @@ def normalise_trace_labels(
         trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
     else:
         if is_flat_str_collection(trace_labels):
-            trace_labels = cast(ShallowLabelsArray, trace_labels)
-            trace_labels = cast(LabelsArray, nest_shallow_collection(trace_labels))
-        trace_labels = normalise_row_attrs(trace_labels, densities=densities)
+            trace_labels = nest_shallow_collection(trace_labels)
+        trace_labels = normalise_row_attrs(trace_labels, l2_target=densities)
     return trace_labels
 
 
@@ -98,7 +97,7 @@ def normalise_y_labels(trace_labels: LabelsArray) -> LabelsArray:
 class RidgeplotTrace:
     trace: DensityTrace
     label: str
-    color: str
+    color: dict[str, Any]
 
 
 @dataclass
@@ -137,8 +136,8 @@ def draw_density_trace(
     y: Collection[Numeric],
     y_shifted: float,
     label: str,
-    color: str,
-    linewidth: float,
+    color: dict[str, Any],
+    line_width: float,
 ) -> go.Figure:
     """Draw a density trace.
 
@@ -151,14 +150,11 @@ def draw_density_trace(
         go.Scatter(
             x=x,
             y=[y_i + y_shifted for y_i in y],
-            fillcolor=color,
+            **color,
             name=label,
             fill="tonexty",
             mode="lines",
-            line=dict(
-                color="rgba(0,0,0,0.6)" if color is not None else None,
-                width=linewidth,
-            ),
+            line=dict(width=line_width),
             # Hover information
             customdata=[[y_i] for y_i in y],
             hovertemplate=_DEFAULT_HOVERTEMPLATE,
@@ -202,10 +198,11 @@ def update_layout(
 def create_ridgeplot(
     densities: Densities,
     colorscale: ColorScale | Collection[Color] | str | None,
-    coloralpha: float | None,
-    colormode: Colormode,
+    opacity: float | None,
+    colormode: Literal["fillgradient"] | SolidColormode,
     trace_labels: LabelsArray | ShallowLabelsArray | None,
-    linewidth: float,
+    line_color: Color | Literal["fill-color"],
+    line_width: float,
     spacing: float,
     show_yticklabels: bool,
     xpad: float,
@@ -229,7 +226,7 @@ def create_ridgeplot(
     y_labels = normalise_y_labels(trace_labels)
 
     # Force cast certain arguments to the expected types
-    linewidth = float(linewidth)
+    line_width = float(line_width)
     spacing = float(spacing)
     show_yticklabels = bool(show_yticklabels)
     xpad = float(xpad)
@@ -241,7 +238,8 @@ def create_ridgeplot(
     colors = compute_trace_colors(
         colorscale=colorscale,
         colormode=colormode,
-        coloralpha=coloralpha,
+        line_color=line_color,
+        opacity=opacity,
         interpolation_ctx=InterpolationContext(
             densities=densities,
             n_rows=n_rows,
@@ -274,7 +272,7 @@ def create_ridgeplot(
                 y_shifted=row.y_shifted,
                 label=trace.label,
                 color=trace.color,
-                linewidth=linewidth,
+                line_width=line_width,
             )
     fig = update_layout(
         fig,

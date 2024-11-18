@@ -66,7 +66,7 @@ install: .venv ## install all local development dependencies
 jupyter-init: install ## initialise a jupyter environment
 	@echo "==> Setting up jupyterlab environment..."
 	@$(VENV_BIN)/uv pip install --upgrade ipykernel jupyter
-	@$(VENV_BIN)/ipykernel install --user --name="ridgeplot"
+	@$(VENV_BIN)/python -m ipykernel install --user --name='ridgeplot' --display-name='ridgeplot'
 
 
 # ==============================================================

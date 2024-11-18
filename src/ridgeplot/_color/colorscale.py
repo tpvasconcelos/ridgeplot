@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING, Any, cast
 
 import plotly.express as px
@@ -10,10 +11,6 @@ from ridgeplot._types import Color, ColorScale
 
 if TYPE_CHECKING:
     from collections.abc import Collection
-
-
-def infer_default_colorscale() -> ColorScale | Collection[Color] | str:
-    return default_plotly_template().layout.colorscale.sequential or px.colors.sequential.Viridis  # type: ignore[no-any-return]
 
 
 class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
@@ -32,7 +29,17 @@ class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
         coerced = super().validate_coerce(v)
         if coerced is None:  # pragma: no cover
             self.raise_invalid_val(coerced)
-        return cast(ColorScale, tuple(tuple(c) for c in coerced))
+        # This helps us avoid floating point errors when making
+        # comparisons in our test suite. The user should not
+        # be able to notice *any* difference in the output
+        coerced = tuple((v if isinstance(v, int) else round(v, ndigits=12), c) for v, c in coerced)
+        return cast(ColorScale, coerced)
+
+
+def infer_default_colorscale() -> ColorScale | Collection[Color] | str:
+    return validate_and_coerce_colorscale(
+        default_plotly_template().layout.colorscale.sequential or px.colors.sequential.Viridis
+    )
 
 
 def validate_and_coerce_colorscale(
@@ -46,15 +53,21 @@ def validate_and_coerce_colorscale(
 
 
 def list_all_colorscale_names() -> list[str]:
-    """Get a list with all available colorscale names.
+    """Get a list of all available continuous colorscale names.
 
-    .. versionadded:: 0.1.21
-        Replaced the deprecated function ``get_all_colorscale_names()``.
+    .. deprecated:: 0.1.31
+       This function is deprecated and will be removed in a future version.
+       Please use :func:`px.colors.named_colorscales() <plotly.express.colors.named_colorscales>`
+       from Plotly Express for the same functionality. For more details, visit:
+       https://plotly.com/python/builtin-colorscales/#named-builtin-continuous-color-scales
 
-    Returns
-    -------
-    list[str]
-        A list with all available colorscale names.
     """
-    # Add 'default' for backwards compatibility
+    warnings.warn(
+        "list_all_colorscale_names() is deprecated and will be removed in a future version. "
+        "Please use px.colors.named_colorscales() from Plotly Express for the same functionality. "
+        "For more details, visit: "
+        "https://plotly.com/python/builtin-colorscales/#named-builtin-continuous-color-scales",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     return sorted(ColorscaleValidator().named_colorscales)

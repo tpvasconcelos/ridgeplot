@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import plotly.express as px
 import pytest
 
 from ridgeplot import ridgeplot
+from ridgeplot._color.utils import round_color
 from ridgeplot._types import Color, ColorScale, nest_shallow_collection
 
 if TYPE_CHECKING:
@@ -80,7 +82,12 @@ def test_colorscale_invalid(invalid_colorscale: ColorScale | Collection[Color] |
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=invalid_colorscale)
 
 
-def test_coloralpha() -> None:
+# ==============================================================
+# ---  param: opacity
+# ==============================================================
+
+
+def test_opacity() -> None:
     fig = ridgeplot(
         samples=[[[1, 2, 3], [4, 5, 6]]],
         colorscale=(
@@ -88,16 +95,84 @@ def test_coloralpha() -> None:
             (1.0, "rgb(20, 20, 20)"),
         ),
         colormode="trace-index",
-        coloralpha=0.5,
+        opacity=0.5,
     )
     assert fig.data[1].fillcolor == "rgba(20, 20, 20, 0.5)"
     assert fig.data[3].fillcolor == "rgba(10, 10, 10, 0.5)"
 
 
+# ==============================================================
+# ---  param: norm
+# ==============================================================
+
+
+def test_norm() -> None:
+    densities = [
+        [
+            [(0, 0), (1, 1), (2, 0)],  # Trace 1
+            [(1, 0), (2, 2), (3, 0)],  # Trace 2
+            [(2, 1), (3, 2), (4, 1)],  # Trace 3
+        ],
+        [
+            [(0, 4), (1, 4), (2, 8)],  # Trace 4
+            [(1, 4), (2, 4), (3, 2)],  # Trace 5
+        ],
+    ]
+    fig = ridgeplot(densities=densities, norm="percent")
+    assert fig.data[1].customdata == ([0], [100], [0])
+    assert fig.data[3].customdata == ([0], [100], [0])
+    assert fig.data[5].customdata == ([25], [50], [25])
+    assert fig.data[7].customdata == ([25], [25], [50])
+    assert fig.data[9].customdata == ([40], [40], [20])
+
+
+# ==============================================================
+# ---  param: line_color
+# ==============================================================
+
+
+def test_line_color() -> None:
+    fig = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], line_color="red")
+    assert fig.data[1].line.color == fig.data[3].line.color == "red"
+
+
+def test_line_color_fill_color() -> None:
+    fig = ridgeplot(
+        samples=[[[1, 2, 3], [4, 5, 6]]],
+        colorscale=((0.0, "red"), (1.0, "blue")),
+        colormode="trace-index",
+        line_color="fill-color",
+    )
+    assert fig.data[1].line.color == "rgb(0, 0, 255)"
+    assert fig.data[3].line.color == "rgb(255, 0, 0)"
+
+
+def test_line_color_fill_color_fillgradient() -> None:
+    colorscale = px.colors.sequential.Blues[:6]
+    fig = ridgeplot(
+        samples=[[[1, 2, 3], [4, 5, 6]]],
+        colorscale=colorscale,
+        colormode="fillgradient",
+        line_color="fill-color",
+    )
+    assert round_color(fig.data[1].line.color) == round_color(colorscale[1])
+    assert round_color(fig.data[3].line.color) == round_color(colorscale[4])
+
+
+# ==============================================================
+# ---  param: line_width
+# ==============================================================
+
+
 @pytest.mark.parametrize("lw", [0.3, 0.7, 1.2, 3])
-def test_linewidth(lw: float) -> None:
-    fig = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], linewidth=lw)
+def test_line_width(lw: float) -> None:
+    fig = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], line_width=lw)
     assert fig.data[1].line.width == fig.data[3].line.width == lw
+
+
+# ==============================================================
+# ---  param: spacing
+# ==============================================================
 
 
 @pytest.mark.parametrize("spacing", [0.3, 0.7, 1.2, 3])
@@ -118,20 +193,35 @@ def test_spacing(spacing: float) -> None:
     assert fig.layout.yaxis.tickvals[-1] == -y_max * spacing
 
 
-def test_deprecated_colormode_index() -> None:
-    with pytest.warns(
-        DeprecationWarning,
-        match="The colormode='index' value has been deprecated in favor of colormode='row-index'",
-    ):
-        ridgeplot(
-            samples=[[1, 2, 3], [1, 2, 3]],
-            colormode="index",  # type: ignore[arg-type]
-        )
+# ==============================================================
+# ---  Deprecations...
+# ==============================================================
 
 
-def test_deprecated_show_annotations_is_not_missing() -> None:
+def test_deprecated_coloralpha_is_not_missing() -> None:
     with pytest.warns(
         DeprecationWarning,
-        match="The show_annotations argument has been deprecated in favor of show_yticklabels",
+        match="The 'coloralpha' argument has been deprecated in favor of 'opacity'",
     ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_annotations=True)
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], coloralpha=0.5)
+
+
+def test_deprecated_coloralpha_and_opacity_together_raises() -> None:
+    with pytest.raises(
+        ValueError,
+        match="You may not specify both the 'coloralpha' and 'opacity' arguments!",
+    ):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], coloralpha=0.4, opacity=0.6)
+
+
+def test_deprecated_linewidth_is_not_missing() -> None:
+    with pytest.warns(
+        DeprecationWarning,
+        match="The 'linewidth' argument has been deprecated in favor of 'line_width'",
+    ):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], linewidth=0.5)
+
+
+def test_ridgeplot_colorscale_default_deprecation_warning() -> None:
+    with pytest.warns(DeprecationWarning, match="colorscale='default' is deprecated"):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], colorscale="default")

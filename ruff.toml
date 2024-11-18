@@ -94,6 +94,10 @@ ignore = [
     "S101",   # Use of assert detected
     "SLF001", # Private member accessed: `_X`
 ]
+"misc/brand/logo.ipynb" = [
+    "E501", # Line too long
+    "W505", # Doc line too long
+]
 
 [lint.flake8-annotations]
 mypy-init-return = true
@@ -102,7 +106,7 @@ mypy-init-return = true
 allow-dict-calls-with-keyword-arguments = true
 
 [lint.flake8-import-conventions]
-extend-aliases = { "numpy.typing" = "npt", "plotly.graph_objects" = "go" }
+extend-aliases = { "numpy.typing" = "npt", "plotly.graph_objects" = "go", "plotly.express" = "px" }
 banned-from = ["pandas", "numpy"]
 
 [lint.isort]

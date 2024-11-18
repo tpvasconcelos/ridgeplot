@@ -27,3 +27,6 @@ matplotlib
 
 # Cleanup generated files
 pre_commit_hooks
+
+# TODO: revert this (https://github.com/plotly/Kaleido/issues/226)
+kaleido<0.4

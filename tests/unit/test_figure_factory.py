@@ -27,10 +27,11 @@ class TestCreateRidgeplot:
             create_ridgeplot(
                 densities=densities,
                 colorscale=...,  # type: ignore[arg-type]
-                coloralpha=...,  # type: ignore[arg-type]
+                opacity=...,  # type: ignore[arg-type]
                 colormode=...,  # type: ignore[arg-type]
                 trace_labels=...,  # type: ignore[arg-type]
-                linewidth=...,  # type: ignore[arg-type]
+                line_color=...,  # type: ignore[arg-type]
+                line_width=...,  # type: ignore[arg-type]
                 spacing=...,  # type: ignore[arg-type]
                 show_yticklabels=...,  # type: ignore[arg-type]
                 xpad=...,  # type: ignore[arg-type]

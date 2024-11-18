@@ -26,7 +26,8 @@ PATH_ROOT_DIR = Path(__file__).parents[3]
 PATH_TO_CHANGELOG = PATH_ROOT_DIR.joinpath("docs/reference/changelog.md")
 PATH_TO_LATEST_RELEASE_NOTES = PATH_ROOT_DIR.joinpath("LATEST_RELEASE_NOTES.md")
 
-GITHUB_URL = "https://github.com/tpvasconcelos/ridgeplot"
+GITHUB_URL = "https://github.com"
+GITHUB_PROJECT_REPO_URL = f"{GITHUB_URL}/tpvasconcelos/ridgeplot"
 
 
 def parse_markdown_tokens(text: str) -> list[Token]:
@@ -91,7 +92,15 @@ def replace_gh_links(tokens: list[Token]) -> list[Token]:
             gh_type = "pull" if token.meta["name"] == "gh-pr" else "issues"
             link_tokens = get_link_tokens(
                 text=f"#{gh_number}",
-                href=f"{GITHUB_URL}/{gh_type}/{gh_number}",
+                href=f"{GITHUB_PROJECT_REPO_URL}/{gh_type}/{gh_number}",
+            )
+            tokens_new.extend(link_tokens)
+            continue
+        if token.type == "myst_role" and token.meta.get("name", "") == "gh-user":
+            gh_user = token.content
+            link_tokens = get_link_tokens(
+                text=f"@{gh_user}",
+                href=f"{GITHUB_URL}/{gh_user}",
             )
             tokens_new.extend(link_tokens)
             continue
