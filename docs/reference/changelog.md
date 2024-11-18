@@ -5,8 +5,6 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-Thanks to {gh-user}`sstephanyy` for their contributions to this release! 🚀
-
 ### Breaking changes
 
 - The new default colormode is `"fillgradient"` ({gh-pr}`244`)
@@ -56,6 +54,8 @@ Thanks to {gh-user}`sstephanyy` for their contributions to this release! 🚀
 - Simplify and refactor `interpolate_color` to not depend on `px.colors.find_intermediate_color` ({gh-pr}`253`)
 - Improve type narrowing using `typing.TypeIs` ({gh-pr}`259`)
 - Refactor community health files ({gh-pr}`260`)
+
+Thanks to {gh-user}`sstephanyy` for their contributions to this release! 🚀
 
 ---
 
