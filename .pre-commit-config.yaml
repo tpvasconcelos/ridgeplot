@@ -54,12 +54,12 @@ repos:
       - id: check-readthedocs
 
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.3
+    rev: v1.7.4
     hooks:
       - id: actionlint
 
   - repo: https://github.com/kynan/nbstripout
-    rev: 0.7.1
+    rev: 0.8.0
     hooks:
       - id: nbstripout
 
@@ -89,7 +89,7 @@ repos:
           - mdformat-myst
 
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.22
+    rev: v0.23
     hooks:
       - id: validate-pyproject
 
@@ -111,7 +111,7 @@ repos:
       - id: black-jupyter
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.7.1
+    rev: v0.7.3
     hooks:
       - id: ruff
         args: [ --show-fixes, --exit-non-zero-on-fix ]

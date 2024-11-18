@@ -5,6 +5,8 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+Thanks to {gh-user}`sstephanyy` for their contributions to this release! 🚀
+
 ### Breaking changes
 
 - The new default colormode is `"fillgradient"` ({gh-pr}`244`)
@@ -42,6 +44,7 @@ Unreleased changes
 ### CI/CD
 
 - Stop sending coverage reports to Codacy ({gh-pr}`265`)
+- Improve local development experience and optimise the CI pipeline ({gh-pr}`273`)
 
 ### Miscellaneous
 
@@ -224,6 +227,7 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 - The `colormode='index'` value has been deprecated in favor of `colormode='row-index'`, which provides the same functionality but is more explicit and allows to distinguish between the `'row-index'` and `'trace-index'` modes ({gh-pr}`114`)
 - The `show_annotations` argument has been deprecated in favor of `show_yticklabels` ({gh-pr}`114`)
 - The `get_all_colorscale_names()` function has been deprecated in favor of `list_all_colorscale_names()` ({gh-pr}`114`)
+- Deprecated `colorscale='default'` and `list_all_colorscale_names()` in favour of Plotly Express' `px.colors.named_colorscales()` ({gh-pr}`262`)
 
 ### Features
 

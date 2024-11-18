@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING
 
 import pytest
@@ -56,7 +57,10 @@ def test_validate_and_coerce_colorscale_fails(
 
 
 def test_list_all_colorscale_names() -> None:
-    all_colorscale_names = list_all_colorscale_names()
+    with pytest.warns(
+        DeprecationWarning, match=re.escape("list_all_colorscale_names() is deprecated")
+    ):
+        all_colorscale_names = list_all_colorscale_names()
     assert all(isinstance(name, str) for name in all_colorscale_names)
     assert "viridis" in all_colorscale_names
     assert "default" in all_colorscale_names
