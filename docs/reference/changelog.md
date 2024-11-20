@@ -5,19 +5,30 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-After almost 4 years, 30 _"patch"_ releases, +200 pull-requests and close to 1,000 commits, this is ridgeplot's first _minor_ release (`0.1.30 -> 0.2.0`)! 🚀
+After almost 4 years, 30 _"patch"_ releases, +200 pull-requests, and close to 1,000 commits, this is ridgeplot's first _minor_ release (`v0.1.30 -> v0.2.0`)! 🚀
 
-ridgeplot has been downloaded [over 400k times](...) (peaking at [102k](...) downloads in a single month), is listed as a dependency in [+135](...) public GitHub repositories, and - perhaps most relevantly - is a dependency of large projects such as [Shiny for Python](...), [Ploomber](...), and [NiMARE](...) which further extends the impact and reach of the project.
+ridgeplot has been downloaded [over 400k times](https://pepy.tech/projects/ridgeplot) (peaking at [102k](https://pypistats.org/packages/ridgeplot) downloads in a single month), is listed as a dependency in [135](https://github.com/tpvasconcelos/ridgeplot/network/dependents?dependent_type=REPOSITORY) public GitHub repositories, and - perhaps most relevantly - is a dependency of larger projects such as [Shiny for Python](https://github.com/posit-dev/py-shiny), [Ploomber](https://github.com/ploomber), and [NiMARE](https://github.com/neurostuff/NiMARE) which further extends the impact and reach of the project.
 
-This release marks another significant milestone for the project, which we believe has now reached a level of maturity and stability that warrants a stricter and more structured release and versioning process. Even though we have managed to never publish breaking changes in the past (if you find any, please let us know!), we will from now on be even more careful and mindful of the impact of any changes that could affect downstream users and their applications.
+This release marks a small milestone for ridgeplot, which we believe has now reached a level of maturity and stability that warrants a stricter and more structured, predictable, and standard release and versioning process. Even though we have managed to never publish breaking changes in the past (if you find any, please let us know!), we will from now on be even more careful and mindful of the impact of any changes that could affect downstream users and their applications.
 
-### ⚠️ Breaking changes
+We will make an effort to standardise and document our versioning policy. For now, we will try to simply adhere to the following general rules:
+- We are explicitly **not** going to follow [Semantic Versioning](https://semver.org/), as we believe it is not a good fit for this project yet.
+- `MAJOR.MINOR.PATCH` versioning scheme:
+  - **MAJOR**: We don't have any plans for this yet... we will probably use this in the future once we settle on a more stable API and feature set
+  - **MINOR**: New features, significant improvements, and deprecations
+  - **PATCH**: Backwards-compatible bug fixes, small improvements, internal changes, and documentation updates
+- **Breaking changes:**
+  - **We might introduce breaking changes in minor releases!**
+  - However, this will never happen without a proper deprecation period and a clear upgrade path. i.e., we will always first deprecate the old API via a `DeprecationWarning` and provide a clear migration path to the new API.
+  - Such instances will be kept to a minimum and will likely only show up in the form of deprecated or renamed parameters or the meaning/behaviour of their arguments/values.
+
+### Breaking changes
 
 - Remove support for the deprecated `show_annotations` parameter and `colormode='index'` value ({gh-pr}`254`)
 - The new default colormode is `"fillgradient"` ({gh-pr}`244`)
 - The default value for `line_width` changed from `1` to `1.5` ({gh-pr}`253`)
 
-### 🚀 Features
+### Features
 
 - Implement new `"fillgradient"` colormode ({gh-pr}`244`)
 - Add new `line_color` parameter to the `ridgeplot` function ({gh-pr}`253`)
@@ -25,20 +36,20 @@ This release marks another significant milestone for the project, which we belie
 - Add new `norm` parameter to the `ridgeplot` function to allow users to normalize the data before plotting ({gh-pr}`255`)
 - Add `sample_weights` argument to `ridgeplot()` to allow users to pass sample weights to the KDE estimator ({gh-pr}`259`)
 
-### ⛓️‍💥Deprecations
+### Deprecations
 
 - Rename `coloralpha` to `opacity` for consistently with Plotly Express and deprecate the old parameter name ({gh-pr}`245`)
 - Rename `linewidth` to `line_width` for consistency with Plotly's API and deprecate the old parameter name ({gh-pr}`253`)
 
-### 🔋 Dependencies
+### Dependencies
 
 - The new minimum version of Plotly is `5.20` to leverage the new `fillgradient` feature ({gh-pr}`244`)
 
-### 🏎️ Optimizations
+### Optimizations
 
 - Importing statsmodels, scipy, and numpy can be slow, so we now only import the `ridgeplot._kde` module when the user needs this functionality ({gh-pr}`242`)
 
-### 📚 Documentation
+### Documentation
 
 - Update examples in the getting-started guide to reflect the new default colormode ({gh-pr}`244`)
 - Update the `plotly.min.js` version from `2.27` to `2.35.2` to leverage the `fillgradient` feature ({gh-pr}`244`)
@@ -47,7 +58,7 @@ This release marks another significant milestone for the project, which we belie
 - Add the reference jupyter notebook used to generate the ridgeplot logo ({gh-pr}`242`)
 - Update ridgeplot's logo to use Plotly's official colors ({gh-pr}`243`)
 
-### 🔗 CI/CD
+### CI/CD
 
 - Stop sending coverage reports to Codacy ({gh-pr}`265`)
 - Improve local development experience and optimise the CI pipeline ({gh-pr}`273`)
