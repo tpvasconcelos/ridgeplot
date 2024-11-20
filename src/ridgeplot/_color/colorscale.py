@@ -55,7 +55,7 @@ def validate_and_coerce_colorscale(
 def list_all_colorscale_names() -> list[str]:
     """Get a list of all available continuous colorscale names.
 
-    .. deprecated:: 0.1.31
+    .. deprecated:: 0.2.0
        This function is deprecated and will be removed in a future version.
        Please use :func:`px.colors.named_colorscales() <plotly.express.colors.named_colorscales>`
        from Plotly Express for the same functionality. For more details, visit:
