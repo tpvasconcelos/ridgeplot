@@ -5,13 +5,19 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-### Breaking changes
+After almost 4 years, 30 _"patch"_ releases, +200 pull-requests and close to 1,000 commits, this is ridgeplot's first _minor_ release (`0.1.30 -> 0.2.0`)! 🚀
 
+ridgeplot has been downloaded [over 400k times](...) (peaking at [102k](...) downloads in a single month), is listed as a dependency in [+135](...) public GitHub repositories, and - perhaps most relevantly - is a dependency of large projects such as [Shiny for Python](...), [Ploomber](...), and [NiMARE](...) which further extends the impact and reach of the project.
+
+This release marks another significant milestone for the project, which we believe has now reached a level of maturity and stability that warrants a stricter and more structured release and versioning process. Even though we have managed to never publish breaking changes in the past (if you find any, please let us know!), we will from now on be even more careful and mindful of the impact of any changes that could affect downstream users and their applications.
+
+### ⚠️ Breaking changes
+
+- Remove support for the deprecated `show_annotations` parameter and `colormode='index'` value ({gh-pr}`254`)
 - The new default colormode is `"fillgradient"` ({gh-pr}`244`)
 - The default value for `line_width` changed from `1` to `1.5` ({gh-pr}`253`)
-- Remove support for the deprecated `show_annotations` parameter and `colormode='index'` value ({gh-pr}`254`)
 
-### Features
+### 🚀 Features
 
 - Implement new `"fillgradient"` colormode ({gh-pr}`244`)
 - Add new `line_color` parameter to the `ridgeplot` function ({gh-pr}`253`)
@@ -19,35 +25,32 @@ Unreleased changes
 - Add new `norm` parameter to the `ridgeplot` function to allow users to normalize the data before plotting ({gh-pr}`255`)
 - Add `sample_weights` argument to `ridgeplot()` to allow users to pass sample weights to the KDE estimator ({gh-pr}`259`)
 
-### Deprecations
+### ⛓️‍💥Deprecations
 
 - Rename `coloralpha` to `opacity` for consistently with Plotly Express and deprecate the old parameter name ({gh-pr}`245`)
 - Rename `linewidth` to `line_width` for consistency with Plotly's API and deprecate the old parameter name ({gh-pr}`253`)
 
-### Dependencies
+### 🔋 Dependencies
 
 - The new minimum version of Plotly is `5.20` to leverage the new `fillgradient` feature ({gh-pr}`244`)
 
-### Optimizations
+### 🏎️ Optimizations
 
 - Importing statsmodels, scipy, and numpy can be slow, so we now only import the `ridgeplot._kde` module when the user needs this functionality ({gh-pr}`242`)
 
-### Documentation
+### 📚 Documentation
 
 - Update examples in the getting-started guide to reflect the new default colormode ({gh-pr}`244`)
 - Update the `plotly.min.js` version from `2.27` to `2.35.2` to leverage the `fillgradient` feature ({gh-pr}`244`)
 - Fix the API reference docs for the internal `ridgeplot._color` module ({gh-pr}`244`)
 - Tighten margins in generated examples ({gh-pr}`257`)
+- Add the reference jupyter notebook used to generate the ridgeplot logo ({gh-pr}`242`)
+- Update ridgeplot's logo to use Plotly's official colors ({gh-pr}`243`)
 
-### CI/CD
+### 🔗 CI/CD
 
 - Stop sending coverage reports to Codacy ({gh-pr}`265`)
 - Improve local development experience and optimise the CI pipeline ({gh-pr}`273`)
-
-### Miscellaneous
-
-- Add the reference jupyter notebook used to generate the ridgeplot logo ({gh-pr}`242`)
-- Update ridgeplot's logo to use Plotly's official colors ({gh-pr}`243`)
 
 ### Internal
 
