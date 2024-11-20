@@ -12,6 +12,7 @@ ridgeplot has been downloaded [over 400k times](https://pepy.tech/projects/ridge
 This release marks a small milestone for ridgeplot, which we believe has now reached a level of maturity and stability that warrants a stricter and more structured, predictable, and standard release and versioning process. Even though we have managed to never publish breaking changes in the past (if you find any, please let us know!), we will from now on be even more careful and mindful of the impact of any changes that could affect downstream users and their applications.
 
 We will make an effort to standardise and document our versioning policy. For now, we will try to simply adhere to the following general rules:
+
 - We are explicitly **not** going to follow [Semantic Versioning](https://semver.org/), as we believe it is not a good fit for this project yet.
 - `MAJOR.MINOR.PATCH` versioning scheme:
   - **MAJOR**: We don't have any plans for this yet... we will probably use this in the future once we settle on a more stable API and feature set
