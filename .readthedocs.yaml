@@ -9,6 +9,9 @@ build:
   apt_packages:
     # chromium-browser is required by Kaleido to generate Plotly figures via fig.write_image()
     - chromium-browser
+  jobs:
+    pre_build:
+      - KALEIDO_DEBUG=1
 
 python:
   install:
