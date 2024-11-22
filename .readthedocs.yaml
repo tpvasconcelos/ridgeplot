@@ -11,7 +11,7 @@ build:
     - chromium-browser
   jobs:
     pre_build:
-      - KALEIDO_DEBUG=1
+      - export KALEIDO_DEBUG=1
 
 python:
   install:
