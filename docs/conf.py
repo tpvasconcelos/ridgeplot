@@ -368,6 +368,14 @@ def _fix_html_charts() -> None:
 
 
 def setup(app: Sphinx) -> None:
+    from choreographer.system import which_browser
+
+    print("-" * 80)
+    print("-" * 80)
+    print(which_browser())
+    print("-" * 80)
+    print("-" * 80)
+
     compile_plotly_charts()
     # app.connect("html-page-context", register_jinja_functions)
 
