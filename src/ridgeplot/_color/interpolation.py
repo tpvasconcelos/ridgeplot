@@ -138,10 +138,11 @@ def _interpolate_trace_index(ctx: InterpolationContext) -> ColorscaleInterpolant
 
 
 def _interpolate_trace_index_row_wise(ctx: InterpolationContext) -> ColorscaleInterpolants:
-    if ctx.n_rows == 1:
-        return [[0.0] * len(row) for row in ctx.densities]
     return [
-        [((len(row) - 1) - ith_row_trace) / (len(row) - 1) for ith_row_trace in range(len(row))]
+        [
+            ((len(row) - 1) - ith_row_trace) / (len(row) - 1) if len(row) > 1 else 0.0
+            for ith_row_trace in range(len(row))
+        ]
         for row in ctx.densities
     ]
 
