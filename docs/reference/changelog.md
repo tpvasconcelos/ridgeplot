@@ -5,7 +5,9 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+### Bug fixes
+
+- Fixed `ZeroDivisionError` for index-based colormodes when specifying single-trace or single-row plots ({gh-pr}`268`)
 
 ---
 
@@ -49,10 +51,6 @@ We will make an effort to standardise and document our versioning policy. For no
 - Rename `coloralpha` to `opacity` for consistently with Plotly Express and deprecate the old parameter name ({gh-pr}`245`)
 - Rename `linewidth` to `line_width` for consistency with Plotly's API and deprecate the old parameter name ({gh-pr}`253`)
 - Deprecated `colorscale='default'` and `list_all_colorscale_names()` in favour or Plotly Express' `px.colors.named_colorscales()` ({gh-pr}`262`)
-
-### Bug fixes
-
-- Fixed `ZeroDivisionError` for index-based colormodes when specifying single-trace or single-row plots ({gh-pr}`268`)
 
 ### Dependencies
 
