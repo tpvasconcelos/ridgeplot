@@ -5,6 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.2.1
+------
+
 ### Bug fixes
 
 - Fixed `ZeroDivisionError` for index-based colormodes when specifying single-trace or single-row plots ({gh-pr}`268`)
