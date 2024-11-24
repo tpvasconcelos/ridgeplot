@@ -6,7 +6,10 @@ import pytest
 
 from ridgeplot import ridgeplot
 from ridgeplot._color.interpolation import (
+    SOLID_COLORMODE_MAPS,
+    ColorscaleInterpolants,
     InterpolationContext,
+    SolidColormode,
     _interpolate_color,
     _interpolate_mean_means,
     _interpolate_mean_minmax,
@@ -16,7 +19,7 @@ from ridgeplot._color.interpolation import (
 from ridgeplot._color.utils import to_rgb
 
 if TYPE_CHECKING:
-    from ridgeplot._types import ColorScale
+    from ridgeplot._types import ColorScale, Densities
 
 
 # ==============================================================
@@ -92,6 +95,41 @@ def test_interpolate_mean_means() -> None:
     )
     ps = _interpolate_mean_means(ctx)
     assert ps == [[0.0], [0.5], [1.0]]
+
+
+_DENSITY_01 = [(0, 1), (1, 2), (2, 1)]
+_DENSITY_02 = [(1, 1), (2, 2), (3, 1)]
+
+_DENSITIES_ONE_TRACE = [[_DENSITY_01]]
+_DENSITIES_ONE_ROW = [[_DENSITY_01, _DENSITY_02]]
+_DENSITIES_ONE_TRACE_PER_ROW = [[_DENSITY_01, _DENSITY_02], [_DENSITY_02]]
+
+
+@pytest.mark.parametrize(
+    ("colormode", "densities", "expected"),
+    [
+        # One trace
+        ("row-index", _DENSITIES_ONE_TRACE, [[0.0]]),
+        ("trace-index", _DENSITIES_ONE_TRACE, [[0.0]]),
+        ("trace-index-row-wise", _DENSITIES_ONE_TRACE, [[0.0]]),
+        # One row
+        ("row-index", _DENSITIES_ONE_ROW, [[0.0, 0.0]]),
+        ("trace-index", _DENSITIES_ONE_ROW, [[1.0, 0.0]]),
+        ("trace-index-row-wise", _DENSITIES_ONE_ROW, [[1.0, 0.0]]),
+        # One trace per row
+        ("row-index", _DENSITIES_ONE_TRACE_PER_ROW, [[1.0, 1.0], [0.0]]),
+        ("trace-index", _DENSITIES_ONE_TRACE_PER_ROW, [[1.0, 0.5], [0.0]]),
+        ("trace-index-row-wise", _DENSITIES_ONE_TRACE_PER_ROW, [[1.0, 0.0], [0.0]]),
+    ],
+)
+def test_index_based_colormodes(
+    colormode: SolidColormode, densities: Densities, expected: ColorscaleInterpolants
+) -> None:
+    """ZeroDivisionError should never be raised, even when there is only one
+    trace, one row, or one trace per row."""
+    interpolate_func = SOLID_COLORMODE_MAPS[colormode]
+    interpolants = interpolate_func(ctx=InterpolationContext.from_densities(densities))
+    assert interpolants == expected
 
 
 # ==============================================================
