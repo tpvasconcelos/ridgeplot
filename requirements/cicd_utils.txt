@@ -1,6 +1,7 @@
 # ./cicd_utils/cicd/compile_plotly_charts.py
 minify-html
-kaleido
+# TODO: unpin after 1.0.0 (https://github.com/plotly/Kaleido/issues/226)
+kaleido<0.4
 
 # ./cicd_utils/cicd/scripts/extract_latest_release_notes.py
 markdown-it-py

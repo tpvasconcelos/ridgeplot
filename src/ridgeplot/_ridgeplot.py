@@ -241,7 +241,7 @@ def ridgeplot(
           the distribution, but without taking into account the entire
           variability of the distributions.
 
-        .. versionchanged:: 0.1.31
+        .. versionchanged:: 0.2.0
             The default value changed from ``"mean-minmax"`` to
             ``"fillgradient"``.
 
@@ -251,7 +251,7 @@ def ridgeplot(
         if a float value is passed, it will be used to overwrite the
         opacity/transparency of the color-scale's colors.
 
-        .. versionadded:: 0.1.31
+        .. versionadded:: 0.2.0
             Replaces the deprecated :paramref:`coloralpha` argument.
 
     labels : LabelsArray or ShallowLabelsArray, optional
@@ -271,7 +271,7 @@ def ridgeplot(
         - ``"percent"`` - same as ``"probability"``, but the normalised values
           are multiplied by 100.
 
-        .. versionadded:: 0.1.31
+        .. versionadded:: 0.2.0
 
     line_color : Color or "fill-color", optional
         The color of the traces' lines. Any valid CSS color is allowed
@@ -281,15 +281,15 @@ def ridgeplot(
         will be the mean color of the fill gradient (i.e., equivalent to the
         fill color when ``colormode='mean-minmax'``).
 
-        .. versionadded:: 0.1.31
+        .. versionadded:: 0.2.0
 
     line_width : float
         The traces' line width (in px).
 
-        .. versionadded:: 0.1.31
+        .. versionadded:: 0.2.0
             Replaces the deprecated :paramref:`linewidth` argument.
 
-        .. versionchanged:: 0.1.31
+        .. versionchanged:: 0.2.0
             The default value changed from 1 to 1.5
 
     spacing : float
@@ -309,12 +309,12 @@ def ridgeplot(
 
     coloralpha : float, optional
 
-        .. deprecated:: 0.1.31
+        .. deprecated:: 0.2.0
             Use :paramref:`opacity` instead.
 
     linewidth : float
 
-        .. deprecated:: 0.1.31
+        .. deprecated:: 0.2.0
             Use :paramref:`line_width` instead.
 
     Returns
