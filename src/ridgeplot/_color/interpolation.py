@@ -116,7 +116,7 @@ def _mul(a: tuple[Numeric, ...], b: tuple[Numeric, ...]) -> tuple[Numeric, ...]:
 
 def _interpolate_row_index(ctx: InterpolationContext) -> ColorscaleInterpolants:
     if ctx.n_rows == 1:
-        return [[0.0] * len(row) for row in ctx.densities]
+        return [[0.0] * ctx.n_traces]
     return [
         [((ctx.n_rows - 1) - ith_row) / (ctx.n_rows - 1)] * len(row)
         for ith_row, row in enumerate(ctx.densities)
