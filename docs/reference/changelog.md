@@ -5,6 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.2.0
+------
+
 After almost 4 years, 30 _"patch"_ releases, +200 pull-requests, and close to 1,000 commits, this is ridgeplot's first _minor_ release (`v0.1.30 -> v0.2.0`)! 🚀
 
 ridgeplot has been downloaded [over 400k times](https://pepy.tech/projects/ridgeplot) (peaking at [102k](https://pypistats.org/packages/ridgeplot) downloads in a single month), is listed as a dependency in [135](https://github.com/tpvasconcelos/ridgeplot/network/dependents?dependent_type=REPOSITORY) public GitHub repositories, and - perhaps most relevantly - is a dependency of larger projects such as [Shiny for Python](https://github.com/posit-dev/py-shiny), [Ploomber](https://github.com/ploomber), and [NiMARE](https://github.com/neurostuff/NiMARE) which further extends the impact and reach of the project.
