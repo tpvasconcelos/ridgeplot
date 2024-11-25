@@ -111,7 +111,7 @@ def ridgeplot(
 
     Parameters
     ----------
-    samples : Samples or ShallowSamples, optional
+    samples : Samples or ShallowSamples
         If ``samples`` data is specified, Kernel Density Estimation (KDE) will
         be computed. See :paramref:`kernel`, :paramref:`bandwidth`,
         :paramref:`kde_points`, and :paramref:`sample_weights` for more details
@@ -130,7 +130,7 @@ def ridgeplot(
         :paramref:`densities` array with shape :math:`(R, T_r, P_t, 2)`
         (see below for more details).
 
-    densities : Densities or ShallowDensities, optional
+    densities : Densities or ShallowDensities
         If a ``densities`` array is specified, the KDE step will be skipped and
         all associated arguments ignored. Each density array should have shape
         :math:`(R, T_r, P_t, 2)` (4D). Just like the :paramref:`samples`
@@ -182,23 +182,25 @@ def ridgeplot(
         set of samples. Optionally, you can also pass a custom 1D numerical
         array, which will be used for all traces.
 
-    sample_weights : SampleWeightsArray or ShallowSampleWeightsArray or SampleWeights, optional
+    sample_weights : SampleWeightsArray or ShallowSampleWeightsArray or SampleWeights or None
         An (optional) array of KDE weights corresponding to each sample. The
-        weights should be of the same shape as the samples array. If not
+        weights should have the same shape as the samples array. If not
         specified (default), all samples will be weighted equally.
 
-    colorscale : ColorScale or Collection[Color] or str
+    colorscale : ColorScale or Collection[Color] or str or None
         A continuous color scale used to color the different traces in the
         ridgeline plot. It can be represented by a string name (e.g.,
-        ``"viridis"``), a :data:`~ridgeplot._colors.ColorScale` object, or a
-        list of colors (see :data:`~ridgeplot._colors.Color`). If a string name
+        ``"viridis"``), a :data:`~ridgeplot._types.ColorScale` object, or a
+        list of valid :data:`~ridgeplot._colors.Color` objects. If a string name
         is provided, it must be one of the built-in color scales (see
         :func:`~ridgeplot.list_all_colorscale_names()` and
         `Plotly's built-in color-scales`_). If a list of colors is provided, it
         must be a list of valid CSS colors (e.g.,
         ``["rgb(255, 0, 0)", "blue", "hsl(120, 100%, 50%)"]``). The list will
-        ultimately be converted to a :data:`~ridgeplot._colors.ColorScale` object, assuming the
-        colors are evenly spaced.
+        ultimately be converted into a :data:`~ridgeplot._colors.ColorScale`
+        object, assuming the colors provided are evenly spaced. If not specified
+        (default), the color scale will be inferred from current Plotly
+        template.
 
     colormode : "fillgradient" or SolidColormode
         This argument controls the logic used for the coloring of each
@@ -245,26 +247,25 @@ def ridgeplot(
             The default value changed from ``"mean-minmax"`` to
             ``"fillgradient"``.
 
-    opacity : float, optional
+    opacity : float or None
         If None (default), this argument will be ignored and the transparency
-        values of the specifies color-scale will remain untouched. Otherwise,
+        values of the specified color-scale will remain untouched. Otherwise,
         if a float value is passed, it will be used to overwrite the
         opacity/transparency of the color-scale's colors.
 
         .. versionadded:: 0.2.0
             Replaces the deprecated :paramref:`coloralpha` argument.
 
-    labels : LabelsArray or ShallowLabelsArray, optional
-        A list of string labels for each trace. The default value is None,
-        which will result in auto-generated labels of form "Trace n". If,
-        instead, a list of labels is specified, it must be of the same
-        size/length as the number of traces.
+    labels : LabelsArray or ShallowLabelsArray or None
+        A list of string labels for each trace. If not specified (default), the
+        labels will be automatically generated as ``"Trace {n}"``, where ``n``
+        is the trace's index. If instead a list of labels is specified, it
+        should have the same shape as the samples array.
 
-    norm : NormalisationOption, optional
-        The normalisation option to use when normalising the densities. The
-        default is None, which means no normalisation will be applied and the
-        densities will be used as is. The following normalisation options are
-        available:
+    norm : NormalisationOption or None
+        The normalisation option to use when normalising the densities. If not
+        specified (default), no normalisation will be applied and the densities
+        will be used *as is*. The following normalisation options are available:
 
         - ``"probability"`` - normalise the densities by dividing each trace by
           its sum.
@@ -273,7 +274,7 @@ def ridgeplot(
 
         .. versionadded:: 0.2.0
 
-    line_color : Color or "fill-color", optional
+    line_color : Color or "fill-color"
         The color of the traces' lines. Any valid CSS color is allowed
         (default: ``"black"``). If the value is set to "fill-color", the line
         color will be the same as the fill color of the traces (see
@@ -307,7 +308,7 @@ def ridgeplot(
         units of the range between the minimum and maximum x-values from all
         distributions.
 
-    coloralpha : float, optional
+    coloralpha : float
 
         .. deprecated:: 0.2.0
             Use :paramref:`opacity` instead.
