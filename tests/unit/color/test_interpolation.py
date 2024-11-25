@@ -215,7 +215,7 @@ def test_colormode_invalid() -> None:
     ):
         compute_trace_colors(
             colorscale="Viridis",
-            colormode="INVALID",  # type: ignore[arg-type]
+            colormode="INVALID",  # type: ignore[call-overload]
             line_color="black",
             opacity=None,
             interpolation_ctx=InterpolationContext.from_densities([[[(0, 0)]]]),

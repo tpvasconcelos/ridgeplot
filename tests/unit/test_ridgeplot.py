@@ -222,6 +222,14 @@ def test_deprecated_linewidth_is_not_missing() -> None:
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], linewidth=0.5)
 
 
+def test_deprecated_linewidth_and_line_width_together_raises() -> None:
+    with pytest.raises(
+        ValueError,
+        match="You may not specify both the 'linewidth' and 'line_width' arguments!",
+    ):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], linewidth=0.4, line_width=0.6)
+
+
 def test_ridgeplot_colorscale_default_deprecation_warning() -> None:
     with pytest.warns(DeprecationWarning, match="colorscale='default' is deprecated"):
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], colorscale="default")

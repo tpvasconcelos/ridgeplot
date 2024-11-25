@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Literal, Protocol
+from typing import TYPE_CHECKING, Literal, Protocol, TypedDict, overload
 
 import plotly.graph_objs as go
 
@@ -63,14 +63,6 @@ def _interpolate_color(colorscale: ColorScale, p: float) -> str:
 # --- Solid color modes
 # ==============================================================
 
-SolidColormode = Literal[
-    "row-index",
-    "trace-index",
-    "trace-index-row-wise",
-    "mean-minmax",
-    "mean-means",
-]
-"""See :paramref:`ridgeplot.ridgeplot.colormode` for more information."""
 
 ColorscaleInterpolants = CollectionL2[float]
 """A :data:`ColorscaleInterpolants` contains the interpolants for a :data:`ColorScale`.
@@ -175,6 +167,15 @@ def _interpolate_mean_means(ctx: InterpolationContext) -> ColorscaleInterpolants
     ]
 
 
+SolidColormode = Literal[
+    "row-index",
+    "trace-index",
+    "trace-index-row-wise",
+    "mean-minmax",
+    "mean-means",
+]
+"""See :paramref:`ridgeplot.ridgeplot.colormode` for more information."""
+
 SOLID_COLORMODE_MAPS: dict[SolidColormode, InterpolationFunc] = {
     "row-index": _interpolate_row_index,
     "trace-index": _interpolate_trace_index,
@@ -202,13 +203,18 @@ def _compute_solid_colors(
     return ((_get_fill_color(p) for p in row) for row in interpolants)
 
 
+class SolidColorsDict(TypedDict):
+    line_color: Color
+    fillcolor: str
+
+
 def _compute_solid_trace_colors(
     colorscale: ColorScale,
     colormode: SolidColormode,
     line_color: Color | Literal["fill-color"],
     opacity: float | None,
     interpolation_ctx: InterpolationContext,
-) -> Generator[Generator[dict[str, Any]]]:
+) -> Generator[Generator[SolidColorsDict]]:
     return (
         (
             dict(
@@ -276,12 +282,17 @@ def _slice_colorscale(
     )
 
 
+class FillgradientColorsDict(TypedDict):
+    line_color: str
+    fillgradient: go.scatter.Fillgradient
+
+
 def _compute_fillgradient_trace_colors(
     colorscale: ColorScale,
     line_color: Color | Literal["fill-color"],
     opacity: float | None,
     interpolation_ctx: InterpolationContext,
-) -> Generator[Generator[dict[str, Any]]]:
+) -> Generator[Generator[FillgradientColorsDict]]:
     solid_line_colors: Generator[Generator[Color]]
     if line_color == "fill-color":
         solid_line_colors = _compute_solid_colors(
@@ -332,13 +343,33 @@ def _compute_fillgradient_trace_colors(
 # ==============================================================
 
 
+@overload
+def compute_trace_colors(
+    colorscale: ColorScale | Collection[Color] | str | None,
+    colormode: Literal["fillgradient"],
+    line_color: Color | Literal["fill-color"],
+    opacity: float | None,
+    interpolation_ctx: InterpolationContext,
+) -> Generator[Generator[FillgradientColorsDict]]: ...
+
+
+@overload
+def compute_trace_colors(
+    colorscale: ColorScale | Collection[Color] | str | None,
+    colormode: SolidColormode,
+    line_color: Color | Literal["fill-color"],
+    opacity: float | None,
+    interpolation_ctx: InterpolationContext,
+) -> Generator[Generator[SolidColorsDict]]: ...
+
+
 def compute_trace_colors(
     colorscale: ColorScale | Collection[Color] | str | None,
     colormode: Literal["fillgradient"] | SolidColormode,
     line_color: Color | Literal["fill-color"],
     opacity: float | None,
     interpolation_ctx: InterpolationContext,
-) -> Generator[Generator[dict[str, Any]]]:
+) -> Generator[Generator[FillgradientColorsDict | SolidColorsDict]]:
     colorscale = validate_and_coerce_colorscale(colorscale)
 
     valid_colormodes = ("fillgradient", *SOLID_COLORMODE_MAPS)
