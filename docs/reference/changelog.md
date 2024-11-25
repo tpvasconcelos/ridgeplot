@@ -5,7 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+### Documentation
+
+- Small improvements to `ridgeplot()`'s docstring ({gh-pr}`284`)
+
+### Internal
+
+- Small improvements to type hints and annotations ({gh-pr}`284`)
 
 ---
 
