@@ -14,8 +14,8 @@ if TYPE_CHECKING:
 import pandas as pd
 
 __all__ = [
-    "load_probly",
     "load_lincoln_weather",
+    "load_probly",
 ]
 
 
