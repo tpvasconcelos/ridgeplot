@@ -360,6 +360,11 @@ def ridgeplot(
         opacity = coloralpha
 
     if linewidth is not MISSING:
+        if line_width != 1.5:
+            raise ValueError(
+                "You may not specify both the 'linewidth' and 'line_width' arguments! "
+                "HINT: Use the new 'line_width' argument instead of the deprecated 'linewidth'."
+            )
         warnings.warn(
             "The 'linewidth' argument has been deprecated in favor of 'line_width'. "
             "Support for the deprecated argument will be removed in a future version.",
