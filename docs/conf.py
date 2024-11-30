@@ -205,9 +205,9 @@ extlinks_detect_hardcoded_links = True
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "packaging": ("https://packaging.pypa.io/en/latest", None),
-    "numpy": ("https://docs.scipy.org/doc/numpy/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
     "statsmodels": ("https://www.statsmodels.org/stable/", None),
     "plotly": ("https://plotly.com/python-api-reference/", None),
 }

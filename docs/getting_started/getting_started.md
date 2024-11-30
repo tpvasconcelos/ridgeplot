@@ -10,7 +10,7 @@ This basic example shows how you can quickly get started with a simple call to t
 import numpy as np
 from ridgeplot import ridgeplot
 
-my_samples = [np.random.normal(n / 1.2, size=600) for n in range(7, 0, -1)]
+my_samples = [np.random.normal(n / 1.2, size=600) for n in range(6, 0, -1)]
 fig = ridgeplot(samples=my_samples)
 fig.show()
 ```
@@ -18,6 +18,18 @@ fig.show()
 ```{raw} html
 :file: ../_static/charts/basic.html
 ```
+
+By default, the `ridgeplot` function will estimate the samples' probability density functions (PDFs) using kernel density estimation (KDE) and plot them as ridgeline area traces (`trace_type="area"`). If you want to plot histograms instead, you can set the `nbins` parameter and change the `trace_type` to `"bar"`.
+
+```python
+fig = ridgeplot(samples=my_samples, nbins=20, trace_type="bar")
+fig.show()
+```
+
+```{raw} html
+:file: ../_static/charts/basic_hist.html
+```
+
 
 ## Flexible configuration
 
