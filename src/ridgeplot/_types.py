@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sys
 from collections.abc import Collection
-from typing import Any, Literal, TypeVar, Union
+from typing import Any, Literal, Optional, TypeVar, Union
 
 import numpy as np
 
@@ -501,6 +501,72 @@ def is_shallow_samples(obj: Any) -> TypeIs[ShallowSamples]:
     """
     return isinstance(obj, Collection) and all(map(is_trace_samples, obj))
 
+
+# ========================================================
+# ---  Other array types
+# ========================================================
+
+
+# Trace types ---
+
+TraceType = Literal["area", "bar"]
+"""The type of trace to draw in a ridgeplot. See
+:paramref:`ridgeplot.ridgeplot.trace_type` for more information."""
+
+TraceTypesArray = CollectionL2[TraceType]
+"""A :data:`TraceTypesArray` represents the types of traces in a ridgeplot.
+
+Example
+-------
+>>> trace_types_array: TraceTypesArray = [
+...     ["area", "bar", "area"],
+...     ["bar", "area"],
+... ]
+"""
+
+ShallowTraceTypesArray = CollectionL1[TraceType]
+"""Shallow type for :data:`TraceTypesArray`.
+
+Example
+-------
+>>> trace_types_array: ShallowTraceTypesArray = ["area", "bar", "area"]
+"""
+
+# Labels ---
+
+LabelsArray = CollectionL2[str]
+"""A :data:`LabelsArray` represents the labels of traces in a ridgeplot.
+
+Example
+-------
+
+>>> labels_array: LabelsArray = [
+...     ["trace 1", "trace 2", "trace 3"],
+...     ["trace 4", "trace 5"],
+... ]
+"""
+
+ShallowLabelsArray = CollectionL1[str]
+"""Shallow type for :data:`LabelsArray`.
+
+Example
+-------
+
+>>> labels_array: ShallowLabelsArray = ["trace 1", "trace 2", "trace 3"]
+"""
+
+# Sample weights ---
+
+SampleWeights = Optional[CollectionL1[Numeric]]
+"""An array of KDE weights corresponding to each sample."""
+
+SampleWeightsArray = CollectionL2[SampleWeights]
+"""A :data:`SampleWeightsArray` represents the weights of the datapoints in a
+:data:`Samples` array. The shape of the :data:`SampleWeightsArray` array should
+match the shape of the corresponding :data:`Samples` array."""
+
+ShallowSampleWeightsArray = CollectionL1[SampleWeights]
+"""Shallow type for :data:`SampleWeightsArray`."""
 
 # ========================================================
 # ---  More type guards and other utilities

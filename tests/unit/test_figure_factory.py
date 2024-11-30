@@ -26,6 +26,7 @@ class TestCreateRidgeplot:
         with pytest.raises(ValueError, match="Expected a 4D array of densities"):
             create_ridgeplot(
                 densities=densities,
+                trace_types=...,  # type: ignore[arg-type]
                 colorscale=...,  # type: ignore[arg-type]
                 opacity=...,  # type: ignore[arg-type]
                 colormode=...,  # type: ignore[arg-type]

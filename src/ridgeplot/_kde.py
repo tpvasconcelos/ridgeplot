@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Collection
 from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Optional, Union, cast
+from typing import TYPE_CHECKING, Any, Callable, Union, cast
 
 import numpy as np
 import statsmodels.api as sm
@@ -16,9 +16,11 @@ else:
 
 from ridgeplot._types import (
     CollectionL1,
-    CollectionL2,
     Float,
     Numeric,
+    SampleWeights,
+    SampleWeightsArray,
+    ShallowSampleWeightsArray,
     is_flat_numeric_collection,
     nest_shallow_collection,
 )
@@ -36,17 +38,6 @@ KDEPoints = Union[int, CollectionL1[Numeric]]
 
 KDEBandwidth = Union[str, float, Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]]
 """The :paramref:`ridgeplot.ridgeplot.bandwidth` parameter."""
-
-SampleWeights = Optional[CollectionL1[Numeric]]
-"""An array of KDE weights corresponding to each sample."""
-
-SampleWeightsArray = CollectionL2[SampleWeights]
-"""A :data:`SampleWeightsArray` represents the weights of the datapoints in a
-:data:`Samples` array. The shape of the :data:`SampleWeightsArray` array should
-match the shape of the corresponding :data:`Samples` array."""
-
-ShallowSampleWeightsArray = CollectionL1[SampleWeights]
-"""Shallow type for :data:`SampleWeightsArray`."""
 
 
 def _is_sample_weights(obj: Any) -> TypeIs[SampleWeights]:
