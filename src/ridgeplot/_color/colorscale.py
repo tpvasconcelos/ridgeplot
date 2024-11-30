@@ -37,12 +37,12 @@ class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
 
 
 def infer_default_colorscale() -> ColorScale | Collection[Color] | str:
-    return validate_and_coerce_colorscale(
+    return validate_coerce_colorscale(
         default_plotly_template().layout.colorscale.sequential or px.colors.sequential.Viridis
     )
 
 
-def validate_and_coerce_colorscale(
+def validate_coerce_colorscale(
     colorscale: ColorScale | Collection[Color] | str | None,
 ) -> ColorScale:
     """Convert mixed colorscale representations to the canonical

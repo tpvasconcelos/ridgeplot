@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Literal, cast
 
 from plotly import graph_objects as go
 
-from ridgeplot._color.colorscale import validate_and_coerce_colorscale
+from ridgeplot._color.colorscale import validate_coerce_colorscale
 from ridgeplot._color.interpolation import (
     InterpolationContext,
     SolidColormode,
@@ -143,7 +143,7 @@ def create_ridgeplot(
     spacing = float(spacing)
     show_yticklabels = bool(show_yticklabels)
     xpad = float(xpad)
-    colorscale = validate_and_coerce_colorscale(colorscale)
+    colorscale = validate_coerce_colorscale(colorscale)
 
     # ==============================================================
     # ---  Build the figure
