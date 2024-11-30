@@ -6,7 +6,7 @@ from plotly import graph_objects as go
 
 from ridgeplot._color.interpolation import slice_colorscale
 from ridgeplot._color.utils import apply_alpha
-from ridgeplot._obj._base import DEFAULT_HOVERTEMPLATE, ColoringContext, RidgeplotTrace
+from ridgeplot._obj.traces.base import DEFAULT_HOVERTEMPLATE, ColoringContext, RidgeplotTrace
 from ridgeplot._utils import normalise_min_max
 
 
@@ -50,12 +50,12 @@ class AreaTrace(RidgeplotTrace):
         return color_kwargs
 
     def draw(self, fig: go.Figure, coloring_ctx: ColoringContext) -> go.Figure:
-        # Draw an invisible trace at constance y=y_shifted so that we
-        # can set fill="tonexty" below and get a filled area plot.
+        # Draw an invisible trace at constance y=y_base so that we
+        # can set fill="tonexty" below and get a filled area plot
         fig.add_trace(
             go.Scatter(
                 x=self.x,
-                y=[self.y_shifted] * len(self.x),
+                y=[self.y_base] * len(self.x),
                 # make trace 'invisible'
                 # Note: visible=False does not work with fill="tonexty"
                 line=dict(color="rgba(0,0,0,0)", width=0),
@@ -69,7 +69,7 @@ class AreaTrace(RidgeplotTrace):
         fig.add_trace(
             go.Scatter(
                 x=self.x,
-                y=[y_i + self.y_shifted for y_i in self.y],
+                y=[y_i + self.y_base for y_i in self.y],
                 name=self.label,
                 fill="tonexty",
                 mode="lines",

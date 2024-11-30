@@ -57,7 +57,7 @@ class RidgeplotTrace(ABC):
         solid_color: str,
         zorder: int,
         # Constant over the trace's row
-        y_shifted: float,
+        y_base: float,
         # Constant over the entire plot
         line_color: Color | Literal["fill-color"],
         line_width: float | None,
@@ -66,7 +66,7 @@ class RidgeplotTrace(ABC):
         self.label = label
         self.solid_color = solid_color
         self.zorder = zorder
-        self.y_shifted = y_shifted
+        self.y_base = y_base
         self.line_color: Color = self.solid_color if line_color == "fill-color" else line_color
         self.line_width: float = line_width if line_width is not None else self._DEFAULT_LINE_WIDTH
 

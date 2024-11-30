@@ -10,8 +10,8 @@ from ridgeplot._color.interpolation import (
     SolidColormode,
     compute_solid_colors,
 )
-from ridgeplot._obj import get_trace_cls
-from ridgeplot._obj._base import ColoringContext
+from ridgeplot._obj.traces import get_trace_cls
+from ridgeplot._obj.traces.base import ColoringContext
 from ridgeplot._types import (
     Color,
     ColorScale,
@@ -169,8 +169,8 @@ def create_ridgeplot(
     for ith_row, (row_traces, row_trace_types, row_labels, row_colors) in enumerate(
         zip_strict(densities, trace_types, trace_labels, solid_colors)
     ):
-        y_shifted = float(-ith_row * y_max * spacing)
-        tickvals.append(y_shifted)
+        y_base = float(-ith_row * y_max * spacing)
+        tickvals.append(y_base)
         for trace, trace_type, label, color in zip_strict(
             row_traces, row_trace_types, row_labels, row_colors
         ):
@@ -179,7 +179,7 @@ def create_ridgeplot(
                 label=label,
                 solid_color=color,
                 zorder=ith_trace,
-                y_shifted=y_shifted,
+                y_base=y_base,
                 line_color=line_color,
                 line_width=line_width,
             )

@@ -5,7 +5,7 @@ from typing import Any, ClassVar
 from plotly import graph_objects as go
 
 from ridgeplot._color.interpolation import interpolate_color
-from ridgeplot._obj._base import DEFAULT_HOVERTEMPLATE, ColoringContext, RidgeplotTrace
+from ridgeplot._obj.traces.base import DEFAULT_HOVERTEMPLATE, ColoringContext, RidgeplotTrace
 from ridgeplot._utils import normalise_min_max
 
 
@@ -39,7 +39,7 @@ class BarTrace(RidgeplotTrace):
                 x=self.x,
                 y=self.y,
                 name=self.label,
-                base=self.y_shifted,
+                base=self.y_base,
                 marker_line_width=self.line_width if self.line_width is not None else 0.5,
                 # width=1,  # TODO: do we need to specify the bar width?
                 **self._get_coloring_kwargs(ctx=coloring_ctx),
