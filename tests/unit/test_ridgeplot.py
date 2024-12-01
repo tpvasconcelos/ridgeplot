@@ -46,6 +46,11 @@ def test_shallow_samples() -> None:
     )  # fmt: skip
 
 
+# ==============================================================
+# ---  param: labels
+# ==============================================================
+
+
 def test_shallow_labels() -> None:
     shallow_labels = ["trace 1", "trace 2"]
     assert (
@@ -59,6 +64,26 @@ def test_y_labels_dedup() -> None:
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=["a"]) ==
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=[["a", "a"]])
     )  # fmt: skip
+
+
+# ==============================================================
+# ---  param: trace_type
+# ==============================================================
+
+
+def test_shallow_trace_type() -> None:
+    assert (
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type="bar") ==
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type=["bar", "bar"]) ==  # type: ignore[arg-type]
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type=[["bar"], ["bar"]]) # type: ignore[arg-type]
+    )  # fmt: skip
+
+
+def test_unknown_trace_type() -> None:
+    with pytest.raises(
+        ValueError, match="Unknown trace type 'foo'. Available types: 'area', 'bar'."
+    ):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type="foo")  # type: ignore[arg-type]
 
 
 # ==============================================================
