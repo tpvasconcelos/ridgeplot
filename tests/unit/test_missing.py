@@ -60,7 +60,7 @@ def test_reloading() -> None:
     )
 
     reload(types_module)
-    assert_all_are(
+    assert_all_are(  # pragma: no cover
         missing1,
         missing2,
         missing3,

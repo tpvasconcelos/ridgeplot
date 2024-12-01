@@ -6,6 +6,7 @@ from functools import partial
 from typing import TYPE_CHECKING, Any, Callable, Union, cast
 
 import numpy as np
+import numpy.typing as npt
 import statsmodels.api as sm
 from statsmodels.sandbox.nonparametric.kernels import CustomKernel as StatsmodelsKernel
 
@@ -28,7 +29,6 @@ from ridgeplot._utils import normalise_row_attrs
 from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
-    import numpy.typing as npt
 
     from ridgeplot._types import Densities, Samples, SamplesTrace, XYCoordinate
 
@@ -165,14 +165,16 @@ def estimate_density_trace(
         weights=weights,
     )
     density_y = dens.evaluate(density_x)
-    _validate_densities(x=density_x, y=density_y, kernel=kernel)
+    density_y = _validate_densities(x=density_x, y=density_y, kernel=kernel)
 
     return list(zip(density_x, density_y))
 
 
 def _validate_densities(
-    x: npt.NDArray[np.floating[Any]], y: npt.NDArray[np.floating[Any]], kernel: str
-) -> None:
+    x: npt.NDArray[np.floating[Any]],
+    y: Any,
+    kernel: str,
+) -> npt.NDArray[np.floating[Any]]:
     # I haven't investigated the root of this issue yet
     # but statsmodels' KDEUnivariate implementation
     # can return a float('NaN') if something goes
@@ -190,10 +192,12 @@ def _validate_densities(
         # Fail early if the return type is incorrect
         # Otherwise, the remaining checks will fail
         raise RuntimeError(msg)  # noqa: TRY004
+    y = cast(npt.NDArray[np.floating[Any]], y)
     wrong_shape = y.shape != x.shape
     not_finite = ~np.isfinite(y).all()
     if wrong_shape or not_finite:
         raise RuntimeError(msg)
+    return y
 
 
 def estimate_densities(

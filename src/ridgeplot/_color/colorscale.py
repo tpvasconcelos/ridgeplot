@@ -29,6 +29,7 @@ class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
         coerced = super().validate_coerce(v)
         if coerced is None:  # pragma: no cover
             self.raise_invalid_val(coerced)
+        coerced = cast(ColorScale, coerced)
         # This helps us avoid floating point errors when making
         # comparisons in our test suite. The user should not
         # be able to notice *any* difference in the output
