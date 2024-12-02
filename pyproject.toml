@@ -67,7 +67,3 @@ namespaces = false
 # and we want to push X.devM to TestPyPi
 # on every merge to the `main` branch
 local_scheme = "no-local-version"
-
-[tool.black]
-line-length = 100
-include = '\.pyi?$'
