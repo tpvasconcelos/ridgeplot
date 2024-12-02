@@ -29,7 +29,6 @@ from ridgeplot._utils import normalise_row_attrs
 from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
-
     from ridgeplot._types import Densities, Samples, SamplesTrace
 
 
@@ -97,10 +96,6 @@ def normalize_sample_weights(
     """
     if _is_sample_weights(sample_weights):
         return [[sample_weights] * len(row) for row in samples]
-    sample_weights = cast(
-        Union[SampleWeightsArray, ShallowSampleWeightsArray],
-        sample_weights,
-    )
     if _is_shallow_sample_weights(sample_weights):
         sample_weights = nest_shallow_collection(sample_weights)
     sample_weights = normalise_row_attrs(sample_weights, l2_target=samples)
@@ -160,7 +155,7 @@ def estimate_density_trace(
     dens.fit(
         kernel=kernel,
         fft=kernel == "gau" and weights is None,
-        bw=bandwidth,  # type: ignore[arg-type]
+        bw=bandwidth,  # pyright: ignore[reportArgumentType]
         weights=weights,
     )
     density_y = dens.evaluate(density_x)

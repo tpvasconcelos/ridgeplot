@@ -8,7 +8,6 @@ from ridgeplot._kde import normalize_sample_weights
 from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
-
     from ridgeplot._types import (
         Densities,
         DensityTrace,

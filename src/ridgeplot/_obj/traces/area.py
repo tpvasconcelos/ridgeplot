@@ -73,7 +73,7 @@ class AreaTrace(RidgeplotTrace):
                 name=self.label,
                 fill="tonexty",
                 mode="lines",
-                line=dict(width=self.line_width if self.line_width is not None else 1.5),
+                line_width=self.line_width,
                 **self._get_coloring_kwargs(ctx=coloring_ctx),
                 # Hover information
                 customdata=[[y_i] for y_i in self.y],

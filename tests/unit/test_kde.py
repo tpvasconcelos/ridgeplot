@@ -8,7 +8,7 @@ import pytest
 
 from ridgeplot._kde import (
     KDEPoints,
-    _validate_densities,
+    _validate_densities,  # pyright: ignore[reportPrivateUsage]
     estimate_densities,
     estimate_density_trace,
 )

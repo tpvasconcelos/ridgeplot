@@ -7,7 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
 
-from ridgeplot._color.css_colors import CSS_NAMED_COLORS, CssNamedColor
+from ridgeplot._color.css_colors import CSS_NAMED_COLORS
 from ridgeplot._types import Color
 
 
@@ -24,7 +24,7 @@ def infer_default_color_sequence() -> Collection[Color]:  # pragma: no cover
 
 
 def to_rgb(color: Color) -> str:
-    if not isinstance(color, (str, tuple)):
+    if not isinstance(color, (str, tuple)):  # type: ignore[reportUnnecessaryIsInstance]
         raise TypeError(f"Expected str or tuple for color, got {type(color)} instead.")
     if isinstance(color, tuple):
         r, g, b = color
@@ -34,7 +34,6 @@ def to_rgb(color: Color) -> str:
     elif color.startswith(("rgb(", "rgba(")):
         rgb = color
     elif color in CSS_NAMED_COLORS:
-        color = cast(CssNamedColor, color)
         return to_rgb(CSS_NAMED_COLORS[color])
     else:
         raise ValueError(

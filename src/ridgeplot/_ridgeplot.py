@@ -73,7 +73,7 @@ def _coerce_to_densities(
     if has_densities:
         if is_shallow_densities(densities):
             densities = nest_shallow_collection(densities)
-        return cast(Densities, densities)
+        return densities
 
     # Transform samples into densities via KDE or histogram binning
     if is_shallow_samples(samples):

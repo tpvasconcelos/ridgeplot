@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata  # type: ignore[no-redef]
+    import importlib_metadata  # pyright: ignore[no-redef]
 
 try:
     from cicd.compile_plotly_charts import compile_plotly_charts
@@ -391,5 +391,5 @@ def setup(app: Sphinx) -> None:
     compile_plotly_charts()
     # app.connect("html-page-context", register_jinja_functions)
 
-    app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())
-    app.connect("build-finished", lambda *_: _fix_html_charts())
+    app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())  # pyright: ignore[reportUnknownLambdaType]
+    app.connect("build-finished", lambda *_: _fix_html_charts())  # pyright: ignore[reportUnknownLambdaType]

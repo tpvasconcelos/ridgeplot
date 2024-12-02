@@ -81,7 +81,7 @@ def test_shallow_trace_type() -> None:
 
 def test_unknown_trace_type() -> None:
     with pytest.raises(TypeError, match="Invalid trace_type: foo"):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type="foo")  # type: ignore[arg-type]
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type="foo")  # pyright: ignore[reportArgumentType]
 
 
 # ==============================================================
@@ -90,7 +90,7 @@ def test_unknown_trace_type() -> None:
 
 
 def test_colorscale_coercion(
-    valid_colorscale: tuple[ColorScale | Collection[Color] | str, ColorScale]
+    valid_colorscale: tuple[ColorScale | Collection[Color] | str, ColorScale],
 ) -> None:
     colorscale, coerced = valid_colorscale
     assert ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=colorscale) == ridgeplot(

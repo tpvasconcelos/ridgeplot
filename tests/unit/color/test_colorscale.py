@@ -32,7 +32,7 @@ def test_infer_default_colorscale() -> None:
 
 
 def test_validate_coerce_colorscale(
-    valid_colorscale: tuple[ColorScale | Collection[Color] | str, ColorScale]
+    valid_colorscale: tuple[ColorScale | Collection[Color] | str, ColorScale],
 ) -> None:
     colorscale, expected = valid_colorscale
     coerced = validate_coerce_colorscale(colorscale=colorscale)

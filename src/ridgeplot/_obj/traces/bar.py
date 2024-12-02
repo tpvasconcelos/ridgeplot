@@ -40,7 +40,7 @@ class BarTrace(RidgeplotTrace):
                 y=self.y,
                 name=self.label,
                 base=self.y_base,
-                marker_line_width=self.line_width if self.line_width is not None else 0.5,
+                marker_line_width=self.line_width,
                 # width=1,  # TODO: do we need to specify the bar width?
                 **self._get_coloring_kwargs(ctx=coloring_ctx),
                 # Hover information

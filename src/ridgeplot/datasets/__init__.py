@@ -165,5 +165,5 @@ def load_lincoln_weather() -> pd.DataFrame:
     """
     with as_file(_DATA_DIR / "lincoln-weather.csv") as data_file:
         data = pd.read_csv(data_file, index_col="CST")
-    data.index = pd.to_datetime(data.index.to_list())
+    data.index = pd.to_datetime(data.index)
     return data

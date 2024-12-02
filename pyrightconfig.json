@@ -12,5 +12,9 @@
   "extraPaths": [
     "cicd_utils"
   ],
-  "typeCheckingMode": "standard"
+  "typeCheckingMode": "strict",
+  "reportMissingTypeStubs": "none",
+  "reportUnknownMemberType": "none",
+  "reportUnknownArgumentType": "none",
+  "reportUnknownVariableType": "none"
 }
