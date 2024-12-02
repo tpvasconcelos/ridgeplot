@@ -31,7 +31,7 @@ from ridgeplot._ridgeplot import ridgeplot
 from ridgeplot._version import __version__
 
 __all__ = [
-    "ridgeplot",
-    "list_all_colorscale_names",
     "__version__",
+    "list_all_colorscale_names",
+    "ridgeplot",
 ]
