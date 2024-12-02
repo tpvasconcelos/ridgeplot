@@ -42,7 +42,7 @@ repos:
         exclude: ^\.bumpversion\.cfg$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema.git
-    rev: 0.29.4
+    rev: 0.30.0
     hooks:
       - id: check-github-actions
       - id: check-github-workflows
@@ -111,7 +111,7 @@ repos:
       - id: black-jupyter
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.0
+    rev: v0.8.1
     hooks:
       - id: ruff
         args: [ --show-fixes, --exit-non-zero-on-fix ]
