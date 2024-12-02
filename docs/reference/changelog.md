@@ -12,6 +12,7 @@ Unreleased changes
 ### Internal
 
 - Small improvements to type hints and annotations ({gh-pr}`284`)
+- Improve type annotations and switch from mypy to pyright ({gh-pr}`287`)
 
 ---
 

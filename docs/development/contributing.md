@@ -158,13 +158,13 @@ pre-commit run --all-files
 
 For more information on all the checks being run here, take a look inside the {repo-file}`.pre-commit-config.yaml` configuration file.
 
-The only static check that is not run by pre-commit is [mypy](https://github.com/python/mypy), which is too expensive to run on every commit. To run mypy against all files, run:
+The only static check that is not run by pre-commit is [pyright](https://github.com/microsoft/pyright), which is too expensive to run on every commit. To run pyright against all files, run:
 
 ```shell
-tox -e mypy-incremental
+tox -e typing
 ```
 
-Just like with pytest, you can also pass extra positional arguments to mypy by running `tox -e mypy-incremental -- <MYPY_FLAGS>`.
+Just like with pytest, you can also pass extra positional arguments to pyright by running `tox -e typing -- <PYRIGHT_FLAGS>`.
 
 To trigger all static checks, run:
 
@@ -194,7 +194,7 @@ Here is a quick overview of ~~all~~ most of the CI tools and software used in th
 | [Coverage.py](https://github.com/nedbat/coveragepy)     | 📊 Coverage      | {repo-file}`.coveragerc`                                                                  | The code coverage tool for Python                                                                                                                                                                      |
 | [Codecov](https://about.codecov.io/)                    | 📊 Coverage      | {repo-file}`.github/workflows/ci.yml`                                                     | An external services for tracking, monitoring, and alerting on code coverage metrics.                                                                                                                  |
 | [pre-commit](https://pre-commit.com/)                   | 💅 Linting       | {repo-file}`.pre-commit-config.yaml`                                                      | Used to to automatically check and fix any formatting rules on every commit.                                                                                                                           |
-| [mypy](https://github.com/python/mypy)                  | 💅 Linting       | {repo-file}`mypy.ini`                                                                     | A static type checker for Python. We use quite a strict configuration here, which can be tricky at times. Feel free to ask for help from the community by commenting on your issue or pull request.    |
+| [pyright](https://github.com/microsoft/pyright)         | 💅 Linting       | {repo-file}`pyrightconfig.json`                                                           | A static type checker for Python. We use quite a strict configuration here, which can be tricky at times. Feel free to ask for help from the community by commenting on your issue or pull request.    |
 | [black](https://github.com/psf/black)                   | 💅 Linting       | {repo-file}`pyproject.toml`                                                               | "The uncompromising Python code formatter". We use `black` to automatically format Python code in a deterministic manner. Maybe we'll replace this with `ruff` in the future.                          |
 | [ruff](https://github.com/astral-sh/ruff)               | 💅 Linting       | {repo-file}`ruff.toml`                                                                    | "An extremely fast Python linter and code formatter, written in Rust." For this project, ruff replaced Flake8 (+plugins), isort, pydocstyle, pyupgrade, and autoflake with a single (and faster) tool. |
 | [EditorConfig](https://editorconfig.org/)               | 💅 Linting       | {repo-file}`.editorconfig`                                                                | This repository uses the `.editorconfig` standard configuration file, which aims to ensure consistent style across multiple programming environments.                                                  |

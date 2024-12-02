@@ -1,0 +1,16 @@
+{
+  "include": [
+    "src",
+    "tests",
+    "docs",
+    "cicd_utils"
+  ],
+  "exclude": [
+    "docs/build",
+    "**/__pycache__"
+  ],
+  "extraPaths": [
+    "cicd_utils"
+  ],
+  "typeCheckingMode": "basic"
+}

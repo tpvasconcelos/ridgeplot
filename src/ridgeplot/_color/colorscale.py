@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from collections.abc import Collection
 
 
-class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
+class ColorscaleValidator(_ColorscaleValidator):
     def __init__(self) -> None:
         super().__init__("colorscale", "ridgeplot")
 

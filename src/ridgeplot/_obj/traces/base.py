@@ -52,6 +52,7 @@ class RidgeplotTrace(ABC):
 
     def __init__(
         self,
+        *,  # kw only
         trace: DensityTrace,
         label: str,
         solid_color: str,

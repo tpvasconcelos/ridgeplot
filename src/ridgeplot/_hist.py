@@ -11,13 +11,12 @@ if TYPE_CHECKING:
 
     from ridgeplot._types import (
         Densities,
-        Float,
+        DensityTrace,
         Samples,
         SamplesTrace,
         SampleWeights,
         SampleWeightsArray,
         ShallowSampleWeightsArray,
-        XYCoordinate,
     )
 
 
@@ -25,7 +24,7 @@ def bin_trace_samples(
     trace_samples: SamplesTrace,
     nbins: int,
     weights: SampleWeights,
-) -> list[XYCoordinate[Float]]:
+) -> DensityTrace:
     hist, bins = np.histogram(
         np.asarray(trace_samples, dtype=float),
         bins=nbins,

@@ -532,6 +532,56 @@ Example
 >>> trace_types_array: ShallowTraceTypesArray = ["area", "bar", "area"]
 """
 
+
+def is_trace_type(obj: Any) -> TypeIs[TraceType]:
+    """Type guard for :data:`TraceType`.
+
+    Examples
+    --------
+    >>> is_trace_type("area")
+    True
+    >>> is_trace_type("bar")
+    True
+    >>> is_trace_type("foo")
+    False
+    >>> is_trace_type(42)
+    False
+    """
+    from typing import get_args
+
+    return isinstance(obj, str) and obj in get_args(TraceType)
+
+
+def is_shallow_trace_types_array(obj: Any) -> TypeIs[ShallowTraceTypesArray]:
+    """Type guard for :data:`ShallowTraceTypesArray`.
+
+    Examples
+    --------
+    >>> is_shallow_trace_types_array(["area", "bar", "area"])
+    True
+    >>> is_shallow_trace_types_array(["area", "bar", "foo"])
+    False
+    >>> is_shallow_trace_types_array([1, 2, 3])
+    False
+    """
+    return isinstance(obj, Collection) and all(map(is_trace_type, obj))
+
+
+def is_trace_types_array(obj: Any) -> TypeIs[TraceTypesArray]:
+    """Type guard for :data:`TraceTypesArray`.
+
+    Examples
+    --------
+    >>> is_trace_types_array([["area", "bar"], ["area", "bar"]])
+    True
+    >>> is_trace_types_array([["area", "bar"], ["area", "foo"]])
+    False
+    >>> is_trace_types_array([["area", "bar"], ["area", 42]])
+    False
+    """
+    return isinstance(obj, Collection) and all(map(is_shallow_trace_types_array, obj))
+
+
 # Labels ---
 
 LabelsArray = CollectionL2[str]

@@ -37,9 +37,9 @@ jobs:
       #  env:
       #    SKIP: "no-commit-to-branch"
       #  run: tox -e pre-commit-all
-      - name: Run type checks with mypy
+      - name: Run type checks
         shell: bash
-        run: tox -e mypy-safe
+        run: tox -e typing
 
   # Run test suits for all supported platforms and Python versions
   software-tests:

@@ -21,6 +21,9 @@ from ridgeplot._types import (
     TraceType,
     TraceTypesArray,
     is_flat_str_collection,
+    is_shallow_trace_types_array,
+    is_trace_type,
+    is_trace_types_array,
     nest_shallow_collection,
 )
 from ridgeplot._utils import (
@@ -41,12 +44,15 @@ def normalise_trace_types(
     densities: Densities,
     trace_types: TraceTypesArray | ShallowTraceTypesArray | TraceType,
 ) -> TraceTypesArray:
-    if isinstance(trace_types, str):
-        trace_types = [[trace_types] * len(row) for row in densities]
-    else:
-        if is_flat_str_collection(trace_types):
-            trace_types = nest_shallow_collection(cast(ShallowTraceTypesArray, trace_types))
+    if is_trace_type(trace_types):
+        trace_types = cast(TraceTypesArray, [[trace_types] * len(row) for row in densities])
+    elif is_shallow_trace_types_array(trace_types):
+        trace_types = nest_shallow_collection(trace_types)
         trace_types = normalise_row_attrs(trace_types, l2_target=densities)
+    elif is_trace_types_array(trace_types):
+        trace_types = normalise_row_attrs(trace_types, l2_target=densities)
+    else:
+        raise TypeError(f"Invalid trace_type: {trace_types}")
     return trace_types
 
 

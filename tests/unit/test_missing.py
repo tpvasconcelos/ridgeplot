@@ -30,7 +30,7 @@ def assert_all_are(*args: Any) -> None:
         b = args[i + 1]
         if a is not b:
             raise AssertionError(
-                f"{a!r} and {b!r} (i={i}) are not the same object (id: {id(a)} != {id(b)})"
+                f"{a!r} and {b!r} ({i=}) are not the same object ({id(a)=} != {id(b)=})"
             )
 
 
@@ -43,7 +43,7 @@ def test_reloading() -> None:
     import ridgeplot._missing as types_module
     from ridgeplot._missing import MISSING
 
-    missing1 = ridgeplot._missing.MISSING
+    missing1 = ridgeplot._missing.MISSING  # type: ignore[attr-defined]
     missing2 = types_module.MISSING
     missing3 = MISSING
 
@@ -54,7 +54,7 @@ def test_reloading() -> None:
         missing1,
         missing2,
         missing3,
-        ridgeplot._missing.MISSING,
+        ridgeplot._missing.MISSING,  # type: ignore[attr-defined]
         types_module.MISSING,
         MISSING,
     )
@@ -64,7 +64,7 @@ def test_reloading() -> None:
         missing1,
         missing2,
         missing3,
-        ridgeplot._missing.MISSING,
+        ridgeplot._missing.MISSING,  # type: ignore[attr-defined]
         types_module.MISSING,
         MISSING,
     )

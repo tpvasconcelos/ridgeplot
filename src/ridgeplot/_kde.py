@@ -17,7 +17,7 @@ else:
 
 from ridgeplot._types import (
     CollectionL1,
-    Float,
+    DensityTrace,
     Numeric,
     SampleWeights,
     SampleWeightsArray,
@@ -30,7 +30,7 @@ from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
 
-    from ridgeplot._types import Densities, Samples, SamplesTrace, XYCoordinate
+    from ridgeplot._types import Densities, Samples, SamplesTrace
 
 
 KDEPoints = Union[int, CollectionL1[Numeric]]
@@ -97,8 +97,7 @@ def normalize_sample_weights(
     """
     if _is_sample_weights(sample_weights):
         return [[sample_weights] * len(row) for row in samples]
-    # TODO: Investigate this issue with mypy's type narrowing...
-    sample_weights = cast(  # type: ignore[unreachable]
+    sample_weights = cast(
         Union[SampleWeightsArray, ShallowSampleWeightsArray],
         sample_weights,
     )
@@ -114,7 +113,7 @@ def estimate_density_trace(
     kernel: str,
     bandwidth: KDEBandwidth,
     weights: SampleWeights = None,
-) -> list[XYCoordinate[Float]]:
+) -> DensityTrace:
     """Estimates a density trace from a set of samples.
 
     For a given set of sample values, computes the kernel densities (KDE) at
@@ -161,7 +160,7 @@ def estimate_density_trace(
     dens.fit(
         kernel=kernel,
         fft=kernel == "gau" and weights is None,
-        bw=bandwidth,
+        bw=bandwidth,  # type: ignore[arg-type]
         weights=weights,
     )
     density_y = dens.evaluate(density_x)
