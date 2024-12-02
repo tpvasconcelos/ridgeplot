@@ -12,5 +12,5 @@
   "extraPaths": [
     "cicd_utils"
   ],
-  "typeCheckingMode": "basic"
+  "typeCheckingMode": "standard"
 }
