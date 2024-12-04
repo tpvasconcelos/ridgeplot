@@ -99,7 +99,7 @@ def _coerce_to_densities(
 def ridgeplot(
     samples: Samples | ShallowSamples | None = None,
     densities: Densities | ShallowDensities | None = None,
-    trace_type: TraceTypesArray | ShallowTraceTypesArray | TraceType = "area",
+    trace_type: TraceTypesArray | ShallowTraceTypesArray | TraceType | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
     # KDE parameters
     kernel: str = "gau",
@@ -185,11 +185,13 @@ def ridgeplot(
 
         See :paramref:`samples` above for more details.
 
-    trace_type : TraceTypesArray or ShallowTraceTypesArray or TraceType
-        The type of trace to display. The default is ``"area"``. Choices are
-        ``"area"`` or ``"bar"``. If a single value is passed, it will be used
-        for all traces. If a list of values is passed, it should have the same
-        shape as the samples array.
+    trace_type : TraceTypesArray or ShallowTraceTypesArray or TraceType or None
+        The type of trace to display. Choices are ``'area'`` or ``'bar'``. If a
+        single value is passed, it will be used for all traces. If a list of
+        values is passed, it should have the same shape as the samples array.
+        If not specified (default), the traces will be displayed as area plots
+        (``trace_type='area'``) unless histogram binning is used, in which case
+        the traces will be displayed as bar plots (``trace_type='bar'``).
 
     labels : LabelsArray or ShallowLabelsArray or None
         A list of string labels for each trace. If not specified (default), the
@@ -385,6 +387,9 @@ def ridgeplot(
         if neither of them is specified. i.e. you may only specify one of them.
 
     """
+    if trace_type is None:
+        trace_type = "area" if nbins is None else "bar"
+
     densities = _coerce_to_densities(
         samples=samples,
         densities=densities,
@@ -394,7 +399,7 @@ def ridgeplot(
         nbins=nbins,
         sample_weights=sample_weights,
     )
-    del samples, kernel, bandwidth, kde_points
+    del samples, kernel, bandwidth, kde_points, nbins, sample_weights
 
     if norm:
         densities = normalise_densities(densities, norm=norm)
