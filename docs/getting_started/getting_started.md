@@ -19,10 +19,10 @@ fig.show()
 :file: ../_static/charts/basic.html
 ```
 
-By default, the `ridgeplot` function will estimate the samples' probability density functions (PDFs) using kernel density estimation (KDE) and plot them as ridgeline area traces (`trace_type="area"`). If you want to plot histograms instead, you can set the `nbins` parameter and change the `trace_type` to `"bar"`.
+By default, the `ridgeplot` function will estimate the samples' probability density functions (PDFs) using kernel density estimation (KDE) and plot them as ridgeline area traces (`trace_type="area"`). If you want to plot histograms instead, you can set the `nbins` parameter (which will automatically switch the trace type to `"bar"`).
 
 ```python
-fig = ridgeplot(samples=my_samples, nbins=20, trace_type="bar")
+fig = ridgeplot(samples=my_samples, nbins=20)
 fig.show()
 ```
 
