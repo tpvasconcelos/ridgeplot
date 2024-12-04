@@ -74,8 +74,6 @@ ignore = [
     "TD003", # Missing issue link on the line following this TODO
 
     # flake8-annotations (ANN)
-    "ANN101", # Missing type annotation for `self` in method
-    "ANN102", # Missing type annotation for `cls` in classmethod
     "ANN401", # Dynamically typed expressions (typing.Any) are disallowed in {name}
 ]
 
