@@ -19,7 +19,7 @@ fig.show()
 :file: ../_static/charts/basic.html
 ```
 
-By default, the `ridgeplot` function will estimate the samples' probability density functions (PDFs) using kernel density estimation (KDE) and plot them as ridgeline area traces (`trace_type="area"`). If you want to plot histograms instead, you can set the `nbins` parameter (which will automatically switch the trace type to `"bar"`).
+By default, the {py:func}`~ridgeplot.ridgeplot()` function will estimate the samples' probability density functions (PDFs) using kernel density estimation (KDE) and plot them as ridgeline area traces ({py:paramref}`trace_type="area" <ridgeplot.ridgeplot.trace_type>`). If you want to plot histograms instead, you can set the {py:paramref}`~ridgeplot.ridgeplot.nbins` parameter to an integer, which will automatically switch the trace type to `"bar"`.
 
 ```python
 fig = ridgeplot(samples=my_samples, nbins=20)
@@ -220,10 +220,10 @@ samples = [
 ```
 
 :::{note}
-For other use cases (like in the two previous examples), you could use a numpy ndarray to represent the samples. However, since different months have different number of days, we need to use a data container that can hold arrays of different lengths along the same dimension. Irregular arrays like this one are called [ragged arrays](https://en.wikipedia.org/wiki/Jagged_array). There are many different ways you can represent irregular arrays in Python. In this specific example, we used a list of lists of pandas Series. However,`ridgeplot` is designed to handle any object that implements the {py:class}`~typing.Collection`\[{py:class}`~typing.Collection`\[{py:class}`~typing.Collection`\[{py:data}`~ridgeplot._types.Numeric`\]]] protocol (_i.e.,_ any numeric 3D ragged array).
+For other use cases (like in the two previous examples), you could use a numpy ndarray to represent the samples. However, since different months have different number of days, we need to use a data container that can hold arrays of different lengths along the same dimension. Irregular arrays like this one are called [ragged arrays](https://en.wikipedia.org/wiki/Jagged_array). There are many different ways you can represent irregular arrays in Python. In this specific example, we used a list of lists of pandas Series. However, {py:func}`~ridgeplot.ridgeplot()` is designed to handle any object that implements the {py:class}`~typing.Collection`\[{py:class}`~typing.Collection`\[{py:class}`~typing.Collection`\[{py:data}`~ridgeplot._types.Numeric`\]]] protocol (_i.e.,_ any numeric 3D ragged array).
 :::
 
-Finally, we can pass the `samples` list to the {py:func}`~ridgeplot.ridgeplot()` function and specify any other arguments we want to customize the plot, like adjusting the KDE's bandwidth, the vertical spacing between rows, etc.
+Finally, we can pass the {py:paramref}`~ridgeplot.ridgeplot.samples` list to the {py:func}`~ridgeplot.ridgeplot()` function and specify any other arguments we want to customize the plot, like adjusting the KDE's bandwidth, the vertical spacing between rows, etc.
 
 ```python
 fig = ridgeplot(
@@ -263,7 +263,7 @@ We are currently investigating the best way to support all color options availab
 
 The {py:func}`~ridgeplot.ridgeplot()` function offers flexible customisation options that help you control the automatic coloring of ridgeline traces. Take a look at {py:paramref}`~ridgeplot.ridgeplot.colorscale`, {py:paramref}`~ridgeplot.ridgeplot.colormode`, and {py:paramref}`~ridgeplot.ridgeplot.opacity` for more information.
 
-To demonstrate how these options can be used, we can try to adjust the output from the previous example to use different colors for the minimum and maximum temperature traces. For instance, setting all minimum temperature traces to a shade of blue and all maximum temperature traces to a shade of red. To achieve this, we just need to adjust the `colorscale` and `colormode` parameters in the call to the {py:func}`~ridgeplot.ridgeplot()` function. _i.e._,
+To demonstrate how these options can be used, we can try to adjust the output from the previous example to use different colors for the minimum and maximum temperature traces. For instance, setting all minimum temperature traces to a shade of blue and all maximum temperature traces to a shade of red. To achieve this, we just need to adjust the {py:paramref}`~ridgeplot.ridgeplot.colorscale` and {py:paramref}`~ridgeplot.ridgeplot.colormode` parameters in the call to the {py:func}`~ridgeplot.ridgeplot()` function. _i.e._,
 
 ```python
 fig = ridgeplot(
