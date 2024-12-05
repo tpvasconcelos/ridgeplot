@@ -104,8 +104,15 @@ def update_layout(
         showticklabels=True,
         **axes_common,
     )
-    # TODO: Review default layout for bar traces...
-    fig.update_layout(barmode="stack", bargap=0, bargroupgap=0)
+    # Settings for bar/histogram traces:
+    fig.update_layout(
+        # barmode can be either 'stack' or 'relative'
+        barmode="stack",
+        # bargap and bargroupgap should be set
+        # to 0 to avoid gaps between bars
+        bargap=0,
+        bargroupgap=0,
+    )
     return fig
 
 

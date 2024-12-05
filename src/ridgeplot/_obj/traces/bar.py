@@ -41,7 +41,7 @@ class BarTrace(RidgeplotTrace):
                 name=self.label,
                 base=self.y_base,
                 marker_line_width=self.line_width,
-                # width=1,  # TODO: do we need to specify the bar width?
+                width=None,  # Plotly automatically picks the right width
                 **self._get_coloring_kwargs(ctx=coloring_ctx),
                 # Hover information
                 customdata=[[y_i] for y_i in self.y],
