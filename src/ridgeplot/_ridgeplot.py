@@ -193,6 +193,8 @@ def ridgeplot(
         (``trace_type='area'``) unless histogram binning is used, in which case
         the traces will be displayed as bar plots (``trace_type='bar'``).
 
+        .. versionadded:: 0.3.0
+
     labels : LabelsArray or ShallowLabelsArray or None
         A list of string labels for each trace. If not specified (default), the
         labels will be automatically generated as ``"Trace {n}"``, where ``n``
@@ -240,6 +242,8 @@ def ridgeplot(
     nbins : int or None
         The number of bins to use when applying histogram binning. If not
         specified (default), KDE will be used instead of histogram binning.
+
+        .. versionadded:: 0.3.0
 
     sample_weights : SampleWeightsArray or ShallowSampleWeightsArray or SampleWeights or None
         An (optional) array of KDE weights corresponding to each sample. The
