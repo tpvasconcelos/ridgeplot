@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from collections.abc import Collection
 
 
-class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
+class ColorscaleValidator(_ColorscaleValidator):
     def __init__(self) -> None:
         super().__init__("colorscale", "ridgeplot")
 
@@ -29,6 +29,7 @@ class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
         coerced = super().validate_coerce(v)
         if coerced is None:  # pragma: no cover
             self.raise_invalid_val(coerced)
+        coerced = cast(ColorScale, coerced)
         # This helps us avoid floating point errors when making
         # comparisons in our test suite. The user should not
         # be able to notice *any* difference in the output
@@ -37,12 +38,12 @@ class ColorscaleValidator(_ColorscaleValidator):  # type: ignore[misc]
 
 
 def infer_default_colorscale() -> ColorScale | Collection[Color] | str:
-    return validate_and_coerce_colorscale(
+    return validate_coerce_colorscale(
         default_plotly_template().layout.colorscale.sequential or px.colors.sequential.Viridis
     )
 
 
-def validate_and_coerce_colorscale(
+def validate_coerce_colorscale(
     colorscale: ColorScale | Collection[Color] | str | None,
 ) -> ColorScale:
     """Convert mixed colorscale representations to the canonical
@@ -55,7 +56,7 @@ def validate_and_coerce_colorscale(
 def list_all_colorscale_names() -> list[str]:
     """Get a list of all available continuous colorscale names.
 
-    .. deprecated:: 0.1.31
+    .. deprecated:: 0.2.0
        This function is deprecated and will be removed in a future version.
        Please use :func:`px.colors.named_colorscales() <plotly.express.colors.named_colorscales>`
        from Plotly Express for the same functionality. For more details, visit:

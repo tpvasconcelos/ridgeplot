@@ -36,6 +36,3 @@ matplotlib
 # Use the `pre_commit_hooks` Python package to cleanup
 # generated files as 'build-finished' Sphinx hooks
 pre_commit_hooks
-
-# TODO: revert this (https://github.com/plotly/Kaleido/issues/226)
-kaleido<0.4

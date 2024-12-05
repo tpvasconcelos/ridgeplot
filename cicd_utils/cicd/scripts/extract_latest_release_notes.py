@@ -6,6 +6,7 @@ Execution steps:
 - The output is written to the `LATEST_RELEASE_NOTES.md` file.
 - The body of this file is then used as the body of the GitHub release.
 """
+
 from __future__ import annotations
 
 from pathlib import Path

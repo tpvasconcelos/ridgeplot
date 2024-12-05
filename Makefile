@@ -94,7 +94,7 @@ clean-pyc: ## remove Python file artifacts
 .PHONY: clean-cov
 clean-cov: ## remove coverage artifacts
 	@echo "==> Removing coverage artifacts..."
-	find . \( -name 'coverage.*.xml' -o -name '.coverage.*' \) -exec rm -fr {} +
+	find . \( -name 'coverage.*.xml' -o -name 'coverage.xml' -o -name '.coverage.*' \) -exec rm -fr {} +
 	rm -fr coverage/
 
 

@@ -8,6 +8,7 @@ include *.md
 include *.toml
 include *.yml
 include *.yaml
+include *.json
 
 # Stubs
 recursive-include src py.typed *.pyi

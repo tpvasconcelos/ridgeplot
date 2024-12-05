@@ -3,13 +3,14 @@ from __future__ import annotations
 import sys
 from contextlib import contextmanager
 from datetime import datetime
+from importlib import import_module
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata  # type: ignore[no-redef]
+    import importlib_metadata  # pyright: ignore[no-redef]
 
 try:
     from cicd.compile_plotly_charts import compile_plotly_charts
@@ -206,9 +207,9 @@ extlinks_detect_hardcoded_links = True
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "packaging": ("https://packaging.pypa.io/en/latest", None),
-    "numpy": ("https://docs.scipy.org/doc/numpy/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
     "statsmodels": ("https://www.statsmodels.org/stable/", None),
     "plotly": ("https://plotly.com/python-api-reference/", None),
 }
@@ -260,12 +261,11 @@ napoleon_attr_annotations = True
 
 # Type aliases
 _TYPE_ALIASES_FULLY_QUALIFIED = {
-    # ------- ._colormodes -------------------------
-    "ridgeplot._color.interpolation.SolidColormode",
+    # ------- ._color.css_colors -------------------
+    "ridgeplot._color.css_colors.CssNamedColor",
+    # ------- ._color.interpolation ----------------
     "ridgeplot._color.interpolation.ColorscaleInterpolants",
-    # ------- ._figure_factory ---------------------
-    "ridgeplot._figure_factory.LabelsArray",
-    "ridgeplot._figure_factory.ShallowLabelsArray",
+    "ridgeplot._color.interpolation.SolidColormode",
     # ------- ._kde --------------------------------
     "ridgeplot._kde.KDEPoints",
     "ridgeplot._kde.KDEBandwidth",
@@ -275,6 +275,7 @@ _TYPE_ALIASES_FULLY_QUALIFIED = {
     # ------- ._types ------------------------------
     "ridgeplot._types.Color",
     "ridgeplot._types.ColorScale",
+    "ridgeplot._types.NormalisationOption",
     "ridgeplot._types.CollectionL1",
     "ridgeplot._types.CollectionL2",
     "ridgeplot._types.CollectionL3",
@@ -291,13 +292,32 @@ _TYPE_ALIASES_FULLY_QUALIFIED = {
     "ridgeplot._types.SamplesRow",
     "ridgeplot._types.Samples",
     "ridgeplot._types.ShallowSamples",
+    "ridgeplot._types.TraceType",
+    "ridgeplot._types.TraceTypesArray",
+    "ridgeplot._types.ShallowTraceTypesArray",
+    "ridgeplot._types.LabelsArray",
+    "ridgeplot._types.ShallowLabelsArray",
+    "ridgeplot._types.SampleWeights",
+    "ridgeplot._types.SampleWeightsArray",
+    "ridgeplot._types.ShallowSampleWeightsArray",
 }
+for fq in _TYPE_ALIASES_FULLY_QUALIFIED:
+    module_name, _, type_name = fq.rpartition(".")
+    try:
+        import_module(module_name)
+    except ImportError as e:
+        raise AssertionError(f"Type alias {fq!r} is not importable: {e}") from e
+
 _TYPE_ALIASES = {fq.split(".")[-1]: fq for fq in _TYPE_ALIASES_FULLY_QUALIFIED}
 autodoc_type_aliases = {
     **{a: a for a in _TYPE_ALIASES.values()},
     **{fq: fq for fq in _TYPE_ALIASES.values()},
 }
 napoleon_type_aliases = {a: f":data:`~{fq}`" for a, fq in _TYPE_ALIASES.items()}
+EXTRA_NAPOLEON_ALIASES = {
+    "Collection[Color]": r":data:`~collections.abc.Collection`\[:data:`~ridgeplot._types.Color`\]",
+}
+napoleon_type_aliases.update(EXTRA_NAPOLEON_ALIASES)
 
 
 # -- sphinx_remove_toctrees ------------------------------------------------------------------------
@@ -400,6 +420,6 @@ def setup(app: Sphinx) -> None:
     compile_plotly_charts()
     # app.connect("html-page-context", register_jinja_functions)
 
-    app.connect("builder-inited", lambda *_: rename_plotly_io_show())
-    app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())
-    app.connect("build-finished", lambda *_: _fix_html_charts())
+    app.connect("builder-inited", lambda *_: rename_plotly_io_show())  # pyright: ignore[reportUnknownLambdaType]
+    app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())  # pyright: ignore[reportUnknownLambdaType]
+    app.connect("build-finished", lambda *_: _fix_html_charts())  # pyright: ignore[reportUnknownLambdaType]

@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from collections.abc import Collection
+from typing import Union, cast
 
 import plotly.express as px
 import pytest
 
-if TYPE_CHECKING:
-    from collections.abc import Collection
-
-    from ridgeplot._types import Color, ColorScale
+from ridgeplot._types import Color, ColorScale
 
 VIRIDIS = (
     (0.0, "#440154"),
@@ -50,7 +48,7 @@ VALID_COLOR_SCALES = [
 def valid_colorscale(
     request: pytest.FixtureRequest,
 ) -> tuple[ColorScale | Collection[Color] | str, ColorScale]:
-    return request.param  # type: ignore[no-any-return]
+    return cast(tuple[Union[ColorScale, Collection[Color], str], ColorScale], request.param)
 
 
 INVALID_COLOR_SCALES = [
@@ -68,4 +66,4 @@ INVALID_COLOR_SCALES = [
 
 @pytest.fixture(scope="session", params=INVALID_COLOR_SCALES)
 def invalid_colorscale(request: pytest.FixtureRequest) -> ColorScale | Collection[Color] | str:
-    return request.param  # type: ignore[no-any-return]
+    return cast(Union[ColorScale, Collection[Color], str], request.param)

@@ -46,6 +46,11 @@ def test_shallow_samples() -> None:
     )  # fmt: skip
 
 
+# ==============================================================
+# ---  param: labels
+# ==============================================================
+
+
 def test_shallow_labels() -> None:
     shallow_labels = ["trace 1", "trace 2"]
     assert (
@@ -62,12 +67,41 @@ def test_y_labels_dedup() -> None:
 
 
 # ==============================================================
+# ---  param: trace_type
+# ==============================================================
+
+
+def test_shallow_trace_type() -> None:
+    assert (
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type="bar") ==
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type=["bar", "bar"]) ==
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type=[["bar"], ["bar"]])
+    )  # fmt: skip
+
+
+def test_unknown_trace_type() -> None:
+    with pytest.raises(TypeError, match="Invalid trace_type: foo"):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type="foo")  # pyright: ignore[reportArgumentType]
+
+
+# ==============================================================
+# ---  param: nbins
+# ==============================================================
+
+
+def test_nbins() -> None:
+    fig = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], nbins=3)
+    assert len(fig.data) == 2
+    assert fig.data[0]._plotly_name == "bar"
+
+
+# ==============================================================
 # ---  param: colorscale
 # ==============================================================
 
 
 def test_colorscale_coercion(
-    valid_colorscale: tuple[ColorScale | Collection[Color] | str, ColorScale]
+    valid_colorscale: tuple[ColorScale | Collection[Color] | str, ColorScale],
 ) -> None:
     colorscale, coerced = valid_colorscale
     assert ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=colorscale) == ridgeplot(
@@ -220,6 +254,14 @@ def test_deprecated_linewidth_is_not_missing() -> None:
         match="The 'linewidth' argument has been deprecated in favor of 'line_width'",
     ):
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], linewidth=0.5)
+
+
+def test_deprecated_linewidth_and_line_width_together_raises() -> None:
+    with pytest.raises(
+        ValueError,
+        match="You may not specify both the 'linewidth' and 'line_width' arguments!",
+    ):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], linewidth=0.4, line_width=0.6)
 
 
 def test_ridgeplot_colorscale_default_deprecation_warning() -> None:

@@ -161,7 +161,7 @@ def get_collection_array_shape(arr: Collection[Any]) -> tuple[int | set[int], ..
         return len(obj)
 
     shape: list[int | set[int]] = [_get_dim_length(arr)]
-    while isinstance(arr, Collection) and len(arr) > 0:
+    while len(arr) > 0:
         try:
             dim_lengths = set(map(_get_dim_length, arr))
         except TypeError:
