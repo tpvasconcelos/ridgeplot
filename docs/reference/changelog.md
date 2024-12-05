@@ -5,14 +5,23 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Features
+
+- Add support for histogram and bar traces ({gh-pr}`287`)
+
 ### Documentation
 
 - Small improvements to `ridgeplot()`'s docstring ({gh-pr}`284`)
+- Misc improvements to the API docs and the getting-started and contributing guides ({gh-pr}`287`)
 
 ### Internal
 
 - Small improvements to type hints and annotations ({gh-pr}`284`)
-- Improve type annotations and switch from mypy to stricter pyright settings ({gh-pr}`287`)
+- Introduce an internal `ridgeplot._obj` package to hold object-oriented interfaces ({gh-pr}`287`)
+
+### CI/CD
+
+- Improve type annotations and switch from mypy to pyright with stricter settings ({gh-pr}`287`)
 - Switch from `black` to the new `ruff` formatter ({gh-pr}`287`)
 
 ---
