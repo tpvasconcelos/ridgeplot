@@ -5,6 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.3.0
+------
+
 ### Features
 
 - Add support for histogram and bar traces ({gh-pr}`287`)
