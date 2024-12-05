@@ -46,6 +46,11 @@ def test_shallow_samples() -> None:
     )  # fmt: skip
 
 
+# ==============================================================
+# ---  param: labels
+# ==============================================================
+
+
 def test_shallow_labels() -> None:
     shallow_labels = ["trace 1", "trace 2"]
     assert (
@@ -62,12 +67,41 @@ def test_y_labels_dedup() -> None:
 
 
 # ==============================================================
+# ---  param: trace_type
+# ==============================================================
+
+
+def test_shallow_trace_type() -> None:
+    assert (
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type="bar") ==
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type=["bar", "bar"]) ==
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type=[["bar"], ["bar"]])
+    )  # fmt: skip
+
+
+def test_unknown_trace_type() -> None:
+    with pytest.raises(TypeError, match="Invalid trace_type: foo"):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type="foo")  # pyright: ignore[reportArgumentType]
+
+
+# ==============================================================
+# ---  param: nbins
+# ==============================================================
+
+
+def test_nbins() -> None:
+    fig = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], nbins=3)
+    assert len(fig.data) == 2
+    assert fig.data[0]._plotly_name == "bar"
+
+
+# ==============================================================
 # ---  param: colorscale
 # ==============================================================
 
 
 def test_colorscale_coercion(
-    valid_colorscale: tuple[ColorScale | Collection[Color] | str, ColorScale]
+    valid_colorscale: tuple[ColorScale | Collection[Color] | str, ColorScale],
 ) -> None:
     colorscale, coerced = valid_colorscale
     assert ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=colorscale) == ridgeplot(

@@ -8,7 +8,7 @@ import pytest
 
 from ridgeplot._kde import (
     KDEPoints,
-    _validate_densities,
+    _validate_densities,  # pyright: ignore[reportPrivateUsage]
     estimate_densities,
     estimate_density_trace,
 )
@@ -126,7 +126,8 @@ def test__validate_densities() -> None:
     inputs."""
     x = np.array([0, 1, 2, 3, 4, 5, 6])
     y = np.array([0.1, 0.2, 0.3, 0.4, 0.3, 0.2, 0.1])
-    _validate_densities(x=x, y=y, kernel="doesn't matter")
+    y_valid = _validate_densities(x=x, y=y, kernel="doesn't matter")
+    np.testing.assert_array_equal(y_valid, y)
 
 
 @pytest.mark.parametrize(

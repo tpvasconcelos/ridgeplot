@@ -9,16 +9,6 @@ API Reference
    ridgeplot.ridgeplot
 
 
-Color utilities
-===============
-
-.. autosummary::
-   :toctree: public/
-   :nosignatures:
-
-   ridgeplot.list_all_colorscale_names
-
-
 Data loading utilities
 ======================
 

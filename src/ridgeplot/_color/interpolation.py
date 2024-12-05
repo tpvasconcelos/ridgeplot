@@ -1,28 +1,25 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal, Protocol, TypedDict, overload
+from typing import TYPE_CHECKING, Literal, Protocol
 
-import plotly.graph_objs as go
-
-from ridgeplot._color.colorscale import validate_and_coerce_colorscale
 from ridgeplot._color.utils import apply_alpha, round_color, to_rgb, unpack_rgb
-from ridgeplot._types import CollectionL2, Color, ColorScale
+from ridgeplot._types import CollectionL2, ColorScale
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
 from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
-    from collections.abc import Collection, Generator
+    from collections.abc import Generator
 
     from ridgeplot._types import Densities, Numeric
 
 
 # ==============================================================
-# --- Common interpolation utilities
+# --- Interpolation utilities
 # ==============================================================
 
 
-def _interpolate_color(colorscale: ColorScale, p: float) -> str:
+def interpolate_color(colorscale: ColorScale, p: float) -> str:
     """Get a color from a colorscale at a given interpolation point ``p``.
 
     This function always returns a color in the RGB format, even if the input
@@ -59,6 +56,51 @@ def _interpolate_color(colorscale: ColorScale, p: float) -> str:
     return round_color(rgb, 5)
 
 
+def slice_colorscale(
+    colorscale: ColorScale,
+    p_lower: float,
+    p_upper: float,
+) -> ColorScale:
+    """Slice a continuous colorscale between two intermediate points.
+
+    Parameters
+    ----------
+    colorscale
+        The continuous colorscale to slice.
+    p_lower
+        The lower bound of the slicing interval. Must be >= 0 and < p_upper.
+    p_upper
+        The upper bound of the slicing interval. Must be <= 1 and > p_lower.
+
+    Returns
+    -------
+    ColorScale
+        The sliced colorscale.
+
+    Raises
+    ------
+    ValueError
+        If ``p_lower`` is >= ``p_upper``, or if either ``p_lower`` or ``p_upper``
+        are outside the range [0, 1].
+    """
+    if p_lower >= p_upper:
+        raise ValueError("p_lower should be less than p_upper.")
+    if p_lower < 0 or p_upper > 1:
+        raise ValueError("p_lower should be >= 0 and p_upper should be <= 1.")
+    if p_lower == 0 and p_upper == 1:
+        return colorscale
+
+    return (
+        (0.0, interpolate_color(colorscale, p=p_lower)),
+        *[
+            (normalise_min_max(v, min_=p_lower, max_=p_upper), c)
+            for v, c in colorscale
+            if p_lower < v < p_upper
+        ],
+        (1.0, interpolate_color(colorscale, p=p_upper)),
+    )
+
+
 # ==============================================================
 # --- Solid color modes
 # ==============================================================
@@ -79,6 +121,8 @@ Example
 
 @dataclass
 class InterpolationContext:
+    """Context information needed by the interpolation functions."""
+
     densities: Densities
     n_rows: int
     n_traces: int
@@ -87,7 +131,7 @@ class InterpolationContext:
 
     @classmethod
     def from_densities(cls, densities: Densities) -> InterpolationContext:
-        x_min, x_max, _, _ = map(float, get_xy_extrema(densities=densities))
+        x_min, x_max, _, _ = get_xy_extrema(densities=densities)
         return cls(
             densities=densities,
             n_rows=len(densities),
@@ -160,8 +204,8 @@ def _interpolate_mean_means(ctx: InterpolationContext) -> ColorscaleInterpolants
             x, y = zip(*trace)
             means_row.append(sum(_mul(x, y)) / sum(y))
         means.append(means_row)
-    min_mean = min([min(row) for row in means])
-    max_mean = max([max(row) for row in means])
+    min_mean = min(min(row) for row in means)
+    max_mean = max(max(row) for row in means)
     return [
         [normalise_min_max(mean, min_=min_mean, max_=max_mean) for mean in row] for row in means
     ]
@@ -185,14 +229,16 @@ SOLID_COLORMODE_MAPS: dict[SolidColormode, InterpolationFunc] = {
 }
 
 
-def _compute_solid_colors(
+def compute_solid_colors(
     colorscale: ColorScale,
     colormode: SolidColormode,
     opacity: float | None,
     interpolation_ctx: InterpolationContext,
 ) -> Generator[Generator[str]]:
-    def _get_fill_color(p: float) -> str:
-        fill_color = _interpolate_color(colorscale, p=p)
+    """Compute the solid colors for all traces in the plot."""
+
+    def get_fill_color(p: float) -> str:
+        fill_color = interpolate_color(colorscale, p=p)
         if opacity is not None:
             # Sometimes the interpolation logic can drop the alpha channel
             fill_color = apply_alpha(fill_color, alpha=float(opacity))
@@ -200,195 +246,4 @@ def _compute_solid_colors(
 
     interpolate_func = SOLID_COLORMODE_MAPS[colormode]
     interpolants = interpolate_func(ctx=interpolation_ctx)
-    return ((_get_fill_color(p) for p in row) for row in interpolants)
-
-
-class SolidColorsDict(TypedDict):
-    line_color: Color
-    fillcolor: str
-
-
-def _compute_solid_trace_colors(
-    colorscale: ColorScale,
-    colormode: SolidColormode,
-    line_color: Color | Literal["fill-color"],
-    opacity: float | None,
-    interpolation_ctx: InterpolationContext,
-) -> Generator[Generator[SolidColorsDict]]:
-    return (
-        (
-            dict(
-                line_color=fill_color if line_color == "fill-color" else line_color,
-                fillcolor=fill_color,
-            )
-            for fill_color in row
-        )
-        for row in _compute_solid_colors(
-            colorscale=colorscale,
-            colormode=colormode,
-            opacity=opacity,
-            interpolation_ctx=interpolation_ctx,
-        )
-    )
-
-
-# ==============================================================
-# --- `fillgradient` color mode
-# ==============================================================
-
-
-def _slice_colorscale(
-    colorscale: ColorScale,
-    p_lower: float,
-    p_upper: float,
-) -> ColorScale:
-    """Slice a continuous colorscale between two intermediate points.
-
-    Parameters
-    ----------
-    colorscale
-        The continuous colorscale to slice.
-    p_lower
-        The lower bound of the slicing interval. Must be >= 0 and < p_upper.
-    p_upper
-        The upper bound of the slicing interval. Must be <= 1 and > p_lower.
-
-    Returns
-    -------
-    ColorScale
-        The sliced colorscale.
-
-    Raises
-    ------
-    ValueError
-        If ``p_lower`` is >= ``p_upper``, or if either ``p_lower`` or ``p_upper``
-        are outside the range [0, 1].
-    """
-    if p_lower >= p_upper:
-        raise ValueError("p_lower should be less than p_upper.")
-    if p_lower < 0 or p_upper > 1:
-        raise ValueError("p_lower should be >= 0 and p_upper should be <= 1.")
-    if p_lower == 0 and p_upper == 1:
-        return colorscale
-
-    return (
-        (0.0, _interpolate_color(colorscale, p=p_lower)),
-        *[
-            (normalise_min_max(v, min_=p_lower, max_=p_upper), c)
-            for v, c in colorscale
-            if p_lower < v < p_upper
-        ],
-        (1.0, _interpolate_color(colorscale, p=p_upper)),
-    )
-
-
-class FillgradientColorsDict(TypedDict):
-    line_color: str
-    fillgradient: go.scatter.Fillgradient
-
-
-def _compute_fillgradient_trace_colors(
-    colorscale: ColorScale,
-    line_color: Color | Literal["fill-color"],
-    opacity: float | None,
-    interpolation_ctx: InterpolationContext,
-) -> Generator[Generator[FillgradientColorsDict]]:
-    solid_line_colors: Generator[Generator[Color]]
-    if line_color == "fill-color":
-        solid_line_colors = _compute_solid_colors(
-            colorscale=colorscale,
-            colormode="mean-minmax",
-            opacity=opacity,
-            interpolation_ctx=interpolation_ctx,
-        )
-    else:
-        solid_line_colors = ((line_color for _ in row) for row in interpolation_ctx.densities)
-    if opacity is not None:
-        # HACK: Plotly doesn't yet support setting the fill opacity
-        #       for traces with `fillgradient`. As a workaround, we
-        #       can override the color-scale's color values and add
-        #       the corresponding alpha channel to all colors.
-        colorscale = [(v, apply_alpha(c, float(opacity))) for v, c in colorscale]
-    return (
-        (
-            dict(
-                line_color=line_color,
-                fillgradient=go.scatter.Fillgradient(
-                    colorscale=_slice_colorscale(
-                        colorscale=colorscale,
-                        p_lower=normalise_min_max(
-                            min(next(zip(*trace))),
-                            min_=interpolation_ctx.x_min,
-                            max_=interpolation_ctx.x_max,
-                        ),
-                        p_upper=normalise_min_max(
-                            max(next(zip(*trace))),
-                            min_=interpolation_ctx.x_min,
-                            max_=interpolation_ctx.x_max,
-                        ),
-                    ),
-                    type="horizontal",
-                ),
-            )
-            for line_color, trace in zip_strict(line_colors_row, densities_row)
-        )
-        for line_colors_row, densities_row in zip_strict(
-            solid_line_colors, interpolation_ctx.densities
-        )
-    )
-
-
-# ==============================================================
-# --- Main public function
-# ==============================================================
-
-
-@overload
-def compute_trace_colors(
-    colorscale: ColorScale | Collection[Color] | str | None,
-    colormode: Literal["fillgradient"],
-    line_color: Color | Literal["fill-color"],
-    opacity: float | None,
-    interpolation_ctx: InterpolationContext,
-) -> Generator[Generator[FillgradientColorsDict]]: ...
-
-
-@overload
-def compute_trace_colors(
-    colorscale: ColorScale | Collection[Color] | str | None,
-    colormode: SolidColormode,
-    line_color: Color | Literal["fill-color"],
-    opacity: float | None,
-    interpolation_ctx: InterpolationContext,
-) -> Generator[Generator[SolidColorsDict]]: ...
-
-
-def compute_trace_colors(
-    colorscale: ColorScale | Collection[Color] | str | None,
-    colormode: Literal["fillgradient"] | SolidColormode,
-    line_color: Color | Literal["fill-color"],
-    opacity: float | None,
-    interpolation_ctx: InterpolationContext,
-) -> Generator[Generator[FillgradientColorsDict | SolidColorsDict]]:
-    colorscale = validate_and_coerce_colorscale(colorscale)
-
-    valid_colormodes = ("fillgradient", *SOLID_COLORMODE_MAPS)
-    if colormode not in valid_colormodes:
-        raise ValueError(
-            f"The colormode argument should be one of {valid_colormodes}, got {colormode} instead."
-        )
-
-    if colormode == "fillgradient":
-        return _compute_fillgradient_trace_colors(
-            colorscale=colorscale,
-            line_color=line_color,
-            opacity=opacity,
-            interpolation_ctx=interpolation_ctx,
-        )
-    return _compute_solid_trace_colors(
-        colorscale=colorscale,
-        colormode=colormode,
-        line_color=line_color,
-        opacity=opacity,
-        interpolation_ctx=interpolation_ctx,
-    )
+    return ((get_fill_color(p) for p in row) for row in interpolants)

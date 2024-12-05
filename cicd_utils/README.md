@@ -16,6 +16,7 @@ For this reason, the `cicd_utils` directory needs to be made explicitly discover
 Static analysis tools will also we need to be made aware of this package:
 
 - For mypy, we can add it to the `files` option in `mypy.ini` to help with import discovery.
+- For pyright, we can add it to the `extraPaths` option in `pyrightconfig.json`.
 - For ruff's _isort_-implementation, we also added it to the `known-first-party` list (see `ruff.toml`)
 
 ### The `cicd/scripts` directory
