@@ -297,12 +297,12 @@ Example
 """
 
 
-def is_xy_coord(x: Any) -> bool:
+def is_xy_coord(x: Any) -> TypeIs[XYCoordinate[Numeric]]:
     """Type guard for :data:`XYCoordinate`."""
     return isinstance(x, tuple) and len(x) == 2 and all(map(_is_numeric, x))
 
 
-def is_density_trace(x: Any) -> bool:
+def is_density_trace(x: Any) -> TypeIs[DensityTrace]:
     """Type guard for :data:`DensityTrace`."""
     return isinstance(x, Collection) and all(map(is_xy_coord, x))
 
