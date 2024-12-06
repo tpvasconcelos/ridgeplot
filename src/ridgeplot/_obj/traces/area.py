@@ -1,19 +1,14 @@
 from __future__ import annotations
 
-import sys
-from typing import Any, ClassVar
+from typing import ClassVar
 
 from plotly import graph_objects as go
+from typing_extensions import Any, override
 
 from ridgeplot._color.interpolation import slice_colorscale
 from ridgeplot._color.utils import apply_alpha
 from ridgeplot._obj.traces.base import DEFAULT_HOVERTEMPLATE, ColoringContext, RidgeplotTrace
 from ridgeplot._utils import normalise_min_max
-
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override
 
 
 class AreaTrace(RidgeplotTrace):

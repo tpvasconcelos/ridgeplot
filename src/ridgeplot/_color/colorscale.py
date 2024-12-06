@@ -1,19 +1,14 @@
 from __future__ import annotations
 
-import sys
 import warnings
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, cast
 
 import plotly.express as px
 from _plotly_utils.basevalidators import ColorscaleValidator as _ColorscaleValidator
+from typing_extensions import Any, override
 
 from ridgeplot._color.utils import default_plotly_template
 from ridgeplot._types import Color, ColorScale
-
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override
 
 if TYPE_CHECKING:
     from collections.abc import Collection

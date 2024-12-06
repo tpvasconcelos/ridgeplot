@@ -9,7 +9,7 @@ else:
     from importlib_resources import as_file, files
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from typing_extensions import Literal
 
 import pandas as pd
 

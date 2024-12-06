@@ -1,19 +1,9 @@
 from __future__ import annotations
 
-import sys
 from enum import Enum
-from typing import Final, Literal
+from typing import Final
 
-if sys.version_info >= (3, 10):
-    from typing import TypeAlias
-else:
-    from typing_extensions import TypeAlias
-
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override
-
+from typing_extensions import Literal, TypeAlias, override
 
 if "_is_loaded" in globals():
     raise RuntimeError("Reloading ridgeplot._missing is not allowed")
