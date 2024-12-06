@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from typing import Callable
+from typing import TYPE_CHECKING
 
 import plotly.graph_objects as go
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def tighten_margins(fig: go.Figure, px: int = 0) -> go.Figure:

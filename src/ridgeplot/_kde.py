@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import sys
-from collections.abc import Collection
+from collections.abc import Callable, Collection
 from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Union, cast
+from typing import TYPE_CHECKING, Any, Union, cast
 
 import numpy as np
 import numpy.typing as npt

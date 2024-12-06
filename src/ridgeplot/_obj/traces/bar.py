@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from typing import Any, ClassVar
 
 from plotly import graph_objects as go
@@ -7,6 +8,11 @@ from plotly import graph_objects as go
 from ridgeplot._color.interpolation import interpolate_color
 from ridgeplot._obj.traces.base import DEFAULT_HOVERTEMPLATE, ColoringContext, RidgeplotTrace
 from ridgeplot._utils import normalise_min_max
+
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
 
 
 class BarTrace(RidgeplotTrace):
@@ -33,6 +39,7 @@ class BarTrace(RidgeplotTrace):
             )
         return color_kwargs
 
+    @override
     def draw(self, fig: go.Figure, coloring_ctx: ColoringContext) -> go.Figure:
         fig.add_trace(
             go.Bar(

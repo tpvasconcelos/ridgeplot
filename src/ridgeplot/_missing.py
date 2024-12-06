@@ -9,6 +9,11 @@ if sys.version_info >= (3, 10):
 else:
     from typing_extensions import TypeAlias
 
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
+
 
 if "_is_loaded" in globals():
     raise RuntimeError("Reloading ridgeplot._missing is not allowed")
@@ -44,6 +49,7 @@ class _Missing(Enum):
 
     MISSING = "MISSING"
 
+    @override
     def __repr__(self) -> str:
         return "<MISSING>"
 

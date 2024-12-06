@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 import warnings
 from typing import TYPE_CHECKING, Any, cast
 
@@ -8,6 +9,11 @@ from _plotly_utils.basevalidators import ColorscaleValidator as _ColorscaleValid
 
 from ridgeplot._color.utils import default_plotly_template
 from ridgeplot._types import Color, ColorScale
+
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
 
 if TYPE_CHECKING:
     from collections.abc import Collection
@@ -18,6 +24,7 @@ class ColorscaleValidator(_ColorscaleValidator):
         super().__init__("colorscale", "ridgeplot")
 
     @property
+    @override
     def named_colorscales(self) -> dict[str, list[str]]:
         named_colorscales = cast(dict[str, list[str]], super().named_colorscales)
         if "default" not in named_colorscales:
@@ -25,6 +32,7 @@ class ColorscaleValidator(_ColorscaleValidator):
             named_colorscales["default"] = px.colors.DEFAULT_PLOTLY_COLORS
         return named_colorscales
 
+    @override
     def validate_coerce(self, v: Any) -> ColorScale:
         coerced = super().validate_coerce(v)
         if coerced is None:  # pragma: no cover
