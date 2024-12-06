@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata  # pyright: ignore[no-redef]
+    import importlib_metadata
 
 try:
     from cicd.compile_plotly_charts import compile_plotly_charts

@@ -1,19 +1,14 @@
 from __future__ import annotations
 
-import sys
-from collections.abc import Collection
+from collections.abc import Callable, Collection
 from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Union, cast
+from typing import TYPE_CHECKING, Union, cast
 
 import numpy as np
 import numpy.typing as npt
 import statsmodels.api as sm
 from statsmodels.sandbox.nonparametric.kernels import CustomKernel as StatsmodelsKernel
-
-if sys.version_info >= (3, 13):
-    from typing import TypeIs
-else:
-    from typing_extensions import TypeIs
+from typing_extensions import Any, TypeIs
 
 from ridgeplot._types import (
     CollectionL1,

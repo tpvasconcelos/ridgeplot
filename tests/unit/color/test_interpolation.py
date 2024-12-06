@@ -49,7 +49,7 @@ def test_interpolate_color_p_not_in_scale(viridis_colorscale: ColorScale) -> Non
 @pytest.mark.parametrize("p", [-10.0, -1.3, 1.9, 100.0])
 def test_interpolate_color_fails_for_p_out_of_bounds(p: float) -> None:
     with pytest.raises(ValueError, match="should be a float value between 0 and 1"):
-        interpolate_color(colorscale=..., p=p)  # pyright: ignore[reportArgumentType]
+        interpolate_color(colorscale=..., p=p)
 
 
 # ==============================================================

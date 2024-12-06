@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal, cast
+from typing import TYPE_CHECKING, cast
 
 from plotly import graph_objects as go
+from typing_extensions import Literal
 
 from ridgeplot._color.colorscale import validate_coerce_colorscale
 from ridgeplot._color.interpolation import (

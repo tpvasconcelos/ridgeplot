@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from pathlib import Path
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 from minify_html import minify
 from plotly.offline import get_plotlyjs
@@ -18,6 +18,8 @@ from plotly.offline import get_plotlyjs
 from ridgeplot_examples import ALL_EXAMPLES, tighten_margins
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import plotly.graph_objects as go
 
 

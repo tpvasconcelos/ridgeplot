@@ -1,9 +1,12 @@
+// https://microsoft.github.io/pyright/#/configuration
 {
   "include": [
+    "cicd_utils",
+    "docs",
+    "misc",
     "src",
     "tests",
-    "docs",
-    "cicd_utils"
+    "*.py"
   ],
   "exclude": [
     "docs/build",
@@ -12,7 +15,21 @@
   "extraPaths": [
     "cicd_utils"
   ],
+  "pythonVersion": "3.9",
+  "pythonPlatform": "All",
   "typeCheckingMode": "strict",
+  // stricter settings
+  "deprecateTypingAliases": true,
+  "reportMissingModuleSource": "error",
+  "reportCallInDefaultInitializer": "error",
+  "reportImplicitOverride": "error",
+  "reportImportCycles": "error",
+  "reportMissingSuperCall": "warning",
+  "reportPropertyTypeMismatch": "error",
+  "reportShadowedImports": "error",
+  "reportUninitializedInstanceVariable": "error",
+  "reportUnnecessaryTypeIgnoreComment": "error",
+  // turn off some of the strictest settings
   "reportMissingTypeStubs": "none",
   "reportUnknownMemberType": "none",
   "reportUnknownArgumentType": "none",

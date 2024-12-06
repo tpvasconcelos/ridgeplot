@@ -16,9 +16,9 @@ from ridgeplot._utils import normalise_densities
 
 if TYPE_CHECKING:
     from collections.abc import Collection
-    from typing import Literal
 
     import plotly.graph_objects as go
+    from typing_extensions import Literal
 
     from ridgeplot._color.interpolation import SolidColormode
     from ridgeplot._kde import (

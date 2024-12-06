@@ -40,7 +40,9 @@ from __future__ import annotations
 import functools
 import sys
 from itertools import zip_longest
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+
+from typing_extensions import Any
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
