@@ -28,6 +28,21 @@ from typing_extensions import Any, Literal, TypeIs, TypeVar
 # ...     )
 
 
+_T = TypeVar("_T")
+
+
+# ========================================================
+# ---  `is_type` implementation
+# ========================================================
+
+
+_TYPEIS_REGISTRY = {}
+
+
+def is_type(obj: Any, tp: _T) -> TypeIs[_T]:
+    raise NotImplementedError(f"is_type not defined for {tp}")
+
+
 # ========================================================
 # ---  Miscellaneous types
 # ========================================================
@@ -68,8 +83,6 @@ details."""
 # ========================================================
 # ---  Base nested Collection types (ragged arrays)
 # ========================================================
-
-_T = TypeVar("_T")
 
 CollectionL1 = Collection[_T]
 """A :data:`~typing.TypeAlias` for a 1-level-deep :class:`~typing.Collection`.
@@ -118,6 +131,7 @@ NumericT = TypeVar("NumericT", bound=Numeric)
 """A :class:`~typing.TypeVar` variable bound to :data:`Numeric` types."""
 
 
+@is_type.register(Numeric)
 def _is_numeric(obj: Any) -> TypeIs[Numeric]:
     """Type guard for :data:`Numeric`.
 
