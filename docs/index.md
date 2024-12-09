@@ -65,6 +65,7 @@ hidden: true
 ---
 getting_started/installation
 getting_started/getting_started
+examples_gallery_out/index.rst
 ```
 
 ```{toctree}
