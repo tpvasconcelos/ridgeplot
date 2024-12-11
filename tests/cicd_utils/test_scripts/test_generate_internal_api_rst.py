@@ -8,15 +8,11 @@ from pathlib import Path
 
 import pytest
 
-# Import script directly
+from generate_internal_api_rst import generate_module_rst, organize_modules
+
+# Mueve esta línea después de las importaciones
 SCRIPT_PATH = Path(__file__).parents[3] / "cicd_utils/cicd/scripts/generate_internal_api_rst.py"
 sys.path.append(str(SCRIPT_PATH.parent))
-
-from generate_internal_api_rst import (
-    generate_module_rst,
-    organize_modules,
-)
-
 
 def test_organize_modules() -> None:
     """Test basic module organization."""

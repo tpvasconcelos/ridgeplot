@@ -21,9 +21,7 @@ PATH_ROOT_DIR = Path(__file__).parents[3]
 PATH_TO_SRC = PATH_ROOT_DIR / "src/ridgeplot"
 PATH_TO_DOCS = PATH_ROOT_DIR / "docs/api/internal"
 
-# Descriptions for all modules
 MODULE_DESCRIPTIONS = {
-    # Main modules
     "ridgeplot": "Main ridgeline plotting module.",
     "ridgeplot._ridgeplot": "Core implementation of ridgeline plots.",
     "ridgeplot._figure_factory": "Factory functions for creating ridgeline plots.",
@@ -33,22 +31,16 @@ MODULE_DESCRIPTIONS = {
     "ridgeplot._utils": "General utility functions.",
     "ridgeplot._missing": "Missing value handling utilities.",
     "ridgeplot._version": "Version information.",
-    
-    # Color module and submodules
     "ridgeplot._color": "Color management and utilities.",
     "ridgeplot._color.colorscale": "Continuous colorscale generation and handling.",
     "ridgeplot._color.css_colors": "Standard CSS color definitions and mappings.",
     "ridgeplot._color.interpolation": "Color interpolation and gradient utilities.",
     "ridgeplot._color.utils": "Color manipulation and conversion functions.",
-    
-    # Object module and submodules
     "ridgeplot._obj": "Object-oriented implementations.",
     "ridgeplot._obj.traces": "Trace implementations for different plot types.",
     "ridgeplot._obj.traces.area": "Area trace for density visualizations.",
     "ridgeplot._obj.traces.bar": "Bar trace for histogram visualizations.",
     "ridgeplot._obj.traces.base": "Base classes for trace implementations.",
-    
-    # Vendor modules
     "ridgeplot._vendor": "Third-party vendored utilities.",
     "ridgeplot._vendor.more_itertools": "Additional iteration utilities.",
 }
@@ -163,21 +155,16 @@ def clean_directory(path: Path) -> None:
 
 def main() -> None:
     """Generate RST files for all internal modules."""
-    # Clean up existing directories
     for dir_name in ['color', 'obj', 'vendor', '_color', '_obj', '_vendor']:
         dir_path = PATH_TO_DOCS / dir_name
         if dir_path.exists():
             clean_directory(dir_path)
             dir_path.rmdir()
-            
-    # Clean up RST files in root
+
     for rst_file in PATH_TO_DOCS.glob('*.rst'):
         rst_file.unlink()
     
-    # Create output directory
     PATH_TO_DOCS.mkdir(parents=True, exist_ok=True)
-    
-    # Generate new files
     modules = [name for name, _ in find_internal_modules(PATH_TO_SRC)]
     hierarchy = organize_modules(modules)
     
