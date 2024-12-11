@@ -45,23 +45,24 @@ MODULE_DESCRIPTIONS = {
     "ridgeplot._vendor.more_itertools": "Additional iteration utilities.",
 }
 
+
 def find_internal_modules(base_path: Path) -> Iterator[tuple[str, Path]]:
     """Find all internal modules and their paths."""
     for item in base_path.rglob("*.py"):
         if item.name.startswith("__"):
             continue
-            
+
         rel_path = item.relative_to(base_path)
         mod_parts = list(rel_path.parent.parts)
         if rel_path.name != "__init__.py":
             mod_parts.append(rel_path.stem)
-            
-        if not any(part.startswith("_") and not part.startswith("__") 
-                  for part in mod_parts):
+
+        if not any(part.startswith("_") and not part.startswith("__") for part in mod_parts):
             continue
-            
+
         module_name = ".".join(mod_parts)
         yield module_name, item
+
 
 def get_module_description(full_module_name: str) -> str:
     """Get the module description."""
@@ -71,17 +72,15 @@ def get_module_description(full_module_name: str) -> str:
             return module.__doc__.strip().split("\n")[0]
     except ImportError:
         pass
-        
-    return MODULE_DESCRIPTIONS.get(
-        full_module_name, 
-        "Internal module utilities."
-    )
+
+    return MODULE_DESCRIPTIONS.get(full_module_name, "Internal module utilities.")
+
 
 def generate_module_rst(module_name: str, submodules: list[str] | None = None) -> str:
     """Generate RST content for a module."""
     full_module_name = f"ridgeplot.{module_name}"
     description = get_module_description(full_module_name)
-    
+
     content = [
         full_module_name,
         "=" * len(full_module_name),
@@ -89,30 +88,29 @@ def generate_module_rst(module_name: str, submodules: list[str] | None = None) -
         description,
         "",
     ]
-    
+
     if submodules:
-        content.extend([
-            ".. toctree::",
-            "   :maxdepth: 1",
-            "",
-        ])
+        content.extend(
+            [
+                ".. toctree::",
+                "   :maxdepth: 1",
+                "",
+            ]
+        )
         for submod in sorted(submodules):
             rel_path = submod.replace(module_name + ".", "")
             content.append(f"   {rel_path}")
         content.append("")
-    
-    content.extend([
-        f".. automodule:: {full_module_name}",
-        "   :private-members:",
-        ""
-    ])
-    
+
+    content.extend([f".. automodule:: {full_module_name}", "   :private-members:", ""])
+
     return "\n".join(content)
+
 
 def organize_modules(modules: list[str]) -> dict[str, list[str]]:
     """Organize modules into a hierarchical structure."""
     hierarchy = defaultdict(list)
-    
+
     for module in modules:
         parts = module.split(".")
         if len(parts) > 1:
@@ -121,16 +119,17 @@ def organize_modules(modules: list[str]) -> dict[str, list[str]]:
         else:
             clean_name = module.lstrip("_")
             hierarchy[clean_name] = []
-            
+
     return dict(hierarchy)
+
 
 def write_rst_file(output_dir: Path, module_name: str, content: str) -> None:
     """Write RST content to file."""
     output_dir.mkdir(parents=True, exist_ok=True)
-    
+
     clean_name = module_name.lstrip("_")
     parts = clean_name.split(".")
-    
+
     if len(parts) > 1:
         *dir_parts, filename = parts
         current_dir = output_dir
@@ -140,41 +139,44 @@ def write_rst_file(output_dir: Path, module_name: str, content: str) -> None:
         filepath = current_dir / f"{filename}.rst"
     else:
         filepath = output_dir / f"{clean_name}.rst"
-    
+
     filepath.write_text(content)
     print(f"Generated {filepath.relative_to(PATH_TO_DOCS)}")
+
 
 def clean_directory(path: Path) -> None:
     """Clean directory recursively."""
     if path.exists():
-        for item in sorted(path.glob('**/*'), reverse=True):
+        for item in sorted(path.glob("**/*"), reverse=True):
             if item.is_file():
                 item.unlink()
             elif item.is_dir():
                 item.rmdir()
 
+
 def main() -> None:
     """Generate RST files for all internal modules."""
-    for dir_name in ['color', 'obj', 'vendor', '_color', '_obj', '_vendor']:
+    for dir_name in ["color", "obj", "vendor", "_color", "_obj", "_vendor"]:
         dir_path = PATH_TO_DOCS / dir_name
         if dir_path.exists():
             clean_directory(dir_path)
             dir_path.rmdir()
 
-    for rst_file in PATH_TO_DOCS.glob('*.rst'):
+    for rst_file in PATH_TO_DOCS.glob("*.rst"):
         rst_file.unlink()
-    
+
     PATH_TO_DOCS.mkdir(parents=True, exist_ok=True)
     modules = [name for name, _ in find_internal_modules(PATH_TO_SRC)]
     hierarchy = organize_modules(modules)
-    
+
     for module_name, submodules in hierarchy.items():
         content = generate_module_rst(module_name, submodules)
         write_rst_file(PATH_TO_DOCS, module_name, content)
-        
+
         for submod in submodules:
             subcontent = generate_module_rst(submod)
             write_rst_file(PATH_TO_DOCS, submod, subcontent)
+
 
 if __name__ == "__main__":
     main()
