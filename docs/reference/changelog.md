@@ -9,6 +9,10 @@ Unreleased changes
 
 - Improve type annotations and use stricter pyright settings ({gh-pr}`291`)
 
+### Documentation
+
+- Added automatic RST file generation for internal API documentation ({gh-pr}`293`)
+
 ---
 
 0.3.0
