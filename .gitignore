@@ -2,8 +2,8 @@
 #  Project specific
 # ============================================================================
 
-# add custom entries here...
-
+# Ignore new .rst files generated in docs/api/internal
+docs/api/internal/
 
 # ============================================================================
 #  Based on https://github.com/github/gitignore
