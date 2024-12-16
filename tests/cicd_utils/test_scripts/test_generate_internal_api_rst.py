@@ -12,6 +12,7 @@ from cicd.scripts.generate_internal_api_rst import (
     organize_modules,
 )
 
+
 def test_organize_modules() -> None:
     """Test basic module organization."""
     modules = ["_color.utils", "_color.css_colors", "_hist", "_kde", "_color.interpolation"]

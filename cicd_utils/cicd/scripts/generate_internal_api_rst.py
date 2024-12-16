@@ -45,6 +45,7 @@ MODULE_DESCRIPTIONS = {
     "ridgeplot._vendor.more_itertools": "Additional iteration utilities.",
 }
 
+
 def find_internal_modules(base_path: Path) -> Iterator[tuple[str, Path]]:
     """Find all internal modules and their paths."""
     for item in base_path.rglob("*.py"):
@@ -62,6 +63,7 @@ def find_internal_modules(base_path: Path) -> Iterator[tuple[str, Path]]:
         module_name = ".".join(mod_parts)
         yield module_name, item
 
+
 def get_module_description(full_module_name: str) -> str:
     """Get the module description."""
     try:
@@ -72,6 +74,7 @@ def get_module_description(full_module_name: str) -> str:
         pass
 
     return MODULE_DESCRIPTIONS.get(full_module_name, "Internal module utilities.")
+
 
 def generate_module_rst(module_name: str, submodules: list[str] | None = None) -> str:
     """Generate RST content for a module."""
@@ -103,6 +106,7 @@ def generate_module_rst(module_name: str, submodules: list[str] | None = None) -
 
     return "\n".join(content)
 
+
 def organize_modules(modules: list[str]) -> dict[str, list[str]]:
     """Organize modules into a hierarchical structure."""
     hierarchy = defaultdict(list)
@@ -114,6 +118,7 @@ def organize_modules(modules: list[str]) -> dict[str, list[str]]:
             hierarchy[parent].append(module)
 
     return dict(hierarchy)
+
 
 def write_rst_file(output_dir: Path, module_name: str, content: str) -> None:
     """Write RST content to file."""
@@ -133,6 +138,7 @@ def write_rst_file(output_dir: Path, module_name: str, content: str) -> None:
     filepath.write_text(content)
     print(f"Generated {filepath.relative_to(PATH_TO_DOCS)}")
 
+
 def clean_directory(path: Path) -> None:
     """Clean directory recursively."""
     if path.exists():
@@ -141,6 +147,7 @@ def clean_directory(path: Path) -> None:
                 item.unlink()
             elif item.is_dir():
                 item.rmdir()
+
 
 def main() -> None:
     """Generate RST files for all internal modules."""
@@ -159,6 +166,7 @@ def main() -> None:
     for module_name in modules:
         content = generate_module_rst(module_name)
         write_rst_file(PATH_TO_DOCS, module_name, content)
+
 
 if __name__ == "__main__":
     main()
