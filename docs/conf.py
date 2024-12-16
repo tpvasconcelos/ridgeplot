@@ -14,12 +14,14 @@ except ImportError:
 
 try:
     from cicd.compile_plotly_charts import compile_plotly_charts
+    from cicd.generate_internal_api_rst import main as generate_internal_api_rst
 except ImportError:
     # When this script is run from the readthedocs build server,
     # the `cicd` package will not be available because
     # the `cicd_utils` dir is not in the PYTHONPATH.
     sys.path.append((Path(__file__).parents[1] / "cicd_utils").resolve().as_posix())
     from cicd.compile_plotly_charts import compile_plotly_charts
+    from cicd.generate_internal_api_rst import main as generate_internal_api_rst
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -389,6 +391,7 @@ def _fix_html_charts() -> None:
 
 def setup(app: Sphinx) -> None:
     compile_plotly_charts()
+    generate_internal_api_rst()
     # app.connect("html-page-context", register_jinja_functions)
 
     app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())  # pyright: ignore[reportUnknownLambdaType]
