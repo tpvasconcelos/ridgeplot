@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
-PATH_ROOT_DIR = Path(__file__).parents[3]
+PATH_ROOT_DIR = Path(__file__).parents[2]
 PATH_TO_SRC = PATH_ROOT_DIR / "src/ridgeplot"
 PATH_TO_DOCS = PATH_ROOT_DIR / "docs/api/internal"
 

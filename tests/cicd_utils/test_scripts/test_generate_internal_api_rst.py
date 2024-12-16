@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from cicd.scripts.generate_internal_api_rst import (
+from cicd.generate_internal_api_rst import (
     clean_directory,
     find_internal_modules,
     generate_module_rst,
