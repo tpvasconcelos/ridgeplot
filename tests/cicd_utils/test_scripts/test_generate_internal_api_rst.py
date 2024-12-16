@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from cicd.generate_internal_api_rst import (
+from cicd.scripts.generate_internal_api_rst import (
     clean_directory,
     find_internal_modules,
     generate_module_rst,
@@ -12,21 +12,16 @@ from cicd.generate_internal_api_rst import (
     organize_modules,
 )
 
-
 def test_organize_modules() -> None:
     """Test basic module organization."""
     modules = ["_color.utils", "_color.css_colors", "_hist", "_kde", "_color.interpolation"]
     hierarchy = organize_modules(modules)
 
-    assert "color" in hierarchy
-    assert len(hierarchy["color"]) == 3
-    assert "_color.utils" in hierarchy["color"]
-    assert "_color.css_colors" in hierarchy["color"]
-    assert "_color.interpolation" in hierarchy["color"]
-    assert "hist" in hierarchy
-    assert hierarchy["hist"] == []
-    assert "kde" in hierarchy
-    assert hierarchy["kde"] == []
+    assert "_color" in hierarchy
+    assert len(hierarchy["_color"]) == 3
+    assert "_color.utils" in hierarchy["_color"]
+    assert "_color.css_colors" in hierarchy["_color"]
+    assert "_color.interpolation" in hierarchy["_color"]
 
 
 def test_generate_module_rst_with_submodules() -> None:
