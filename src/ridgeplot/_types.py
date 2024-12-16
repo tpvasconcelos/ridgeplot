@@ -28,6 +28,8 @@ from typing_extensions import Any, Literal, TypeIs, TypeVar
 # ...     )
 
 
+_T = TypeVar("_T")
+
 # ========================================================
 # ---  Miscellaneous types
 # ========================================================
@@ -69,8 +71,6 @@ details."""
 # ---  Base nested Collection types (ragged arrays)
 # ========================================================
 
-_T = TypeVar("_T")
-
 CollectionL1 = Collection[_T]
 """A :data:`~typing.TypeAlias` for a 1-level-deep :class:`~typing.Collection`.
 
@@ -105,10 +105,10 @@ Example
 # ---  Numeric types
 # ========================================================
 
-Float = Union[float, "np.floating[Any]"]
+Float = Union[float, np.floating[Any]]
 """A :data:`~typing.TypeAlias` for float types."""
 
-Int = Union[int, "np.integer[Any]"]
+Int = Union[int, np.integer[Any]]
 """A :data:`~typing.TypeAlias` for a int types."""
 
 Numeric = Union[Int, Float]
@@ -147,7 +147,7 @@ def _is_numeric(obj: Any) -> TypeIs[Numeric]:
 # ---  `Densities` array
 # ========================================================
 
-XYCoordinate = tuple[NumericT, NumericT]
+XYCoordinate = tuple[Numeric, Numeric]
 """A 2D :math:`(x, y)` coordinate, represented as a :class:`~tuple` of
 two :data:`Numeric` values.
 
@@ -157,7 +157,7 @@ Example
 >>> xy_coord = (1, 2)
 """
 
-DensityTrace = CollectionL1[XYCoordinate[Numeric]]
+DensityTrace = CollectionL1[XYCoordinate]
 r"""A 2D line/trace represented as a collection of :math:`(x, y)` coordinates
 (i.e. :data:`XYCoordinate`\s).
 
@@ -297,14 +297,14 @@ Example
 """
 
 
-def is_xy_coord(x: Any) -> bool:
+def is_xy_coord(obj: Any) -> TypeIs[XYCoordinate]:
     """Type guard for :data:`XYCoordinate`."""
-    return isinstance(x, tuple) and len(x) == 2 and all(map(_is_numeric, x))
+    return isinstance(obj, tuple) and len(obj) == 2 and all(map(_is_numeric, obj))
 
 
-def is_density_trace(x: Any) -> bool:
+def is_density_trace(obj: Any) -> TypeIs[DensityTrace]:
     """Type guard for :data:`DensityTrace`."""
-    return isinstance(x, Collection) and all(map(is_xy_coord, x))
+    return isinstance(obj, Collection) and all(map(is_xy_coord, obj))
 
 
 def is_shallow_densities(obj: Any) -> TypeIs[ShallowDensities]:
@@ -460,9 +460,9 @@ Example
 """
 
 
-def is_trace_samples(x: Any) -> TypeIs[SamplesTrace]:
+def is_trace_samples(obj: Any) -> TypeIs[SamplesTrace]:
     """Check if the given object is a :data:`SamplesTrace` type."""
-    return isinstance(x, Collection) and all(map(_is_numeric, x))
+    return isinstance(obj, Collection) and all(map(_is_numeric, obj))
 
 
 def is_shallow_samples(obj: Any) -> TypeIs[ShallowSamples]:
