@@ -28,6 +28,7 @@ recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpg
 recursive-include docs/_static/js *.js
 recursive-include docs/_templates *.html
 prune docs/build
+prune docs/api/internal
 
 # Misc
 recursive-include .github *.yml *.yaml
