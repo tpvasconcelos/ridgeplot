@@ -72,7 +72,7 @@ details."""
 # ========================================================
 
 CollectionL1 = Collection[_T]
-"""A :data:`~typing.TypeAlias` for a 1-level-deep :class:`~typing.Collection`.
+"""A :data:`~typing.TypeAlias` for a 1-level-deep :class:`~collections.abc.Collection`.
 
 Example
 -------
@@ -81,7 +81,7 @@ Example
 """
 
 CollectionL2 = Collection[Collection[_T]]
-"""A :data:`~typing.TypeAlias` for a 2-level-deep :class:`~typing.Collection`.
+"""A :data:`~typing.TypeAlias` for a 2-level-deep :class:`~collections.abc.Collection`.
 
 Example
 -------
@@ -90,7 +90,7 @@ Example
 """
 
 CollectionL3 = Collection[Collection[Collection[_T]]]
-"""A :data:`~typing.TypeAlias` for a 3-level-deep :class:`~typing.Collection`.
+"""A :data:`~typing.TypeAlias` for a 3-level-deep :class:`~collections.abc.Collection`.
 
 Example
 -------
