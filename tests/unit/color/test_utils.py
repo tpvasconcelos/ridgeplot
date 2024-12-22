@@ -8,7 +8,6 @@ from _plotly_utils.exceptions import PlotlyError
 from ridgeplot._color.utils import apply_alpha, default_plotly_template, round_color, to_rgb
 
 if TYPE_CHECKING:
-
     from ridgeplot._types import Color
 
 

@@ -4,18 +4,18 @@ import sys
 from typing import TYPE_CHECKING
 
 if sys.version_info >= (3, 10):
-    from importlib.resources import files
+    from importlib.resources import as_file, files
 else:
-    from importlib_resources import files
+    from importlib_resources import as_file, files
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from typing_extensions import Literal
 
 import pandas as pd
 
 __all__ = [
-    "load_probly",
     "load_lincoln_weather",
+    "load_probly",
 ]
 
 
@@ -124,7 +124,8 @@ def load_probly(
             f"Unknown version {version!r} for the probly dataset. "
             f"Valid versions are {list(versions.keys())}."
         )
-    return pd.read_csv(_DATA_DIR / versions[version])
+    with as_file(_DATA_DIR / versions[version]) as data_file:
+        return pd.read_csv(data_file)
 
 
 def load_lincoln_weather() -> pd.DataFrame:
@@ -162,6 +163,7 @@ def load_lincoln_weather() -> pd.DataFrame:
        https://austinwehrwein.com/data-visualization/plot-inspiration-via-fivethirtyeight/
 
     """
-    data = pd.read_csv(_DATA_DIR / "lincoln-weather.csv", index_col="CST")
-    data.index = pd.to_datetime(data.index.to_list())
+    with as_file(_DATA_DIR / "lincoln-weather.csv") as data_file:
+        data = pd.read_csv(data_file, index_col="CST")
+    data.index = pd.to_datetime(data.index)
     return data

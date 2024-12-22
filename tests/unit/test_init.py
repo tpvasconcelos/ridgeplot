@@ -10,8 +10,9 @@ def test_packaged_installed() -> None:
 
     # By definition, if a module has a __path__ attribute, it is a package.
     assert hasattr(ridgeplot, "__path__")
-    assert len(ridgeplot.__path__) == 1
-    package_path = Path(ridgeplot.__path__[0])
+    pkg_path = list(ridgeplot.__path__)
+    assert len(pkg_path) == 1
+    package_path = Path(pkg_path[0])
     assert package_path.exists()
     assert package_path.is_dir()
     assert package_path.name == "ridgeplot"

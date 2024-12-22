@@ -23,5 +23,5 @@ ptpython
 # And everything else...
 -r cicd_utils.txt
 -r docs.txt
--r mypy.txt
+-r typing.txt
 -r tests.txt

@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from typing import Callable
+from typing import TYPE_CHECKING
 
 import plotly.graph_objects as go
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def tighten_margins(fig: go.Figure, px: int = 0) -> go.Figure:
@@ -20,6 +23,12 @@ def tighten_margins(fig: go.Figure, px: int = 0) -> go.Figure:
 
 def load_basic() -> go.Figure:
     from ._basic import main
+
+    return main()
+
+
+def load_basic_hist() -> go.Figure:
+    from ._basic_hist import main
 
     return main()
 
@@ -44,6 +53,7 @@ def load_probly() -> go.Figure:
 
 ALL_EXAMPLES: list[tuple[str, Callable[[], go.Figure]]] = [
     ("basic", load_basic),
+    ("basic_hist", load_basic_hist),
     ("lincoln_weather", load_lincoln_weather),
     ("lincoln_weather_red_blue", load_lincoln_weather_red_blue),
     ("probly", load_probly),

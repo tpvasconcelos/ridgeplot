@@ -11,6 +11,6 @@ from cicd.test_helpers import patch_plotly_show
 
 
 @pytest.fixture(autouse=True, scope="session")
-def _patch_plotly_show() -> Generator[None]:
+def _patch_plotly_show() -> Generator[None]:  # pyright: ignore[reportUnusedFunction]
     with patch_plotly_show():
         yield

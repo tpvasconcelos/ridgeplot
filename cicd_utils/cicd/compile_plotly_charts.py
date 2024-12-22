@@ -5,11 +5,12 @@ This script is used by `conf.py::setup(app)` to (re-)compile the Plotly charts
 used in the docs. It saves the HTML and WebP artefacts to the
 `docs/_static/charts` directory.
 """
+
 from __future__ import annotations
 
 from copy import deepcopy
 from pathlib import Path
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 from minify_html import minify
 from plotly.offline import get_plotlyjs
@@ -17,6 +18,8 @@ from plotly.offline import get_plotlyjs
 from ridgeplot_examples import ALL_EXAMPLES, tighten_margins
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import plotly.graph_objects as go
 
 
@@ -116,9 +119,9 @@ def _write_plotlyjs_bundle() -> None:
     bundle_path.write_text(plotlyjs, encoding="utf-8")
 
 
-def compile_plotly_charts() -> None:
-    # Setup logic ---
-    # _write_plotlyjs_bundle()
+def compile_plotly_charts(update_plotlyjs_bundle: bool = False) -> None:
+    if update_plotlyjs_bundle:
+        _write_plotlyjs_bundle()
 
     # Compile all charts ---
     if not PATH_STATIC_CHARTS.exists():

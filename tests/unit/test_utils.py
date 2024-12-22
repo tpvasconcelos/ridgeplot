@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from itertools import product
-from typing import TYPE_CHECKING, Callable, TypeVar
+from typing import TYPE_CHECKING, TypeVar
 
 import numpy as np
 import pytest
@@ -9,6 +9,7 @@ import pytest
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
 
     from ridgeplot._types import Densities, DensitiesRow
 
@@ -36,7 +37,7 @@ class TestGetXYExtrema:
                     # valid 2D trace
                     [[(0, 0), (1, 1), (2, 2)]],
                     # invalid 3D trace
-                    [[(3, 3, 3), (4, 4, 4)]],  # type: ignore[list-item]
+                    [[(3, 3, 3), (4, 4, 4)]],  # pyright: ignore[reportArgumentType]
                 ]
             )
 

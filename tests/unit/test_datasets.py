@@ -3,7 +3,11 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from ridgeplot.datasets import _DATA_DIR, load_lincoln_weather, load_probly
+from ridgeplot.datasets import (
+    _DATA_DIR,  # pyright: ignore[reportPrivateUsage]
+    load_lincoln_weather,
+    load_probly,
+)
 
 
 def test_data_dir_contains_data_files() -> None:
@@ -29,7 +33,7 @@ def test_load_probly() -> None:
     df_illinois = load_probly(version="illinois")
     assert df_illinois.shape == (75, 17)
     with pytest.raises(ValueError, match="Unknown version"):
-        load_probly(version="nonexistent")  # type: ignore[arg-type]
+        load_probly(version="nonexistent")  # pyright: ignore[reportArgumentType]
 
 
 def test_load_lincoln_weather() -> None:

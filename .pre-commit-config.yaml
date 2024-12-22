@@ -10,6 +10,7 @@ repos:
       - id: check-ast
       - id: check-executables-have-shebangs
       - id: check-json
+        exclude: ^pyrightconfig\.json$
       - id: check-merge-conflict
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
@@ -33,7 +34,7 @@ repos:
       - id: pretty-format-json
         args: [ --autofix, --no-sort-keys ]
         # ignore jupyter notebooks
-        exclude: ^.*\.ipynb$
+        exclude: (^.*\.ipynb$|^pyrightconfig\.json$)
       - id: pretty-format-json
         args: [ --autofix, --no-sort-keys, --indent=1, --no-ensure-ascii ]
         # only jupyter notebooks
@@ -42,7 +43,7 @@ repos:
         exclude: ^\.bumpversion\.cfg$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema.git
-    rev: 0.29.4
+    rev: 0.30.0
     hooks:
       - id: check-github-actions
       - id: check-github-workflows
@@ -59,7 +60,7 @@ repos:
       - id: actionlint
 
   - repo: https://github.com/kynan/nbstripout
-    rev: 0.8.0
+    rev: 0.8.1
     hooks:
       - id: nbstripout
 
@@ -78,7 +79,7 @@ repos:
   # mdformat is not enabled by default, but can be run manually with:
   #   pre-commit run mdformat --all-files --hook-stage manual
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.18
+    rev: 0.7.19
     hooks:
       - id: mdformat
         stages: [ manual ]
@@ -100,19 +101,9 @@ repos:
         args: [ --no-build-isolation ]
         additional_dependencies: [setuptools-scm]
 
-  - repo: https://github.com/adamchainz/blacken-docs
-    rev: 1.19.1
-    hooks:
-      - id: blacken-docs
-
-  - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.10.0
-    hooks:
-      - id: black-jupyter
-
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.7.3
+    rev: v0.8.3
     hooks:
+      - id: ruff-format
       - id: ruff
         args: [ --show-fixes, --exit-non-zero-on-fix ]
-        types_or: [ python, pyi, jupyter ]

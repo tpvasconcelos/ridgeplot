@@ -1,24 +1,22 @@
 from __future__ import annotations
 
-import sys
-from collections.abc import Collection
+from collections.abc import Callable, Collection
 from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Optional, Union, cast
+from typing import TYPE_CHECKING, Union, cast
 
 import numpy as np
+import numpy.typing as npt
 import statsmodels.api as sm
 from statsmodels.sandbox.nonparametric.kernels import CustomKernel as StatsmodelsKernel
-
-if sys.version_info >= (3, 13):
-    from typing import TypeIs
-else:
-    from typing_extensions import TypeIs
+from typing_extensions import Any, TypeIs
 
 from ridgeplot._types import (
     CollectionL1,
-    CollectionL2,
-    Float,
+    DensityTrace,
     Numeric,
+    SampleWeights,
+    SampleWeightsArray,
+    ShallowSampleWeightsArray,
     is_flat_numeric_collection,
     nest_shallow_collection,
 )
@@ -26,9 +24,7 @@ from ridgeplot._utils import normalise_row_attrs
 from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
-    import numpy.typing as npt
-
-    from ridgeplot._types import Densities, Samples, SamplesTrace, XYCoordinate
+    from ridgeplot._types import Densities, Samples, SamplesTrace
 
 
 KDEPoints = Union[int, CollectionL1[Numeric]]
@@ -36,17 +32,6 @@ KDEPoints = Union[int, CollectionL1[Numeric]]
 
 KDEBandwidth = Union[str, float, Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]]
 """The :paramref:`ridgeplot.ridgeplot.bandwidth` parameter."""
-
-SampleWeights = Optional[CollectionL1[Numeric]]
-"""An array of KDE weights corresponding to each sample."""
-
-SampleWeightsArray = CollectionL2[SampleWeights]
-"""A :data:`SampleWeightsArray` represents the weights of the datapoints in a
-:data:`Samples` array. The shape of the :data:`SampleWeightsArray` array should
-match the shape of the corresponding :data:`Samples` array."""
-
-ShallowSampleWeightsArray = CollectionL1[SampleWeights]
-"""Shallow type for :data:`SampleWeightsArray`."""
 
 
 def _is_sample_weights(obj: Any) -> TypeIs[SampleWeights]:
@@ -106,11 +91,6 @@ def normalize_sample_weights(
     """
     if _is_sample_weights(sample_weights):
         return [[sample_weights] * len(row) for row in samples]
-    # TODO: Investigate this issue with mypy's type narrowing...
-    sample_weights = cast(  # type: ignore[unreachable]
-        Union[SampleWeightsArray, ShallowSampleWeightsArray],
-        sample_weights,
-    )
     if _is_shallow_sample_weights(sample_weights):
         sample_weights = nest_shallow_collection(sample_weights)
     sample_weights = normalise_row_attrs(sample_weights, l2_target=samples)
@@ -123,7 +103,7 @@ def estimate_density_trace(
     kernel: str,
     bandwidth: KDEBandwidth,
     weights: SampleWeights = None,
-) -> list[XYCoordinate[Float]]:
+) -> DensityTrace:
     """Estimates a density trace from a set of samples.
 
     For a given set of sample values, computes the kernel densities (KDE) at
@@ -170,18 +150,20 @@ def estimate_density_trace(
     dens.fit(
         kernel=kernel,
         fft=kernel == "gau" and weights is None,
-        bw=bandwidth,
+        bw=bandwidth,  # pyright: ignore[reportArgumentType]
         weights=weights,
     )
     density_y = dens.evaluate(density_x)
-    _validate_densities(x=density_x, y=density_y, kernel=kernel)
+    density_y = _validate_densities(x=density_x, y=density_y, kernel=kernel)
 
     return list(zip(density_x, density_y))
 
 
 def _validate_densities(
-    x: npt.NDArray[np.floating[Any]], y: npt.NDArray[np.floating[Any]], kernel: str
-) -> None:
+    x: npt.NDArray[np.floating[Any]],
+    y: Any,
+    kernel: str,
+) -> npt.NDArray[np.floating[Any]]:
     # I haven't investigated the root of this issue yet
     # but statsmodels' KDEUnivariate implementation
     # can return a float('NaN') if something goes
@@ -199,10 +181,12 @@ def _validate_densities(
         # Fail early if the return type is incorrect
         # Otherwise, the remaining checks will fail
         raise RuntimeError(msg)  # noqa: TRY004
+    y = cast(npt.NDArray[np.floating[Any]], y)
     wrong_shape = y.shape != x.shape
     not_finite = ~np.isfinite(y).all()
     if wrong_shape or not_finite:
         raise RuntimeError(msg)
+    return y
 
 
 def estimate_densities(

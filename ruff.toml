@@ -6,11 +6,11 @@ fix = true
 line-length = 100
 
 # ================================================
-# Formatting settings (currently not used)
+# Formatting settings
 # ================================================
 [format]
 line-ending = "lf"
-docstring-code-format = true
+docstring-code-format = false
 
 # ================================================
 # Linting settings
@@ -74,8 +74,6 @@ ignore = [
     "TD003", # Missing issue link on the line following this TODO
 
     # flake8-annotations (ANN)
-    "ANN101", # Missing type annotation for `self` in method
-    "ANN102", # Missing type annotation for `cls` in classmethod
     "ANN401", # Dynamically typed expressions (typing.Any) are disallowed in {name}
 ]
 
@@ -84,7 +82,8 @@ ignore = [
     "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
     "T201", # `print` found
 ]
-"docs/*" = [
+"docs/conf.py" = [
+    "ARG001", # Unused function argument
     "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
     "S101",   # Use of assert detected
     "T201",   # `print` found

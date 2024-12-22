@@ -22,11 +22,11 @@ def main(
 
     df = load_lincoln_weather()
 
-    months = df.index.month_name().unique()  # type: ignore[attr-defined]
+    months = df.index.month_name().unique()  # pyright: ignore[reportAttributeAccessIssue]
     samples = [
         [
-            df[df.index.month_name() == month]["Min Temperature [F]"],  # type: ignore[attr-defined]
-            df[df.index.month_name() == month]["Max Temperature [F]"],  # type: ignore[attr-defined]
+            df[df.index.month_name() == month]["Min Temperature [F]"],  # pyright: ignore[reportAttributeAccessIssue]
+            df[df.index.month_name() == month]["Max Temperature [F]"],  # pyright: ignore[reportAttributeAccessIssue]
         ]
         for month in months
     ]

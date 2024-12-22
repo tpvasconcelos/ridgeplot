@@ -1,15 +1,10 @@
 from __future__ import annotations
 
-import sys
 from collections.abc import Collection
-from typing import Any, Literal, TypeVar, Union
+from typing import Optional, Union
 
 import numpy as np
-
-if sys.version_info >= (3, 13):
-    from typing import TypeIs
-else:
-    from typing_extensions import TypeIs
+from typing_extensions import Any, Literal, TypeIs, TypeVar
 
 # Snippet used to generate and store the image artefacts:
 # >>> def save_fig(fig, name):
@@ -32,6 +27,8 @@ else:
 # ...         engine="kaleido",
 # ...     )
 
+
+_T = TypeVar("_T")
 
 # ========================================================
 # ---  Miscellaneous types
@@ -74,10 +71,8 @@ details."""
 # ---  Base nested Collection types (ragged arrays)
 # ========================================================
 
-_T = TypeVar("_T")
-
 CollectionL1 = Collection[_T]
-"""A :data:`~typing.TypeAlias` for a 1-level-deep :class:`~typing.Collection`.
+"""A :data:`~typing.TypeAlias` for a 1-level-deep :class:`~collections.abc.Collection`.
 
 Example
 -------
@@ -86,7 +81,7 @@ Example
 """
 
 CollectionL2 = Collection[Collection[_T]]
-"""A :data:`~typing.TypeAlias` for a 2-level-deep :class:`~typing.Collection`.
+"""A :data:`~typing.TypeAlias` for a 2-level-deep :class:`~collections.abc.Collection`.
 
 Example
 -------
@@ -95,7 +90,7 @@ Example
 """
 
 CollectionL3 = Collection[Collection[Collection[_T]]]
-"""A :data:`~typing.TypeAlias` for a 3-level-deep :class:`~typing.Collection`.
+"""A :data:`~typing.TypeAlias` for a 3-level-deep :class:`~collections.abc.Collection`.
 
 Example
 -------
@@ -110,10 +105,10 @@ Example
 # ---  Numeric types
 # ========================================================
 
-Float = Union[float, "np.floating[Any]"]
+Float = Union[float, np.floating[Any]]
 """A :data:`~typing.TypeAlias` for float types."""
 
-Int = Union[int, "np.integer[Any]"]
+Int = Union[int, np.integer[Any]]
 """A :data:`~typing.TypeAlias` for a int types."""
 
 Numeric = Union[Int, Float]
@@ -152,7 +147,7 @@ def _is_numeric(obj: Any) -> TypeIs[Numeric]:
 # ---  `Densities` array
 # ========================================================
 
-XYCoordinate = tuple[NumericT, NumericT]
+XYCoordinate = tuple[Numeric, Numeric]
 """A 2D :math:`(x, y)` coordinate, represented as a :class:`~tuple` of
 two :data:`Numeric` values.
 
@@ -162,7 +157,7 @@ Example
 >>> xy_coord = (1, 2)
 """
 
-DensityTrace = CollectionL1[XYCoordinate[Numeric]]
+DensityTrace = CollectionL1[XYCoordinate]
 r"""A 2D line/trace represented as a collection of :math:`(x, y)` coordinates
 (i.e. :data:`XYCoordinate`\s).
 
@@ -302,14 +297,14 @@ Example
 """
 
 
-def is_xy_coord(x: Any) -> bool:
+def is_xy_coord(obj: Any) -> TypeIs[XYCoordinate]:
     """Type guard for :data:`XYCoordinate`."""
-    return isinstance(x, tuple) and len(x) == 2 and all(map(_is_numeric, x))
+    return isinstance(obj, tuple) and len(obj) == 2 and all(map(_is_numeric, obj))
 
 
-def is_density_trace(x: Any) -> bool:
+def is_density_trace(obj: Any) -> TypeIs[DensityTrace]:
     """Type guard for :data:`DensityTrace`."""
-    return isinstance(x, Collection) and all(map(is_xy_coord, x))
+    return isinstance(obj, Collection) and all(map(is_xy_coord, obj))
 
 
 def is_shallow_densities(obj: Any) -> TypeIs[ShallowDensities]:
@@ -465,9 +460,9 @@ Example
 """
 
 
-def is_trace_samples(x: Any) -> TypeIs[SamplesTrace]:
+def is_trace_samples(obj: Any) -> TypeIs[SamplesTrace]:
     """Check if the given object is a :data:`SamplesTrace` type."""
-    return isinstance(x, Collection) and all(map(_is_numeric, x))
+    return isinstance(obj, Collection) and all(map(_is_numeric, obj))
 
 
 def is_shallow_samples(obj: Any) -> TypeIs[ShallowSamples]:
@@ -501,6 +496,122 @@ def is_shallow_samples(obj: Any) -> TypeIs[ShallowSamples]:
     """
     return isinstance(obj, Collection) and all(map(is_trace_samples, obj))
 
+
+# ========================================================
+# ---  Other array types
+# ========================================================
+
+
+# Trace types ---
+
+TraceType = Literal["area", "bar"]
+"""The type of trace to draw in a ridgeplot. See
+:paramref:`ridgeplot.ridgeplot.trace_type` for more information."""
+
+TraceTypesArray = CollectionL2[TraceType]
+"""A :data:`TraceTypesArray` represents the types of traces in a ridgeplot.
+
+Example
+-------
+>>> trace_types_array: TraceTypesArray = [
+...     ["area", "bar", "area"],
+...     ["bar", "area"],
+... ]
+"""
+
+ShallowTraceTypesArray = CollectionL1[TraceType]
+"""Shallow type for :data:`TraceTypesArray`.
+
+Example
+-------
+>>> trace_types_array: ShallowTraceTypesArray = ["area", "bar", "area"]
+"""
+
+
+def is_trace_type(obj: Any) -> TypeIs[TraceType]:
+    """Type guard for :data:`TraceType`.
+
+    Examples
+    --------
+    >>> is_trace_type("area")
+    True
+    >>> is_trace_type("bar")
+    True
+    >>> is_trace_type("foo")
+    False
+    >>> is_trace_type(42)
+    False
+    """
+    from typing_extensions import get_args
+
+    return isinstance(obj, str) and obj in get_args(TraceType)
+
+
+def is_shallow_trace_types_array(obj: Any) -> TypeIs[ShallowTraceTypesArray]:
+    """Type guard for :data:`ShallowTraceTypesArray`.
+
+    Examples
+    --------
+    >>> is_shallow_trace_types_array(["area", "bar", "area"])
+    True
+    >>> is_shallow_trace_types_array(["area", "bar", "foo"])
+    False
+    >>> is_shallow_trace_types_array([1, 2, 3])
+    False
+    """
+    return isinstance(obj, Collection) and all(map(is_trace_type, obj))
+
+
+def is_trace_types_array(obj: Any) -> TypeIs[TraceTypesArray]:
+    """Type guard for :data:`TraceTypesArray`.
+
+    Examples
+    --------
+    >>> is_trace_types_array([["area", "bar"], ["area", "bar"]])
+    True
+    >>> is_trace_types_array([["area", "bar"], ["area", "foo"]])
+    False
+    >>> is_trace_types_array([["area", "bar"], ["area", 42]])
+    False
+    """
+    return isinstance(obj, Collection) and all(map(is_shallow_trace_types_array, obj))
+
+
+# Labels ---
+
+LabelsArray = CollectionL2[str]
+"""A :data:`LabelsArray` represents the labels of traces in a ridgeplot.
+
+Example
+-------
+
+>>> labels_array: LabelsArray = [
+...     ["trace 1", "trace 2", "trace 3"],
+...     ["trace 4", "trace 5"],
+... ]
+"""
+
+ShallowLabelsArray = CollectionL1[str]
+"""Shallow type for :data:`LabelsArray`.
+
+Example
+-------
+
+>>> labels_array: ShallowLabelsArray = ["trace 1", "trace 2", "trace 3"]
+"""
+
+# Sample weights ---
+
+SampleWeights = Optional[CollectionL1[Numeric]]
+"""An array of KDE weights corresponding to each sample."""
+
+SampleWeightsArray = CollectionL2[SampleWeights]
+"""A :data:`SampleWeightsArray` represents the weights of the datapoints in a
+:data:`Samples` array. The shape of the :data:`SampleWeightsArray` array should
+match the shape of the corresponding :data:`Samples` array."""
+
+ShallowSampleWeightsArray = CollectionL1[SampleWeights]
+"""Shallow type for :data:`SampleWeightsArray`."""
 
 # ========================================================
 # ---  More type guards and other utilities

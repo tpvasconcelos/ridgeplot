@@ -11,7 +11,6 @@ if TYPE_CHECKING:
 
 
 class TestCreateRidgeplot:
-
     @pytest.mark.parametrize(
         "densities",
         [
@@ -26,13 +25,14 @@ class TestCreateRidgeplot:
         with pytest.raises(ValueError, match="Expected a 4D array of densities"):
             create_ridgeplot(
                 densities=densities,
-                colorscale=...,  # type: ignore[arg-type]
-                opacity=...,  # type: ignore[arg-type]
-                colormode=...,  # type: ignore[arg-type]
-                trace_labels=...,  # type: ignore[arg-type]
-                line_color=...,  # type: ignore[arg-type]
-                line_width=...,  # type: ignore[arg-type]
-                spacing=...,  # type: ignore[arg-type]
-                show_yticklabels=...,  # type: ignore[arg-type]
-                xpad=...,  # type: ignore[arg-type]
+                trace_types=...,
+                colorscale=...,
+                opacity=...,
+                colormode=...,
+                trace_labels=...,
+                line_color=...,
+                line_width=...,
+                spacing=...,
+                show_yticklabels=...,
+                xpad=...,
             )

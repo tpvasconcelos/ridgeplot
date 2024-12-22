@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from collections.abc import Collection
-from typing import (
-    TYPE_CHECKING,
+from typing import TYPE_CHECKING
+
+from typing_extensions import (
     TypeVar,
 )
 
 if TYPE_CHECKING:
-    from typing import Any
+    from typing_extensions import Any
 
     from ridgeplot._types import CollectionL2, Densities, NormalisationOption, Numeric
 
@@ -161,7 +162,7 @@ def get_collection_array_shape(arr: Collection[Any]) -> tuple[int | set[int], ..
         return len(obj)
 
     shape: list[int | set[int]] = [_get_dim_length(arr)]
-    while isinstance(arr, Collection) and len(arr) > 0:
+    while len(arr) > 0:
         try:
             dim_lengths = set(map(_get_dim_length, arr))
         except TypeError:
