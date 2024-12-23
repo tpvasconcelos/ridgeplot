@@ -34,7 +34,7 @@ repos:
       - id: pretty-format-json
         args: [ --autofix, --no-sort-keys ]
         # ignore jupyter notebooks
-        exclude: (^.*\.ipynb$|^pyrightconfig\.json$)
+        exclude: (^.*\.ipynb$|^pyrightconfig\.json$|^tests/e2e/artifacts/.*\.json$)
       - id: pretty-format-json
         args: [ --autofix, --no-sort-keys, --indent=1, --no-ensure-ascii ]
         # only jupyter notebooks
