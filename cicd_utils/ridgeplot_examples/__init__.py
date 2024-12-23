@@ -2,23 +2,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import plotly.graph_objects as go
+from ridgeplot_examples._base import Example
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    import plotly.graph_objects as go
 
-
-def tighten_margins(fig: go.Figure, px: int = 0) -> go.Figure:
-    """Tighten the margins of a Plotly figure."""
-    if fig.layout.margin != go.layout.Margin():
-        # If the Figure's margins are different from the default values,
-        # we'll assume that the user has set these values intentionally
-        return fig
-    # If the Figure does not have a title, we'll leave 40px of space at the
-    # top to account for the Plotly toolbar. If the Figure does include
-    # a title, we'll leave the top margin with the default value.
-    margin_top = None if fig.layout.title.text else max(40, px)
-    return fig.update_layout(margin=dict(l=px, r=px, t=margin_top, b=px))
+__all__ = [
+    "ALL_EXAMPLES",
+    "Example",
+]
 
 
 def load_basic() -> go.Figure:
@@ -51,10 +43,10 @@ def load_probly() -> go.Figure:
     return main()
 
 
-ALL_EXAMPLES: list[tuple[str, Callable[[], go.Figure]]] = [
-    ("basic", load_basic),
-    ("basic_hist", load_basic_hist),
-    ("lincoln_weather", load_lincoln_weather),
-    ("lincoln_weather_red_blue", load_lincoln_weather_red_blue),
-    ("probly", load_probly),
+ALL_EXAMPLES: list[Example] = [
+    Example("basic", load_basic),
+    Example("basic_hist", load_basic_hist),
+    Example("lincoln_weather", load_lincoln_weather),
+    Example("lincoln_weather_red_blue", load_lincoln_weather_red_blue),
+    Example("probly", load_probly),
 ]

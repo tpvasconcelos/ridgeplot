@@ -67,6 +67,7 @@ class RidgeplotTrace(ABC):
         line_color: Color | Literal["fill-color"],
         line_width: float | None,
     ):
+        super().__init__()
         self.x, self.y = zip_strict(*trace)
         self.label = label
         self.solid_color = solid_color
