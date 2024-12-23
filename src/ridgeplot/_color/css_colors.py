@@ -1,3 +1,5 @@
+"""Mapping of CSS named colors to RGB tuples."""
+
 from __future__ import annotations
 
 from typing_extensions import Literal
