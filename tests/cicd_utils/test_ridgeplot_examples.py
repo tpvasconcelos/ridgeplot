@@ -13,10 +13,10 @@ def test_all_examples() -> None:
 @pytest.mark.parametrize(
     ("sig", "x", "expected"),
     [
-        (2, 0.123456, 0.12),
-        (3, 0.123456, 0.123),
-        (4, 0.123456, 0.1235),
         (5, 0.123456, 0.12346),
+        (12, 0.123456, 0.123456),
+        (3, 1234, 1230),
+        (1, 123e-3, 0.1),
     ],
 )
 def test_round_sig_figs(sig: int, x: float, expected: float) -> None:
