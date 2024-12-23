@@ -74,8 +74,14 @@ jupyter-init: install ## initialise a jupyter environment
 # ==============================================================
 
 .PHONY: clean-all
-clean-all: clean-build clean-pyc clean-cov clean-ci-caches clean-tox clean-venv ## remove all artifacts
+clean-all: clean-docs clean-build clean-pyc clean-cov clean-ci-caches clean-tox clean-venv ## remove all artifacts
 	@echo "==> Removed all artifacts!"
+
+
+.PHONY: clean-docs
+clean-docs: ## remove documentation build artifacts
+	@echo "==> Removing documentation build artifacts..."
+	rm -fr docs/build/ docs/api/autogen/ docs/api/public/
 
 
 .PHONY: clean-build
