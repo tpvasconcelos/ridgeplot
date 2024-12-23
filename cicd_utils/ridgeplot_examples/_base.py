@@ -25,6 +25,19 @@ def tighten_margins(fig: go.Figure, px: int = 0) -> go.Figure:
     return fig.update_layout(margin=dict(l=px, r=px, t=margin_top, b=px))
 
 
+def _round_sig_figs(x: float, sig_figs: int) -> float:
+    """Round a float value to a fixed number of significant figures."""
+    return float(f"{x:.{sig_figs}g}")
+
+
+def round_fig_data(fig: go.Figure, sig_figs: int) -> go.Figure:
+    """Round the float values in the data of a Plotly figure."""
+    for i, trace in enumerate(fig.data):
+        fig.data[i].x = [_round_sig_figs(x, sig_figs) for x in trace.x]
+        fig.data[i].y = [_round_sig_figs(y, sig_figs) for y in trace.y]
+    return fig
+
+
 @dataclass
 class Example:
     plot_id: str
@@ -105,7 +118,10 @@ class Example:
             engine="kaleido",
         )
 
-    def to_json(self, path: Path) -> None:
+    def to_json(self, path: Path, sig_figs: int) -> None:
+        # We'll round the float values in the JSON to a fixed number of
+        # significant figures to make the regression tests more robust.
+        round_fig_data(self.fig, sig_figs=sig_figs)
         if not path.exists():
             path.mkdir(parents=True)
         out_path = path / f"{self.plot_id}.json"
