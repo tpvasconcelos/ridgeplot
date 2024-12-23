@@ -8,6 +8,13 @@ Unreleased changes
 ### Internal
 
 - Improve type annotations and use stricter pyright settings ({gh-pr}`291`)
+
+### CI/CD
+
+- Fix regressions tests by comparing against JSON artefacts instead of flaky JPEGs ({gh-pr}`299`)
+
+### Documentation
+
 - Use `sphinxcontrib.apidoc` to automatically generate API docs from the source code ({gh-pr}`296`)
 
 ---
