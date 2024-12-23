@@ -26,11 +26,9 @@ ignore = [
     "C408", # Unnecessary `dict` call (rewrite as a literal)
 
     # pydocstyle
-    "D100", # Missing docstring in public module
     "D101", # Missing docstring in public class
     "D102", # Missing docstring in public method
     "D103", # Missing docstring in public function
-    "D104", # Missing docstring in public package
     "D105", # Missing docstring in magic method
     "D107", # Missing docstring in __init__
     "D205", # 1 blank line required between summary line and description
@@ -79,16 +77,21 @@ ignore = [
 
 [lint.per-file-ignores]
 "cicd_utils/*" = [
+    "D100", # Missing docstring in public module
+    "D104", # Missing docstring in public package
     "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
     "T201", # `print` found
 ]
 "docs/conf.py" = [
+    "D100", # Missing docstring in public module
     "ARG001", # Unused function argument
     "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
     "S101",   # Use of assert detected
     "T201",   # `print` found
 ]
 "tests/*" = [
+    "D100", # Missing docstring in public module
+    "D104", # Missing docstring in public package
     "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
     "S101",   # Use of assert detected
     "SLF001", # Private member accessed: `_X`

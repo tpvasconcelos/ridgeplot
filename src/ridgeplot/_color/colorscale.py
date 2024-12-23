@@ -1,3 +1,5 @@
+"""Continuous colorscale utilities."""
+
 from __future__ import annotations
 
 import warnings

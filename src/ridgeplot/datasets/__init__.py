@@ -1,3 +1,5 @@
+"""Loading functions for toy datasets included with the package."""
+
 from __future__ import annotations
 
 import sys

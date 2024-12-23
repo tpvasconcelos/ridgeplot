@@ -1,3 +1,6 @@
+"""Miscellaneous types, type aliases, type guards, and other related utilities
+used throughout the package."""
+
 from __future__ import annotations
 
 from collections.abc import Collection
