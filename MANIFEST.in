@@ -30,6 +30,8 @@ recursive-include docs/_templates *.html
 exclude docs/sg_execution_times.rst
 prune docs/examples_gallery_out
 prune docs/build
+prune docs/api/autogen
+prune docs/api/public
 
 # Misc
 recursive-include .github *.yml *.yaml

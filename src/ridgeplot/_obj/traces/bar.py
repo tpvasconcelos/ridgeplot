@@ -1,8 +1,11 @@
+"""Bar trace object."""
+
 from __future__ import annotations
 
-from typing import Any, ClassVar
+from typing import ClassVar
 
 from plotly import graph_objects as go
+from typing_extensions import Any, override
 
 from ridgeplot._color.interpolation import interpolate_color
 from ridgeplot._obj.traces.base import DEFAULT_HOVERTEMPLATE, ColoringContext, RidgeplotTrace
@@ -33,6 +36,7 @@ class BarTrace(RidgeplotTrace):
             )
         return color_kwargs
 
+    @override
     def draw(self, fig: go.Figure, coloring_ctx: ColoringContext) -> go.Figure:
         fig.add_trace(
             go.Bar(

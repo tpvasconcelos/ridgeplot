@@ -1,6 +1,8 @@
+"""Mapping of CSS named colors to RGB tuples."""
+
 from __future__ import annotations
 
-from typing import Literal
+from typing_extensions import Literal
 
 # Taken from https://www.w3.org/TR/css-color-3/#svg-color
 

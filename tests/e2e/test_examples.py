@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 import pytest
 
 from ridgeplot_examples import ALL_EXAMPLES
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import plotly.graph_objects as go
 
 ROOT_DIR = Path(__file__).parents[2]

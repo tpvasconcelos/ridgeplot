@@ -5,6 +5,16 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Internal
+
+- Improve type annotations and use stricter pyright settings ({gh-pr}`291`)
+- Use `sphinxcontrib.apidoc` to automatically generate API docs from the source code ({gh-pr}`296`)
+
+---
+
+0.3.0
+------
+
 ### Features
 
 - Add support for histogram and bar traces ({gh-pr}`287`)

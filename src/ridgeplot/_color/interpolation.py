@@ -1,7 +1,11 @@
+"""Color interpolation utilities."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal, Protocol
+from typing import TYPE_CHECKING
+
+from typing_extensions import Literal, Protocol
 
 from ridgeplot._color.utils import apply_alpha, round_color, to_rgb, unpack_rgb
 from ridgeplot._types import CollectionL2, ColorScale

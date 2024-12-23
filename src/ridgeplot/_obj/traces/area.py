@@ -1,8 +1,11 @@
+"""Area trace object."""
+
 from __future__ import annotations
 
-from typing import Any, ClassVar
+from typing import ClassVar
 
 from plotly import graph_objects as go
+from typing_extensions import Any, override
 
 from ridgeplot._color.interpolation import slice_colorscale
 from ridgeplot._color.utils import apply_alpha
@@ -49,6 +52,7 @@ class AreaTrace(RidgeplotTrace):
             )
         return color_kwargs
 
+    @override
     def draw(self, fig: go.Figure, coloring_ctx: ColoringContext) -> go.Figure:
         # Draw an invisible trace at constance y=y_base so that we
         # can set fill="tonexty" below and get a filled area plot

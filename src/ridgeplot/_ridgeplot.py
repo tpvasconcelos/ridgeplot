@@ -16,9 +16,9 @@ from ridgeplot._utils import normalise_densities
 
 if TYPE_CHECKING:
     from collections.abc import Collection
-    from typing import Literal
 
     import plotly.graph_objects as go
+    from typing_extensions import Literal
 
     from ridgeplot._color.interpolation import SolidColormode
     from ridgeplot._kde import (
@@ -126,11 +126,11 @@ def ridgeplot(
     r"""Return an interactive ridgeline (Plotly) |~go.Figure|.
 
     .. note::
-        You must specify either :paramref:`samples` or :paramref:`densities` to
-        this function, but not both. When specifying :paramref:`samples`, the
-        function will estimate the densities using either Kernel Density
+        You must specify either :paramref:`.samples` or :paramref:`.densities`
+        to this function, but not both. When specifying :paramref:`.samples`,
+        the function will estimate the densities using either Kernel Density
         Estimation (KDE) or histogram binning. When specifying
-        :paramref:`densities`, the function will skip the density estimation
+        :paramref:`.densities`, the function will skip the density estimation
         step and use the provided densities directly. See the parameter
         descriptions below for more details.
 
@@ -148,11 +148,11 @@ def ridgeplot(
         or histogram binning will be performed to estimate the underlying
         densities.
 
-        See :paramref:`kernel`, :paramref:`bandwidth`, and
-        :paramref:`kde_points` for more details on the different KDE parameters.
-        See :paramref:`nbins` for more details on histogram binning. The
-        :paramref:`sample_weights` parameter can be used for both KDE and
-        histogram binning.
+        See :paramref:`.kernel`, :paramref:`.bandwidth`, and
+        :paramref:`.kde_points` for more details on the different KDE
+        parameters. See :paramref:`.nbins` for more details on histogram
+        binning. The :paramref:`.sample_weights` parameter can be used for both
+        KDE and histogram binning.
 
         The ``samples`` argument should be an array of shape
         :math:`(R, T_r, S_t)`. Note that we support irregular (`ragged`_)
@@ -166,14 +166,14 @@ def ridgeplot(
 
         The density estimation step will be performed over the sample values
         (:math:`S_t`) for all traces. The resulting array will be a (4D)
-        :paramref:`densities` array of shape :math:`(R, T_r, P_t, 2)`
-        (see :paramref:`densities` below for more details).
+        :paramref:`.densities` array of shape :math:`(R, T_r, P_t, 2)`
+        (see :paramref:`.densities` below for more details).
 
     densities : Densities or ShallowDensities
         If a ``densities`` array is specified, the density estimation step will
         be skipped and all associated arguments ignored. Each density array
         should have shape :math:`(R, T_r, P_t, 2)` (4D). Just like the
-        :paramref:`samples` argument, we also support irregular (`ragged`_)
+        :paramref:`.samples` argument, we also support irregular (`ragged`_)
         ``densities`` arrays, where:
 
         - :math:`R` is the number of rows in the plot
@@ -183,7 +183,7 @@ def ridgeplot(
           :math:`t \in T_r` can also have a different number of points.
         - :math:`2` is the number of coordinates per point (x and y)
 
-        See :paramref:`samples` above for more details.
+        See :paramref:`.samples` above for more details.
 
     trace_type : TraceTypesArray or ShallowTraceTypesArray or TraceType or None
         The type of trace to display. Choices are ``'area'`` or ``'bar'``. If a
@@ -272,7 +272,7 @@ def ridgeplot(
         `Plotly's built-in color-scales`_). If a list of colors is provided, it
         must be a list of valid CSS colors (e.g.,
         ``["rgb(255, 0, 0)", "blue", "hsl(120, 100%, 50%)"]``). The list will
-        ultimately be converted into a :data:`~ridgeplot._colors.ColorScale`
+        ultimately be converted into a :data:`~ridgeplot._types.ColorScale`
         object, assuming the colors provided are evenly spaced. If not specified
         (default), the color scale will be inferred from current Plotly
         template.
@@ -282,12 +282,12 @@ def ridgeplot(
         ridgeline trace.
 
         The ``"fillgradient"`` mode (default) will fill each trace with a
-        gradient using the specified :paramref:`colorscale`. The gradient
+        gradient using the specified :paramref:`.colorscale`. The gradient
         normalisation is done using the minimum and maximum x-values over all
         densities.
 
         All other modes provide different methods for calculating interpolation
-        values from the specified :paramref:`colorscale` (i.e., a float value
+        values from the specified :paramref:`.colorscale` (i.e., a float value
         between 0 and 1) for each trace. The interpolated color will be used to
         color each trace with a solid color. The available modes are:
 
@@ -329,13 +329,13 @@ def ridgeplot(
         opacity/transparency of the color-scale's colors.
 
         .. versionadded:: 0.2.0
-            Replaces the deprecated :paramref:`coloralpha` argument.
+            Replaces the deprecated :paramref:`.coloralpha` argument.
 
     line_color : Color or "fill-color"
         The color of the traces' lines. Any valid CSS color is allowed
         (default: ``"black"``). If the value is set to "fill-color", the line
         color will be the same as the fill color of the traces (see
-        :paramref:`colormode`). If ``colormode='fillgradient'``, the line color
+        :paramref:`.colormode`). If ``colormode='fillgradient'``, the line color
         will be the mean color of the fill gradient (i.e., equivalent to the
         fill color when ``colormode='mean-minmax'``).
 
@@ -347,7 +347,7 @@ def ridgeplot(
         of 0.5 px.
 
         .. versionadded:: 0.2.0
-            Replaces the deprecated :paramref:`linewidth` argument.
+            Replaces the deprecated :paramref:`.linewidth` argument.
 
         .. versionchanged:: 0.2.0
             The default value changed from 1 to 1.5
@@ -360,7 +360,7 @@ def ridgeplot(
         Whether to show the tick labels on the y-axis. The default is True.
 
         .. versionadded:: 0.1.21
-            Replaces the deprecated :paramref:`show_annotations` argument.
+            Replaces the deprecated :paramref:`.show_annotations` argument.
 
     xpad : float
         Specifies the extra padding to use on the x-axis. It is defined in
@@ -370,12 +370,12 @@ def ridgeplot(
     coloralpha : float
 
         .. deprecated:: 0.2.0
-            Use :paramref:`opacity` instead.
+            Use :paramref:`.opacity` instead.
 
     linewidth : float
 
         .. deprecated:: 0.2.0
-            Use :paramref:`line_width` instead.
+            Use :paramref:`.line_width` instead.
 
     Returns
     -------
@@ -387,8 +387,9 @@ def ridgeplot(
     Raises
     ------
     :exc:`ValueError`
-        If both :paramref:`samples` and :paramref:`densities` are specified, or
-        if neither of them is specified. i.e. you may only specify one of them.
+        If both :paramref:`.samples` and :paramref:`.densities` are specified,
+        or if neither of them is specified. i.e., you may only specify one of
+        them.
 
     """
     if trace_type is None:

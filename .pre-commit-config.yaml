@@ -10,6 +10,7 @@ repos:
       - id: check-ast
       - id: check-executables-have-shebangs
       - id: check-json
+        exclude: ^pyrightconfig\.json$
       - id: check-merge-conflict
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
@@ -33,7 +34,7 @@ repos:
       - id: pretty-format-json
         args: [ --autofix, --no-sort-keys ]
         # ignore jupyter notebooks
-        exclude: ^.*\.ipynb$
+        exclude: (^.*\.ipynb$|^pyrightconfig\.json$)
       - id: pretty-format-json
         args: [ --autofix, --no-sort-keys, --indent=1, --no-ensure-ascii ]
         # only jupyter notebooks
@@ -101,7 +102,7 @@ repos:
         additional_dependencies: [setuptools-scm]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.1
+    rev: v0.8.3
     hooks:
       - id: ruff-format
       - id: ruff

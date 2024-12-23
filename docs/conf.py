@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 try:
     import importlib.metadata as importlib_metadata
 except ImportError:
-    import importlib_metadata  # pyright: ignore[no-redef]
+    import importlib_metadata
 
 try:
     from cicd.compile_plotly_charts import compile_plotly_charts
@@ -56,8 +56,9 @@ language = "en"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    # https://myst-parser.readthedocs.io/en/v0.15.1/sphinx/intro.html
     "myst_parser",
-    "notfound.extension",
+    # https://www.sphinx-doc.org/en/master/usage/extensions/index.html
     "sphinx.ext.autodoc",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.autosummary",
@@ -79,10 +80,16 @@ extensions = [
     "sphinx_sitemap",
     "sphinx_thebe",
     "sphinx_togglebutton",
+    # https://github.com/sphinx-contrib/apidoc
+    "sphinxcontrib.apidoc",
+    # https://github.com/sphinx-toolbox/sphinx-toolbox
     "sphinx_toolbox.collapse",
     "sphinx_toolbox.more_autodoc.autoprotocol",
     "sphinx_toolbox.more_autodoc.generic_bases",
+    # https://github.com/wpilibsuite/sphinxext-opengraph
     "sphinxext.opengraph",
+    # https://github.com/readthedocs/sphinx-notfound-page
+    "notfound.extension",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -207,6 +214,7 @@ extlinks_detect_hardcoded_links = True
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "packaging": ("https://packaging.pypa.io/en/latest", None),
+    "typing_extensions": ("https://typing-extensions.readthedocs.io/en/latest", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
@@ -220,7 +228,14 @@ html_baseurl = docs_url
 sitemap_url_scheme = "{link}"
 
 
-# -- autodoc, napoleon, and autodoc-typehints ------------------------------------------------------
+# -- autodoc, apidoc, napoleon, and autodoc-typehints ----------------------------------------------
+
+# apidoc config
+apidoc_module_dir = "../src/ridgeplot"
+apidoc_output_dir = "api/autogen"
+apidoc_separate_modules = True
+apidoc_extra_args = ["--no-toc", "--private"]
+
 
 # autosectionlabel
 autosectionlabel_prefix_document = True
@@ -254,7 +269,7 @@ napoleon_numpy_docstring = True
 napoleon_use_admonition_for_examples = True
 napoleon_use_admonition_for_notes = False
 napoleon_use_param = False
-# napoleon_use_rtype = False
+napoleon_use_rtype = True
 napoleon_preprocess_types = True
 napoleon_attr_annotations = True
 
@@ -379,19 +394,7 @@ def reset_sys_argv() -> Generator[None]:
         sys.argv = original_sys_argv
 
 
-def _fix_generated_public_api_rst() -> None:
-    from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
-    from pre_commit_hooks.fix_byte_order_marker import main as fix_byte_order_marker
-
-    files = [file.resolve().as_posix() for file in Path("api/public/").glob("*.rst")]
-    if not files:
-        raise RuntimeError("No RST files found. Check that the path above is correct.")
-    with reset_sys_argv():
-        end_of_file_fixer(files)
-        fix_byte_order_marker(files)
-
-
-def _fix_html_charts() -> None:
+def _fix_html_charts(app: Sphinx, exception: Exception | None) -> None:
     from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
 
     files = [file.resolve().as_posix() for file in Path("_static/charts/").glob("*.html")]
@@ -401,7 +404,7 @@ def _fix_html_charts() -> None:
         end_of_file_fixer(files)
 
 
-def rename_plotly_io_show() -> None:
+def _rename_plotly_io_show(app: Sphinx) -> None:
     """Rename usages of `plotly.io.show` to `fig.show`."""
     from pathlib import Path
 
@@ -420,6 +423,5 @@ def setup(app: Sphinx) -> None:
     compile_plotly_charts()
     # app.connect("html-page-context", register_jinja_functions)
 
-    app.connect("builder-inited", lambda *_: rename_plotly_io_show())  # pyright: ignore[reportUnknownLambdaType]
-    app.connect("build-finished", lambda *_: _fix_generated_public_api_rst())  # pyright: ignore[reportUnknownLambdaType]
-    app.connect("build-finished", lambda *_: _fix_html_charts())  # pyright: ignore[reportUnknownLambdaType]
+    app.connect("builder-inited", _rename_plotly_io_show)
+    app.connect("build-finished", _fix_html_charts)

@@ -1,3 +1,5 @@
+"""Object-oriented trace interfaces."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
