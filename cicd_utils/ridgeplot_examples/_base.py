@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from minify_html import minify
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
     from pathlib import Path
 
 
@@ -30,11 +30,25 @@ def _round_sig_figs(x: float, sig_figs: int) -> float:
     return float(f"{x:.{sig_figs}g}")
 
 
+def _round_seq(data: Sequence[float], sig_figs: int) -> Sequence[float]:
+    return [_round_sig_figs(x, sig_figs) for x in data]
+
+
+def _round_nested_seq(data: Sequence[Sequence[float]], sig_figs: int) -> Sequence[Sequence[float]]:
+    return [_round_seq(sub_data, sig_figs) for sub_data in data]
+
+
 def round_fig_data(fig: go.Figure, sig_figs: int) -> go.Figure:
     """Round the float values in the data of a Plotly figure."""
-    for i, trace in enumerate(fig.data):
-        fig.data[i].x = [_round_sig_figs(x, sig_figs) for x in trace.x]
-        fig.data[i].y = [_round_sig_figs(y, sig_figs) for y in trace.y]
+    data_attrs = {"x": _round_seq, "y": _round_seq, "customdata": _round_nested_seq}
+    for i in range(len(fig.data)):
+        for attr, round_fn in data_attrs.items():
+            if hasattr(fig.data[i], attr):
+                attr_val = getattr(fig.data[i], attr)
+                if attr_val is None:
+                    continue
+                rounded_attr = round_fn(attr_val, sig_figs)
+                setattr(fig.data[i], attr, rounded_attr)
     return fig
 
 
