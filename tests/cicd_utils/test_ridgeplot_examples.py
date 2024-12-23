@@ -3,7 +3,11 @@ from __future__ import annotations
 import pytest
 
 from ridgeplot_examples import ALL_EXAMPLES
-from ridgeplot_examples._base import _round_sig_figs  # pyright: ignore[reportPrivateUsage]
+from ridgeplot_examples._base import (
+    _round_nested_seq,  # pyright: ignore[reportPrivateUsage]
+    _round_seq,  # pyright: ignore[reportPrivateUsage]
+    _round_sig_figs,  # pyright: ignore[reportPrivateUsage]
+)
 
 
 def test_all_examples() -> None:
@@ -21,3 +25,11 @@ def test_all_examples() -> None:
 )
 def test_round_sig_figs(sig: int, x: float, expected: float) -> None:
     assert _round_sig_figs(x, sig) == expected
+
+
+def test_round_seq() -> None:
+    assert _round_seq([123456, 123.456, 0.123456], 5) == [123460, 123.46, 0.12346]
+
+
+def test_round_nested_seq() -> None:
+    assert _round_nested_seq([[123456], [123.456]], 5) == [[123460], [123.46]]
