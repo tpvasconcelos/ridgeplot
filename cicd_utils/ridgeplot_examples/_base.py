@@ -11,6 +11,8 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
     from pathlib import Path
 
+    from ridgeplot._types import NumericT
+
 
 def tighten_margins(fig: go.Figure, px: int = 0) -> go.Figure:
     """Tighten the margins of a Plotly figure."""
@@ -25,22 +27,32 @@ def tighten_margins(fig: go.Figure, px: int = 0) -> go.Figure:
     return fig.update_layout(margin=dict(l=px, r=px, t=margin_top, b=px))
 
 
-def _round_sig_figs(x: float, sig_figs: int) -> float:
+def round_sig_figs(x: NumericT, sig_figs: int) -> NumericT:
     """Round a float value to a fixed number of significant figures."""
-    return float(f"{x:.{sig_figs}g}")
+    cls = type(x)
+    rounded = float(f"{x:.{sig_figs}g}")
+    return cls(rounded)
 
 
-def _round_seq(data: Sequence[float], sig_figs: int) -> Sequence[float]:
-    return [_round_sig_figs(x, sig_figs) for x in data]
+def round_seq(seq: Sequence[NumericT], sig_figs: int) -> Sequence[NumericT]:
+    rounded_seq = [round_sig_figs(x, sig_figs) for x in seq]
+    if isinstance(seq, (list, tuple)):
+        return type(seq)(rounded_seq)
+    raise TypeError(f"Unsupported sequence type: {type(seq)}")
 
 
-def _round_nested_seq(data: Sequence[Sequence[float]], sig_figs: int) -> Sequence[Sequence[float]]:
-    return [_round_seq(sub_data, sig_figs) for sub_data in data]
+def round_nested_seq(
+    seq: Sequence[Sequence[NumericT]], sig_figs: int
+) -> Sequence[Sequence[NumericT]]:
+    rounded_seq = [round_seq(sub_seq, sig_figs) for sub_seq in seq]
+    if isinstance(seq, (list, tuple)):
+        return type(seq)(rounded_seq)
+    raise TypeError(f"Unsupported sequence type: {type(seq)}")
 
 
 def round_fig_data(fig: go.Figure, sig_figs: int) -> go.Figure:
     """Round the float values in the data of a Plotly figure."""
-    data_attrs = {"x": _round_seq, "y": _round_seq, "customdata": _round_nested_seq}
+    data_attrs = {"x": round_seq, "y": round_seq, "customdata": round_nested_seq}
     for i in range(len(fig.data)):
         for attr, round_fn in data_attrs.items():
             if hasattr(fig.data[i], attr):
