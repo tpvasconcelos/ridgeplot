@@ -26,7 +26,16 @@ def test_regressions(example: Example) -> None:
 
 
 def _update_all_artifacts() -> None:
-    """Update the artifacts for all examples."""
+    """Update the artifacts for all examples.
+
+    This function is intended to be run manually when the examples
+    have been updated and the artifacts need to be refreshed.
+
+    To update the artifacts, run:
+
+        $ PYTHONPATH='cicd_utils/' python ./tests/e2e/test_examples.py
+
+    """
     for example in ALL_EXAMPLES:
         # Save JSONs for regression tests
         example.to_json(PATH_ARTIFACTS)
