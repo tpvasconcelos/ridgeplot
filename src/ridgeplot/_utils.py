@@ -1,3 +1,5 @@
+"""Miscellaneous utilities and helper functions."""
+
 from __future__ import annotations
 
 from collections.abc import Collection

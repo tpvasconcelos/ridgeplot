@@ -20,6 +20,7 @@ sphinx-togglebutton
 sphinx-toolbox
 sphinx_design
 sphinx_thebe
+sphinxcontrib-apidoc
 sphinxext-opengraph
 
 # matplotlib is used to generate social cards

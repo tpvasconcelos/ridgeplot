@@ -19,13 +19,3 @@ Data loading utilities
 
    ridgeplot.datasets.load_probly
    ridgeplot.datasets.load_lincoln_weather
-
-
-Internals
-=========
-
-.. toctree::
-   :maxdepth: 1
-   :glob:
-
-   internal/*

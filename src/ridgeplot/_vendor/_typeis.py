@@ -46,7 +46,8 @@ def typeis(obj: Any, tp: _T) -> TypeIs[_T]:
 
     Returns
     -------
-        bool: Whether the object is of the given type.
+    bool
+        Whether the object is of the given type.
     """
     if tp in _typeguard_registry:
         return _typeguard_registry[tp](obj)
@@ -71,7 +72,9 @@ def register_typeis(tp: _T) -> Callable[[TypeGuardFunc[_T]], TypeGuardFunc[_T]]:
 
     Returns
     -------
-        A decorator that registers the given type guard function for the given type.
+    Callable[[TypeGuardFunc[_T]], TypeGuardFunc[_T]]
+        A decorator that registers the given type guard function for the given
+        type.
     """
 
     def decorator(func: TypeGuardFunc[_T]) -> TypeGuardFunc[_T]:

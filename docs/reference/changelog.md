@@ -8,6 +8,7 @@ Unreleased changes
 ### Internal
 
 - Improve type annotations and use stricter pyright settings ({gh-pr}`291`)
+- Use `sphinxcontrib.apidoc` to automatically generate API docs from the source code ({gh-pr}`296`)
 
 ---
 
