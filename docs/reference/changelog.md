@@ -5,6 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.3.1
+------
+
 ### Internal
 
 - Improve type annotations and use stricter pyright settings ({gh-pr}`291`)
