@@ -8,7 +8,18 @@ Unreleased changes
 ### Internal
 
 - Improve type annotations and use stricter pyright settings ({gh-pr}`291`)
+
+### Documentation
+
 - Use `sphinxcontrib.apidoc` to automatically generate API docs from the source code ({gh-pr}`296`)
+- Update hero image in the docs' landing page ({gh-pr}`300`)
+- Update release process notes ({gh-pr}`301` and {gh-pr}`303`)
+
+### CI/CD
+
+- Fix regressions tests by comparing against JSON artefacts instead of flaky JPEGs ({gh-pr}`299`)
+
+Thanks to {gh-user}`imprvhub` for their contributions to this release! 🚀
 
 ---
 

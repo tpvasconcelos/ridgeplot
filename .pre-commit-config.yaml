@@ -34,7 +34,7 @@ repos:
       - id: pretty-format-json
         args: [ --autofix, --no-sort-keys ]
         # ignore jupyter notebooks
-        exclude: (^.*\.ipynb$|^pyrightconfig\.json$)
+        exclude: (^.*\.ipynb$|^pyrightconfig\.json$|^tests/e2e/artifacts/.*\.json$)
       - id: pretty-format-json
         args: [ --autofix, --no-sort-keys, --indent=1, --no-ensure-ascii ]
         # only jupyter notebooks
@@ -79,7 +79,7 @@ repos:
   # mdformat is not enabled by default, but can be run manually with:
   #   pre-commit run mdformat --all-files --hook-stage manual
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.19
+    rev: 0.7.21
     hooks:
       - id: mdformat
         stages: [ manual ]
@@ -102,7 +102,7 @@ repos:
         additional_dependencies: [setuptools-scm]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.3
+    rev: v0.8.4
     hooks:
       - id: ruff-format
       - id: ruff

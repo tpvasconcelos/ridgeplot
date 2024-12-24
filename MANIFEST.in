@@ -22,14 +22,15 @@ include docs/make.bat
 include docs/robots.txt
 include docs/_static/favicon.ico
 recursive-include docs *.md *.py *.rst
-recursive-include docs/_static/charts *.html *.webp *.jpeg
+recursive-include docs/_static/charts *.html *.webp
 recursive-include docs/_static/css *.css
 recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpg
 recursive-include docs/_static/js *.js
 recursive-include docs/_templates *.html
 exclude docs/sg_execution_times.rst
 prune docs/examples_gallery_out
-prune docs/build
+prune docs/_build
+prune docs/_static/charts
 prune docs/api/autogen
 prune docs/api/public
 
@@ -39,6 +40,7 @@ recursive-include cicd_utils README.md *.py
 recursive-include misc *.py *.ipynb *.txt *.png
 recursive-include requirements *.txt
 recursive-include tests *.py
+recursive-include tests/e2e/artifacts *.jpeg *.json
 
 # Globally excluded patterns
 recursive-exclude * *.py[cod] *.egg-info __pycache__ .ipynb_checkpoints/*
