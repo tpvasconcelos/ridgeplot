@@ -151,4 +151,5 @@ class Example:
         if not path.exists():
             path.mkdir(parents=True)
         out_path = path / f"{self.plot_id}.json"
-        out_path.write_text(self.fig.to_json(), "utf-8")
+        json_txt = f"{self.fig.to_json()}\n"
+        out_path.write_text(json_txt, "utf-8")
