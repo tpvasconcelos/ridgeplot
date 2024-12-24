@@ -81,7 +81,8 @@ clean-all: clean-docs clean-build clean-pyc clean-cov clean-ci-caches clean-tox 
 .PHONY: clean-docs
 clean-docs: ## remove documentation build artifacts
 	@echo "==> Removing documentation build artifacts..."
-	rm -fr docs/_build/ docs/_static/charts docs/api/autogen/ docs/api/public/
+	rm -fr docs/_build/ docs/_static/charts docs/api/autogen/ docs/api/public/ docs/examples_gallery_out
+	rm -f docs/sg_execution_times.rst
 
 
 .PHONY: clean-build
