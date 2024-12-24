@@ -12,7 +12,7 @@ Unreleased changes
 ### Documentation
 
 - Use `sphinxcontrib.apidoc` to automatically generate API docs from the source code ({gh-pr}`296`)
-- Update hero image in the docs' landing page ({gh-pr}`300`)
+- Update hero image in the docs' landing page ({gh-pr}`300` and {gh-pr}`301`)
 - Update release process notes ({gh-pr}`301`)
 
 ### CI/CD
