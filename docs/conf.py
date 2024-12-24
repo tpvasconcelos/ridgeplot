@@ -398,7 +398,7 @@ def reset_sys_argv() -> Generator[None]:
 
 def compile_all_plotly_charts() -> None:
     path_charts = PATH_DOCS / "_static/charts"
-    print(f"Writing image artefacts to {path_charts}...")
+    print(f"Writing image artifacts to {path_charts}...")
     for example in ALL_EXAMPLES:
         example.to_html(path_charts, minify_html=True)
         example.to_webp(path_charts)

@@ -17,7 +17,7 @@ Unreleased changes
 
 ### CI/CD
 
-- Fix regressions tests by comparing against JSON artefacts instead of flaky JPEGs ({gh-pr}`299`)
+- Fix regressions tests by comparing against JSON artifacts instead of flaky JPEGs ({gh-pr}`299`)
 
 Thanks to {gh-user}`imprvhub` for their contributions to this release! 🚀
 
@@ -265,7 +265,7 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 
 ### Documentation
 
-- Use the `{raw} html :file: _static/charts/<PLOT-ID>.html` directive to load the interactive Plotly graphs in the generated Sphinx docs. The generated HTML artefacts only include a `<div>` wrapper block now and the plotly.min.js is now vendored and automatically loaded via the `html_js_files` Sphinx config ({gh-pr}`132`)
+- Use the `{raw} html :file: _static/charts/<PLOT-ID>.html` directive to load the interactive Plotly graphs in the generated Sphinx docs. The generated HTML artifacts only include a `<div>` wrapper block now and the plotly.min.js is now vendored and automatically loaded via the `html_js_files` Sphinx config ({gh-pr}`132`)
 - Small adjustments to the example plots in the documentation ({gh-pr}`132`)
 - Reformat markdown files, removing all line breaks ({gh-pr}`132`)
 
