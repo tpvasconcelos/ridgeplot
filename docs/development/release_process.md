@@ -7,7 +7,7 @@ You need to have push-access to the project's repository to make releases. There
 :::
 
 1. Review the **`## Unreleased changes`** section at the top of the {repo-file}`docs/reference/changelog.md` file and, if necessary, group and/or split entries into relevant subsections (e.g., _Features_, _Docs_, _Bugfixes_, _Security_, etc.). Take a look at previous release notes for guidance and try to keep the format consistent.
-2. Review new usages of `.. versionadded::`, `.. versionchanged::`, and `.. deprecated::` directives that were added to the documentation since the last release. If necessary, update the version numbers in these directives to reflect the new release version.
+2. [Review](https://github.com/tpvasconcelos/ridgeplot/compare) new usages of `.. versionadded::`, `.. versionchanged::`, and `.. deprecated::` directives that were added to the documentation since the last release. If necessary, update the version numbers in these directives to reflect the new release version.
    * You can determine the latest release version by running `git describe --tags --abbrev=0` on the `main` branch. Based on this, you can determine the next release version by incrementing the relevant _MAJOR_, _MINOR_, or _PATCH_ numbers.
 3. **IMPORTANT:** Remember to switch to the `main` branch and pull the latest changes before proceeding.
    ```shell
