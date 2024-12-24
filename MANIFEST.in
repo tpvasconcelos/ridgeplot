@@ -22,13 +22,12 @@ include docs/make.bat
 include docs/robots.txt
 include docs/_static/favicon.ico
 recursive-include docs *.md *.py *.rst
-recursive-include docs/_static/charts *.html *.webp
+recursive-include docs/_static/charts *.webp
 recursive-include docs/_static/css *.css
 recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpg
 recursive-include docs/_static/js *.js
 recursive-include docs/_templates *.html
 prune docs/_build
-prune docs/_static/charts
 prune docs/api/autogen
 prune docs/api/public
 
