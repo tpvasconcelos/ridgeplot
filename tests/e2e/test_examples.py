@@ -6,9 +6,6 @@ from pathlib import Path
 import pytest
 
 from ridgeplot_examples import ALL_EXAMPLES, Example
-from ridgeplot_examples._base import round_fig_data
-
-JSON_SIG_FIGS = 8
 
 PATH_ROOT = Path(__file__).parents[2].resolve()
 PATH_ARTIFACTS = PATH_ROOT / "tests/e2e/artifacts"
@@ -32,8 +29,7 @@ def test_examples_width_height_set(example: Example) -> None:
 def test_regressions(example: Example) -> None:
     """Verify that the rendered JPEG images match the current artifacts."""
     expected = (PATH_ARTIFACTS / f"{example.plot_id}.json").read_text()
-    fig = round_fig_data(example.fig, sig_figs=JSON_SIG_FIGS)
-    assert fig.to_dict() == json.loads(expected)
+    assert example.fig.to_dict() == json.loads(expected)
 
 
 def _update_all_artifacts() -> None:
@@ -48,8 +44,9 @@ def _update_all_artifacts() -> None:
 
     """
     for example in ALL_EXAMPLES:
+        print(f"Updating artifacts for: {example.plot_id!r}")  # noqa: T201
         # Save JSONs for regression tests
-        example.to_json(PATH_ARTIFACTS, sig_figs=JSON_SIG_FIGS)
+        example.to_json(PATH_ARTIFACTS)
         # We also save JPEGs for visual inspection (e.g., in PRs)
         # (Don't use JPEGs for regression tests because outputs
         #  will vary between Plotly versions and platforms)

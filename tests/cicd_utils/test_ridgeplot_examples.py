@@ -48,7 +48,7 @@ def test_round_fig_data() -> None:
             )
         ]
     )
-    fig_rounded = round_fig_data(fig, 5)
-    assert fig_rounded.data[0].x == (123460, 123.46, 0.12346)
-    assert fig_rounded.data[0].y == (123460, 123.46, 0.12346)
-    assert fig_rounded.data[0].customdata == ([123460], [123.46], [0.12346])
+    round_fig_data(fig, 5)
+    assert fig.data[0].x == (123460, 123.46, 0.12346)
+    assert fig.data[0].y == (123460, 123.46, 0.12346)
+    assert fig.data[0].customdata == ([123460], [123.46], [0.12346])
