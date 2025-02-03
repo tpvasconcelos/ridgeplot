@@ -26,8 +26,7 @@ def test_examples_width_height_set(example: Example) -> None:
 
 
 @pytest.mark.parametrize("example", ALL_EXAMPLES, ids=lambda e: e.plot_id)
-def test_regressions(example: Example) -> None:
-    """Verify that the rendered JPEG images match the current artifacts."""
+def test_json_regressions(example: Example) -> None:
     expected = (PATH_ARTIFACTS / f"{example.plot_id}.json").read_text()
     assert example.fig.to_dict() == json.loads(expected)
 
