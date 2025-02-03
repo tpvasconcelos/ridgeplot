@@ -6,9 +6,6 @@ from pathlib import Path
 import pytest
 
 from ridgeplot_examples import ALL_EXAMPLES, Example
-from ridgeplot_examples._base import round_fig_data
-
-JSON_SIG_FIGS = 8
 
 PATH_ROOT = Path(__file__).parents[2].resolve()
 PATH_ARTIFACTS = PATH_ROOT / "tests/e2e/artifacts"
@@ -29,11 +26,9 @@ def test_examples_width_height_set(example: Example) -> None:
 
 
 @pytest.mark.parametrize("example", ALL_EXAMPLES, ids=lambda e: e.plot_id)
-def test_regressions(example: Example) -> None:
-    """Verify that the rendered JPEG images match the current artifacts."""
+def test_json_regressions(example: Example) -> None:
     expected = (PATH_ARTIFACTS / f"{example.plot_id}.json").read_text()
-    fig = round_fig_data(example.fig, sig_figs=JSON_SIG_FIGS)
-    assert fig.to_dict() == json.loads(expected)
+    assert json.loads(example.to_json()) == json.loads(expected)
 
 
 def _update_all_artifacts() -> None:
@@ -48,18 +43,19 @@ def _update_all_artifacts() -> None:
 
     """
     for example in ALL_EXAMPLES:
+        print(f"Updating artifacts for: {example.plot_id!r}")  # noqa: T201
         # Save JSONs for regression tests
-        example.to_json(PATH_ARTIFACTS, sig_figs=JSON_SIG_FIGS)
+        example.write_json(PATH_ARTIFACTS)
         # We also save JPEGs for visual inspection (e.g., in PRs)
         # (Don't use JPEGs for regression tests because outputs
         #  will vary between Plotly versions and platforms)
-        example.to_jpeg(PATH_ARTIFACTS)
+        example.write_jpeg(PATH_ARTIFACTS)
         # Just to keep things in sync with the docs, we should also
         # regenerate the WebP images used there. These are tracked
         # by Git because some are used in the README (which needs
         # to be rendered on GitHub), otherwise they would be in
         # the .gitignore file (like the HTML artifacts).
-        example.to_webp(PATH_CHARTS)
+        example.write_webp(PATH_CHARTS)
 
 
 if __name__ == "__main__":

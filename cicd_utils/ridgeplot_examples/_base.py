@@ -50,7 +50,7 @@ def round_nested_seq(
     raise TypeError(f"Unsupported sequence type: {type(seq)}")
 
 
-def round_fig_data(fig: go.Figure, sig_figs: int) -> go.Figure:
+def round_fig_data(fig: go.Figure, sig_figs: int) -> None:
     """Round the float values in the data of a Plotly figure."""
     data_attrs = {"x": round_seq, "y": round_seq, "customdata": round_nested_seq}
     for i in range(len(fig.data)):
@@ -61,7 +61,6 @@ def round_fig_data(fig: go.Figure, sig_figs: int) -> go.Figure:
                     continue
                 rounded_attr = round_fn(attr_val, sig_figs)
                 setattr(fig.data[i], attr, rounded_attr)
-    return fig
 
 
 @dataclass
@@ -71,8 +70,20 @@ class Example:
 
     def __post_init__(self) -> None:
         self.fig = self.figure_factory()  # pyright: ignore[reportUninitializedInstanceVariable]
+        round_fig_data(self.fig, sig_figs=8)
 
-    def to_html(self, path: Path, minify_html: bool) -> None:
+    def to_json(self) -> str:
+        return f"{self.fig.to_json()}\n"
+
+    def write_json(self, path: Path) -> None:
+        # We'll round the float values in the JSON to a fixed number of
+        # significant figures to make the regression tests more robust.
+        if not path.exists():
+            path.mkdir(parents=True)
+        out_path = path / f"{self.plot_id}.json"
+        out_path.write_text(self.to_json(), "utf-8")
+
+    def write_html(self, path: Path, minify_html: bool) -> None:
         fig = deepcopy(self.fig)
 
         if fig.layout.height is None:
@@ -114,7 +125,7 @@ class Example:
         out_path = path / f"{self.plot_id}.html"
         out_path.write_text(html_str, "utf-8")
 
-    def to_webp(self, path: Path) -> None:
+    def write_webp(self, path: Path) -> None:
         fig = deepcopy(self.fig)
         fig = tighten_margins(fig, px=40)
         if not path.exists():
@@ -129,7 +140,7 @@ class Example:
             engine="kaleido",
         )
 
-    def to_jpeg(self, path: Path) -> None:
+    def write_jpeg(self, path: Path) -> None:
         fig = deepcopy(self.fig)
         fig = tighten_margins(fig, px=40)
         if not path.exists():
@@ -143,13 +154,3 @@ class Example:
             scale=1,
             engine="kaleido",
         )
-
-    def to_json(self, path: Path, sig_figs: int) -> None:
-        # We'll round the float values in the JSON to a fixed number of
-        # significant figures to make the regression tests more robust.
-        round_fig_data(self.fig, sig_figs=sig_figs)
-        if not path.exists():
-            path.mkdir(parents=True)
-        out_path = path / f"{self.plot_id}.json"
-        json_txt = f"{self.fig.to_json()}\n"
-        out_path.write_text(json_txt, "utf-8")
