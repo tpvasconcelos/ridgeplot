@@ -72,7 +72,7 @@ class Example:
         self.fig = self.figure_factory()  # pyright: ignore[reportUninitializedInstanceVariable]
         round_fig_data(self.fig, sig_figs=8)
 
-    def to_html(self, path: Path, minify_html: bool) -> None:
+    def write_html(self, path: Path, minify_html: bool) -> None:
         fig = deepcopy(self.fig)
 
         if fig.layout.height is None:
@@ -114,7 +114,7 @@ class Example:
         out_path = path / f"{self.plot_id}.html"
         out_path.write_text(html_str, "utf-8")
 
-    def to_webp(self, path: Path) -> None:
+    def write_webp(self, path: Path) -> None:
         fig = deepcopy(self.fig)
         fig = tighten_margins(fig, px=40)
         if not path.exists():
@@ -129,7 +129,7 @@ class Example:
             engine="kaleido",
         )
 
-    def to_jpeg(self, path: Path) -> None:
+    def write_jpeg(self, path: Path) -> None:
         fig = deepcopy(self.fig)
         fig = tighten_margins(fig, px=40)
         if not path.exists():
@@ -144,7 +144,7 @@ class Example:
             engine="kaleido",
         )
 
-    def to_json(self, path: Path) -> None:
+    def write_json(self, path: Path) -> None:
         # We'll round the float values in the JSON to a fixed number of
         # significant figures to make the regression tests more robust.
         if not path.exists():

@@ -45,17 +45,17 @@ def _update_all_artifacts() -> None:
     for example in ALL_EXAMPLES:
         print(f"Updating artifacts for: {example.plot_id!r}")  # noqa: T201
         # Save JSONs for regression tests
-        example.to_json(PATH_ARTIFACTS)
+        example.write_json(PATH_ARTIFACTS)
         # We also save JPEGs for visual inspection (e.g., in PRs)
         # (Don't use JPEGs for regression tests because outputs
         #  will vary between Plotly versions and platforms)
-        example.to_jpeg(PATH_ARTIFACTS)
+        example.write_jpeg(PATH_ARTIFACTS)
         # Just to keep things in sync with the docs, we should also
         # regenerate the WebP images used there. These are tracked
         # by Git because some are used in the README (which needs
         # to be rendered on GitHub), otherwise they would be in
         # the .gitignore file (like the HTML artifacts).
-        example.to_webp(PATH_CHARTS)
+        example.write_webp(PATH_CHARTS)
 
 
 if __name__ == "__main__":
