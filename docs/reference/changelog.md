@@ -5,7 +5,9 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+### Internal
+
+- Fix regression tests for Plotly 6.0+ by updating the JSON test artifacts ({gh-pr}`313`)
 
 ---
 
