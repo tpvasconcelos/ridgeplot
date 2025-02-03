@@ -400,8 +400,8 @@ def compile_all_plotly_charts() -> None:
     path_charts = PATH_DOCS / "_static/charts"
     print(f"Writing image artifacts to {path_charts}...")
     for example in ALL_EXAMPLES:
-        example.to_html(path_charts, minify_html=True)
-        example.to_webp(path_charts)
+        example.write_html(path_charts, minify_html=True)
+        example.write_webp(path_charts)
 
     # Fix the end-of-file markers in the generated HTML files
     from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
