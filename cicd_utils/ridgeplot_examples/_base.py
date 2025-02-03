@@ -72,6 +72,17 @@ class Example:
         self.fig = self.figure_factory()  # pyright: ignore[reportUninitializedInstanceVariable]
         round_fig_data(self.fig, sig_figs=8)
 
+    def to_json(self) -> str:
+        return f"{self.fig.to_json()}\n"
+
+    def write_json(self, path: Path) -> None:
+        # We'll round the float values in the JSON to a fixed number of
+        # significant figures to make the regression tests more robust.
+        if not path.exists():
+            path.mkdir(parents=True)
+        out_path = path / f"{self.plot_id}.json"
+        out_path.write_text(self.to_json(), "utf-8")
+
     def write_html(self, path: Path, minify_html: bool) -> None:
         fig = deepcopy(self.fig)
 
@@ -143,12 +154,3 @@ class Example:
             scale=1,
             engine="kaleido",
         )
-
-    def write_json(self, path: Path) -> None:
-        # We'll round the float values in the JSON to a fixed number of
-        # significant figures to make the regression tests more robust.
-        if not path.exists():
-            path.mkdir(parents=True)
-        out_path = path / f"{self.plot_id}.json"
-        json_txt = f"{self.fig.to_json()}\n"
-        out_path.write_text(json_txt, "utf-8")
