@@ -121,11 +121,12 @@ def update_layout(
 
 def create_ridgeplot(
     densities: Densities,
+    trace_labels: LabelsArray | ShallowLabelsArray | None,
     trace_types: TraceTypesArray | ShallowTraceTypesArray | TraceType,
     colorscale: ColorScale | Collection[Color] | str | None,
-    opacity: float | None,
     colormode: Literal["fillgradient"] | SolidColormode,
-    trace_labels: LabelsArray | ShallowLabelsArray | None,
+    color_discrete_map: dict[str, str] | None,
+    opacity: float | None,
     line_color: Color | Literal["fill-color"],
     line_width: float | None,
     spacing: float,
@@ -172,12 +173,17 @@ def create_ridgeplot(
         x_min=x_min,
         x_max=x_max,
     )
-    solid_colors = compute_solid_colors(
-        colorscale=colorscale,
-        colormode=colormode if colormode != "fillgradient" else "mean-minmax",
-        opacity=opacity,
-        interpolation_ctx=interpolation_ctx,
-    )
+    if color_discrete_map:
+        solid_colors = (
+            (color_discrete_map[label] for label in row_labels) for row_labels in trace_labels
+        )
+    else:
+        solid_colors = compute_solid_colors(
+            colorscale=colorscale,
+            colormode=colormode if colormode != "fillgradient" else "mean-minmax",
+            opacity=opacity,
+            interpolation_ctx=interpolation_ctx,
+        )
 
     tickvals: list[float] = []
     fig = go.Figure()

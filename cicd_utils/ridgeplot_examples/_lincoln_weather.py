@@ -1,19 +1,13 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from collections.abc import Collection
-
     import plotly.graph_objects as go
-
-    from ridgeplot._color.interpolation import SolidColormode
-    from ridgeplot._types import Color, ColorScale
 
 
 def main(
-    colorscale: ColorScale | Collection[Color] | str | None = "Inferno",
-    colormode: SolidColormode | Literal["fillgradient"] = "fillgradient",
+    color_discrete_map: dict[str, str] | None = None,
 ) -> go.Figure:
     import numpy as np
 
@@ -34,8 +28,9 @@ def main(
     fig = ridgeplot(
         samples=samples,
         labels=months,
-        colorscale=colorscale,
-        colormode=colormode,
+        colorscale="Inferno",
+        colormode="fillgradient",
+        color_discrete_map=color_discrete_map,
         bandwidth=4,
         kde_points=np.linspace(-40, 110, 400),
         spacing=0.3,

@@ -10,8 +10,10 @@ if TYPE_CHECKING:
 
 def main() -> go.Figure:
     fig = lincoln_weather(
-        colorscale=["orangered", "deepskyblue"],
-        colormode="trace-index-row-wise",
+        color_discrete_map={
+            "Min Temperature [F]": "deepskyblue",
+            "Max Temperature [F]": "orangered",
+        }
     )
     return fig
 
