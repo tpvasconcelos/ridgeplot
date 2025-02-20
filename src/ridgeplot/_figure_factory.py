@@ -78,7 +78,7 @@ def normalise_y_labels(trace_labels: LabelsArray) -> LabelsArray:
     return [ordered_dedup(row) for row in trace_labels]
 
 
-def update_layout(
+def _update_layout(
     fig: go.Figure,
     y_labels: LabelsArray,
     tickvals: list[float],
@@ -216,7 +216,7 @@ def create_ridgeplot(
             )
             ith_trace += 1
 
-    fig = update_layout(
+    fig = _update_layout(
         fig,
         y_labels=y_labels,
         tickvals=tickvals,
