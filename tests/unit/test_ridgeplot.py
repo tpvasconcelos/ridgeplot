@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import plotly.express as px
 import pytest
@@ -82,6 +82,52 @@ def test_shallow_trace_type() -> None:
 def test_unknown_trace_type() -> None:
     with pytest.raises(TypeError, match="Invalid trace_type: foo"):
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type="foo")  # pyright: ignore[reportArgumentType]
+
+
+# ==============================================================
+# ---  param: yticklabels
+# ==============================================================
+
+
+@pytest.mark.parametrize(
+    "yticklabels",
+    [
+        ["row 1"],
+        ["Trace 1", "Trace 2", "Trace 3", "Trace 4", "Trace 5"],
+    ],
+)
+def test_yticklabels_wrong_len(yticklabels: Any) -> None:
+    densities = [
+        [
+            [(0, 0), (1, 1), (2, 0)],  # Trace 1
+            [(1, 0), (2, 2), (3, 0)],  # Trace 2
+            [(2, 1), (3, 2), (4, 1)],  # Trace 3
+        ],
+        [
+            [(0, 4), (1, 4), (2, 8)],  # Trace 4
+            [(1, 4), (2, 4), (3, 2)],  # Trace 5
+        ],
+    ]
+    with pytest.raises(ValueError, match="Expected 2 yticklabels, got .* instead"):
+        ridgeplot(densities=densities, yticklabels=yticklabels)
+
+
+def test_yticklabels_auto() -> None:
+    densities = [
+        [
+            [(0, 0), (1, 1), (2, 0)],  # Trace 1
+            [(1, 0), (2, 2), (3, 0)],  # Trace 2
+            [(2, 1), (3, 2), (4, 1)],  # Trace 3
+        ],
+        [
+            [(0, 4), (1, 4), (2, 8)],  # Trace 4
+            [(1, 4), (2, 4), (3, 2)],  # Trace 5
+        ],
+    ]
+    assert (
+        ridgeplot(densities=densities) ==
+        ridgeplot(densities=densities, yticklabels=["Trace 1,Trace 2,Trace 3", "Trace 4,Trace 5"])
+    )  # fmt: skip
 
 
 # ==============================================================
@@ -262,6 +308,22 @@ def test_deprecated_linewidth_and_line_width_together_raises() -> None:
         match="You may not specify both the 'linewidth' and 'line_width' arguments!",
     ):
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], linewidth=0.4, line_width=0.6)
+
+
+def test_deprecated_show_yticklabels_is_not_missing() -> None:
+    with pytest.warns(
+        DeprecationWarning,
+        match="The 'show_yticklabels' argument has been deprecated in favor of 'yticklabels'",
+    ):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_yticklabels=False)
+
+
+def test_deprecated_show_yticklabels_and_yticklabels_together_raises() -> None:
+    with pytest.raises(
+        ValueError,
+        match="You may not specify both the 'show_yticklabels' and 'yticklabels' arguments!",
+    ):
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_yticklabels=False, yticklabels=["a", "b"])
 
 
 def test_ridgeplot_colorscale_default_deprecation_warning() -> None:
