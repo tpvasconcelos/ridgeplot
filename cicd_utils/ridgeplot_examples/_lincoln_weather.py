@@ -27,7 +27,7 @@ def main(
 
     fig = ridgeplot(
         samples=samples,
-        labels=months,
+        row_labels=months,
         colorscale="Inferno",
         colormode="fillgradient",
         color_discrete_map=color_discrete_map,
