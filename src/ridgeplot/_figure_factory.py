@@ -80,7 +80,7 @@ def normalise_row_labels(trace_labels: LabelsArray) -> Collection[str]:
 
 def update_layout(
     fig: go.Figure,
-    yticklabels: Collection[str] | Literal[False],
+    row_labels: Collection[str] | Literal[False],
     tickvals: list[float],
     xpad: float,
     x_max: float,
@@ -95,14 +95,14 @@ def update_layout(
         showgrid=True,
     )
     fig.update_yaxes(
-        showticklabels=yticklabels is not False,
+        showticklabels=row_labels is not False,
         **axes_common,
     )
-    if yticklabels is not False:
+    if row_labels is not False:
         fig.update_yaxes(
             # tickmode="array",  # TODO: check if this is needed
             tickvals=tickvals,
-            ticktext=yticklabels,
+            ticktext=row_labels,
         )
     x_padding = xpad * (x_max - x_min)
     fig.update_xaxes(
@@ -125,7 +125,7 @@ def update_layout(
 def create_ridgeplot(
     densities: Densities,
     trace_types: TraceTypesArray | ShallowTraceTypesArray | TraceType,
-    yticklabels: Collection[str] | None | Literal[False],
+    row_labels: Collection[str] | None | Literal[False],
     colorscale: ColorScale | Collection[Color] | str | None,
     opacity: float | None,
     colormode: Literal["fillgradient"] | SolidColormode,
@@ -155,10 +155,10 @@ def create_ridgeplot(
         trace_labels=trace_labels,
         n_traces=n_traces,
     )
-    if yticklabels is None:
-        yticklabels = normalise_row_labels(trace_labels)
-    elif yticklabels is not False and len(yticklabels) != n_rows:
-        raise ValueError(f"Expected {n_rows} yticklabels, got {len(yticklabels)} instead.")
+    if row_labels is None:
+        row_labels = normalise_row_labels(trace_labels)
+    elif row_labels is not False and len(row_labels) != n_rows:
+        raise ValueError(f"Expected {n_rows} row_labels, got {len(row_labels)} instead.")
 
     # Force cast certain arguments to the expected types
     line_width = float(line_width) if line_width is not None else None
@@ -217,7 +217,7 @@ def create_ridgeplot(
 
     fig = update_layout(
         fig,
-        yticklabels=yticklabels,
+        row_labels=row_labels,
         tickvals=tickvals,
         xpad=xpad,
         x_max=x_max,

@@ -85,18 +85,18 @@ def test_unknown_trace_type() -> None:
 
 
 # ==============================================================
-# ---  param: yticklabels
+# ---  param: row_labels
 # ==============================================================
 
 
 @pytest.mark.parametrize(
-    "yticklabels",
+    "row_labels",
     [
         ["row 1"],
         ["Trace 1", "Trace 2", "Trace 3", "Trace 4", "Trace 5"],
     ],
 )
-def test_yticklabels_wrong_len(yticklabels: Any) -> None:
+def test_row_labels_wrong_len(row_labels: Any) -> None:
     densities = [
         [
             [(0, 0), (1, 1), (2, 0)],  # Trace 1
@@ -108,11 +108,11 @@ def test_yticklabels_wrong_len(yticklabels: Any) -> None:
             [(1, 4), (2, 4), (3, 2)],  # Trace 5
         ],
     ]
-    with pytest.raises(ValueError, match="Expected 2 yticklabels, got .* instead"):
-        ridgeplot(densities=densities, yticklabels=yticklabels)
+    with pytest.raises(ValueError, match="Expected 2 row_labels, got .* instead"):
+        ridgeplot(densities=densities, row_labels=row_labels)
 
 
-def test_yticklabels_auto() -> None:
+def test_row_labels_auto() -> None:
     densities = [
         [
             [(0, 0), (1, 1), (2, 0)],  # Trace 1
@@ -126,7 +126,7 @@ def test_yticklabels_auto() -> None:
     ]
     assert (
         ridgeplot(densities=densities) ==
-        ridgeplot(densities=densities, yticklabels=["Trace 1,Trace 2,Trace 3", "Trace 4,Trace 5"])
+        ridgeplot(densities=densities, row_labels=["Trace 1,Trace 2,Trace 3", "Trace 4,Trace 5"])
     )  # fmt: skip
 
 
@@ -313,17 +313,17 @@ def test_deprecated_linewidth_and_line_width_together_raises() -> None:
 def test_deprecated_show_yticklabels_is_not_missing() -> None:
     with pytest.warns(
         DeprecationWarning,
-        match="The 'show_yticklabels' argument has been deprecated in favor of 'yticklabels'",
+        match="The 'show_yticklabels' argument has been deprecated in favor of 'row_labels'",
     ):
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_yticklabels=False)
 
 
-def test_deprecated_show_yticklabels_and_yticklabels_together_raises() -> None:
+def test_deprecated_show_yticklabels_and_row_labels_together_raises() -> None:
     with pytest.raises(
         ValueError,
-        match="You may not specify both the 'show_yticklabels' and 'yticklabels' arguments!",
+        match="You may not specify both the 'show_yticklabels' and 'row_labels' arguments!",
     ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_yticklabels=False, yticklabels=["a", "b"])
+        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_yticklabels=False, row_labels=["a", "b"])
 
 
 def test_ridgeplot_colorscale_default_deprecation_warning() -> None:

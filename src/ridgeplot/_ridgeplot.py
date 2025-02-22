@@ -101,7 +101,7 @@ def ridgeplot(
     densities: Densities | ShallowDensities | None = None,
     trace_type: TraceTypesArray | ShallowTraceTypesArray | TraceType | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
-    yticklabels: Collection[str] | None | Literal[False] = None,
+    row_labels: Collection[str] | None | Literal[False] = None,
     # KDE parameters
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
@@ -203,7 +203,7 @@ def ridgeplot(
         collection of labels is specified, it should have the same shape as the
         samples array.
 
-    yticklabels : Collection[str] or None or False
+    row_labels : Collection[str] or None or False
         A collection of string labels for each row in the ridgeline plot. If
         specified, the length of this collection should match the number of rows
         in the plot (i.e., the :math:`R` dimension in the :paramref:`.samples`
@@ -389,7 +389,7 @@ def ridgeplot(
     show_yticklabels : bool
 
         .. deprecated:: 0.4.0
-            Use :paramref:`.yticklabels` instead.
+            Use :paramref:`.row_labels` instead.
 
     Returns
     -------
@@ -452,19 +452,19 @@ def ridgeplot(
         line_width = linewidth
 
     if show_yticklabels is not MISSING:
-        if yticklabels is not None:
+        if row_labels is not None:
             raise ValueError(
-                "You may not specify both the 'show_yticklabels' and 'yticklabels' arguments! "
-                "HINT: Use the new 'yticklabels' argument instead of the deprecated "
+                "You may not specify both the 'show_yticklabels' and 'row_labels' arguments! "
+                "HINT: Use the new 'row_labels' argument instead of the deprecated "
                 "'show_yticklabels'."
             )
         warnings.warn(
-            "The 'show_yticklabels' argument has been deprecated in favor of 'yticklabels'. "
+            "The 'show_yticklabels' argument has been deprecated in favor of 'row_labels'. "
             "Support for the deprecated argument will be removed in a future version.",
             DeprecationWarning,
             stacklevel=2,
         )
-        yticklabels = yticklabels if show_yticklabels else False
+        row_labels = row_labels if show_yticklabels else False
 
     if colorscale == "default":
         warnings.warn(
@@ -483,7 +483,7 @@ def ridgeplot(
         densities=densities,
         trace_labels=labels,
         trace_types=trace_type,
-        yticklabels=yticklabels,
+        row_labels=row_labels,
         colorscale=colorscale,
         opacity=opacity,
         colormode=colormode,

@@ -26,7 +26,7 @@ class TestCreateRidgeplot:
             create_ridgeplot(
                 densities=densities,
                 trace_types=...,
-                yticklabels=...,
+                row_labels=...,
                 colorscale=...,
                 opacity=...,
                 colormode=...,
