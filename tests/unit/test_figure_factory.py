@@ -27,7 +27,7 @@ class TestCreateRidgeplot:
                 densities=densities,
                 trace_labels=...,
                 trace_types=...,
-                yticklabels=...,
+                row_labels=...,
                 colorscale=...,
                 colormode=...,
                 color_discrete_map=...,
