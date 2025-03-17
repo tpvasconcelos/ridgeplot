@@ -23,7 +23,7 @@ class ColorscaleValidator(_ColorscaleValidator):
     @property
     @override
     def named_colorscales(self) -> dict[str, list[str]]:
-        named_colorscales = cast(dict[str, list[str]], super().named_colorscales)
+        named_colorscales = cast("dict[str, list[str]]", super().named_colorscales)
         if "default" not in named_colorscales:
             # Add 'default' for backwards compatibility
             named_colorscales["default"] = px.colors.DEFAULT_PLOTLY_COLORS
@@ -34,12 +34,12 @@ class ColorscaleValidator(_ColorscaleValidator):
         coerced = super().validate_coerce(v)
         if coerced is None:  # pragma: no cover
             self.raise_invalid_val(coerced)
-        coerced = cast(ColorScale, coerced)
+        coerced = cast("ColorScale", coerced)
         # This helps us avoid floating point errors when making
         # comparisons in our test suite. The user should not
         # be able to notice *any* difference in the output
         coerced = tuple((v if isinstance(v, int) else round(v, ndigits=12), c) for v, c in coerced)
-        return cast(ColorScale, coerced)
+        return cast("ColorScale", coerced)
 
 
 def infer_default_colorscale() -> ColorScale | Collection[Color] | str:

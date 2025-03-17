@@ -48,7 +48,7 @@ VALID_COLOR_SCALES = [
 def valid_colorscale(
     request: pytest.FixtureRequest,
 ) -> tuple[ColorScale | Collection[Color] | str, ColorScale]:
-    return cast(tuple[Union[ColorScale, Collection[Color], str], ColorScale], request.param)
+    return cast("tuple[Union[ColorScale, Collection[Color], str], ColorScale]", request.param)
 
 
 INVALID_COLOR_SCALES = [
@@ -66,4 +66,4 @@ INVALID_COLOR_SCALES = [
 
 @pytest.fixture(scope="session", params=INVALID_COLOR_SCALES)
 def invalid_colorscale(request: pytest.FixtureRequest) -> ColorScale | Collection[Color] | str:
-    return cast(Union[ColorScale, Collection[Color], str], request.param)
+    return cast("Union[ColorScale, Collection[Color], str]", request.param)

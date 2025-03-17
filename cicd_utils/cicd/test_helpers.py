@@ -57,7 +57,7 @@ def round_trip_pickle(obj: _T, protocol: int = pickle.HIGHEST_PROTOCOL) -> _T:
     The object that was pickled and unpickled.
 
     """
-    return cast(_T, pickle.loads(pickle.dumps(obj, protocol=protocol)))  # noqa: S301
+    return cast("_T", pickle.loads(pickle.dumps(obj, protocol=protocol)))  # noqa: S301
 
 
 def import_pyscript_as_module(path: str | Path) -> ModuleType:
@@ -81,7 +81,7 @@ def import_pyscript_as_module(path: str | Path) -> ModuleType:
     path_posix = Path(path).resolve().as_posix()
     module_name = path_posix.split("/")[-1].split(".")[0]
     spec = cast(
-        ModuleSpec,
+        "ModuleSpec",
         spec_from_file_location(
             name=module_name,
             location=path_posix,
@@ -89,7 +89,7 @@ def import_pyscript_as_module(path: str | Path) -> ModuleType:
     )
     module = module_from_spec(spec)
     sys.modules[module_name] = module
-    loader = cast(Loader, spec.loader)
+    loader = cast("Loader", spec.loader)
     loader.exec_module(module)
     return module
 

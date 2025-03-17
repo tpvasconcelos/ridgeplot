@@ -183,7 +183,7 @@ def _validate_densities(
         # Fail early if the return type is incorrect
         # Otherwise, the remaining checks will fail
         raise RuntimeError(msg)  # noqa: TRY004
-    y = cast(npt.NDArray[np.floating[Any]], y)
+    y = cast("npt.NDArray[np.floating[Any]]", y)
     wrong_shape = y.shape != x.shape
     not_finite = ~np.isfinite(y).all()
     if wrong_shape or not_finite:
