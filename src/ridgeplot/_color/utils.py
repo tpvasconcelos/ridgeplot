@@ -2,15 +2,18 @@
 
 from __future__ import annotations
 
-from collections.abc import Collection
-from typing import Union, cast
+from typing import TYPE_CHECKING, Union, cast
 
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
 
 from ridgeplot._color.css_colors import CSS_NAMED_COLORS
-from ridgeplot._types import Color
+
+if TYPE_CHECKING:
+    from collections.abc import Collection
+
+    from ridgeplot._types import Color
 
 
 def default_plotly_template() -> go.layout.Template:

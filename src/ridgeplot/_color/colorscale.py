@@ -10,10 +10,11 @@ from _plotly_utils.basevalidators import ColorscaleValidator as _ColorscaleValid
 from typing_extensions import Any, override
 
 from ridgeplot._color.utils import default_plotly_template
-from ridgeplot._types import Color, ColorScale
 
 if TYPE_CHECKING:
     from collections.abc import Collection
+
+    from ridgeplot._types import Color, ColorScale
 
 
 class ColorscaleValidator(_ColorscaleValidator):
