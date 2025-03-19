@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union, cast
+from typing import TYPE_CHECKING, cast
 
 import plotly.express as px
 import pytest
 
 if TYPE_CHECKING:
     from collections.abc import Collection
+    from typing import Union
 
     from ridgeplot._types import Color, ColorScale
 

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union, cast
+from typing import TYPE_CHECKING, cast
 
 import plotly.express as px
 import plotly.graph_objects as go
@@ -12,6 +12,7 @@ from ridgeplot._color.css_colors import CSS_NAMED_COLORS
 
 if TYPE_CHECKING:
     from collections.abc import Collection
+    from typing import Union
 
     from ridgeplot._types import Color
 
