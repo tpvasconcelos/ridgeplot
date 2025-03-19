@@ -8,6 +8,7 @@ Unreleased changes
 ### Internal
 
 - Fix regression tests for Plotly 6.0+ by updating the JSON test artifacts ({gh-pr}`313`)
+- Add an `OFFLINE`-mode option to the Makefile and make `uv` compulsory for local development ({gh-pr}`322`)
 
 ---
 
