@@ -21,7 +21,13 @@ The following is a set of (slightly opinionated) rules and general guidelines fo
 (Development-environment)=
 ## Development environment
 
-Here are our guidelines for setting a **working** development environment. Most of the steps have been abstracted away using the [make](<https://en.wikipedia.org/wiki/Make_(software)>) build automation tool. Feel free to peak inside the {repo-file}`Makefile` to see exactly what is being run, and in which order.
+Here are our guidelines for setting a **working** development environment. Most of the steps have been abstracted away using the [make](https://en.wikipedia.org/wiki/Make_(software)) build automation tool. Feel free to peak inside the {repo-file}`Makefile` to see exactly what is being run, and in which order.
+
+:::{admonition} Prerequisites
+:class: important
+
+To follow along with this guide, you will need to have [git](https://git-scm.com/), [make](https://www.gnu.org/software/make/), and [uv](https://docs.astral.sh/uv/) installed on your system. We recommend using [uv](https://docs.astral.sh/uv/guides/install-python/) to also manage your Python installations. For this project you will need Python 3.9 or higher.
+:::
 
 First, you will need to [clone](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo#step-2-create-a-local-clone-of-your-fork) this repository. For this, make sure you have a [GitHub account](https://github.com/join), fork ridgeplot by clicking the [Fork](https://github.com/tpvasconcelos/ridgeplot/fork) button, and clone the main repository locally (_e.g.,_ using SSH)
 
@@ -53,6 +59,12 @@ The default and **recommended** base Python is `python3.9`. However, if you enco
 
 ```shell
 BASE_PYTHON=python3.13 make init
+```
+
+If for whatever reason you don't have a working internet connection (✈️, ⛵, 🏕️, 🚀, etc.), you can try exposing the `OFFLINE=1` environment variable. This will only work if compatible packages have already been cached by `uv` on your system.
+
+```shell
+OFFLINE=1 make init
 ```
 
 If you need to use jupyter in this environment, run the following command:
