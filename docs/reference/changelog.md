@@ -5,7 +5,8 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+### CI/CD
+- Migrate GitHub workflows to Blacksmith runners ({gh-pr}`327`)
 
 ---
 
