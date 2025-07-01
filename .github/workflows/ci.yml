@@ -19,7 +19,7 @@ jobs:
   # Run static checks only for Ubuntu and Python 3.9
   static-checks:
     name: Static checks
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
           - "3.12"
           - "3.13"
         os:
-          - ubuntu-latest
+          - blacksmith-2vcpu-ubuntu-2404
           # There shouldn't be any behavior differences between OSes,
           # so we'll only run the test suite on Ubuntu for now. Also,
           # since I (the main maintainer) develop on a macOS machine,

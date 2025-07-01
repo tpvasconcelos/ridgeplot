@@ -29,7 +29,7 @@ concurrency:
 jobs:
   build:
     name: Build distributions
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - build
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 2
     environment:
       name: testpypi
@@ -76,7 +76,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs:
       - build
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 2
     environment:
       name: pypi
@@ -97,7 +97,7 @@ jobs:
     name: Publish a GitHub Release
     needs:
       - publish-to-pypi
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 2
     permissions:
       contents: write  # IMPORTANT: mandatory for making GitHub Releases
