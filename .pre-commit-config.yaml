@@ -3,7 +3,7 @@ default_language_version:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
         args: [ '--maxkb=500' ]
@@ -43,7 +43,7 @@ repos:
         exclude: ^\.bumpversion\.cfg$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema.git
-    rev: 0.31.3
+    rev: 0.33.3
     hooks:
       - id: check-github-actions
       - id: check-github-workflows
@@ -72,7 +72,7 @@ repos:
         exclude: ^docs/_static/.*\.(js|html)$|^src/ridgeplot/.*\.c$
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.10.0.1
+    rev: v0.11.0.1
     hooks:
       - id: shellcheck
 
@@ -102,7 +102,7 @@ repos:
         additional_dependencies: [setuptools-scm]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.2
+    rev: v0.12.10
     hooks:
       - id: ruff-format
       - id: ruff
