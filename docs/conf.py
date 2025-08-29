@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.metadata
 import sys
 from contextlib import contextmanager
 from datetime import datetime
@@ -8,11 +9,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from typing_extensions import Any
-
-try:
-    import importlib.metadata as importlib_metadata
-except ImportError:
-    import importlib_metadata
 
 try:
     from ridgeplot_examples import ALL_EXAMPLES
@@ -40,7 +36,7 @@ if TYPE_CHECKING:
 
 # -- Project information ---------------------------------------------------------------------------
 
-metadata = importlib_metadata.metadata("ridgeplot")
+metadata = importlib.metadata.metadata("ridgeplot")
 
 project = project_name = name = metadata["name"]
 author = metadata["author"]
