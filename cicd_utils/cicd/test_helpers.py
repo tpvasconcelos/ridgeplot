@@ -6,6 +6,7 @@ import sys
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypeVar, cast
+from unittest.mock import MagicMock, patch
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -22,8 +23,6 @@ def patch_plotly_show() -> Iterator[None]:
     and, instead, simply call
     :func:`plotly.io._utils.validate_coerce_fig_to_dict()`.
     """
-    from unittest.mock import MagicMock, patch
-
     from plotly.io._utils import validate_coerce_fig_to_dict
 
     def patched(
