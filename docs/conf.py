@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.metadata
 import sys
 from contextlib import contextmanager
 from datetime import datetime
@@ -8,11 +9,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from typing_extensions import Any
-
-try:
-    import importlib.metadata as importlib_metadata
-except ImportError:
-    import importlib_metadata
 
 try:
     from ridgeplot_examples import ALL_EXAMPLES
@@ -40,7 +36,7 @@ if TYPE_CHECKING:
 
 # -- Project information ---------------------------------------------------------------------------
 
-metadata = importlib_metadata.metadata("ridgeplot")
+metadata = importlib.metadata.metadata("ridgeplot")
 
 project = project_name = name = metadata["name"]
 author = metadata["author"]
@@ -412,10 +408,10 @@ def reset_sys_argv() -> Generator[None]:
 
 def compile_all_plotly_charts() -> None:
     path_charts = PATH_DOCS / "_static/charts"
-    print(f"Writing image artefacts to {path_charts}...")
+    print(f"Writing image artifacts to {path_charts}...")
     for example in ALL_EXAMPLES:
-        example.to_html(path=path_charts, minify_html=True)
-        example.to_webp(path=path_charts)
+        example.write_html(path_charts, minify_html=True)
+        example.write_webp(path_charts)
 
     # Fix the end-of-file markers in the generated HTML files
     from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer

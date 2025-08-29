@@ -48,7 +48,7 @@ def normalise_trace_types(
     trace_types: TraceTypesArray | ShallowTraceTypesArray | TraceType,
 ) -> TraceTypesArray:
     if is_trace_type(trace_types):
-        trace_types = cast(TraceTypesArray, [[trace_types] * len(row) for row in densities])
+        trace_types = cast("TraceTypesArray", [[trace_types] * len(row) for row in densities])
     elif is_shallow_trace_types_array(trace_types):
         trace_types = nest_shallow_collection(trace_types)
         trace_types = normalise_row_attrs(trace_types, l2_target=densities)

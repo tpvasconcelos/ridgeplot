@@ -3,14 +3,15 @@ from __future__ import annotations
 import contextlib
 import pickle
 import sys
-from importlib.abc import Loader
-from importlib.machinery import ModuleSpec
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypeVar, cast
+from unittest.mock import MagicMock, patch
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
+    from importlib.abc import Loader
+    from importlib.machinery import ModuleSpec
     from types import ModuleType
 
     from plotly.graph_objs import Figure
@@ -22,8 +23,6 @@ def patch_plotly_show() -> Iterator[None]:
     and, instead, simply call
     :func:`plotly.io._utils.validate_coerce_fig_to_dict()`.
     """
-    from unittest.mock import MagicMock, patch
-
     from plotly.io._utils import validate_coerce_fig_to_dict
 
     def patched(
@@ -57,7 +56,7 @@ def round_trip_pickle(obj: _T, protocol: int = pickle.HIGHEST_PROTOCOL) -> _T:
     The object that was pickled and unpickled.
 
     """
-    return cast(_T, pickle.loads(pickle.dumps(obj, protocol=protocol)))  # noqa: S301
+    return cast("_T", pickle.loads(pickle.dumps(obj, protocol=protocol)))  # noqa: S301
 
 
 def import_pyscript_as_module(path: str | Path) -> ModuleType:
@@ -81,7 +80,7 @@ def import_pyscript_as_module(path: str | Path) -> ModuleType:
     path_posix = Path(path).resolve().as_posix()
     module_name = path_posix.split("/")[-1].split(".")[0]
     spec = cast(
-        ModuleSpec,
+        "ModuleSpec",
         spec_from_file_location(
             name=module_name,
             location=path_posix,
@@ -89,7 +88,7 @@ def import_pyscript_as_module(path: str | Path) -> ModuleType:
     )
     module = module_from_spec(spec)
     sys.modules[module_name] = module
-    loader = cast(Loader, spec.loader)
+    loader = cast("Loader", spec.loader)
     loader.exec_module(module)
     return module
 
