@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, Any
 
 import pytest
@@ -45,26 +46,31 @@ def test_to_rgb(color: Color, expected: str) -> None:
     ("color", "expected_exception", "exception_match"),
     [
         # invalid types
-        (1, TypeError, None),
-        ([1, 2, 3], TypeError, None),
+        (1, TypeError, "Expected str or tuple for color, got <class 'int'> instead"),
+        ([1, 2, 3], TypeError, "Expected str or tuple for color, got <class 'list'> instead"),
         # invalid CSS named color
-        ("not-a-color", ValueError, None),
+        (
+            "not-a-color",
+            ValueError,
+            "color should be a tuple or a str representation of a "
+            "hex or rgb color, got 'not-a-color' instead",
+        ),
         # invalid hex
-        ("#1234567890", ValueError, r"too many values to unpack \(expected 3\)"),
-        ("#ABCDEFGHIJ", ValueError, r"invalid literal for int\(\) with base 16"),
+        ("#1234567890", ValueError, "too many values to unpack (expected 3)"),
+        ("#ABCDEFGHIJ", ValueError, "invalid literal for int() with base 16"),
         # invalid rgb
-        ("rgb(0,0,999)", PlotlyError, r"rgb colors tuples cannot exceed 255"),
+        ("rgb(0,0,999)", PlotlyError, "rgb colors tuples cannot exceed 255"),
         # invalid tuple
-        ((1, 2), ValueError, r"not enough values to unpack \(expected 3, got 2\)"),
-        ((1, 2, 3, 4), ValueError, r"too many values to unpack \(expected 3\)"),
+        ((1, 2), ValueError, "not enough values to unpack (expected 3, got 2)"),
+        ((1, 2, 3, 4), ValueError, "too many values to unpack (expected 3)"),
     ],
 )
 def test_to_rgb_fails_for_invalid_color(
     color: Any,
     expected_exception: type[Exception],
-    exception_match: str | None,
+    exception_match: str,
 ) -> None:
-    with pytest.raises(expected_exception, match=exception_match or ""):
+    with pytest.raises(expected_exception, match=re.escape(exception_match or "^$")):
         to_rgb(color)
 
 
