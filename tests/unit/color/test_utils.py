@@ -70,7 +70,7 @@ def test_to_rgb_fails_for_invalid_color(
     expected_exception: type[Exception],
     exception_match: str,
 ) -> None:
-    with pytest.raises(expected_exception, match=re.escape(exception_match or "^$")):
+    with pytest.raises(expected_exception, match=re.escape(exception_match)):
         to_rgb(color)
 
 
