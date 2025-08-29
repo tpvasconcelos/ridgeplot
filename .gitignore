@@ -2,6 +2,7 @@
 #  Project specific
 # ============================================================================
 
+docs/_static/charts/*.html
 docs/api/autogen
 docs/api/public
 

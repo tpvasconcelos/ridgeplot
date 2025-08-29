@@ -5,10 +5,38 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.3.2
+------
+
+### Internal
+
+- Fix regression tests for Plotly 6.0+ by updating the JSON test artifacts ({gh-pr}`313`)
+- Add an `OFFLINE`-mode option to the Makefile and make `uv` compulsory for local development ({gh-pr}`322`)
+
+---
+
+0.3.1
+------
+
 ### Internal
 
 - Improve type annotations and use stricter pyright settings ({gh-pr}`291`)
+
+### Documentation
+
 - Use `sphinxcontrib.apidoc` to automatically generate API docs from the source code ({gh-pr}`296`)
+- Update hero image in the docs' landing page ({gh-pr}`300`)
+- Update release process notes ({gh-pr}`301` and {gh-pr}`303`)
+
+### CI/CD
+
+- Fix regressions tests by comparing against JSON artifacts instead of flaky JPEGs ({gh-pr}`299`)
+
+Thanks to {gh-user}`imprvhub` for their contributions to this release! 🚀
 
 ---
 
@@ -254,7 +282,7 @@ This release contains a number of improvements to the docs, API reference, CI/CD
 
 ### Documentation
 
-- Use the `{raw} html :file: _static/charts/<PLOT-ID>.html` directive to load the interactive Plotly graphs in the generated Sphinx docs. The generated HTML artefacts only include a `<div>` wrapper block now and the plotly.min.js is now vendored and automatically loaded via the `html_js_files` Sphinx config ({gh-pr}`132`)
+- Use the `{raw} html :file: _static/charts/<PLOT-ID>.html` directive to load the interactive Plotly graphs in the generated Sphinx docs. The generated HTML artifacts only include a `<div>` wrapper block now and the plotly.min.js is now vendored and automatically loaded via the `html_js_files` Sphinx config ({gh-pr}`132`)
 - Small adjustments to the example plots in the documentation ({gh-pr}`132`)
 - Reformat markdown files, removing all line breaks ({gh-pr}`132`)
 

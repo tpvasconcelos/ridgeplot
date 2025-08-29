@@ -9,7 +9,7 @@ from typing import Optional, Union
 import numpy as np
 from typing_extensions import Any, Literal, TypeIs, TypeVar
 
-# Snippet used to generate and store the image artefacts:
+# Snippet used to generate and store the image artifacts:
 # >>> def save_fig(fig, name):
 # ...     height = 400
 # ...     width = 800

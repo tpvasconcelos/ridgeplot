@@ -5,9 +5,7 @@ from __future__ import annotations
 from collections.abc import Collection
 from typing import TYPE_CHECKING
 
-from typing_extensions import (
-    TypeVar,
-)
+from typing_extensions import TypeVar
 
 if TYPE_CHECKING:
     from typing_extensions import Any

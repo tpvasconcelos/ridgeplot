@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.metadata
 import sys
 from contextlib import contextmanager
 from datetime import datetime
@@ -7,22 +8,19 @@ from importlib import import_module
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-try:
-    import importlib.metadata as importlib_metadata
-except ImportError:
-    import importlib_metadata
+from typing_extensions import Any
 
 try:
-    from cicd.compile_plotly_charts import compile_plotly_charts
+    from ridgeplot_examples import ALL_EXAMPLES
 except ImportError:
     # When this script is run from the readthedocs build server,
     # the `cicd` package will not be available because
     # the `cicd_utils` dir is not in the PYTHONPATH.
     sys.path.append((Path(__file__).parents[1] / "cicd_utils").resolve().as_posix())
-    from cicd.compile_plotly_charts import compile_plotly_charts
+    from ridgeplot_examples import ALL_EXAMPLES
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
+    from collections.abc import Callable, Generator
 
     from sphinx.application import Sphinx
 
@@ -38,7 +36,7 @@ if TYPE_CHECKING:
 
 # -- Project information ---------------------------------------------------------------------------
 
-metadata = importlib_metadata.metadata("ridgeplot")
+metadata = importlib.metadata.metadata("ridgeplot")
 
 project = project_name = name = metadata["name"]
 author = metadata["author"]
@@ -370,6 +368,20 @@ suppress_warnings = [
 # -- custom setup steps ------------------------------------------------------------
 
 
+PATH_DOCS = Path(__file__).parent.resolve()
+
+
+def write_plotlyjs_bundle() -> None:
+    from plotly.offline import get_plotlyjs
+
+    path = PATH_DOCS / "_static/js/plotly.min.js"
+    print(f"Writing Plotly.js bundle to: {path}")
+    plotlyjs = get_plotlyjs()
+    if not path.parent.exists():
+        path.parent.mkdir(parents=True)
+    path.write_text(plotlyjs, encoding="utf-8")
+
+
 @contextmanager
 def reset_sys_argv() -> Generator[None]:
     original_sys_argv = sys.argv
@@ -380,18 +392,30 @@ def reset_sys_argv() -> Generator[None]:
         sys.argv = original_sys_argv
 
 
-def _fix_html_charts(app: Sphinx, exception: Exception | None) -> None:
+def compile_all_plotly_charts() -> None:
+    path_charts = PATH_DOCS / "_static/charts"
+    print(f"Writing image artifacts to {path_charts}...")
+    for example in ALL_EXAMPLES:
+        example.write_html(path_charts, minify_html=True)
+        example.write_webp(path_charts)
+
+    # Fix the end-of-file markers in the generated HTML files
     from pre_commit_hooks.end_of_file_fixer import main as end_of_file_fixer
 
-    files = [file.resolve().as_posix() for file in Path("_static/charts/").glob("*.html")]
+    files = [file.as_posix() for file in path_charts.glob("*.html")]
     if not files:
         raise RuntimeError("No HTML files found. Check that the path above is correct.")
     with reset_sys_argv():
         end_of_file_fixer(files)
 
 
-def setup(app: Sphinx) -> None:
-    compile_plotly_charts()
-    # app.connect("html-page-context", register_jinja_functions)
+def dispatch(fn: Callable[[], None]) -> Callable[..., None]:
+    def wrapper(*args: Any, **kwargs: Any) -> None:
+        fn()
 
-    app.connect("build-finished", _fix_html_charts)
+    return wrapper
+
+
+def setup(app: Sphinx) -> None:
+    # app.connect("builder-inited", dispatch(write_plotlyjs_bundle), priority=501)
+    app.connect("builder-inited", dispatch(compile_all_plotly_charts), priority=502)

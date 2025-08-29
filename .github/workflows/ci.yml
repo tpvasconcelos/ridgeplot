@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-python
         with:
           python-version: "3.9"
@@ -66,7 +66,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 8
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # TODO: This can be very expensive for large repos. Is there a better way to do this?
           # Fetch all history and tags for setuptools_scm to work

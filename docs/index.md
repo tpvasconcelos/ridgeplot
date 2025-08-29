@@ -23,7 +23,7 @@ title: beautiful ridgeline plots in Python
 
 `ridgeplot` is a Python package that provides a simple interface for plotting beautiful and interactive [ridgeline plots](getting_started/getting_started.md) within the extensive [Plotly](https://plotly.com/python/) ecosystem.
 
-![ridgeplot - beautiful ridgeline plots in Python](_static/img/hero.png){align=center w=800px}
+![ridgeplot - beautiful ridgeline plots in Python](_static/img/hero2.png){align=center w=800px}
 
 <h2>Installation</h2>
 
