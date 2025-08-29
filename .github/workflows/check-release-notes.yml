@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Default MISSING_CHANGELOG_ENTRY to 1
         run: echo 'MISSING_CHANGELOG_ENTRY=1' >> "$GITHUB_ENV"
