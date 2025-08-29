@@ -22,10 +22,29 @@ ignore = [
     "FBT", # flake8-boolean-trap
     "FIX", # flake8-fixme
 
-    # flake8-comprehensions
+    # flake8-commas (COM)
+    "COM812", # Trailing comma missing
+
+    # flake8-comprehensions (C4)
     "C408", # Unnecessary `dict` call (rewrite as a literal)
 
-    # pydocstyle
+    # flake8-errmsg (EM)
+    "EM101", # Exception must not use a string literal, assign to variable first
+    "EM102", # Exception must not use an f-string literal, assign to variable first
+    "EM103", # Exception must not use a .format() string directly, assign to variable first
+
+    # flake8-return (RET)
+    "RET504", # Unnecessary variable assignment before `return` statement
+
+    # flake8-todos (TD)
+    "TD001", # Invalid TODO tag: `FIXME`
+    "TD002", # Missing author in [...]
+    "TD003", # Missing issue link on the line following this TODO
+
+    # flake8-annotations (ANN)
+    "ANN401", # Dynamically typed expressions (typing.Any) are disallowed in {name}
+
+    # pydocstyle (D)
     "D101", # Missing docstring in public class
     "D102", # Missing docstring in public method
     "D103", # Missing docstring in public function
@@ -36,43 +55,27 @@ ignore = [
     "D400", # First line should end with a period
     "D415", # First line should end with a period, question mark, or exclamation point
 
-    # flake8-return
-    "RET504", # Unnecessary variable assignment before `return` statement
-
     # eradicate (ERA)
     "ERA001", # Found commented-out code
 
-    # pandas-vet
+    # pandas-vet (PD)
     "PD015", # Use `.merge` method instead of `pd.merge` function. They have equivalent functionality.
     "PD901", # `df` is a bad variable name. Be kinder to your future self.
 
-    # pylint
+    # Convention (PLC)
+    "PLC0415", # `import` should be at the top-level of a file
+
+    # Refactor (PLR)
     "PLR0913", # Too many arguments to function call ({x} > 5)
     "PLR2004", # Magic value used in comparison, consider replacing {x} with a constant variable
 
     # tryceratops
     "TRY003", # Avoid specifying long messages outside the exception class
 
-    # flake8-commas (COM)
-    "COM812", # Trailing comma missing
-
-    # flake8-errmsg (EM)
-    "EM101", # Exception must not use a string literal, assign to variable first
-    "EM102", # Exception must not use an f-string literal, assign to variable first
-    "EM103", # Exception must not use a .format() string directly, assign to variable first
-
     # pep8-naming
     # (allow for sklearn's naming convention for uppercase `X`)
     "N803", # Argument name should be lowercase
     "N806", # Variable in function should be lowercase
-
-    # flake8-todos (TD)
-    "TD001", # Invalid TODO tag: `FIXME`
-    "TD002", # Missing author in [...]
-    "TD003", # Missing issue link on the line following this TODO
-
-    # flake8-annotations (ANN)
-    "ANN401", # Dynamically typed expressions (typing.Any) are disallowed in {name}
 ]
 
 [lint.per-file-ignores]
