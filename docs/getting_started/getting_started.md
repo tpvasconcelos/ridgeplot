@@ -134,7 +134,7 @@ samples = [
 # And finish by styling it up to your liking!
 fig = ridgeplot(
     samples=samples,
-    labels=months,
+    row_labels=months,
     colorscale="Inferno",
     bandwidth=4,
     kde_points=np.linspace(-40, 110, 400),
@@ -228,7 +228,7 @@ Finally, we can pass the {py:paramref}`~ridgeplot.ridgeplot.samples` list to the
 ```python
 fig = ridgeplot(
     samples=samples,
-    labels=months,
+    row_labels=months,
     colorscale="Inferno",
     bandwidth=4,
     kde_points=np.linspace(-40, 110, 400),
