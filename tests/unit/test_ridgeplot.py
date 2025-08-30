@@ -130,6 +130,13 @@ def test_row_labels_auto() -> None:
     )  # fmt: skip
 
 
+def test_row_labels_false() -> None:
+    fig = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], row_labels=False)
+    assert fig.layout.yaxis.tickvals is None
+    assert fig.layout.yaxis.ticktext is None
+    assert fig.layout.yaxis.showticklabels is False
+
+
 # ==============================================================
 # ---  param: nbins
 # ==============================================================
