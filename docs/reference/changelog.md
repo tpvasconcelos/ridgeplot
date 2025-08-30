@@ -5,7 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+### Features
+
+- Add support for custom row labels via a new `row_labels` argument ({gh-pr}`333`)
+
+### Deprecations
+
+- Deprecated the `show_yticklabels` argument in favor of the new more general and flexible `row_labels` argument ({gh-pr}`333`)
 
 ---
 
