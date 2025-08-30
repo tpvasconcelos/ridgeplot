@@ -464,7 +464,7 @@ def ridgeplot(
             DeprecationWarning,
             stacklevel=2,
         )
-        row_labels = row_labels if show_yticklabels else False
+        row_labels = False if not show_yticklabels else None
 
     if colorscale == "default":
         warnings.warn(
