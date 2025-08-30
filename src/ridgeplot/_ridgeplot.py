@@ -199,7 +199,7 @@ def ridgeplot(
     labels : LabelsArray or ShallowLabelsArray or None
         A collection of string labels for each trace. If not specified
         (default), the labels will be automatically generated as
-        ``"Trace {n}"``, where ``n`` is the trace's index. If instead a
+        ``"Trace {i}"``, where ``i`` is the trace's index. If instead a
         collection of labels is specified, it should have the same shape as the
         samples array.
 
