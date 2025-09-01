@@ -5,7 +5,7 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+- Bump project classification from Pre-Alpha to Alpha. ({gh-pr}`336`)
 
 ---
 
