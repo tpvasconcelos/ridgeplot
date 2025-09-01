@@ -5,6 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.4.0
+------
+
 ### Features
 
 - Add support for custom row labels via a new `row_labels` argument ({gh-pr}`333`)
