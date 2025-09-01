@@ -1,7 +1,6 @@
 # ./cicd_utils/ridgeplot_examples/_base.py
 minify-html
-# TODO: unpin after 1.0.0 (https://github.com/plotly/Kaleido/issues/226)
-kaleido<0.4
+kaleido
 
 # ./cicd_utils/cicd/scripts/extract_latest_release_notes.py
 markdown-it-py
