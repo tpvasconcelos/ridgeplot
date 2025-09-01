@@ -75,6 +75,8 @@ repos:
     rev: v0.11.0.1
     hooks:
       - id: shellcheck
+        # Exclude zsh scripts (unsupported by shellcheck)
+        exclude: ^cicd_utils/find-unmentioned-prs\.sh$
 
   # mdformat is not enabled by default, but can be run manually with:
   #   pre-commit run mdformat --all-files --hook-stage manual
