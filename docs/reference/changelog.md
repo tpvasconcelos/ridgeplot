@@ -15,6 +15,7 @@ Unreleased changes
 
 ### CI/CD
 
+- Add `./cicd_utils/find-unmentioned-prs.sh` helper script to find merged PRs that were not mentioned in the changelog yet ({gh-pr}`334`)
 - Bump actions/first-interaction from 1 to 3 ({gh-pr}`331`)
 - Bump actions/checkout from 4 to 5 ({gh-pr}`330`)
 - Bump actions/download-artifact from 4 to 5 ({gh-pr}`329`)
