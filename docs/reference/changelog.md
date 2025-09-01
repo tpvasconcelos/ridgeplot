@@ -13,6 +13,18 @@ Unreleased changes
 
 - Deprecated the `show_yticklabels` argument in favor of the new more general and flexible `row_labels` argument ({gh-pr}`333`)
 
+### CI/CD
+
+- Bump actions/first-interaction from 1 to 3 ({gh-pr}`331`)
+- Bump actions/checkout from 4 to 5 ({gh-pr}`330`)
+- Bump actions/download-artifact from 4 to 5 ({gh-pr}`329`)
+- Bump sigstore/gh-action-sigstore-python from 3.0.0 to 3.0.1 ({gh-pr}`326`)
+- pre-commit autoupdate ({gh-pr}`324`)
+
+### Dependencies
+
+- Remove `importlib_metadata` usage from `conf.py` ({gh-pr}`332`)
+
 ---
 
 0.3.2
@@ -22,6 +34,10 @@ Unreleased changes
 
 - Fix regression tests for Plotly 6.0+ by updating the JSON test artifacts ({gh-pr}`313`)
 - Add an `OFFLINE`-mode option to the Makefile and make `uv` compulsory for local development ({gh-pr}`322`)
+
+### Documentation
+
+- Bump the Plotly JS version used in Sphinx from 2.35.2 to 3.0.0 ({gh-pr}`317`)
 
 ---
 
