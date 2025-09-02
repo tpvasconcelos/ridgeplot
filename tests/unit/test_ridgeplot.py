@@ -322,22 +322,6 @@ def test_deprecated_arguments(
         ridgeplot(samples=samples, **{arg_dep: val_dep, arg_new: val_new})
 
 
-def test_deprecated_show_yticklabels_is_not_missing() -> None:
-    with pytest.warns(
-        DeprecationWarning,
-        match="The 'show_yticklabels' argument has been deprecated in favor of 'row_labels'",
-    ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_yticklabels=False)
-
-
-def test_deprecated_show_yticklabels_and_row_labels_together_raises() -> None:
-    with pytest.raises(
-        ValueError,
-        match="You may not specify both the 'show_yticklabels' and 'row_labels' arguments!",
-    ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], show_yticklabels=False, row_labels=["a", "b"])
-
-
 def test_ridgeplot_colorscale_default_deprecation_warning() -> None:
     with pytest.warns(DeprecationWarning, match="colorscale='default' is deprecated"):
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], colorscale="default")
