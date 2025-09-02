@@ -130,6 +130,13 @@ def test_row_labels_auto() -> None:
     )  # fmt: skip
 
 
+def test_row_labels_false() -> None:
+    fig = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], row_labels=False)
+    assert fig.layout.yaxis.tickvals is None
+    assert fig.layout.yaxis.ticktext is None
+    assert fig.layout.yaxis.showticklabels is False
+
+
 # ==============================================================
 # ---  param: nbins
 # ==============================================================
@@ -278,36 +285,41 @@ def test_spacing(spacing: float) -> None:
 # ==============================================================
 
 
-def test_deprecated_coloralpha_is_not_missing() -> None:
+@pytest.mark.parametrize(
+    ("arg_dep", "val_dep", "arg_new", "val_new"),
+    [
+        ("coloralpha", 0.5, "opacity", 0.5),
+        ("linewidth", 0.5, "line_width", 0.5),
+        ("show_yticklabels", True, "row_labels", ["Trace 1", "Trace 2"]),
+    ],
+)
+def test_deprecated_arguments(
+    arg_dep: str,
+    val_dep: Any,
+    arg_new: str,
+    val_new: Any,
+) -> None:
+    samples = [[1, 2, 3], [1, 2, 3]]
+
+    # Test that using the new argument works without warnings
+    fig_new = ridgeplot(samples=samples, **{arg_new: val_new})
+
+    # Test that using the deprecated argument raises a DeprecationWarning
     with pytest.warns(
         DeprecationWarning,
-        match="The 'coloralpha' argument has been deprecated in favor of 'opacity'",
+        match=f"The '{arg_dep}' argument has been deprecated in favor of '{arg_new}'",
     ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], coloralpha=0.5)
+        fig_dep = ridgeplot(samples=samples, **{arg_dep: val_dep})
 
+    # Test that both approaches yield the same figure
+    assert fig_new == fig_dep
 
-def test_deprecated_coloralpha_and_opacity_together_raises() -> None:
+    # Test that using both the deprecated and new argument raises the expected exception
     with pytest.raises(
         ValueError,
-        match="You may not specify both the 'coloralpha' and 'opacity' arguments!",
+        match=f"You may not specify both the '{arg_dep}' and '{arg_new}' arguments!",
     ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], coloralpha=0.4, opacity=0.6)
-
-
-def test_deprecated_linewidth_is_not_missing() -> None:
-    with pytest.warns(
-        DeprecationWarning,
-        match="The 'linewidth' argument has been deprecated in favor of 'line_width'",
-    ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], linewidth=0.5)
-
-
-def test_deprecated_linewidth_and_line_width_together_raises() -> None:
-    with pytest.raises(
-        ValueError,
-        match="You may not specify both the 'linewidth' and 'line_width' arguments!",
-    ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], linewidth=0.4, line_width=0.6)
+        ridgeplot(samples=samples, **{arg_dep: val_dep, arg_new: val_new})
 
 
 def test_deprecated_show_yticklabels_is_not_missing() -> None:

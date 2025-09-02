@@ -100,7 +100,7 @@ def _update_layout(
     )
     if row_labels is not False:
         fig.update_yaxes(
-            # tickmode="array",  # TODO: check if this is needed
+            tickmode="array",
             tickvals=tickvals,
             ticktext=row_labels,
         )
