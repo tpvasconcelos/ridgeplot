@@ -213,7 +213,7 @@ def create_ridgeplot(
                 fig=fig,
                 coloring_ctx=ColoringContext(
                     colorscale=colorscale,
-                    colormode=colormode,
+                    fillgradient=colormode == "fillgradient" and not color_discrete_map,
                     opacity=opacity,
                     interpolation_ctx=interpolation_ctx,
                 ),

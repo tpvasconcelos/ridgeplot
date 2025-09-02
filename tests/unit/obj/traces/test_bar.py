@@ -40,7 +40,7 @@ class TestBarTrace:
     ) -> None:
         coloring_ctx = ColoringContext(
             colorscale=[(0.0, "red"), (1.0, "blue")],
-            colormode="fillgradient",
+            fillgradient=True,
             opacity=None,
             interpolation_ctx=interpolation_ctx,
         )
@@ -55,7 +55,7 @@ class TestBarTrace:
     ) -> None:
         coloring_ctx = ColoringContext(
             colorscale=[(0.0, "red"), (1.0, "blue")],
-            colormode="trace-index",
+            fillgradient=False,
             opacity=None,
             interpolation_ctx=interpolation_ctx,
         )

@@ -27,6 +27,7 @@ def main(
 
     fig = ridgeplot(
         samples=samples,
+        labels=[["Min Temperature [F]", "Max Temperature [F]"]] * len(months),
         row_labels=months,
         colorscale="Inferno",
         colormode="fillgradient",
