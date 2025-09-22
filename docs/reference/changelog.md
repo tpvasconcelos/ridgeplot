@@ -7,6 +7,10 @@ Unreleased changes
 
 - Bump project classification from Pre-Alpha to Alpha. ({gh-pr}`336`)
 
+### CI/CD
+
+- pre-commit autoupdate ({gh-pr}`340`)
+
 ---
 
 0.4.0
