@@ -108,7 +108,7 @@ def test_row_labels_wrong_len(row_labels: Any) -> None:
             [(1, 4), (2, 4), (3, 2)],  # Trace 5
         ],
     ]
-    with pytest.raises(ValueError, match="Expected 2 row_labels, got .* instead"):
+    with pytest.raises(ValueError, match=r"Expected 2 row_labels, got .* instead"):
         ridgeplot(densities=densities, row_labels=row_labels)
 
 
