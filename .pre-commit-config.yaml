@@ -43,7 +43,7 @@ repos:
         exclude: ^\.bumpversion\.cfg$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema.git
-    rev: 0.33.3
+    rev: 0.34.0
     hooks:
       - id: check-github-actions
       - id: check-github-workflows
@@ -104,7 +104,7 @@ repos:
         additional_dependencies: [setuptools-scm]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.12
+    rev: v0.13.1
     hooks:
       - id: ruff-format
       - id: ruff

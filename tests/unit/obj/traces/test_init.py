@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING
 
 import pytest
@@ -23,6 +24,6 @@ def test_get_trace_cls(name: TraceType, cls: type[RidgeplotTrace]) -> None:
 
 def test_get_trace_cls_unknown() -> None:
     with pytest.raises(
-        ValueError, match="Unknown trace type 'foo'. Available types: 'area', 'bar'."
+        ValueError, match=re.escape("Unknown trace type 'foo'. Available types: 'area', 'bar'.")
     ):
         get_trace_cls("foo")  # pyright: ignore[reportArgumentType]
