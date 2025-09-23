@@ -8,6 +8,10 @@ Unreleased changes
 - Bump project classification from Pre-Alpha to Alpha ({gh-pr}`336`)
 - Bump actions/github-script from 7 to 8 ({gh-pr}`338`)
 
+### CI/CD
+
+- pre-commit autoupdate ({gh-pr}`340`)
+
 ---
 
 0.4.0
