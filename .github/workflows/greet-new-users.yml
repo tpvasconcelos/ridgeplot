@@ -13,14 +13,14 @@ jobs:
     steps:
       - uses: actions/first-interaction@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-message: |
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_message: |
             **Thank you for submitting your first issue with us!** 🎉
 
             Our response times may vary, but we'll get back to you as soon as we can!
 
             Welcome aboard! 🚀
-          pr-message: |
+          pr_message: |
             **Thank you for submitting your first pull request with us!** 🎉
 
             Our response times may vary, but we'll get back to you as soon as we can!
