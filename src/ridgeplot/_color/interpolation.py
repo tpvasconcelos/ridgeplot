@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeAlias
 
 from typing_extensions import Literal, Protocol
 
@@ -109,7 +109,7 @@ def slice_colorscale(
 # ==============================================================
 
 
-ColorscaleInterpolants = CollectionL2[float]
+ColorscaleInterpolants: TypeAlias = CollectionL2[float]
 """A :data:`ColorscaleInterpolants` contains the interpolants for a :data:`ColorScale`.
 
 Example
@@ -214,7 +214,7 @@ def _interpolate_mean_means(ctx: InterpolationContext) -> ColorscaleInterpolants
     ]
 
 
-SolidColormode = Literal[
+SolidColormode: TypeAlias = Literal[
     "row-index",
     "trace-index",
     "trace-index-row-wise",

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Collection
 from functools import partial
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, TypeAlias, cast
 
 import numpy as np
 import numpy.typing as npt
@@ -28,10 +28,10 @@ if TYPE_CHECKING:
     from ridgeplot._types import Densities, Samples, SamplesTrace
 
 
-KDEPoints = int | CollectionL1[Numeric]
+KDEPoints: TypeAlias = int | CollectionL1[Numeric]
 """The :paramref:`ridgeplot.ridgeplot.kde_points` parameter."""
 
-KDEBandwidth = str | float | Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]
+KDEBandwidth: TypeAlias = str | float | Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]
 """The :paramref:`ridgeplot.ridgeplot.bandwidth` parameter."""
 
 
