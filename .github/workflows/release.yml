@@ -39,7 +39,7 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/setup-python
         with:
-          python-version: "3.9"
+          python-version: "3.10"
           requirements: tox
       - name: Build source (sdist) and binary (wheel) distributions
         run: tox -e build-dists
@@ -112,7 +112,7 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/setup-python
         with:
-          python-version: "3.9"
+          python-version: "3.10"
           requirements: tox
       - name: Generate release notes
         run: tox -e release-notes

@@ -33,7 +33,7 @@ def main(
 
     fig = ridgeplot(
         samples=samples,
-        labels=months,
+        row_labels=months,
         colorscale=colorscale,
         colormode=colormode,
         bandwidth=4,

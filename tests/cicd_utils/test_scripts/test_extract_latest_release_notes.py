@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -21,7 +22,7 @@ def test_path_to_changelog_exists() -> None:
 
 
 def test_extract_latest_release_notes_file_not_found() -> None:
-    with pytest.raises(FileNotFoundError, match="File not found: non_existent_file.md"):
+    with pytest.raises(FileNotFoundError, match=re.escape("File not found: non_existent_file.md")):
         extract_latest_release_notes(changelog=Path("non_existent_file.md"))
 
 
