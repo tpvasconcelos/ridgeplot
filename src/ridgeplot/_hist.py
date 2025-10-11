@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from ridgeplot._kde import normalize_sample_weights
-from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     from ridgeplot._types import (
@@ -48,7 +47,7 @@ def bin_samples(
     return [
         [
             bin_trace_samples(trace_samples, nbins=nbins, weights=weights)
-            for trace_samples, weights in zip_strict(samples_row, weights_row)
+            for trace_samples, weights in zip(samples_row, weights_row, strict=True)
         ]
-        for samples_row, weights_row in zip_strict(samples, normalised_weights)
+        for samples_row, weights_row in zip(samples, normalised_weights, strict=True)
     ]

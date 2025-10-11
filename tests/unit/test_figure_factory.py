@@ -25,15 +25,15 @@ class TestCreateRidgeplot:
         with pytest.raises(ValueError, match="Expected a 4D array of densities"):
             create_ridgeplot(
                 densities=densities,
-                trace_labels=...,
-                trace_types=...,
-                row_labels=...,
-                colorscale=...,
-                colormode=...,
-                color_discrete_map=...,
-                opacity=...,
-                line_color=...,
-                line_width=...,
-                spacing=...,
-                xpad=...,
+                trace_labels=...,  # type: ignore[reportArgumentType]
+                trace_types=...,  # type: ignore[reportArgumentType]
+                row_labels=...,  # type: ignore[reportArgumentType]
+                colorscale=...,  # type: ignore[reportArgumentType]
+                colormode=...,  # type: ignore[reportArgumentType]
+                color_discrete_map=...,  # type: ignore[reportArgumentType]
+                opacity=...,  # type: ignore[reportArgumentType]
+                line_color=...,  # type: ignore[reportArgumentType]
+                line_width=...,  # type: ignore[reportArgumentType]
+                spacing=...,  # type: ignore[reportArgumentType]
+                xpad=...,  # type: ignore[reportArgumentType]
             )

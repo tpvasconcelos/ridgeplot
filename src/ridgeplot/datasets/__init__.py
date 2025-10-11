@@ -2,13 +2,8 @@
 
 from __future__ import annotations
 
-import sys
+from importlib.resources import as_file, files
 from typing import TYPE_CHECKING
-
-if sys.version_info >= (3, 10):
-    from importlib.resources import as_file, files
-else:
-    from importlib_resources import as_file, files
 
 if TYPE_CHECKING:
     from typing_extensions import Literal

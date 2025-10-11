@@ -5,7 +5,17 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- Bump project classification from Pre-Alpha to Alpha. ({gh-pr}`336`)
+- Dropped support for Python 3.9, in accordance with the official Python support policy[^1] ({gh-pr}`345`)
+- Bump project classification from Pre-Alpha to Alpha ({gh-pr}`336`)
+
+### CI/CD
+
+- Bump actions/github-script from 7 to 8 ({gh-pr}`338`)
+- pre-commit autoupdate ({gh-pr}`340`)
+- Bump peter-evans/find-comment from 3 to 4 ({gh-pr}`342`)
+- pre-commit autoupdate ({gh-pr}`341`)
+- Bump github/codeql-action from 3 to 4 ({gh-pr}`344`)
+- Bump peter-evans/create-or-update-comment from 4 to 5 ({gh-pr}`343`)
 
 ---
 
