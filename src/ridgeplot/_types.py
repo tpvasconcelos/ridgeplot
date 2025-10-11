@@ -4,7 +4,6 @@ used throughout the package."""
 from __future__ import annotations
 
 from collections.abc import Collection
-from typing import Optional, Union
 
 import numpy as np
 from typing_extensions import Any, Literal, TypeIs, TypeVar
@@ -37,7 +36,7 @@ _T = TypeVar("_T")
 # ---  Miscellaneous types
 # ========================================================
 
-Color = Union[str, tuple[float, float, float]]
+Color = str | tuple[float, float, float]
 """A color can be represented by a tuple of ``(r, g, b)`` values or any valid
 CSS color string - including hex, rgb/a, hsl/a, hsv/a, and named CSS colors."""
 
@@ -108,13 +107,13 @@ Example
 # ---  Numeric types
 # ========================================================
 
-Float = Union[float, np.floating[Any]]
+Float = float | np.floating[Any]
 """A :data:`~typing.TypeAlias` for float types."""
 
-Int = Union[int, np.integer[Any]]
+Int = int | np.integer[Any]
 """A :data:`~typing.TypeAlias` for a int types."""
 
-Numeric = Union[Int, Float]
+Numeric = Int | Float
 """A :data:`~typing.TypeAlias` for *numeric* types."""
 
 NumericT = TypeVar("NumericT", bound=Numeric)
@@ -605,7 +604,7 @@ Example
 
 # Sample weights ---
 
-SampleWeights = Optional[CollectionL1[Numeric]]
+SampleWeights = CollectionL1[Numeric] | None
 """An array of KDE weights corresponding to each sample."""
 
 SampleWeightsArray = CollectionL2[SampleWeights]

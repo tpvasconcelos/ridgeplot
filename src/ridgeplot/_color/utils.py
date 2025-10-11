@@ -12,7 +12,6 @@ from ridgeplot._color.css_colors import CSS_NAMED_COLORS
 
 if TYPE_CHECKING:
     from collections.abc import Collection
-    from typing import Union
 
     from ridgeplot._types import Color
 
@@ -54,7 +53,7 @@ def unpack_rgb(rgb: str) -> tuple[float, float, float, float] | tuple[float, flo
     prefix = rgb.split("(")[0] + "("
     values_str = map(str.strip, rgb.removeprefix(prefix).removesuffix(")").split(","))
     values_num = tuple(int(v) if v.isdecimal() else float(v) for v in values_str)
-    return cast("Union[tuple[float, float, float, float], tuple[float, float, float]]", values_num)
+    return cast("tuple[float, float, float, float] | tuple[float, float, float]", values_num)
 
 
 def apply_alpha(color: Color, alpha: float) -> str:

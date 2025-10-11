@@ -5,11 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- Add support for Python 3.14, in accordance with the official Python support policy[^1] ({gh-pr}`???`)
+- Dropped support for Python 3.9, in accordance with the official Python support policy[^1] ({gh-pr}`???`)
 - Bump project classification from Pre-Alpha to Alpha ({gh-pr}`336`)
-- Bump actions/github-script from 7 to 8 ({gh-pr}`338`)
 
 ### CI/CD
 
+- Bump actions/github-script from 7 to 8 ({gh-pr}`338`)
 - pre-commit autoupdate ({gh-pr}`340`)
 
 ---
