@@ -32,7 +32,7 @@ class TypeGuardFunc(Protocol[_T]):
     def __call__(self, obj: Any) -> TypeIs[_T]: ...
 
 
-_typeguard_registry = {}
+_typeguard_registry: dict[type, TypeGuardFunc[Any]] = {}
 
 
 def typeis(obj: Any, tp: _T) -> TypeIs[_T]:
