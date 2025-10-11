@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from typing import TypeAlias
+
 from typing_extensions import Literal
 
 # Taken from https://www.w3.org/TR/css-color-3/#svg-color
 
-CssNamedColor = Literal[
+CssNamedColor: TypeAlias = Literal[
     "aliceblue",
     "antiquewhite",
     "aqua",

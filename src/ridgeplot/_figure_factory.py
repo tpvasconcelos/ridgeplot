@@ -35,7 +35,6 @@ from ridgeplot._utils import (
     normalise_row_attrs,
     ordered_dedup,
 )
-from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     from collections.abc import Collection
@@ -188,12 +187,12 @@ def create_ridgeplot(
     fig = go.Figure()
     ith_trace = 0
     for ith_row, (row_traces, row_trace_types, row_trace_labels, row_colors) in enumerate(
-        zip_strict(densities, trace_types, trace_labels, solid_colors)
+        zip(densities, trace_types, trace_labels, solid_colors, strict=True)
     ):
         y_base = float(-ith_row * y_max * spacing)
         tickvals.append(y_base)
-        for trace, trace_type, label, color in zip_strict(
-            row_traces, row_trace_types, row_trace_labels, row_colors
+        for trace, trace_type, label, color in zip(
+            row_traces, row_trace_types, row_trace_labels, row_colors, strict=True
         ):
             trace_drawer = get_trace_cls(trace_type)(
                 trace=trace,

@@ -7,8 +7,9 @@ types-pytz
 types-PyYAML
 types-requests
 types-tqdm
-plotly-stubs; python_version >= "3.10"
 pandas-stubs
+# These seem to bring more problems than they solve for now... 👇
+# plotly-stubs
 
 # pyright also needs to inherit other environment dependencies in
 # order to correctly infer types for code in tests, docs, etc.
