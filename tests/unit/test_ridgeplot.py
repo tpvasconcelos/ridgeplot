@@ -170,6 +170,21 @@ def test_colorscale_invalid(invalid_colorscale: ColorScale | Collection[Color] |
 
 
 # ==============================================================
+# ---  param: color_discrete_map
+# ==============================================================
+
+
+def test_color_discrete_map() -> None:
+    fig = ridgeplot(
+        samples=[[[1, 2, 3], [4, 5, 6]]],
+        color_discrete_map={"A": "rgba(0, 128, 0, 1.0)", "B": "rgba(255, 165, 0, 1.0)"},
+        labels=["A", "B"],
+    )
+    assert fig.data[1].fillcolor == "rgba(0, 128, 0, 1.0)"
+    assert fig.data[3].fillcolor == "rgba(255, 165, 0, 1.0)"
+
+
+# ==============================================================
 # ---  param: opacity
 # ==============================================================
 
