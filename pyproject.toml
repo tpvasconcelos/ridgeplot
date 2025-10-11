@@ -22,11 +22,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Software Development",
     "Topic :: Scientific/Engineering",
@@ -37,13 +37,12 @@ classifiers = [
 keywords = [
     "ridgeline", "ridgeplot", "joyplot", "ggridges", "ridges", "ridge", "plot", "plotting", "distplot", "plotly", "data-visualization", "visualization", "data-science", "statistics", "ggplot"
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "numpy>=1",
     "plotly>=5.20",  # The `fillgradient` option was added in 5.20
     "statsmodels>=0.12,!=0.14.2",  # See GH197 for details
     "typing-extensions",
-    'importlib-resources; python_version<"3.10"',
 ]
 
 [project.urls]
