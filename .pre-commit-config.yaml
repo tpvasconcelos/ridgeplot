@@ -1,5 +1,5 @@
 default_language_version:
-  python: python3.9
+  python: python3.10
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -55,7 +55,7 @@ repos:
       - id: check-readthedocs
 
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.7
+    rev: v1.7.8
     hooks:
       - id: actionlint
 
@@ -104,7 +104,7 @@ repos:
         additional_dependencies: [setuptools-scm]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.13.1
+    rev: v0.14.0
     hooks:
       - id: ruff-format
       - id: ruff

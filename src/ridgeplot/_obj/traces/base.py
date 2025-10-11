@@ -8,8 +8,6 @@ from typing import TYPE_CHECKING, ClassVar
 
 from typing_extensions import Literal
 
-from ridgeplot._vendor.more_itertools import zip_strict
-
 if TYPE_CHECKING:
     from plotly import graph_objects as go
 
@@ -68,7 +66,7 @@ class RidgeplotTrace(ABC):
         line_width: float | None,
     ):
         super().__init__()
-        self.x, self.y = zip_strict(*trace)
+        self.x, self.y = zip(*trace, strict=True)
         self.label = label
         self.solid_color = solid_color
         self.zorder = zorder
