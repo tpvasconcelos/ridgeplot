@@ -35,7 +35,6 @@ from ridgeplot._utils import (
     normalise_row_attrs,
     ordered_dedup,
 )
-from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     from collections.abc import Collection
@@ -74,15 +73,14 @@ def normalise_trace_labels(
     return trace_labels
 
 
-def normalise_y_labels(trace_labels: LabelsArray) -> LabelsArray:
-    return [ordered_dedup(row) for row in trace_labels]
+def normalise_row_labels(trace_labels: LabelsArray) -> Collection[str]:
+    return [",".join(ordered_dedup(row)) for row in trace_labels]
 
 
 def update_layout(
     fig: go.Figure,
-    y_labels: LabelsArray,
+    row_labels: Collection[str] | Literal[False],
     tickvals: list[float],
-    show_yticklabels: bool,
     xpad: float,
     x_max: float,
     x_min: float,
@@ -96,11 +94,15 @@ def update_layout(
         showgrid=True,
     )
     fig.update_yaxes(
-        showticklabels=show_yticklabels,
-        tickvals=tickvals,
-        ticktext=y_labels,
+        showticklabels=row_labels is not False,
         **axes_common,
     )
+    if row_labels is not False:
+        fig.update_yaxes(
+            tickmode="array",
+            tickvals=tickvals,
+            ticktext=row_labels,
+        )
     x_padding = xpad * (x_max - x_min)
     fig.update_xaxes(
         range=[x_min - x_padding, x_max + x_padding],
@@ -122,6 +124,7 @@ def update_layout(
 def create_ridgeplot(
     densities: Densities,
     trace_types: TraceTypesArray | ShallowTraceTypesArray | TraceType,
+    row_labels: Collection[str] | None | Literal[False],
     colorscale: ColorScale | Collection[Color] | str | None,
     opacity: float | None,
     colormode: Literal["fillgradient"] | SolidColormode,
@@ -129,7 +132,6 @@ def create_ridgeplot(
     line_color: Color | Literal["fill-color"],
     line_width: float | None,
     spacing: float,
-    show_yticklabels: bool,
     xpad: float,
 ) -> go.Figure:
     # ==============================================================
@@ -152,12 +154,14 @@ def create_ridgeplot(
         trace_labels=trace_labels,
         n_traces=n_traces,
     )
-    y_labels = normalise_y_labels(trace_labels)
+    if row_labels is None:
+        row_labels = normalise_row_labels(trace_labels)
+    elif row_labels is not False and len(row_labels) != n_rows:
+        raise ValueError(f"Expected {n_rows} row_labels, got {len(row_labels)} instead.")
 
     # Force cast certain arguments to the expected types
     line_width = float(line_width) if line_width is not None else None
     spacing = float(spacing)
-    show_yticklabels = bool(show_yticklabels)
     xpad = float(xpad)
     colorscale = validate_coerce_colorscale(colorscale)
 
@@ -182,13 +186,13 @@ def create_ridgeplot(
     tickvals: list[float] = []
     fig = go.Figure()
     ith_trace = 0
-    for ith_row, (row_traces, row_trace_types, row_labels, row_colors) in enumerate(
-        zip_strict(densities, trace_types, trace_labels, solid_colors)
+    for ith_row, (row_traces, row_trace_types, row_trace_labels, row_colors) in enumerate(
+        zip(densities, trace_types, trace_labels, solid_colors, strict=True)
     ):
         y_base = float(-ith_row * y_max * spacing)
         tickvals.append(y_base)
-        for trace, trace_type, label, color in zip_strict(
-            row_traces, row_trace_types, row_labels, row_colors
+        for trace, trace_type, label, color in zip(
+            row_traces, row_trace_types, row_trace_labels, row_colors, strict=True
         ):
             trace_drawer = get_trace_cls(trace_type)(
                 trace=trace,
@@ -212,9 +216,8 @@ def create_ridgeplot(
 
     fig = update_layout(
         fig,
-        y_labels=y_labels,
+        row_labels=row_labels,
         tickvals=tickvals,
-        show_yticklabels=show_yticklabels,
         xpad=xpad,
         x_max=x_max,
         x_min=x_min,

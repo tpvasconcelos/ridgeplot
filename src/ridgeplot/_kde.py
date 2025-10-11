@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Collection
 from functools import partial
-from typing import TYPE_CHECKING, Union, cast
+from typing import TYPE_CHECKING, TypeAlias, cast
 
 import numpy as np
 import numpy.typing as npt
@@ -23,16 +23,15 @@ from ridgeplot._types import (
     nest_shallow_collection,
 )
 from ridgeplot._utils import normalise_row_attrs
-from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     from ridgeplot._types import Densities, Samples, SamplesTrace
 
 
-KDEPoints = Union[int, CollectionL1[Numeric]]
+KDEPoints: TypeAlias = int | CollectionL1[Numeric]
 """The :paramref:`ridgeplot.ridgeplot.kde_points` parameter."""
 
-KDEBandwidth = Union[str, float, Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]]
+KDEBandwidth: TypeAlias = str | float | Callable[[CollectionL1[Numeric], StatsmodelsKernel], float]
 """The :paramref:`ridgeplot.ridgeplot.bandwidth` parameter."""
 
 
@@ -204,7 +203,7 @@ def estimate_densities(
     return [
         [
             kde(samples_trace, weights=weights)
-            for samples_trace, weights in zip_strict(samples_row, weights_row)
+            for samples_trace, weights in zip(samples_row, weights_row, strict=True)
         ]
-        for samples_row, weights_row in zip_strict(samples, normalised_weights)
+        for samples_row, weights_row in zip(samples, normalised_weights, strict=True)
     ]

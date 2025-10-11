@@ -4,7 +4,7 @@ import re
 
 import pytest
 
-V_EXPECTED = "0.3.2"
+V_EXPECTED = "0.4.0"
 
 
 def get_number(v_component: str) -> int:

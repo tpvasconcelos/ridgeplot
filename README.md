@@ -144,7 +144,7 @@ samples = [
 # And finish by styling it up to your liking!
 fig = ridgeplot(
     samples=samples,
-    labels=months,
+    row_labels=months,
     colorscale="Inferno",
     bandwidth=4,
     kde_points=np.linspace(-40, 110, 400),

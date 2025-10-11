@@ -35,7 +35,7 @@ prune docs/api/public
 
 # Misc
 recursive-include .github *.yml *.yaml
-recursive-include cicd_utils README.md *.py
+recursive-include cicd_utils README.md *.py *.sh
 recursive-include misc *.py *.ipynb *.txt *.png
 recursive-include requirements *.txt
 recursive-include tests *.py

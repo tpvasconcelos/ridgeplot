@@ -101,6 +101,7 @@ def ridgeplot(
     densities: Densities | ShallowDensities | None = None,
     trace_type: TraceTypesArray | ShallowTraceTypesArray | TraceType | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
+    row_labels: Collection[str] | None | Literal[False] = None,
     # KDE parameters
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
@@ -117,11 +118,11 @@ def ridgeplot(
     line_color: Color | Literal["fill-color"] = "black",
     line_width: float | None = None,
     spacing: float = 0.5,
-    show_yticklabels: bool = True,
     xpad: float = 0.05,
     # Deprecated parameters
     coloralpha: float | None | MissingType = MISSING,
     linewidth: float | MissingType = MISSING,
+    show_yticklabels: bool | MissingType = MISSING,
 ) -> go.Figure:
     r"""Return an interactive ridgeline (Plotly) |~go.Figure|.
 
@@ -196,10 +197,24 @@ def ridgeplot(
         .. versionadded:: 0.3.0
 
     labels : LabelsArray or ShallowLabelsArray or None
-        A list of string labels for each trace. If not specified (default), the
-        labels will be automatically generated as ``"Trace {n}"``, where ``n``
-        is the trace's index. If instead a list of labels is specified, it
-        should have the same shape as the samples array.
+        A collection of string labels for each trace. If not specified
+        (default), the labels will be automatically generated as
+        ``"Trace {i}"``, where ``i`` is the trace's index. If instead a
+        collection of labels is specified, it should have the same shape as the
+        samples array.
+
+    row_labels : Collection[str] or None or False
+        A collection of string labels for each row in the ridgeline plot. If
+        specified, the length of this collection should match the number of rows
+        in the plot (i.e., the :math:`R` dimension in the :paramref:`.samples`
+        or :paramref:`.densities` parameter). If not specified (default), the
+        row labels displayed on the y-axis will be automatically generated based
+        on the :paramref:`.labels` argument. If set to ``False``, the row
+        labels won't be displayed at all.
+
+        .. versionadded:: 0.4.0
+            Added support for custom row labels, and replaced the deprecated
+            :paramref:`.show_yticklabels` parameter.
 
     kernel : str
         The Kernel to be used during Kernel Density Estimation. The default is
@@ -226,14 +241,14 @@ def ridgeplot(
           ``"scott"`` bandwidth for gaussian kernels. See `bandwidths.py`_.
         - If a float is given, its value is used as the bandwidth.
         - If a callable is given, it's return value is used. The callable
-          should take exactly two parameters, i.e., ``fn(x, kern)``, and return
+          should take exactly two arguments, i.e., ``fn(x, kern)``, and return
           a float, where:
 
           - ``x``: the clipped input data
           - ``kern``: the kernel instance used
 
     kde_points : KDEPoints
-        This argument controls the points at which KDE is computed. If an
+        This parameter controls the points at which KDE is computed. If an
         ``int`` value is passed (default=500), the densities will be evaluated
         at ``kde_points`` evenly spaced points between the min and max of each
         set of samples. Optionally, you can also pass a custom 1D numerical
@@ -278,7 +293,7 @@ def ridgeplot(
         template.
 
     colormode : "fillgradient" or SolidColormode
-        This argument controls the logic used for the coloring of each
+        This parameter controls the logic used for the coloring of each
         ridgeline trace.
 
         The ``"fillgradient"`` mode (default) will fill each trace with a
@@ -323,13 +338,13 @@ def ridgeplot(
             ``"fillgradient"``.
 
     opacity : float or None
-        If None (default), this argument will be ignored and the transparency
+        If None (default), this parameter will be ignored and the transparency
         values of the specified color-scale will remain untouched. Otherwise,
         if a float value is passed, it will be used to overwrite the
         opacity/transparency of the color-scale's colors.
 
         .. versionadded:: 0.2.0
-            Replaces the deprecated :paramref:`.coloralpha` argument.
+            Replaces the deprecated :paramref:`.coloralpha` parameter.
 
     line_color : Color or "fill-color"
         The color of the traces' lines. Any valid CSS color is allowed
@@ -347,20 +362,14 @@ def ridgeplot(
         of 0.5 px.
 
         .. versionadded:: 0.2.0
-            Replaces the deprecated :paramref:`.linewidth` argument.
+            Replaces the deprecated :paramref:`.linewidth` parameter.
 
         .. versionchanged:: 0.2.0
             The default value changed from 1 to 1.5
 
     spacing : float
         The vertical spacing between density traces, which is defined in units
-        of the highest distribution (i.e. the maximum y-value).
-
-    show_yticklabels : bool
-        Whether to show the tick labels on the y-axis. The default is True.
-
-        .. versionadded:: 0.1.21
-            Replaces the deprecated :paramref:`.show_annotations` argument.
+        of the highest distribution (i.e., the maximum y-value).
 
     xpad : float
         Specifies the extra padding to use on the x-axis. It is defined in
@@ -376,6 +385,11 @@ def ridgeplot(
 
         .. deprecated:: 0.2.0
             Use :paramref:`.line_width` instead.
+
+    show_yticklabels : bool
+
+        .. deprecated:: 0.4.0
+            Use :paramref:`.row_labels` instead.
 
     Returns
     -------
@@ -437,6 +451,21 @@ def ridgeplot(
         )
         line_width = linewidth
 
+    if show_yticklabels is not MISSING:
+        if row_labels is not None:
+            raise ValueError(
+                "You may not specify both the 'show_yticklabels' and 'row_labels' arguments! "
+                "HINT: Use the new 'row_labels' argument instead of the deprecated "
+                "'show_yticklabels'."
+            )
+        warnings.warn(
+            "The 'show_yticklabels' argument has been deprecated in favor of 'row_labels'. "
+            "Support for the deprecated argument will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        row_labels = False if not show_yticklabels else None
+
     if colorscale == "default":
         warnings.warn(
             "colorscale='default' is deprecated and support for it will be removed in a future "
@@ -454,13 +483,13 @@ def ridgeplot(
         densities=densities,
         trace_labels=labels,
         trace_types=trace_type,
+        row_labels=row_labels,
         colorscale=colorscale,
         opacity=opacity,
         colormode=colormode,
         line_color=line_color,
         line_width=line_width,
         spacing=spacing,
-        show_yticklabels=show_yticklabels,
         xpad=xpad,
     )
     return fig
