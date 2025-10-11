@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeAlias
 
 from typing_extensions import Literal, Protocol
 
 from ridgeplot._color.utils import apply_alpha, round_color, to_rgb, unpack_rgb
 from ridgeplot._types import CollectionL2, ColorScale
 from ridgeplot._utils import get_xy_extrema, normalise_min_max
-from ridgeplot._vendor.more_itertools import zip_strict
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -110,7 +109,7 @@ def slice_colorscale(
 # ==============================================================
 
 
-ColorscaleInterpolants = CollectionL2[float]
+ColorscaleInterpolants: TypeAlias = CollectionL2[float]
 """A :data:`ColorscaleInterpolants` contains the interpolants for a :data:`ColorScale`.
 
 Example
@@ -151,7 +150,7 @@ class InterpolationFunc(Protocol):
 
 def _mul(a: tuple[Numeric, ...], b: tuple[Numeric, ...]) -> tuple[Numeric, ...]:
     """Multiply two tuples element-wise."""
-    return tuple(a_i * b_i for a_i, b_i in zip_strict(a, b))
+    return tuple(a_i * b_i for a_i, b_i in zip(a, b, strict=True))
 
 
 def _interpolate_row_index(ctx: InterpolationContext) -> ColorscaleInterpolants:
@@ -215,7 +214,7 @@ def _interpolate_mean_means(ctx: InterpolationContext) -> ColorscaleInterpolants
     ]
 
 
-SolidColormode = Literal[
+SolidColormode: TypeAlias = Literal[
     "row-index",
     "trace-index",
     "trace-index-row-wise",

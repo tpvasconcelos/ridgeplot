@@ -15,7 +15,7 @@
   "extraPaths": [
     "cicd_utils"
   ],
-  "pythonVersion": "3.9",
+  "pythonVersion": "3.10",
   "pythonPlatform": "All",
   "typeCheckingMode": "strict",
   // stricter settings
