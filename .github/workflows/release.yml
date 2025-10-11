@@ -32,14 +32,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # TODO: This can be very expensive for large repos. Is there a better way to do this?
           # Fetch all history and tags for setuptools_scm to work
           fetch-depth: 0
       - uses: ./.github/actions/setup-python
         with:
-          python-version: "3.9"
+          python-version: "3.10"
           requirements: tox
       - name: Build source (sdist) and binary (wheel) distributions
         run: tox -e build-dists
@@ -61,7 +61,7 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: python-package-distributions
           path: dist/
@@ -84,7 +84,7 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: python-package-distributions
           path: dist/
@@ -105,26 +105,26 @@ jobs:
     steps:
 
       # Generate the release notes
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # TODO: This can be very expensive for large repos. Is there a better way to do this?
           # Fetch all history and tags for setuptools_scm to work
           fetch-depth: 0
       - uses: ./.github/actions/setup-python
         with:
-          python-version: "3.9"
+          python-version: "3.10"
           requirements: tox
       - name: Generate release notes
         run: tox -e release-notes
 
       # Sign the package distributions with Sigstore
       # https://github.com/marketplace/actions/gh-action-sigstore-python
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: python-package-distributions
           path: dist/
       - name: Sign the dists with Sigstore
-        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        uses: sigstore/gh-action-sigstore-python@v3.0.1
         with:
           inputs: >-
             ./dist/*.tar.gz

@@ -4,7 +4,7 @@ used throughout the package."""
 from __future__ import annotations
 
 from collections.abc import Collection
-from typing import Optional, Union
+from typing import TypeAlias
 
 import numpy as np
 from typing_extensions import Any, Literal, TypeIs, TypeVar
@@ -37,11 +37,11 @@ _T = TypeVar("_T")
 # ---  Miscellaneous types
 # ========================================================
 
-Color = Union[str, tuple[float, float, float]]
+Color: TypeAlias = str | tuple[float, float, float]
 """A color can be represented by a tuple of ``(r, g, b)`` values or any valid
 CSS color string - including hex, rgb/a, hsl/a, hsv/a, and named CSS colors."""
 
-ColorScale = Collection[tuple[float, Color]]
+ColorScale: TypeAlias = Collection[tuple[float, Color]]
 """The canonical form for a color scale is represented by a list of tuples of
 two elements:
 
@@ -65,7 +65,7 @@ For instance, the Viridis color scale can be represented as:
 ]
 """
 
-NormalisationOption = Literal["probability", "percent"]
+NormalisationOption: TypeAlias = Literal["probability", "percent"]
 """A :data:`~typing.Literal` type that represents the normalisation options
 available for the ridgeplot. See :paramref:`ridgeplot.ridgeplot.norm` for more
 details."""
@@ -74,7 +74,7 @@ details."""
 # ---  Base nested Collection types (ragged arrays)
 # ========================================================
 
-CollectionL1 = Collection[_T]
+CollectionL1: TypeAlias = Collection[_T]
 """A :data:`~typing.TypeAlias` for a 1-level-deep :class:`~collections.abc.Collection`.
 
 Example
@@ -83,7 +83,7 @@ Example
 >>> c1 = [1, 2, 3]
 """
 
-CollectionL2 = Collection[Collection[_T]]
+CollectionL2: TypeAlias = Collection[Collection[_T]]
 """A :data:`~typing.TypeAlias` for a 2-level-deep :class:`~collections.abc.Collection`.
 
 Example
@@ -92,7 +92,7 @@ Example
 >>> c2 = [[1, 2, 3], [4, 5, 6]]
 """
 
-CollectionL3 = Collection[Collection[Collection[_T]]]
+CollectionL3: TypeAlias = Collection[Collection[Collection[_T]]]
 """A :data:`~typing.TypeAlias` for a 3-level-deep :class:`~collections.abc.Collection`.
 
 Example
@@ -108,13 +108,13 @@ Example
 # ---  Numeric types
 # ========================================================
 
-Float = Union[float, np.floating[Any]]
+Float: TypeAlias = float | np.floating[Any]
 """A :data:`~typing.TypeAlias` for float types."""
 
-Int = Union[int, np.integer[Any]]
+Int: TypeAlias = int | np.integer[Any]
 """A :data:`~typing.TypeAlias` for a int types."""
 
-Numeric = Union[Int, Float]
+Numeric: TypeAlias = Int | Float
 """A :data:`~typing.TypeAlias` for *numeric* types."""
 
 NumericT = TypeVar("NumericT", bound=Numeric)
@@ -150,7 +150,7 @@ def _is_numeric(obj: Any) -> TypeIs[Numeric]:
 # ---  `Densities` array
 # ========================================================
 
-XYCoordinate = tuple[Numeric, Numeric]
+XYCoordinate: TypeAlias = tuple[Numeric, Numeric]
 """A 2D :math:`(x, y)` coordinate, represented as a :class:`~tuple` of
 two :data:`Numeric` values.
 
@@ -160,7 +160,7 @@ Example
 >>> xy_coord = (1, 2)
 """
 
-DensityTrace = CollectionL1[XYCoordinate]
+DensityTrace: TypeAlias = CollectionL1[XYCoordinate]
 r"""A 2D line/trace represented as a collection of :math:`(x, y)` coordinates
 (i.e. :data:`XYCoordinate`\s).
 
@@ -189,7 +189,7 @@ instance, the following is a valid 2D line trace:
 
 """
 
-DensitiesRow = CollectionL1[DensityTrace]
+DensitiesRow: TypeAlias = CollectionL1[DensityTrace]
 r"""A :data:`DensitiesRow` represents a set of :data:`DensityTrace`\s that
 are to be plotted on a given row of a ridgeplot.
 
@@ -221,7 +221,7 @@ Example
         .. image:: /_static/img/api/types/densities_row.webp
 """
 
-Densities = CollectionL1[DensitiesRow]
+Densities: TypeAlias = CollectionL1[DensitiesRow]
 r"""The :data:`Densities` type represents the entire collection of traces that
 are to be plotted on a ridgeplot.
 
@@ -266,7 +266,7 @@ Example
 """
 
 
-ShallowDensities = CollectionL1[DensityTrace]
+ShallowDensities: TypeAlias = CollectionL1[DensityTrace]
 """Shallow type for :data:`Densities` where each row of the ridgeplot contains
 only a single trace.
 
@@ -346,7 +346,7 @@ def is_shallow_densities(obj: Any) -> TypeIs[ShallowDensities]:
 # --- `Samples` array
 # ========================================================
 
-SamplesTrace = CollectionL1[Numeric]
+SamplesTrace: TypeAlias = CollectionL1[Numeric]
 """A :data:`SamplesTrace` is a collection of numeric values representing a
 set of samples from which a :data:`DensityTrace` can be estimated via KDE.
 
@@ -368,7 +368,7 @@ Example
         .. image:: /_static/img/api/types/samples_trace.webp
 """
 
-SamplesRow = CollectionL1[SamplesTrace]
+SamplesRow: TypeAlias = CollectionL1[SamplesTrace]
 r"""A :data:`SamplesRow` represents a set of :data:`SamplesTrace`\s that are to be
 plotted on a given row of a ridgeplot.
 
@@ -396,7 +396,7 @@ Example
         .. image:: /_static/img/api/types/samples_row.webp
 """
 
-Samples = CollectionL1[SamplesRow]
+Samples: TypeAlias = CollectionL1[SamplesRow]
 r"""The :data:`Samples` type represents the entire collection of samples that
 are to be plotted on a ridgeplot.
 
@@ -437,7 +437,7 @@ Example
         .. image:: /_static/img/api/types/samples.webp
 """
 
-ShallowSamples = CollectionL1[SamplesTrace]
+ShallowSamples: TypeAlias = CollectionL1[SamplesTrace]
 """Shallow type for :data:`Samples` where each row of the ridgeplot contains
 only a single trace.
 
@@ -507,11 +507,11 @@ def is_shallow_samples(obj: Any) -> TypeIs[ShallowSamples]:
 
 # Trace types ---
 
-TraceType = Literal["area", "bar"]
+TraceType: TypeAlias = Literal["area", "bar"]
 """The type of trace to draw in a ridgeplot. See
 :paramref:`ridgeplot.ridgeplot.trace_type` for more information."""
 
-TraceTypesArray = CollectionL2[TraceType]
+TraceTypesArray: TypeAlias = CollectionL2[TraceType]
 """A :data:`TraceTypesArray` represents the types of traces in a ridgeplot.
 
 Example
@@ -522,7 +522,7 @@ Example
 ... ]
 """
 
-ShallowTraceTypesArray = CollectionL1[TraceType]
+ShallowTraceTypesArray: TypeAlias = CollectionL1[TraceType]
 """Shallow type for :data:`TraceTypesArray`.
 
 Example
@@ -582,7 +582,7 @@ def is_trace_types_array(obj: Any) -> TypeIs[TraceTypesArray]:
 
 # Labels ---
 
-LabelsArray = CollectionL2[str]
+LabelsArray: TypeAlias = CollectionL2[str]
 """A :data:`LabelsArray` represents the labels of traces in a ridgeplot.
 
 Example
@@ -594,7 +594,7 @@ Example
 ... ]
 """
 
-ShallowLabelsArray = CollectionL1[str]
+ShallowLabelsArray: TypeAlias = CollectionL1[str]
 """Shallow type for :data:`LabelsArray`.
 
 Example
@@ -605,15 +605,15 @@ Example
 
 # Sample weights ---
 
-SampleWeights = Optional[CollectionL1[Numeric]]
+SampleWeights: TypeAlias = CollectionL1[Numeric] | None
 """An array of KDE weights corresponding to each sample."""
 
-SampleWeightsArray = CollectionL2[SampleWeights]
+SampleWeightsArray: TypeAlias = CollectionL2[SampleWeights]
 """A :data:`SampleWeightsArray` represents the weights of the datapoints in a
 :data:`Samples` array. The shape of the :data:`SampleWeightsArray` array should
 match the shape of the corresponding :data:`Samples` array."""
 
-ShallowSampleWeightsArray = CollectionL1[SampleWeights]
+ShallowSampleWeightsArray: TypeAlias = CollectionL1[SampleWeights]
 """Shallow type for :data:`SampleWeightsArray`."""
 
 # ========================================================

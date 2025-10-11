@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import ast
 import importlib.metadata
+import inspect
+import pkgutil
 import sys
 from contextlib import contextmanager
 from datetime import datetime
@@ -9,6 +12,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from typing_extensions import Any
+
+import ridgeplot as ridgeplot_pkg
 
 try:
     from ridgeplot_examples import ALL_EXAMPLES
@@ -271,47 +276,49 @@ napoleon_attr_annotations = True
 
 
 # Type aliases
-_TYPE_ALIASES_FULLY_QUALIFIED = {
-    # ------- ._color.css_colors -------------------
-    "ridgeplot._color.css_colors.CssNamedColor",
-    # ------- ._color.interpolation ----------------
-    "ridgeplot._color.interpolation.ColorscaleInterpolants",
-    "ridgeplot._color.interpolation.SolidColormode",
-    # ------- ._kde --------------------------------
-    "ridgeplot._kde.KDEPoints",
-    "ridgeplot._kde.KDEBandwidth",
-    # ------- ._missing ----------------------------
-    "ridgeplot._missing.MISSING",
-    "ridgeplot._missing.MissingType",
-    # ------- ._types ------------------------------
-    "ridgeplot._types.Color",
-    "ridgeplot._types.ColorScale",
-    "ridgeplot._types.NormalisationOption",
-    "ridgeplot._types.CollectionL1",
-    "ridgeplot._types.CollectionL2",
-    "ridgeplot._types.CollectionL3",
-    "ridgeplot._types.Float",
-    "ridgeplot._types.Int",
-    "ridgeplot._types.Numeric",
-    "ridgeplot._types.NumericT",
-    "ridgeplot._types.XYCoordinate",
-    "ridgeplot._types.DensityTrace",
-    "ridgeplot._types.DensitiesRow",
-    "ridgeplot._types.Densities",
-    "ridgeplot._types.ShallowDensities",
-    "ridgeplot._types.SamplesTrace",
-    "ridgeplot._types.SamplesRow",
-    "ridgeplot._types.Samples",
-    "ridgeplot._types.ShallowSamples",
-    "ridgeplot._types.TraceType",
-    "ridgeplot._types.TraceTypesArray",
-    "ridgeplot._types.ShallowTraceTypesArray",
-    "ridgeplot._types.LabelsArray",
-    "ridgeplot._types.ShallowLabelsArray",
-    "ridgeplot._types.SampleWeights",
-    "ridgeplot._types.SampleWeightsArray",
-    "ridgeplot._types.ShallowSampleWeightsArray",
-}
+def _get_module_type_aliases(module_name: str) -> set[str]:
+    module = import_module(module_name)
+    source = inspect.getsource(module)
+    tree = ast.parse(source)
+    type_aliases = {
+        f"{module_name}.{node.target.id}"
+        for node in ast.walk(tree)
+        # Handle annotated assignments: x: TypeAlias = ...
+        if (
+            isinstance(node, ast.AnnAssign)
+            and isinstance(node.target, ast.Name)
+            and isinstance(node.annotation, ast.Name)
+            and node.annotation.id == "TypeAlias"
+        )
+    }
+    return type_aliases
+
+
+def _get_package_type_aliases(package_name: str) -> set[str]:
+    """Recursively extract TypeAlias definitions from a package."""
+    package = import_module(package_name)
+    prefix = f"{package.__name__}."
+    type_aliases = set()
+    for _, modname, is_pkg in pkgutil.walk_packages(package.__path__, prefix):
+        if is_pkg:
+            type_aliases.update(_get_package_type_aliases(modname))
+        else:
+            type_aliases.update(_get_module_type_aliases(modname))
+    return type_aliases
+
+
+_TYPE_ALIASES_FULLY_QUALIFIED = (
+    # Automatically extract all TypeAlias
+    # definitions from the `ridgeplot` package
+    _get_package_type_aliases(ridgeplot_pkg.__name__)
+    | {
+        # `MISSING` is a special case that is
+        # widely referenced in type annotations
+        "ridgeplot._missing.MISSING",
+        # Same thing with the `NumericT` TypeVar
+        "ridgeplot._types.NumericT",
+    }
+)
 for fq in _TYPE_ALIASES_FULLY_QUALIFIED:
     module_name, _, type_name = fq.rpartition(".")
     try:

@@ -60,7 +60,6 @@ ignore = [
 
     # pandas-vet (PD)
     "PD015", # Use `.merge` method instead of `pd.merge` function. They have equivalent functionality.
-    "PD901", # `df` is a bad variable name. Be kinder to your future self.
 
     # Convention (PLC)
     "PLC0415", # `import` should be at the top-level of a file

@@ -16,16 +16,16 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  # Run static checks only for Ubuntu and Python 3.9
+  # Run static checks only for Ubuntu and the lowest support version of Python
   static-checks:
     name: Static checks
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-python
         with:
-          python-version: "3.9"
+          python-version: "3.10"
           requirements: tox
       # Instead of running all checks in one task (i.e., `tox -m static`),
       # we'll instead run them one-by-one, so that it's easier to
@@ -47,11 +47,11 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - "3.9"
           - "3.10"
           - "3.11"
           - "3.12"
           - "3.13"
+          #- "3.14"
         os:
           - ubuntu-latest
           # There shouldn't be any behavior differences between OSes,
@@ -66,7 +66,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 8
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # TODO: This can be very expensive for large repos. Is there a better way to do this?
           # Fetch all history and tags for setuptools_scm to work

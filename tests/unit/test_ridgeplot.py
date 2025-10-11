@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import plotly.express as px
 import pytest
@@ -82,6 +82,59 @@ def test_shallow_trace_type() -> None:
 def test_unknown_trace_type() -> None:
     with pytest.raises(TypeError, match="Invalid trace_type: foo"):
         ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], trace_type="foo")  # pyright: ignore[reportArgumentType]
+
+
+# ==============================================================
+# ---  param: row_labels
+# ==============================================================
+
+
+@pytest.mark.parametrize(
+    "row_labels",
+    [
+        ["row 1"],
+        ["Trace 1", "Trace 2", "Trace 3", "Trace 4", "Trace 5"],
+    ],
+)
+def test_row_labels_wrong_len(row_labels: Any) -> None:
+    densities = [
+        [
+            [(0, 0), (1, 1), (2, 0)],  # Trace 1
+            [(1, 0), (2, 2), (3, 0)],  # Trace 2
+            [(2, 1), (3, 2), (4, 1)],  # Trace 3
+        ],
+        [
+            [(0, 4), (1, 4), (2, 8)],  # Trace 4
+            [(1, 4), (2, 4), (3, 2)],  # Trace 5
+        ],
+    ]
+    with pytest.raises(ValueError, match=r"Expected 2 row_labels, got .* instead"):
+        ridgeplot(densities=densities, row_labels=row_labels)
+
+
+def test_row_labels_auto() -> None:
+    densities = [
+        [
+            [(0, 0), (1, 1), (2, 0)],  # Trace 1
+            [(1, 0), (2, 2), (3, 0)],  # Trace 2
+            [(2, 1), (3, 2), (4, 1)],  # Trace 3
+        ],
+        [
+            [(0, 4), (1, 4), (2, 8)],  # Trace 4
+            [(1, 4), (2, 4), (3, 2)],  # Trace 5
+        ],
+    ]
+    assert (
+        ridgeplot(densities=densities) ==
+        ridgeplot(densities=densities, row_labels=["Trace 1,Trace 2,Trace 3", "Trace 4,Trace 5"])
+    )  # fmt: skip
+
+
+def test_row_labels_false() -> None:
+    fig = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], row_labels=False)
+    assert fig.layout.yaxis.tickvals is None
+    assert fig.layout.yaxis.ticktext is None
+    assert fig.layout.yaxis.showticklabels is False
 
 
 # ==============================================================
@@ -232,36 +285,41 @@ def test_spacing(spacing: float) -> None:
 # ==============================================================
 
 
-def test_deprecated_coloralpha_is_not_missing() -> None:
+@pytest.mark.parametrize(
+    ("arg_dep", "val_dep", "arg_new", "val_new"),
+    [
+        ("coloralpha", 0.5, "opacity", 0.5),
+        ("linewidth", 0.5, "line_width", 0.5),
+        ("show_yticklabels", True, "row_labels", ["Trace 1", "Trace 2"]),
+    ],
+)
+def test_deprecated_arguments(
+    arg_dep: str,
+    val_dep: Any,
+    arg_new: str,
+    val_new: Any,
+) -> None:
+    samples = [[1, 2, 3], [1, 2, 3]]
+
+    # Test that using the new argument works without warnings
+    fig_new = ridgeplot(samples=samples, **{arg_new: val_new})
+
+    # Test that using the deprecated argument raises a DeprecationWarning
     with pytest.warns(
         DeprecationWarning,
-        match="The 'coloralpha' argument has been deprecated in favor of 'opacity'",
+        match=f"The '{arg_dep}' argument has been deprecated in favor of '{arg_new}'",
     ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], coloralpha=0.5)
+        fig_dep = ridgeplot(samples=samples, **{arg_dep: val_dep})
 
+    # Test that both approaches yield the same figure
+    assert fig_new == fig_dep
 
-def test_deprecated_coloralpha_and_opacity_together_raises() -> None:
+    # Test that using both the deprecated and new argument raises the expected exception
     with pytest.raises(
         ValueError,
-        match="You may not specify both the 'coloralpha' and 'opacity' arguments!",
+        match=f"You may not specify both the '{arg_dep}' and '{arg_new}' arguments!",
     ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], coloralpha=0.4, opacity=0.6)
-
-
-def test_deprecated_linewidth_is_not_missing() -> None:
-    with pytest.warns(
-        DeprecationWarning,
-        match="The 'linewidth' argument has been deprecated in favor of 'line_width'",
-    ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], linewidth=0.5)
-
-
-def test_deprecated_linewidth_and_line_width_together_raises() -> None:
-    with pytest.raises(
-        ValueError,
-        match="You may not specify both the 'linewidth' and 'line_width' arguments!",
-    ):
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], linewidth=0.4, line_width=0.6)
+        ridgeplot(samples=samples, **{arg_dep: val_dep, arg_new: val_new})
 
 
 def test_ridgeplot_colorscale_default_deprecation_warning() -> None:
