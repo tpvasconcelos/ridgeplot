@@ -11,6 +11,7 @@ Unreleased changes
 ### CI/CD
 
 - pre-commit autoupdate ({gh-pr}`340`)
+- pre-commit autoupdate ({gh-pr}`341`)
 
 ---
 
