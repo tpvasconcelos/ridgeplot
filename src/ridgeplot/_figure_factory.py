@@ -185,7 +185,8 @@ def create_ridgeplot(
     )
     if color_discrete_map:
         solid_colors = (
-            (color_discrete_map[label] for label in row_labels) for row_labels in trace_labels
+            (color_discrete_map[label] for label in row_trace_labels)
+            for row_trace_labels in trace_labels
         )
     else:
         solid_colors = compute_solid_colors(
