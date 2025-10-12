@@ -339,9 +339,22 @@ def ridgeplot(
             ``"fillgradient"``.
 
     color_discrete_map: dict or None
-        TODO: ...
+        A mapping from trace labels to specific colors.
 
-        .. versionadded:: 0.4.0
+        This parameter is useful when you want to have full manual control over
+        the colors assigned to each trace. If specified, the assigned colors
+        are determined by looking up the trace's label as a key in this
+        dictionary. All labels must be present as keys in the dictionary.
+
+        Note that this parameter overrides any value specified for
+        :paramref:`.colorscale` and :paramref:`.colormode`. In this case, the
+        color assigned to each trace will be a solid color, as specified in
+        this dictionary.
+
+        If not specified (default), the colors will be determined using the
+        :paramref:`.colorscale` and :paramref:`.colormode` parameters.
+
+        .. versionadded:: 0.5.0
 
     opacity : float or None
         If None (default), this parameter will be ignored and the transparency
