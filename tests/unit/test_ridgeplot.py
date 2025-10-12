@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, Any
 
 import plotly.express as px
@@ -183,6 +184,18 @@ def test_color_discrete_map() -> None:
     )
     assert fig.data[1].fillcolor == "rgba(0, 128, 0, 1.0)"
     assert fig.data[3].fillcolor == "rgba(255, 165, 0, 1.0)"
+
+
+def test_missing_labels() -> None:
+    with pytest.raises(
+        ValueError,
+        match=re.escape("The following labels are missing from 'color_discrete_map': {'B'}"),
+    ):
+        ridgeplot(
+            samples=[[[1, 2, 3], [4, 5, 6]]],
+            color_discrete_map={"A": "rgba(0, 128, 0, 1.0)"},
+            labels=["A", "B"],
+        )
 
 
 # ==============================================================

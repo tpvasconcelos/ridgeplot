@@ -157,6 +157,15 @@ def create_ridgeplot(
     elif row_labels is not False and len(row_labels) != n_rows:
         raise ValueError(f"Expected {n_rows} row_labels, got {len(row_labels)} instead.")
 
+    if color_discrete_map:
+        missing_labels = {
+            label for row in trace_labels for label in row if label not in color_discrete_map
+        }
+        if missing_labels:
+            raise ValueError(
+                f"The following labels are missing from 'color_discrete_map': {missing_labels}",
+            )
+
     # Force cast certain arguments to the expected types
     line_width = float(line_width) if line_width is not None else None
     spacing = float(spacing)
