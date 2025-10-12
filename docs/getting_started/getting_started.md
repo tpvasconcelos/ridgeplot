@@ -267,6 +267,10 @@ The {py:func}`~ridgeplot.ridgeplot()` function offers flexible customisation opt
 
 As a simple (but quite common) example, we'll try to adjust the output of the previous example to use different discrete colors for the minimum and maximum temperature traces. Specifically, we'll set all minimum temperature traces to a shade of blue and all maximum temperature traces to a shade of red. To achieve this, we just need to set the {py:paramref}`~ridgeplot.ridgeplot.color_discrete_map` parameter to a dictionary that maps the trace labels to the desired colors.
 
+:::{note}
+Because the {py:paramref}`~ridgeplot.ridgeplot.color_discrete_map` parameter takes precedence over the {py:paramref}`~ridgeplot.ridgeplot.colorscale` and {py:paramref}`~ridgeplot.ridgeplot.colormode` parameters, we can keep them as they are in the previous example. However, since their behavior will be overridden by {py:paramref}`~ridgeplot.ridgeplot.color_discrete_map`, it is a good practice to remove them from the function call to avoid any confusion.
+:::
+
 ```python
 fig = ridgeplot(
     # Same options as before, with the
