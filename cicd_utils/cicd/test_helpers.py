@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 import contextlib
+import copy
 import pickle
 import sys
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 from unittest.mock import MagicMock, patch
+
+import plotly.io
+from plotly import graph_objects as go
+from pytest_socket import disable_socket, enable_socket
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -15,6 +20,17 @@ if TYPE_CHECKING:
     from types import ModuleType
 
     from plotly.graph_objs import Figure
+
+
+_PLOTLY_SHOW_DEEPCOPY = copy.deepcopy(plotly.io.show)
+
+
+def plotly_show_browser(fig: go.Figure) -> None:
+    try:
+        enable_socket()
+        _PLOTLY_SHOW_DEEPCOPY(fig=fig.to_dict(), renderer="browser")
+    finally:
+        disable_socket()
 
 
 @contextlib.contextmanager

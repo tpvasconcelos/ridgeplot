@@ -30,7 +30,6 @@ def main(
         labels=[["Min Temperature [F]", "Max Temperature [F]"]] * len(months),
         row_labels=months,
         colorscale="Inferno",
-        colormode="fillgradient",
         color_discrete_map=color_discrete_map,
         bandwidth=4,
         kde_points=np.linspace(-40, 110, 400),

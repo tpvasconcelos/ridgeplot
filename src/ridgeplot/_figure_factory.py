@@ -23,7 +23,6 @@ from ridgeplot._types import (
     ShallowTraceTypesArray,
     TraceType,
     TraceTypesArray,
-    is_flat_str_collection,
     is_shallow_trace_types_array,
     is_trace_type,
     is_trace_types_array,
@@ -50,9 +49,9 @@ def normalise_trace_types(
         trace_types = cast("TraceTypesArray", [[trace_types] * len(row) for row in densities])
     elif is_shallow_trace_types_array(trace_types):
         trace_types = nest_shallow_collection(trace_types)
-        trace_types = normalise_row_attrs(trace_types, l2_target=densities)
+        trace_types = normalise_row_attrs(attrs=trace_types, l2_target=densities)
     elif is_trace_types_array(trace_types):
-        trace_types = normalise_row_attrs(trace_types, l2_target=densities)
+        trace_types = normalise_row_attrs(attrs=trace_types, l2_target=densities)
     else:
         raise TypeError(f"Invalid trace_type: {trace_types}")
     return trace_types
@@ -67,9 +66,7 @@ def normalise_trace_labels(
         ids = iter(range(1, n_traces + 1))
         trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
     else:
-        if is_flat_str_collection(trace_labels):
-            trace_labels = nest_shallow_collection(trace_labels)
-        trace_labels = normalise_row_attrs(trace_labels, l2_target=densities)
+        trace_labels = normalise_row_attrs(attrs=trace_labels, l2_target=densities)
     return trace_labels
 
 

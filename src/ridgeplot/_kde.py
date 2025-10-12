@@ -94,7 +94,7 @@ def normalize_sample_weights(
         return [[sample_weights] * len(row) for row in samples]
     if _is_shallow_sample_weights(sample_weights):
         sample_weights = nest_shallow_collection(sample_weights)
-    sample_weights = normalise_row_attrs(sample_weights, l2_target=samples)
+    sample_weights = normalise_row_attrs(attrs=sample_weights, l2_target=samples)
     return sample_weights
 
 

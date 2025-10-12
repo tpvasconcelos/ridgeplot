@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING
 
 from typing_extensions import TypeVar
 
+from ridgeplot._types import is_collection_l2
+
 if TYPE_CHECKING:
     from typing_extensions import Any
 
@@ -208,7 +210,10 @@ def ordered_dedup(seq: Collection[_V]) -> list[_V]:
     return list(dict.fromkeys(seq))
 
 
-def normalise_row_attrs(attrs: CollectionL2[_V], l2_target: CollectionL2[Any]) -> CollectionL2[_V]:
+def normalise_row_attrs(
+    attrs: Collection[_V] | CollectionL2[_V],
+    l2_target: CollectionL2[Any],
+) -> list[list[_V]]:
     """Validate and normalise the attributes over a CollectionL2 array such
     that the number of attributes matches the number of traces in each row.
 
@@ -221,7 +226,7 @@ def normalise_row_attrs(attrs: CollectionL2[_V], l2_target: CollectionL2[Any]) -
 
     Returns
     -------
-    CollectionL2
+    list[list[_V]]
         The normalised attributes collection.
 
     Raises
@@ -232,6 +237,27 @@ def normalise_row_attrs(attrs: CollectionL2[_V], l2_target: CollectionL2[Any]) -
 
     Examples
     --------
+    >>> densities = [[[(0, 0), (1, 1), (2, 0)]]]  # Single row, single trace
+    >>> normalise_row_attrs(["A"], densities)
+    [['A']]
+    >>> normalise_row_attrs([["A", "B"]], densities)
+    Traceback (most recent call last):
+    ...
+    ValueError: Mismatch between number of traces (1) and number of attrs (2) for row 0.
+    >>> densities = [                       # Row 1
+    ...     [
+    ...         [(0, 0), (1, 1), (2, 0)],   # Trace 1
+    ...         [(1, 0), (2, 1), (3, 0)],   # Trace 2
+    ...     ],
+    ... ]
+    >>> normalise_row_attrs(["A"], densities)
+    [['A', 'A']]
+    >>> normalise_row_attrs(["A", "B"], densities)
+    [['A', 'B']]
+    >>> normalise_row_attrs(["A", "B", "C"], densities)
+    Traceback (most recent call last):
+    ...
+    ValueError: Mismatch between number of traces (2) and number of attrs (3) for row 0.
     >>> densities = [
     ...     [                                             # Row 1
     ...         [(0, 0), (1, 1), (2, 0)],                 # Trace 1
@@ -258,6 +284,14 @@ def normalise_row_attrs(attrs: CollectionL2[_V], l2_target: CollectionL2[Any]) -
     ...     [                                # Row 1
     ...         [0, 1, 1, 2, 2, 2, 3, 3, 4], # Trace 1
     ...         [1, 2, 2, 3, 3, 3, 4, 4, 5], # Trace 2
+    ...     ],
+    ... ]
+    >>> normalise_row_attrs(["A", "B"], samples)
+    [['A', 'B']]
+    >>> samples = [
+    ...     [                                # Row 1
+    ...         [0, 1, 1, 2, 2, 2, 3, 3, 4], # Trace 1
+    ...         [1, 2, 2, 3, 3, 3, 4, 4, 5], # Trace 2
     ...         [3, 4, 4, 5, 5, 5, 6, 6, 7], # Trace 3
     ...     ],
     ...     [                                # Row 2
@@ -267,24 +301,32 @@ def normalise_row_attrs(attrs: CollectionL2[_V], l2_target: CollectionL2[Any]) -
     ... ]
     >>> normalise_row_attrs([["A"], ["B"]], samples)
     [['A', 'A', 'A'], ['B', 'B']]
+    >>> normalise_row_attrs([[(1, 2), "34", None], ["C", ["D", "E"]]], samples)
+    [[(1, 2), '34', None], ['C', ['D', 'E']]]
     >>> normalise_row_attrs([["A"], ["B", "C", "X"]], samples)
     Traceback (most recent call last):
     ...
     ValueError: Mismatch between number of traces (2) and number of attrs (3) for row 1.
     """
-    norm_attrs = []
-    for i, (row, row_attr) in enumerate(zip(l2_target, attrs)):
-        n_traces = len(row)
-        n_attrs = len(row_attr)
-        if n_traces != n_attrs:
-            if n_attrs != 1:
-                raise ValueError(
-                    f"Mismatch between number of traces ({n_traces}) "
-                    f"and number of attrs ({n_attrs}) for row {i}."
-                )
-            row_attr = list(row_attr) * n_traces  # noqa: PLW2901
-        norm_attrs.append(row_attr)
-    return norm_attrs
+    if not is_collection_l2(attrs):
+        attrs = [attrs] if len(l2_target) == 1 else [[attr] for attr in attrs]
+
+    result: list[list[_V]] = []
+    for i, (row_attrs, row_traces) in enumerate(zip(attrs, l2_target, strict=True)):
+        n_traces = len(row_traces)
+        n_attrs = len(row_attrs)
+        if n_attrs == 1:
+            # Broadcast single attribute to all traces in this row
+            result.append(list(row_attrs) * n_traces)
+        elif n_attrs == n_traces:
+            # Use attributes as-is
+            result.append(list(row_attrs))
+        else:
+            raise ValueError(
+                f"Mismatch between number of traces ({n_traces}) "
+                f"and number of attrs ({n_attrs}) for row {i}."
+            )
+    return result
 
 
 def normalise_densities(densities: Densities, norm: NormalisationOption) -> Densities:
