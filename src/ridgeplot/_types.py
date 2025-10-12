@@ -104,6 +104,30 @@ Example
 ... ]
 """
 
+
+def is_collection_l2(obj: Any) -> TypeIs[CollectionL2[Any]]:
+    """Type guard for :data:`CollectionL2`.
+
+    Examples
+    --------
+    >>> is_collection_l2("definitely not")
+    False
+    >>> is_collection_l2([1, 2, 3])
+    False
+    >>> is_collection_l2([[1, 2], [3, 4]])
+    True
+    >>> is_collection_l2([["a", "b"], ["c", "d"]])
+    True
+    >>> is_collection_l2([["a", "b"], "c"])
+    False
+    >>> is_collection_l2([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])  # 3-level deep
+    True
+    """
+    return isinstance(obj, Collection) and all(
+        isinstance(item, Collection) and not isinstance(item, str) for item in obj
+    )
+
+
 # ========================================================
 # ---  Numeric types
 # ========================================================
@@ -340,6 +364,37 @@ def is_shallow_densities(obj: Any) -> TypeIs[ShallowDensities]:
     False
     """
     return isinstance(obj, Collection) and all(map(is_density_trace, obj))
+
+
+def is_densities(obj: Any) -> TypeIs[Densities]:
+    """Type guard for :data:`Densities`.
+
+    Examples
+    --------
+    >>> is_densities("definitely not")
+    False
+    >>> is_densities([["also"], ["not"]])
+    False
+    >>> is_densities([[["still"], ["not"]], [["nope"]]])
+    False
+    >>> shallow_density = [[(0, 0), (1, 1)], [(2, 2), (3, 1)]]
+    >>> is_densities(shallow_density)
+    False
+    >>> deep_density = [
+    ...     [                                             # Row 1
+    ...         [(0, 0), (1, 1), (2, 0)],                 # Trace 1
+    ...         [(1, 0), (2, 1), (3, 2), (4, 1)],         # Trace 2
+    ...         [(3, 0), (4, 1), (5, 2), (6, 1), (7, 0)], # Trace 3
+    ...     ],
+    ...     [                                             # Row 2
+    ...         [(-2, 0), (-1, 1), (0, 0)],               # Trace 4
+    ...         [(0, 0), (1, 1), (2, 1), (3, 0)],         # Trace 5
+    ...     ],
+    ... ]
+    >>> is_densities(deep_density)
+    True
+    """
+    return isinstance(obj, Collection) and all(map(is_shallow_densities, obj))
 
 
 # ========================================================
@@ -668,6 +723,8 @@ def is_flat_numeric_collection(obj: Any) -> TypeIs[CollectionL1[Numeric]]:
     return isinstance(obj, Collection) and all(map(_is_numeric, obj))
 
 
+# TODO: Consider getting rid of this function and using
+#       the list comprehension directly where needed.
 def nest_shallow_collection(shallow_collection: Collection[_T]) -> Collection[Collection[_T]]:
     """Convert a *shallow* collection type into a *deep* collection type.
 

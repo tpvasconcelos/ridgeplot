@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 import contextlib
+import copy
 import pickle
 import sys
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 from unittest.mock import MagicMock, patch
+
+import plotly.io
+import pytest_socket
+from plotly import graph_objects as go
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -15,6 +20,24 @@ if TYPE_CHECKING:
     from types import ModuleType
 
     from plotly.graph_objs import Figure
+
+
+_PLOTLY_SHOW_DEEPCOPY = copy.deepcopy(plotly.io.show)
+
+
+def plotly_show_browser(fig: go.Figure, renderer: str = "browser", **kwargs: Any) -> None:
+    """Display a Plotly figure in a new browser tab.
+
+    This temporarily enables network connections (if disabled by pytest-socket)
+    and ensures the real (unpatched) `plotly.io.show()` is used. Useful for
+    debugging test failures by viewing the actual rendered figure in a browser
+    window.
+    """
+    try:
+        pytest_socket.enable_socket()
+        _PLOTLY_SHOW_DEEPCOPY(fig=fig.to_dict(), renderer=renderer, **kwargs)
+    finally:
+        pytest_socket.disable_socket()
 
 
 @contextlib.contextmanager

@@ -114,6 +114,7 @@ def ridgeplot(
     # Coloring and styling parameters
     colorscale: ColorScale | Collection[Color] | str | None = None,
     colormode: Literal["fillgradient"] | SolidColormode = "fillgradient",
+    color_discrete_map: dict[str, str] | None = None,
     opacity: float | None = None,
     line_color: Color | Literal["fill-color"] = "black",
     line_width: float | None = None,
@@ -337,6 +338,24 @@ def ridgeplot(
             The default value changed from ``"mean-minmax"`` to
             ``"fillgradient"``.
 
+    color_discrete_map: dict or None
+        A mapping from trace labels to specific colors.
+
+        This parameter is useful when you want to have full manual control over
+        the colors assigned to each trace. If specified, the assigned colors
+        are determined by looking up the trace's label as a key in this
+        dictionary. All labels must be present as keys in the dictionary.
+
+        Note that this parameter overrides any value specified for
+        :paramref:`.colorscale` and :paramref:`.colormode`. In this case, the
+        color assigned to each trace will be a solid color, as specified in
+        this dictionary.
+
+        If not specified (default), the colors will be determined using the
+        :paramref:`.colorscale` and :paramref:`.colormode` parameters.
+
+        .. versionadded:: 0.5.0
+
     opacity : float or None
         If None (default), this parameter will be ignored and the transparency
         values of the specified color-scale will remain untouched. Otherwise,
@@ -485,8 +504,9 @@ def ridgeplot(
         trace_types=trace_type,
         row_labels=row_labels,
         colorscale=colorscale,
-        opacity=opacity,
         colormode=colormode,
+        color_discrete_map=color_discrete_map,
+        opacity=opacity,
         line_color=line_color,
         line_width=line_width,
         spacing=spacing,

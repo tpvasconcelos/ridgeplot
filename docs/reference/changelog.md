@@ -8,6 +8,10 @@ Unreleased changes
 - Dropped support for Python 3.9, in accordance with the official Python support policy[^1] ({gh-pr}`345`)
 - Bump project classification from Pre-Alpha to Alpha ({gh-pr}`336`)
 
+### Features
+
+- Implement a new `color_discrete_map` parameter to allow users to specify custom colors for each trace ({gh-pr}`348`)
+
 ### CI/CD
 
 - Bump actions/github-script from 7 to 8 ({gh-pr}`338`)
