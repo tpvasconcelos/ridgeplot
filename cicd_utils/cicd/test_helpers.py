@@ -10,8 +10,8 @@ from typing import TYPE_CHECKING, Any, TypeVar, cast
 from unittest.mock import MagicMock, patch
 
 import plotly.io
+import pytest_socket
 from plotly import graph_objects as go
-from pytest_socket import disable_socket, enable_socket
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -25,12 +25,19 @@ if TYPE_CHECKING:
 _PLOTLY_SHOW_DEEPCOPY = copy.deepcopy(plotly.io.show)
 
 
-def plotly_show_browser(fig: go.Figure) -> None:
+def plotly_show_browser(fig: go.Figure, renderer: str = "browser", **kwargs: Any) -> None:
+    """Display a Plotly figure in a new browser tab.
+
+    This temporarily enables network connections (if disabled by pytest-socket)
+    and ensures the real (unpatched) `plotly.io.show()` is used. Useful for
+    debugging test failures by viewing the actual rendered figure in a browser
+    window.
+    """
     try:
-        enable_socket()
-        _PLOTLY_SHOW_DEEPCOPY(fig=fig.to_dict(), renderer="browser")
+        pytest_socket.enable_socket()
+        _PLOTLY_SHOW_DEEPCOPY(fig=fig.to_dict(), renderer=renderer, **kwargs)
     finally:
-        disable_socket()
+        pytest_socket.disable_socket()
 
 
 @contextlib.contextmanager
