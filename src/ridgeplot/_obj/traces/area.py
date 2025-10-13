@@ -68,6 +68,7 @@ class AreaTrace(RidgeplotTrace):
                 hoverinfo="skip",
                 # z-order (higher z-order means the trace is drawn on top)
                 zorder=self.zorder,
+                legendgroup=self.legend_ctx.legendgroup,
             )
         )
         fig.add_trace(

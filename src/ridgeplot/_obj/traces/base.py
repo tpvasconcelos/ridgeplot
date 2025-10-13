@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from plotly import graph_objects as go
 
     from ridgeplot._color.interpolation import InterpolationContext
+    from ridgeplot._obj.legendcontext import LegendContext
     from ridgeplot._types import Color, ColorScale, DensityTrace
 
 
@@ -24,7 +25,7 @@ in Plotly's 'hovertemplate' parameter. The closest I got was by using the
 string below, but it's not quite the same... (see '.7~r' as well)
 """
 
-DEFAULT_HOVERTEMPLATE = (
+_DEFAULT_HOVERTEMPLATE = (
     f"(%{{x:{_D3HF}}}, %{{customdata[0]:{_D3HF}}})"
     "<br>"
     "<extra>%{fullData.name}</extra>"
@@ -56,7 +57,7 @@ class RidgeplotTrace(ABC):
         self,
         *,  # kw only
         trace: DensityTrace,
-        label: str,
+        legend_ctx: LegendContext,
         solid_color: str,
         zorder: int,
         # Constant over the trace's row
@@ -67,7 +68,7 @@ class RidgeplotTrace(ABC):
     ):
         super().__init__()
         self.x, self.y = zip(*trace, strict=True)
-        self.label = label
+        self.legend_ctx = legend_ctx
         self.solid_color = solid_color
         self.zorder = zorder
         self.y_base = y_base
@@ -79,12 +80,10 @@ class RidgeplotTrace(ABC):
         """Return common trace kwargs."""
         return dict(
             # Legend information
-            name=self.label,
-            # legendgroup=self.label,
-            # legendgrouptitle_text=self.label,
+            **self.legend_ctx.trace_kwargs,
             # Hover information
             customdata=[[y_i] for y_i in self.y],
-            hovertemplate=DEFAULT_HOVERTEMPLATE,
+            hovertemplate=_DEFAULT_HOVERTEMPLATE,
             # z-order (higher z-order means the trace is drawn on top)
             zorder=self.zorder,
         )

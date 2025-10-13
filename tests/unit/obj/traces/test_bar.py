@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 
 from ridgeplot._color.interpolation import InterpolationContext
+from ridgeplot._obj.legendcontext import LegendContext
 from ridgeplot._obj.traces.bar import BarTrace
 from ridgeplot._obj.traces.base import ColoringContext
 
@@ -11,7 +12,10 @@ from ridgeplot._obj.traces.base import ColoringContext
 def bar_trace() -> BarTrace:
     return BarTrace(
         trace=[(0, 0), (1, 1), (2, 0)],
-        label="Trace 1",
+        legend_ctx=LegendContext(
+            name="Trace 1",
+            showlegend=True,
+        ),
         solid_color="red",
         zorder=1,
         y_base=0,

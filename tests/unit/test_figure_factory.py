@@ -126,6 +126,7 @@ class TestCreateRidgeplot:
                 trace_labels=...,  # type: ignore[reportArgumentType]
                 trace_types=...,  # type: ignore[reportArgumentType]
                 row_labels=...,  # type: ignore[reportArgumentType]
+                legendgroup=...,  # type: ignore[reportArgumentType]
                 colorscale=...,  # type: ignore[reportArgumentType]
                 colormode=...,  # type: ignore[reportArgumentType]
                 color_discrete_map=...,  # type: ignore[reportArgumentType]
