@@ -8,7 +8,7 @@ from plotly import graph_objects as go
 from typing_extensions import Any, override
 
 from ridgeplot._color.interpolation import interpolate_color
-from ridgeplot._obj.traces.base import DEFAULT_HOVERTEMPLATE, ColoringContext, RidgeplotTrace
+from ridgeplot._obj.traces.base import ColoringContext, RidgeplotTrace
 from ridgeplot._utils import normalise_min_max
 
 
@@ -42,16 +42,11 @@ class BarTrace(RidgeplotTrace):
             go.Bar(
                 x=self.x,
                 y=self.y,
-                name=self.label,
                 base=self.y_base,
                 marker_line_width=self.line_width,
                 width=None,  # Plotly automatically picks the right width
                 **self._get_coloring_kwargs(ctx=coloring_ctx),
-                # Hover information
-                customdata=[[y_i] for y_i in self.y],
-                hovertemplate=DEFAULT_HOVERTEMPLATE,
-                # z-order (higher z-order means the trace is drawn on top)
-                zorder=self.zorder,
+                **self._common_trace_kwargs,
             ),
         )
         return fig

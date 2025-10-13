@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from typing_extensions import Literal
 
@@ -73,6 +73,21 @@ class RidgeplotTrace(ABC):
         self.y_base = y_base
         self.line_color: Color = self.solid_color if line_color == "fill-color" else line_color
         self.line_width: float = line_width if line_width is not None else self._DEFAULT_LINE_WIDTH
+
+    @property
+    def _common_trace_kwargs(self) -> dict[str, Any]:
+        """Return common trace kwargs."""
+        return dict(
+            # Legend information
+            name=self.label,
+            # legendgroup=self.label,
+            # legendgrouptitle_text=self.label,
+            # Hover information
+            customdata=[[y_i] for y_i in self.y],
+            hovertemplate=DEFAULT_HOVERTEMPLATE,
+            # z-order (higher z-order means the trace is drawn on top)
+            zorder=self.zorder,
+        )
 
     @abstractmethod
     def draw(self, fig: go.Figure, coloring_ctx: ColoringContext) -> go.Figure:
