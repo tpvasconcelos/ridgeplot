@@ -3,9 +3,7 @@
 This document outlines the list of changes to ridgeplot between each release. For full details, see the [commit logs](https://github.com/tpvasconcelos/ridgeplot/commits/).
 
 Unreleased changes
-------------------
-
-### CI/CD
+-------------------
 
 - Bump actions/download-artifact from 5 to 6 ({gh-pr}`354`)
 
