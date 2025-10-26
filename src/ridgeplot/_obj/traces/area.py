@@ -9,7 +9,7 @@ from typing_extensions import Any, override
 
 from ridgeplot._color.interpolation import slice_colorscale
 from ridgeplot._color.utils import apply_alpha
-from ridgeplot._obj.traces.base import DEFAULT_HOVERTEMPLATE, ColoringContext, RidgeplotTrace
+from ridgeplot._obj.traces.base import ColoringContext, RidgeplotTrace
 from ridgeplot._utils import normalise_min_max
 
 
@@ -68,22 +68,18 @@ class AreaTrace(RidgeplotTrace):
                 hoverinfo="skip",
                 # z-order (higher z-order means the trace is drawn on top)
                 zorder=self.zorder,
+                legendgroup=self.legend_ctx.legendgroup,
             )
         )
         fig.add_trace(
             go.Scatter(
                 x=self.x,
                 y=[y_i + self.y_base for y_i in self.y],
-                name=self.label,
                 fill="tonexty",
                 mode="lines",
                 line_width=self.line_width,
+                **self._common_trace_kwargs,
                 **self._get_coloring_kwargs(ctx=coloring_ctx),
-                # Hover information
-                customdata=[[y_i] for y_i in self.y],
-                hovertemplate=DEFAULT_HOVERTEMPLATE,
-                # z-order (higher z-order means the trace is drawn on top)
-                zorder=self.zorder,
             ),
         )
         return fig

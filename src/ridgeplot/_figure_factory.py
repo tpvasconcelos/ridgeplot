@@ -13,6 +13,7 @@ from ridgeplot._color.interpolation import (
     SolidColormode,
     compute_solid_colors,
 )
+from ridgeplot._obj.legendcontext import LegendContextManager
 from ridgeplot._obj.traces import get_trace_cls
 from ridgeplot._obj.traces.base import ColoringContext
 from ridgeplot._types import (
@@ -123,6 +124,7 @@ def create_ridgeplot(
     trace_labels: LabelsArray | ShallowLabelsArray | None,
     trace_types: TraceTypesArray | ShallowTraceTypesArray | TraceType,
     row_labels: Collection[str] | None | Literal[False],
+    legendgroup: bool,
     colorscale: ColorScale | Collection[Color] | str | None,
     colormode: Literal["fillgradient"] | SolidColormode,
     color_discrete_map: dict[str, str] | None,
@@ -176,6 +178,8 @@ def create_ridgeplot(
     # ---  Build the figure
     # ==============================================================
 
+    legend_ctx_manager = LegendContextManager(legendgroup=legendgroup)
+
     interpolation_ctx = InterpolationContext(
         densities=densities,
         n_rows=n_rows,
@@ -209,7 +213,7 @@ def create_ridgeplot(
         ):
             trace_drawer = get_trace_cls(trace_type)(
                 trace=trace,
-                label=label,
+                legend_ctx=legend_ctx_manager.get_legend_ctx(label=label),
                 solid_color=color,
                 zorder=ith_trace,
                 y_base=y_base,

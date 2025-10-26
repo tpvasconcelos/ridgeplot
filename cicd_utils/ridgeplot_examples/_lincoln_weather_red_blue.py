@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 def main() -> go.Figure:
     fig = lincoln_weather(
         color_discrete_map={
-            "Min Temperature [F]": "deepskyblue",
-            "Max Temperature [F]": "orangered",
+            "Min Temperatures": "deepskyblue",
+            "Max Temperatures": "orangered",
         }
     )
     return fig

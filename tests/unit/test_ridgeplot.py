@@ -140,6 +140,33 @@ def test_row_labels_false() -> None:
 
 
 # ==============================================================
+# ---  param: legendgroup
+# ==============================================================
+
+
+def test_traces_share_legend_entries() -> None:
+    fig = ridgeplot(
+        densities=[
+            [
+                [(0.0, 0.0), (1.0, 0.4), (2.0, 0.0)],
+                [(0.0, 0.0), (1.0, 0.2), (2.0, 0.0)],
+            ],
+            [
+                [(0.0, 0.0), (1.5, 0.6), (3.0, 0.0)],
+                [(0.0, 0.0), (1.5, 0.3), (3.0, 0.0)],
+            ],
+        ],
+        trace_type="bar",
+        labels=[["Max", "Min"], ["Max", "Min"]],
+        legendgroup=True,
+    )
+    assert [trace.name for trace in fig.data] == ["Max", "Min", "Max", "Min"]
+    assert [trace.showlegend for trace in fig.data] == [True, True, False, False]
+    assert [trace.legendgroup for trace in fig.data] == ["Max", "Min", "Max", "Min"]
+    assert [trace.legendgrouptitle.text for trace in fig.data] == [None, None, None, None]
+
+
+# ==============================================================
 # ---  param: nbins
 # ==============================================================
 

@@ -102,6 +102,7 @@ def ridgeplot(
     trace_type: TraceTypesArray | ShallowTraceTypesArray | TraceType | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
     row_labels: Collection[str] | None | Literal[False] = None,
+    legendgroup: bool = False,  # TODO: document and rename to smth better!
     # KDE parameters
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
@@ -503,6 +504,7 @@ def ridgeplot(
         trace_labels=labels,
         trace_types=trace_type,
         row_labels=row_labels,
+        legendgroup=legendgroup,
         colorscale=colorscale,
         colormode=colormode,
         color_discrete_map=color_discrete_map,
