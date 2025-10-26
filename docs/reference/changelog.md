@@ -5,7 +5,10 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+## CI/CD
+
+- Bump actions/download-artifact from 5 to 6 ({gh-pr}`354`)
+- Bump actions/upload-artifact from 4 to 5 ({gh-pr}`353`)
 
 ---
 
