@@ -16,7 +16,7 @@ class BarTrace(RidgeplotTrace):
     _DEFAULT_LINE_WIDTH: ClassVar[float] = 0.5
 
     def _get_coloring_kwargs(self, ctx: ColoringContext) -> dict[str, Any]:
-        if ctx.colormode == "fillgradient":
+        if ctx.fillgradient:
             color_kwargs = dict(
                 marker_line_color=self.line_color,
                 marker_color=[

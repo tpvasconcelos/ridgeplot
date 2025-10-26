@@ -11,7 +11,7 @@ from typing_extensions import Literal
 if TYPE_CHECKING:
     from plotly import graph_objects as go
 
-    from ridgeplot._color.interpolation import InterpolationContext, SolidColormode
+    from ridgeplot._color.interpolation import InterpolationContext
     from ridgeplot._types import Color, ColorScale, DensityTrace
 
 
@@ -44,7 +44,7 @@ should also be set to the desired label for the trace (e.g. ``name=self.label``)
 @dataclass
 class ColoringContext:
     colorscale: ColorScale
-    colormode: Literal["fillgradient"] | SolidColormode
+    fillgradient: bool
     opacity: float | None
     interpolation_ctx: InterpolationContext
 
