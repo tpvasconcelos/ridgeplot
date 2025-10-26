@@ -5,6 +5,8 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- Add support for Python 3.14, in accordance with the official Python support policy[^1] ({gh-pr}`346`)
+
 ## CI/CD
 
 - Bump actions/download-artifact from 5 to 6 ({gh-pr}`354`)
