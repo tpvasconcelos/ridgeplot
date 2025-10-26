@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, Any
 
 import plotly.express as px
@@ -52,18 +53,19 @@ def test_shallow_samples() -> None:
 
 
 def test_shallow_labels() -> None:
-    shallow_labels = ["trace 1", "trace 2"]
-    assert (
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], labels=shallow_labels) ==
-        ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], labels=nest_shallow_collection(shallow_labels))
-    )  # fmt: skip
+    fig1 = ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], labels=["A", "B"])
+    fig2 = ridgeplot(samples=[[1, 2, 3], [1, 2, 3]], labels=[["A"], ["B"]])
+    assert fig1 == fig2
+    assert fig1.data[1].name == "A"
+    assert fig1.data[3].name == "B"
 
 
 def test_y_labels_dedup() -> None:
-    assert (
-        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=["a"]) ==
-        ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=[["a", "a"]])
-    )  # fmt: skip
+    fig1 = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=["A"])
+    fig2 = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], labels=[["A", "A"]])
+    assert fig1 == fig2
+    assert fig1.data[1].name == "A"
+    assert fig1.data[3].name == "A"
 
 
 # ==============================================================
@@ -167,6 +169,33 @@ def test_colorscale_invalid(invalid_colorscale: ColorScale | Collection[Color] |
         ValueError, match=r"Invalid value .* received for the 'colorscale' property"
     ):
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=invalid_colorscale)
+
+
+# ==============================================================
+# ---  param: color_discrete_map
+# ==============================================================
+
+
+def test_color_discrete_map() -> None:
+    fig = ridgeplot(
+        samples=[[[1, 2, 3], [4, 5, 6]]],
+        color_discrete_map={"A": "rgba(0, 128, 0, 1.0)", "B": "rgba(255, 165, 0, 1.0)"},
+        labels=["A", "B"],
+    )
+    assert fig.data[1].fillcolor == "rgba(0, 128, 0, 1.0)"
+    assert fig.data[3].fillcolor == "rgba(255, 165, 0, 1.0)"
+
+
+def test_missing_labels() -> None:
+    with pytest.raises(
+        ValueError,
+        match=re.escape("The following labels are missing from 'color_discrete_map': {'B'}"),
+    ):
+        ridgeplot(
+            samples=[[[1, 2, 3], [4, 5, 6]]],
+            color_discrete_map={"A": "rgba(0, 128, 0, 1.0)"},
+            labels=["A", "B"],
+        )
 
 
 # ==============================================================

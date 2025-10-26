@@ -17,7 +17,7 @@ class AreaTrace(RidgeplotTrace):
     _DEFAULT_LINE_WIDTH: ClassVar[float] = 1.5
 
     def _get_coloring_kwargs(self, ctx: ColoringContext) -> dict[str, Any]:
-        if ctx.colormode == "fillgradient":
+        if ctx.fillgradient:
             if ctx.opacity is not None:
                 # HACK: Plotly doesn't yet support setting the fill opacity
                 #       for traces with `fillgradient`. As a workaround, we
