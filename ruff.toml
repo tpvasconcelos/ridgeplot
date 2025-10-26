@@ -88,8 +88,12 @@ ignore = [
     "D100", # Missing docstring in public module
     "ARG001", # Unused function argument
     "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`
-    "S101",   # Use of assert detected
-    "T201",   # `print` found
+    "T201", # `print` found
+]
+"docs/examples_gallery_in/*" = [
+    "INP001", # File {x} is part of an implicit namespace package. Add an `__init__.py`.
+    "B018", # Found useless expression. Either assign it to a variable or remove it.
+    "T201", # `print` found
 ]
 "tests/*" = [
     "D100", # Missing docstring in public module

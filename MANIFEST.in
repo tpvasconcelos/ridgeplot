@@ -27,6 +27,8 @@ recursive-include docs/_static/css *.css
 recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpg
 recursive-include docs/_static/js *.js
 recursive-include docs/_templates *.html
+exclude docs/sg_execution_times.rst
+prune docs/examples_gallery_out
 prune docs/_build
 prune docs/api/autogen
 prune docs/api/public

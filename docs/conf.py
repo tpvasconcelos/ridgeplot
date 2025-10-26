@@ -76,6 +76,7 @@ extensions = [
     # "sphinx_autodoc_typehints",
     "sphinx_copybutton",
     "sphinx_design",
+    "sphinx_gallery.gen_gallery",
     "sphinx_inline_tabs",
     "sphinx_paramlinks",
     "sphinx_remove_toctrees",
@@ -120,6 +121,7 @@ html_static_path = ["_static"]
 
 html_css_files = [
     "css/misc_overrides.css",
+    "css/sphinx_gallery_overwrite.css",
     "css/versionmodified_admonitions.css",
     # FontAwesome CSS for footer icons
     # https://fontawesome.com/search
@@ -344,6 +346,18 @@ napoleon_type_aliases.update(EXTRA_NAPOLEON_ALIASES)
 remove_from_toctrees = ["api/internal/*"]
 
 
+# -- sphinx-gallery config -------------------------------------------------------------------------
+sphinx_gallery_conf = {
+    "examples_dirs": "examples_gallery_in",
+    "gallery_dirs": "examples_gallery_out",
+    "run_stale_examples": True,
+    "download_all_examples": False,
+    "image_scrapers": ("plotly.io._sg_scraper.plotly_sg_scraper",),
+    "show_memory": False,
+    "show_signature": False,
+    "min_reported_time": 6,
+}
+
 # -- sphinx-paramlinks -----------------------------------------------------------------------------
 paramlinks_hyperlink_param = "name"
 
@@ -416,6 +430,21 @@ def compile_all_plotly_charts() -> None:
         end_of_file_fixer(files)
 
 
+def rename_plotly_io_show() -> None:
+    """Rename usages of `plotly.io.show` to `fig.show`."""
+    from pathlib import Path
+
+    for file in Path("examples_gallery_out/").iterdir():
+        if file.suffix not in {".py", ".rst", ".ipynb"}:
+            continue
+        new_lines = []
+        for line in file.read_text().split("\n"):
+            if "import plotly.io as pio" in line:
+                continue
+            new_lines.append(line.replace("pio.show(fig)", "fig.show()"))
+        file.write_text("\n".join(new_lines))
+
+
 def dispatch(fn: Callable[[], None]) -> Callable[..., None]:
     def wrapper(*args: Any, **kwargs: Any) -> None:
         fn()
@@ -425,4 +454,5 @@ def dispatch(fn: Callable[[], None]) -> Callable[..., None]:
 
 def setup(app: Sphinx) -> None:
     # app.connect("builder-inited", dispatch(write_plotlyjs_bundle), priority=501)
+    app.connect("builder-inited", dispatch(rename_plotly_io_show))
     app.connect("builder-inited", dispatch(compile_all_plotly_charts), priority=502)

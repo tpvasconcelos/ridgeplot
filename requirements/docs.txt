@@ -23,8 +23,17 @@ sphinx_thebe
 sphinxcontrib-apidoc
 sphinxext-opengraph
 
-# matplotlib is used to generate social cards
+# Sphinx-Gallery dependencies
+sphinx-gallery
+# kaleido is used to export static images from Plotly
+# figures, which is used by sphinx-gallery to generate
+# thumbnails for the examples gallery
+kaleido
+# matplotlib is an implicit dependency of sphinx-gallery.
+# although we don't need it for this project, we
+# still need to declare the dependency here.
 matplotlib
 
-# Cleanup generated files
+# Use the `pre_commit_hooks` Python package to cleanup
+# generated files as 'build-finished' Sphinx hooks
 pre_commit_hooks

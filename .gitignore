@@ -5,6 +5,8 @@
 docs/_static/charts/*.html
 docs/api/autogen
 docs/api/public
+docs/examples_gallery_out/
+docs/sg_execution_times.rst
 
 
 # ============================================================================
