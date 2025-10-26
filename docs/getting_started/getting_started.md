@@ -134,6 +134,7 @@ samples = [
 # And finish by styling it up to your liking!
 fig = ridgeplot(
     samples=samples,
+    labels=[["Min Temperature [F]", "Max Temperature [F]"]] * len(months),
     row_labels=months,
     colorscale="Inferno",
     bandwidth=4,
@@ -228,6 +229,7 @@ Finally, we can pass the {py:paramref}`~ridgeplot.ridgeplot.samples` list to the
 ```python
 fig = ridgeplot(
     samples=samples,
+    labels=[["Min Temperature [F]", "Max Temperature [F]"]] * len(months),
     row_labels=months,
     colorscale="Inferno",
     bandwidth=4,
@@ -237,8 +239,8 @@ fig = ridgeplot(
 
 fig.update_layout(
     title="Minimum and maximum daily temperatures in Lincoln, NE (2016)",
-    height=650,
-    width=950,
+    height=600,
+    width=800,
     font_size=14,
     plot_bgcolor="rgb(245, 245, 245)",
     xaxis_gridcolor="white",
@@ -261,15 +263,24 @@ fig.show()
 We are currently investigating the best way to support all color options available in Plotly Express. If you have any suggestions or requests, or just want to track the progress, please check out {gh-issue}`226`.
 :::
 
-The {py:func}`~ridgeplot.ridgeplot()` function offers flexible customisation options that help you control the automatic coloring of ridgeline traces. Take a look at {py:paramref}`~ridgeplot.ridgeplot.colorscale`, {py:paramref}`~ridgeplot.ridgeplot.colormode`, and {py:paramref}`~ridgeplot.ridgeplot.opacity` for more information.
+The {py:func}`~ridgeplot.ridgeplot()` function offers flexible customisation options that help you control the exact coloring of ridgeline traces. Take a look at {py:paramref}`~ridgeplot.ridgeplot.colorscale`, {py:paramref}`~ridgeplot.ridgeplot.colormode`, {py:paramref}`~ridgeplot.ridgeplot.color_discrete_map`, {py:paramref}`~ridgeplot.ridgeplot.opacity`, and {py:paramref}`~ridgeplot.ridgeplot.line_color` for a detailed description of the available options.
 
-To demonstrate how these options can be used, we can try to adjust the output from the previous example to use different colors for the minimum and maximum temperature traces. For instance, setting all minimum temperature traces to a shade of blue and all maximum temperature traces to a shade of red. To achieve this, we just need to adjust the {py:paramref}`~ridgeplot.ridgeplot.colorscale` and {py:paramref}`~ridgeplot.ridgeplot.colormode` parameters in the call to the {py:func}`~ridgeplot.ridgeplot()` function. _i.e._,
+As a simple (but quite common) example, we'll try to adjust the output of the previous example to use different discrete colors for the minimum and maximum temperature traces. Specifically, we'll set all minimum temperature traces to a shade of blue and all maximum temperature traces to a shade of red. To achieve this, we just need to set the {py:paramref}`~ridgeplot.ridgeplot.color_discrete_map` parameter to a dictionary that maps the trace labels to the desired colors.
+
+:::{note}
+Because the {py:paramref}`~ridgeplot.ridgeplot.color_discrete_map` parameter takes precedence over the {py:paramref}`~ridgeplot.ridgeplot.colorscale` and {py:paramref}`~ridgeplot.ridgeplot.colormode` parameters, we can keep them as they are in the previous example. However, since their behavior will be overridden by {py:paramref}`~ridgeplot.ridgeplot.color_discrete_map`, it is a good practice to remove them from the function call to avoid any confusion.
+:::
 
 ```python
 fig = ridgeplot(
-    # Same options as before, with only the following changes:
-    colorscale=["orangered", "deepskyblue"],
-    colormode="trace-index-row-wise",
+    # Same options as before, with the
+    # addition of `color_discrete_map`
+    # ...
+    color_discrete_map={
+        "Min Temperature [F]": "deepskyblue",
+        "Max Temperature [F]": "orangered",
+    }
+    # ...
 )
 ```
 

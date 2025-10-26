@@ -23,7 +23,6 @@ from ridgeplot._types import (
     ShallowTraceTypesArray,
     TraceType,
     TraceTypesArray,
-    is_flat_str_collection,
     is_shallow_trace_types_array,
     is_trace_type,
     is_trace_types_array,
@@ -50,9 +49,9 @@ def normalise_trace_types(
         trace_types = cast("TraceTypesArray", [[trace_types] * len(row) for row in densities])
     elif is_shallow_trace_types_array(trace_types):
         trace_types = nest_shallow_collection(trace_types)
-        trace_types = normalise_row_attrs(trace_types, l2_target=densities)
+        trace_types = normalise_row_attrs(attrs=trace_types, l2_target=densities)
     elif is_trace_types_array(trace_types):
-        trace_types = normalise_row_attrs(trace_types, l2_target=densities)
+        trace_types = normalise_row_attrs(attrs=trace_types, l2_target=densities)
     else:
         raise TypeError(f"Invalid trace_type: {trace_types}")
     return trace_types
@@ -67,9 +66,7 @@ def normalise_trace_labels(
         ids = iter(range(1, n_traces + 1))
         trace_labels = [[f"Trace {next(ids)}" for _ in row] for row in densities]
     else:
-        if is_flat_str_collection(trace_labels):
-            trace_labels = nest_shallow_collection(trace_labels)
-        trace_labels = normalise_row_attrs(trace_labels, l2_target=densities)
+        trace_labels = normalise_row_attrs(attrs=trace_labels, l2_target=densities)
     return trace_labels
 
 
@@ -77,7 +74,7 @@ def normalise_row_labels(trace_labels: LabelsArray) -> Collection[str]:
     return [",".join(ordered_dedup(row)) for row in trace_labels]
 
 
-def update_layout(
+def _update_layout(
     fig: go.Figure,
     row_labels: Collection[str] | Literal[False],
     tickvals: list[float],
@@ -123,12 +120,13 @@ def update_layout(
 
 def create_ridgeplot(
     densities: Densities,
+    trace_labels: LabelsArray | ShallowLabelsArray | None,
     trace_types: TraceTypesArray | ShallowTraceTypesArray | TraceType,
     row_labels: Collection[str] | None | Literal[False],
     colorscale: ColorScale | Collection[Color] | str | None,
-    opacity: float | None,
     colormode: Literal["fillgradient"] | SolidColormode,
-    trace_labels: LabelsArray | ShallowLabelsArray | None,
+    color_discrete_map: dict[str, str] | None,
+    opacity: float | None,
     line_color: Color | Literal["fill-color"],
     line_width: float | None,
     spacing: float,
@@ -159,6 +157,15 @@ def create_ridgeplot(
     elif row_labels is not False and len(row_labels) != n_rows:
         raise ValueError(f"Expected {n_rows} row_labels, got {len(row_labels)} instead.")
 
+    if color_discrete_map:
+        missing_labels = {
+            label for row in trace_labels for label in row if label not in color_discrete_map
+        }
+        if missing_labels:
+            raise ValueError(
+                f"The following labels are missing from 'color_discrete_map': {missing_labels}",
+            )
+
     # Force cast certain arguments to the expected types
     line_width = float(line_width) if line_width is not None else None
     spacing = float(spacing)
@@ -176,12 +183,18 @@ def create_ridgeplot(
         x_min=x_min,
         x_max=x_max,
     )
-    solid_colors = compute_solid_colors(
-        colorscale=colorscale,
-        colormode=colormode if colormode != "fillgradient" else "mean-minmax",
-        opacity=opacity,
-        interpolation_ctx=interpolation_ctx,
-    )
+    if color_discrete_map:
+        solid_colors = (
+            (color_discrete_map[label] for label in row_trace_labels)
+            for row_trace_labels in trace_labels
+        )
+    else:
+        solid_colors = compute_solid_colors(
+            colorscale=colorscale,
+            colormode=colormode if colormode != "fillgradient" else "mean-minmax",
+            opacity=opacity,
+            interpolation_ctx=interpolation_ctx,
+        )
 
     tickvals: list[float] = []
     fig = go.Figure()
@@ -207,14 +220,14 @@ def create_ridgeplot(
                 fig=fig,
                 coloring_ctx=ColoringContext(
                     colorscale=colorscale,
-                    colormode=colormode,
+                    fillgradient=colormode == "fillgradient" and not color_discrete_map,
                     opacity=opacity,
                     interpolation_ctx=interpolation_ctx,
                 ),
             )
             ith_trace += 1
 
-    fig = update_layout(
+    fig = _update_layout(
         fig,
         row_labels=row_labels,
         tickvals=tickvals,

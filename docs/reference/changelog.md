@@ -6,7 +6,29 @@ Unreleased changes
 ------------------
 
 - Add support for Python 3.14, in accordance with the official Python support policy[^1] ({gh-pr}`346`)
+
+## CI/CD
+
+- Bump actions/download-artifact from 5 to 6 ({gh-pr}`354`)
+- Bump actions/upload-artifact from 4 to 5 ({gh-pr}`353`)
+- Bump sigstore/gh-action-sigstore-python from 3.0.1 to 3.1.0 ({gh-pr}`352`)
+- pre-commit autoupdate ({gh-pr}`350`)
+
+---
+
+0.5.0
+------
+
+### Breaking changes
+
 - Dropped support for Python 3.9, in accordance with the official Python support policy[^1] ({gh-pr}`345`)
+
+### Features
+
+- Implement a new `color_discrete_map` parameter to allow users to specify custom colors for each trace ({gh-pr}`348`)
+
+### Miscellaneous
+
 - Bump project classification from Pre-Alpha to Alpha ({gh-pr}`336`)
 
 ### CI/CD
