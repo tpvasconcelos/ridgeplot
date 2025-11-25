@@ -7,6 +7,7 @@ Unreleased changes
 
 ## CI/CD
 
+- Bump actions/checkout from 5 to 6 ({gh-pr}`357`)
 - Bump actions/download-artifact from 5 to 6 ({gh-pr}`354`)
 - Bump actions/upload-artifact from 4 to 5 ({gh-pr}`353`)
 - Bump sigstore/gh-action-sigstore-python from 3.0.1 to 3.1.0 ({gh-pr}`352`)
