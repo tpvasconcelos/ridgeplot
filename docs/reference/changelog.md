@@ -12,6 +12,7 @@ Unreleased changes
 - Bump sigstore/gh-action-sigstore-python from 3.0.1 to 3.1.0 ({gh-pr}`352`)
 - pre-commit autoupdate ({gh-pr}`355`)
 - pre-commit autoupdate ({gh-pr}`350`)
+- pre-commit autoupdate ({gh-pr}`358`)
 
 ---
 
