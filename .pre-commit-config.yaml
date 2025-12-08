@@ -81,7 +81,7 @@ repos:
   # mdformat is not enabled by default, but can be run manually with:
   #   pre-commit run mdformat --all-files --hook-stage manual
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.22  # blocked by https://github.com/executablebooks/mdformat-myst/issues/45
+    rev: 1.0.0  # blocked by https://github.com/executablebooks/mdformat-myst/issues/45
     hooks:
       - id: mdformat
         stages: [ manual ]
@@ -104,7 +104,7 @@ repos:
         additional_dependencies: [setuptools-scm]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.6
+    rev: v0.14.8
     hooks:
       - id: ruff-format
       - id: ruff
