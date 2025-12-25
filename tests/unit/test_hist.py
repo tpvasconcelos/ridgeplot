@@ -12,7 +12,7 @@ from ridgeplot._hist import (
 
 SAMPLES_IN = [1, 2, 2, 3, 4]
 NBINS = 4
-DENSITIES_OUT = [(1.0, 1.0), (1.75, 2.0), (2.5, 1.0), (3.25, 1.0)]
+DENSITIES_OUT = [(1, 1), (2, 2), (3, 1), (4, 1)]
 X_OUT, Y_OUT = zip(*DENSITIES_OUT, strict=True)
 
 WEIGHTS = [1, 1, 1, 1, 9]
