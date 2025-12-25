@@ -5,7 +5,19 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-## CI/CD
+### Bug fixes
+
+- Fix the way histogram bin midpoints are computed ({gh-pr}`???`)
+
+### Documentation
+
+- Update the basic examples throughout the docs ({gh-pr}`???`)
+
+### Developer Experience
+
+- Add a basic version of Cursor's `worktrees.json` config ({gh-pr}`???`)
+
+### CI/CD
 
 - Upgrade ruff's target Python version to 3.10 ({gh-pr}`???`)
 - Bump sigstore/gh-action-sigstore-python from 3.1.0 to 3.2.0 ({gh-pr}`359`)
