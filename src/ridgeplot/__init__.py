@@ -1,26 +1,22 @@
 """ridgeplot: beautiful ridgeline plots in Python
 
-The ridgeplot python library aims at providing a simple API for plotting
-beautiful ridgeline plots within the extensive Plotly interactive graphing
-environment.
+ridgeplot is a Python package that provides a simple interface for plotting
+beautiful and interactive ridgeline plots within the extensive Plotly ecosystem.
 
+Take a look at the getting started guide, which provides a quick introduction
+to the ridgeplot library: https://ridgeplot.readthedocs.io/en/stable/getting_started/getting_started.html
 
-  Simple example:
+The full official documentation can be found at: https://ridgeplot.readthedocs.io/en/stable/
 
-  from numpy.random import normal
-  from ridgeplot import ridgeplot
+For those in a hurry, here's a very basic example on how to quickly get started
+with the `ridgeplot()` function.
 
-  # Put your real samples here...
-  synthetic_samples = [normal(n / 1.2, size=600) for n in reversed(range(9))]
+    import numpy as np
+    from ridgeplot import ridgeplot
 
-  # The `ridgeplot()` helper comes packed with sensible defaults
-  fig = ridgeplot(samples=synthetic_samples)
-
-  # and the returned Plotly figure is still fully customizable
-  fig.update_layout(height=500, width=800)
-
-  # show us the work!!
-  fig.show()
+    my_samples = [np.random.normal(n, size=900) for n in range(6, 0, -2)]
+    fig = ridgeplot(samples=my_samples)
+    fig.show()
 
 """
 

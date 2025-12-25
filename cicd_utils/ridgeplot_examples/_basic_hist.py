@@ -12,9 +12,9 @@ def main() -> go.Figure:
     from ridgeplot import ridgeplot
 
     rng = np.random.default_rng(42)
-    my_samples = [rng.normal(n, size=600) for n in range(6, 0, -1)]
-    fig = ridgeplot(samples=my_samples, nbins=20)
-    fig.update_layout(height=350, width=800)
+    my_samples = [rng.normal(n, size=900) for n in range(6, 0, -2)]
+    fig = ridgeplot(samples=my_samples, nbins=18)
+    fig.update_layout(height=400, width=800)
 
     return fig
 
