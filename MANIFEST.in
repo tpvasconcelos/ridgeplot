@@ -32,6 +32,7 @@ prune docs/api/autogen
 prune docs/api/public
 
 # Misc
+recursive-include .cursor *.json
 recursive-include .github *.yml *.yaml
 recursive-include cicd_utils README.md *.py *.sh
 recursive-include misc *.py *.ipynb *.txt *.png
