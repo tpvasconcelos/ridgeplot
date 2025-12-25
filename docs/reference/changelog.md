@@ -7,6 +7,7 @@ Unreleased changes
 
 ## CI/CD
 
+- Upgrade ruff's target Python version to 3.10 ({gh-pr}`???`)
 - Bump sigstore/gh-action-sigstore-python from 3.1.0 to 3.2.0 ({gh-pr}`359`)
 - Bump actions/download-artifact from 5 to 6 ({gh-pr}`354`)
 - Bump actions/upload-artifact from 4 to 5 ({gh-pr}`353`)
