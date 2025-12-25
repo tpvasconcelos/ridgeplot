@@ -36,8 +36,8 @@ def test_validate_coerce_colorscale(
 ) -> None:
     colorscale, expected = valid_colorscale
     coerced = validate_coerce_colorscale(colorscale=colorscale)
-    values, colors = zip(*coerced)
-    values_expected, colors_expected = zip(*expected)
+    values, colors = zip(*coerced, strict=True)
+    values_expected, colors_expected = zip(*expected, strict=True)
     assert values == pytest.approx(values_expected)
     assert colors == colors_expected
 
