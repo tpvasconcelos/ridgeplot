@@ -70,6 +70,14 @@ class Example:
 
     def __post_init__(self) -> None:
         self.fig = self.figure_factory()  # pyright: ignore[reportUninitializedInstanceVariable]
+
+        # All example figures must set the layout's width to 800 and
+        # explicitly declare the layout's height to a concrete value
+        if self.fig.layout.width != 800:
+            raise ValueError("All figures must have width 800")
+        if self.fig.layout.height is None:
+            raise ValueError("All figures must have an explicit height declared")
+
         round_fig_data(self.fig, sig_figs=8)
 
     def to_json(self) -> str:
@@ -86,8 +94,6 @@ class Example:
     def write_html(self, path: Path, minify_html: bool) -> None:
         fig = deepcopy(self.fig)
 
-        if fig.layout.height is None:
-            raise ValueError("The Figure's layout.height value must be explicitly set.")
         # Overriding the width to None results in a '100%' CSS width.
         # This is achieved by setting the `default_width` parameter
         # in `fig.to_html()` to "100%" (see below).

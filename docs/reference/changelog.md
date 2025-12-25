@@ -12,6 +12,7 @@ Unreleased changes
 ### Documentation
 
 - Update the basic examples throughout the docs ({gh-pr}`???`)
+- Bundle a local copy of `plotly.min.js` as a CDN fallback ({gh-pr}`???`)
 
 ### Developer Experience
 

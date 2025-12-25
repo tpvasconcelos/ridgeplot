@@ -21,6 +21,7 @@ include docs/Makefile
 include docs/make.bat
 include docs/robots.txt
 include docs/_static/favicon.ico
+exclude docs/_static/js/plotly.min.js
 recursive-include docs *.md *.py *.rst
 recursive-include docs/_static/charts *.webp
 recursive-include docs/_static/css *.css

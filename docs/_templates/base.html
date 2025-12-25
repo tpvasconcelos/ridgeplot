@@ -10,6 +10,47 @@
     the `extrahead` Sphinx block, which is placed at the bottom of the head
     section at the top of the page.
   #}
-  <script src="https://cdn.plot.ly/plotly-3.0.0.min.js" charset="utf-8"></script>
+<script>
+  (function () {
+    const CDN_URL = "https://cdn.plot.ly/plotly-3.3.0.min.js";
+    const LOCAL_URL = "{{ pathto('_static/js/plotly.min.js', 1) }}";
+
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const el = document.createElement('script');
+        el.src = src;
+        el.onload = resolve;
+        el.onerror = reject;
+        document.head.appendChild(el);
+      });
+    }
+
+    const plotlyReady = loadScript(CDN_URL)
+      .then(() => console.info("Plotly loaded from CDN"))
+      .catch(() => {
+        return loadScript(LOCAL_URL).then(() => {
+          console.info("Plotly loaded from local fallback");
+        });
+      });
+
+    const domReady = new Promise(resolve => {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', resolve);
+      } else {
+        resolve();
+      }
+    });
+
+    Promise.all([plotlyReady, domReady]).then(() => {
+      document.querySelectorAll('.plotly-graph-wrapper script').forEach(s => {
+        const fresh = document.createElement('script');
+        fresh.textContent = s.textContent;
+        document.body.appendChild(fresh);
+      });
+    }).catch(() => {
+      console.error("Failed to load Plotly from CDN and local fallback");
+    });
+  })();
+</script>
 {%- endblock extrahead %}
 git
