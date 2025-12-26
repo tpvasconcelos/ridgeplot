@@ -424,5 +424,5 @@ def dispatch(fn: Callable[[], None]) -> Callable[..., None]:
 
 
 def setup(app: Sphinx) -> None:
-    # app.connect("builder-inited", dispatch(write_plotlyjs_bundle), priority=501)
+    app.connect("builder-inited", dispatch(write_plotlyjs_bundle), priority=501)
     app.connect("builder-inited", dispatch(compile_all_plotly_charts), priority=502)
