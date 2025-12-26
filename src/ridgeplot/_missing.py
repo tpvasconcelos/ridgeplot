@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Final
+from typing import Final, Literal, TypeAlias
 
-from typing_extensions import Literal, TypeAlias, override
+from typing_extensions import override
 
 if "_is_loaded" in globals():
     raise RuntimeError("Reloading ridgeplot._missing is not allowed")

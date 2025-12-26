@@ -157,7 +157,7 @@ def estimate_density_trace(
     density_y = dens.evaluate(density_x)
     density_y = _validate_densities(x=density_x, y=density_y, kernel=kernel)
 
-    return list(zip(density_x, density_y))
+    return list(zip(density_x, density_y, strict=True))
 
 
 def _validate_densities(

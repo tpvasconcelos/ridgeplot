@@ -33,7 +33,7 @@ def viridis_colorscale() -> ColorScale:
 VALID_COLOR_SCALES = [
     (VIRIDIS, VIRIDIS),
     ("viridis", VIRIDIS),
-    (list(zip(*VIRIDIS))[-1], VIRIDIS),
+    (list(zip(*VIRIDIS, strict=True))[-1], VIRIDIS),
     # List of colors
     (["red", "green"], [[0, "red"], [1, "green"]]),
     # List of lists

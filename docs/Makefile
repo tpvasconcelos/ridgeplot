@@ -27,5 +27,5 @@ livehtml:
 		--watch=../src/ridgeplot \
 		--re-ignore 'api/public/.*' \
 		--re-ignore '_static/charts/.*' \
-		--re-ignore '_static/js/plotly.min.js' \
+		--re-ignore '_static/js/plotly.*' \
 		"$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
