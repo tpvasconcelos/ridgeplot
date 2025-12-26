@@ -25,7 +25,7 @@ exclude docs/_static/js/plotly.min.js
 recursive-include docs *.md *.py *.rst
 recursive-include docs/_static/charts *.webp
 recursive-include docs/_static/css *.css
-recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpg
+recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpeg
 recursive-include docs/_static/js *.js
 recursive-include docs/_templates *.html
 prune docs/_build
