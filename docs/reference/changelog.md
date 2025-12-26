@@ -7,7 +7,7 @@ Unreleased changes
 
 ### Bug fixes
 
-- Fix the way histogram bin midpoints are computed ({gh-pr}`364`)
+- Fix the way histogram bin centers are computed ({gh-pr}`364`)
 
 ### Documentation
 
