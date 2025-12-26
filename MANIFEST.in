@@ -39,7 +39,7 @@ recursive-include cicd_utils README.md *.py *.sh
 recursive-include misc *.py *.ipynb *.txt *.png
 recursive-include requirements *.txt
 recursive-include tests *.py
-recursive-include tests/e2e/artifacts *.jpeg *.json
+recursive-include tests/e2e/artifacts *.json
 
 # Globally excluded patterns
 recursive-exclude * *.py[cod] *.egg-info __pycache__ .ipynb_checkpoints/*
