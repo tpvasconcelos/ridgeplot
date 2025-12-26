@@ -96,6 +96,7 @@ clean-docs: ## remove documentation build artifacts
 	@echo "==> Removing documentation build artifacts..."
 	@rm -fr docs/_build/ docs/api/autogen/ docs/api/public/
 	@find . -wholename 'docs/_static/charts/*.html' -exec rm -fr {} +
+	@rm -f docs/_static/js/plotly.min.js
 
 
 .PHONY: clean-build

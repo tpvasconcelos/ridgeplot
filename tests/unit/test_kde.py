@@ -30,7 +30,7 @@ def test_estimate_density_trace_simple() -> None:
         kernel="gau",
         bandwidth="normal_reference",
     )
-    x, y = zip(*density_trace)
+    x, y = zip(*density_trace, strict=True)
     assert x == tuple(range(7))
     assert np.argmax(y) == 3
 
@@ -43,7 +43,7 @@ def test_estimate_density_trace_points() -> None:
         kernel="gau",
         bandwidth="normal_reference",
     )
-    x, y = zip(*density_trace)
+    x, y = zip(*density_trace, strict=True)
     assert x == tuple(points)
     assert np.argmax(y) == 3
     assert np.argmin(y) == 0
@@ -83,7 +83,7 @@ def test_estimate_density_trace_weights() -> None:
         bandwidth="normal_reference",
         weights=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9],
     )
-    x, y = zip(*density_trace)
+    x, y = zip(*density_trace, strict=True)
     assert x == tuple(range(7))
     assert x[np.argmax(y)] == 6
 
@@ -167,6 +167,6 @@ def test_estimate_densities() -> None:
     for densities_row in densities:
         assert len(densities_row) == 1
         density_trace = next(iter(densities_row))
-        x, y = zip(*density_trace)
+        x, y = zip(*density_trace, strict=True)
         assert x == tuple(range(7))
         assert np.argmax(y) == 3

@@ -5,9 +5,26 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-## CI/CD
+### Bug fixes
 
+- Fix the way histogram bin centers are computed ({gh-pr}`364`)
+
+### Documentation
+
+- Update the basic examples throughout the docs ({gh-pr}`364`)
+- Bundle a local copy of `plotly.min.js` as a CDN fallback ({gh-pr}`364`)
+
+### Developer Experience
+
+- Add a basic version of Cursor's `worktrees.json` config ({gh-pr}`364`)
+
+### CI/CD
+
+- Remove the JPEGs used for visual inspection in regression tests ({gh-pr}`364`)
+- Upgrade ruff's target Python version to 3.10 ({gh-pr}`363`)
+- Bump actions/upload-artifact from 5 to 6 ({gh-pr}`360`)
 - Bump sigstore/gh-action-sigstore-python from 3.1.0 to 3.2.0 ({gh-pr}`359`)
+- Bump actions/checkout from 5 to 6 ({gh-pr}`357`)
 - Bump actions/download-artifact from 5 to 6 ({gh-pr}`354`)
 - Bump actions/upload-artifact from 4 to 5 ({gh-pr}`353`)
 - Bump sigstore/gh-action-sigstore-python from 3.0.1 to 3.1.0 ({gh-pr}`352`)
