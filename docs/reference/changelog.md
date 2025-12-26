@@ -22,6 +22,7 @@ Unreleased changes
 
 - Remove the JPEGs used for visual inspection in regression tests ({gh-pr}`364`)
 - Upgrade ruff's target Python version to 3.10 ({gh-pr}`363`)
+- Bump actions/upload-artifact from 5 to 6 ({gh-pr}`360`)
 - Bump sigstore/gh-action-sigstore-python from 3.1.0 to 3.2.0 ({gh-pr}`359`)
 - Bump actions/checkout from 5 to 6 ({gh-pr}`357`)
 - Bump actions/download-artifact from 5 to 6 ({gh-pr}`354`)
