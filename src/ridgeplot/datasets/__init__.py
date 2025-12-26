@@ -6,7 +6,7 @@ from importlib.resources import as_file, files
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing_extensions import Literal
+    from typing import Literal
 
 import pandas as pd
 

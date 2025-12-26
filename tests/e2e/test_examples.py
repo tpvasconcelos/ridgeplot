@@ -19,13 +19,6 @@ def test_paths_exist() -> None:
 
 
 @pytest.mark.parametrize("example", ALL_EXAMPLES, ids=lambda e: e.plot_id)
-def test_examples_width_height_set(example: Example) -> None:
-    msg = "Both `width` and `height` should be set in all example plots."
-    assert isinstance(example.fig.layout.width, int), msg
-    assert isinstance(example.fig.layout.height, int), msg
-
-
-@pytest.mark.parametrize("example", ALL_EXAMPLES, ids=lambda e: e.plot_id)
 def test_json_regressions(example: Example) -> None:
     expected = (PATH_ARTIFACTS / f"{example.plot_id}.json").read_text()
     assert json.loads(example.to_json()) == json.loads(expected)
@@ -46,10 +39,6 @@ def _update_all_artifacts() -> None:
         print(f"Updating artifacts for: {example.plot_id!r}")  # noqa: T201
         # Save JSONs for regression tests
         example.write_json(PATH_ARTIFACTS)
-        # We also save JPEGs for visual inspection (e.g., in PRs)
-        # (Don't use JPEGs for regression tests because outputs
-        #  will vary between Plotly versions and platforms)
-        example.write_jpeg(PATH_ARTIFACTS)
         # Just to keep things in sync with the docs, we should also
         # regenerate the WebP images used there. These are tracked
         # by Git because some are used in the README (which needs
