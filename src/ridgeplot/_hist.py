@@ -34,8 +34,9 @@ def bin_trace_samples(
             raise ValueError("The weights array should have the same length as the samples array.")
         if not np.isfinite(weights).all():
             raise ValueError("The weights array should not contain any infs or NaNs.")
-    hist, bins = np.histogram(trace_samples, bins=nbins, weights=weights)
-    return [(float(x), float(y)) for x, y in zip(bins, hist, strict=True)]
+    hist_counts, hist_edges = np.histogram(trace_samples, bins=nbins, weights=weights)
+    bin_centers = 0.5 * (hist_edges[:-1] + hist_edges[1:])
+    return [(float(x), float(y)) for x, y in zip(bin_centers, hist_counts, strict=True)]
 
 
 def bin_samples(
