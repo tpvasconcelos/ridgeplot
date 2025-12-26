@@ -12,8 +12,12 @@ from ridgeplot._hist import (
 
 SAMPLES_IN = [1, 2, 2, 3, 4]
 NBINS = 4
-DENSITIES_OUT = [(1.0, 1.0), (1.75, 2.0), (2.5, 1.0), (3.25, 1.0)]
-X_OUT, Y_OUT = zip(*DENSITIES_OUT)
+# NOTE: The x values in DENSITIES_OUT correspond to the centers of
+#       equally spaced bins over the range [1, 4].
+#       This can be counterintuitive for count data, as the bins
+#       do not align with the integer sample values.
+DENSITIES_OUT = [(1.375, 1), (2.125, 2), (2.875, 1), (3.625, 1)]
+X_OUT, Y_OUT = zip(*DENSITIES_OUT, strict=True)
 
 WEIGHTS = [1, 1, 1, 1, 9]
 
@@ -24,7 +28,7 @@ WEIGHTS = [1, 1, 1, 1, 9]
 
 def test_bin_trace_samples_simple() -> None:
     density_trace = bin_trace_samples(trace_samples=SAMPLES_IN, nbins=NBINS)
-    x, y = zip(*density_trace)
+    x, y = zip(*density_trace, strict=True)
     assert x == X_OUT
     assert y == Y_OUT
 
@@ -48,7 +52,7 @@ def test_bin_trace_samples_weights() -> None:
         nbins=NBINS,
         weights=WEIGHTS,
     )
-    x, y = zip(*density_trace)
+    x, y = zip(*density_trace, strict=True)
     assert x == X_OUT
     assert np.argmax(y) == len(y) - 1
 
@@ -87,6 +91,6 @@ def test_bin_samples() -> None:
     for densities_row in densities:
         assert len(densities_row) == 1
         density_trace = next(iter(densities_row))
-        x, y = zip(*density_trace)
+        x, y = zip(*density_trace, strict=True)
         assert x == X_OUT
         assert y == Y_OUT

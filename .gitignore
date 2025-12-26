@@ -3,6 +3,7 @@
 # ============================================================================
 
 docs/_static/charts/*.html
+docs/_static/js/plotly.min.js
 docs/api/autogen
 docs/api/public
 

@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TypeAlias
-
-from typing_extensions import Literal
+from typing import Literal, TypeAlias
 
 # Taken from https://www.w3.org/TR/css-color-3/#svg-color
 

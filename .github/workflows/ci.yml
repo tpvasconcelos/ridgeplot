@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-python
         with:
           python-version: "3.10"
@@ -51,7 +51,7 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
-          #- "3.14"
+          - "3.14"
         os:
           - ubuntu-latest
           # There shouldn't be any behavior differences between OSes,
@@ -64,9 +64,11 @@ jobs:
           # - windows-latest
       fail-fast: true
     runs-on: ${{ matrix.os }}
+    env:
+      DIFF_AGAINST: HEAD
     timeout-minutes: 8
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           # TODO: This can be very expensive for large repos. Is there a better way to do this?
           # Fetch all history and tags for setuptools_scm to work
@@ -84,28 +86,20 @@ jobs:
       - name: Run unit tests
         shell: bash
         run: tox -e tests-unit
-        env:
-          DIFF_AGAINST: HEAD
 
       - name: Run E2E tests
         shell: bash
         run: tox -e tests-e2e
-        env:
-          DIFF_AGAINST: HEAD
 
       - name: Test the CI/CD utilities
         shell: bash
         run: tox -e tests-cicd_utils
-        env:
-          DIFF_AGAINST: HEAD
 
       # Combine coverage reports from all test suites
 
       - name: Combine coverage reports
         shell: bash
         run: tox -e coverage-combine
-        env:
-          DIFF_AGAINST: HEAD
 
       # Upload coverage reports to Codecov
 

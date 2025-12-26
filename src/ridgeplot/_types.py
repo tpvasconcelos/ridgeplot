@@ -4,10 +4,10 @@ used throughout the package."""
 from __future__ import annotations
 
 from collections.abc import Collection
-from typing import TypeAlias
+from typing import Literal, TypeAlias
 
 import numpy as np
-from typing_extensions import Any, Literal, TypeIs, TypeVar
+from typing_extensions import Any, TypeIs, TypeVar
 
 # Snippet used to generate and store the image artifacts:
 # >>> def save_fig(fig, name):
@@ -600,7 +600,7 @@ def is_trace_type(obj: Any) -> TypeIs[TraceType]:
     >>> is_trace_type(42)
     False
     """
-    from typing_extensions import get_args
+    from typing import get_args
 
     return isinstance(obj, str) and obj in get_args(TraceType)
 
