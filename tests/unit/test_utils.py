@@ -31,7 +31,7 @@ class TestGetXYExtrema:
 
     def test_raise_for_non_2d_array(self) -> None:
         # Fails if one of the arrays is not 2D
-        with pytest.raises(ValueError, match=r"too many values to unpack \(expected 2\)"):
+        with pytest.raises(ValueError, match=r"too many values to unpack \(expected 2(, got 3)?\)"):
             get_xy_extrema(
                 densities=[
                     # valid 2D trace
