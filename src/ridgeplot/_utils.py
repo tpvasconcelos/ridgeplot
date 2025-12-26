@@ -387,8 +387,8 @@ def normalise_densities(densities: Densities, norm: NormalisationOption) -> Dens
     for row in densities:
         row_norm = []
         for trace in row:
-            x, y = zip(*trace)
+            x, y = zip(*trace, strict=True)
             y = tuple(m * v / sum(y) for v in y)
-            row_norm.append(list(zip(x, y)))
+            row_norm.append(list(zip(x, y, strict=True)))
         densities_norm.append(row_norm)
     return densities_norm
