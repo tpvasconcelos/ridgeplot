@@ -46,13 +46,13 @@ The full official documentation can be found at: https://ridgeplot.readthedocs.i
 
 ### Basic example
 
-For those in a hurry, here's a very basic example on how to quickly get started with [ridgeplot()](https://ridgeplot.readthedocs.io/en/stable/api/public/ridgeplot.ridgeplot.html) function.
+For those in a hurry, here's a very basic example on how to quickly get started with the [ridgeplot()](https://ridgeplot.readthedocs.io/en/stable/api/public/ridgeplot.ridgeplot.html) function.
 
 ```python
 import numpy as np
 from ridgeplot import ridgeplot
 
-my_samples = [np.random.normal(n / 1.2, size=600) for n in range(7, 0, -1)]
+my_samples = [np.random.normal(n, size=900) for n in range(6, 0, -2)]
 fig = ridgeplot(samples=my_samples)
 fig.show()
 ```

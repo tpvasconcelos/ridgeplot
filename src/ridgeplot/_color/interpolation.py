@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, TypeAlias
+from typing import TYPE_CHECKING, Literal, TypeAlias
 
-from typing_extensions import Literal, Protocol
+from typing_extensions import Protocol
 
 from ridgeplot._color.utils import apply_alpha, round_color, to_rgb, unpack_rgb
 from ridgeplot._types import CollectionL2, ColorScale
@@ -191,7 +191,7 @@ def _interpolate_mean_minmax(ctx: InterpolationContext) -> ColorscaleInterpolant
     for row in ctx.densities:
         ps_row = []
         for trace in row:
-            x, y = zip(*trace)
+            x, y = zip(*trace, strict=True)
             ps_row.append(
                 normalise_min_max(sum(_mul(x, y)) / sum(y), min_=ctx.x_min, max_=ctx.x_max)
             )
@@ -204,7 +204,7 @@ def _interpolate_mean_means(ctx: InterpolationContext) -> ColorscaleInterpolants
     for row in ctx.densities:
         means_row = []
         for trace in row:
-            x, y = zip(*trace)
+            x, y = zip(*trace, strict=True)
             means_row.append(sum(_mul(x, y)) / sum(y))
         means.append(means_row)
     min_mean = min(min(row) for row in means)
