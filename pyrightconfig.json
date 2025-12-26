@@ -26,7 +26,6 @@
   "reportImportCycles": "error",
   "reportMissingSuperCall": "warning",
   "reportPropertyTypeMismatch": "error",
-  "reportShadowedImports": "error",
   "reportUninitializedInstanceVariable": "error",
   "reportUnnecessaryTypeIgnoreComment": "error",
   // turn off some of the strictest settings

@@ -21,10 +21,11 @@ include docs/Makefile
 include docs/make.bat
 include docs/robots.txt
 include docs/_static/favicon.ico
+exclude docs/_static/js/plotly.min.js
 recursive-include docs *.md *.py *.rst
 recursive-include docs/_static/charts *.webp
 recursive-include docs/_static/css *.css
-recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpg
+recursive-include docs/_static/img *.png *.webp *.svg *.gif *.jpeg
 recursive-include docs/_static/js *.js
 recursive-include docs/_templates *.html
 exclude docs/sg_execution_times.rst
@@ -34,12 +35,13 @@ prune docs/api/autogen
 prune docs/api/public
 
 # Misc
+recursive-include .cursor *.json
 recursive-include .github *.yml *.yaml
 recursive-include cicd_utils README.md *.py *.sh
 recursive-include misc *.py *.ipynb *.txt *.png
 recursive-include requirements *.txt
 recursive-include tests *.py
-recursive-include tests/e2e/artifacts *.jpeg *.json
+recursive-include tests/e2e/artifacts *.json
 
 # Globally excluded patterns
 recursive-exclude * *.py[cod] *.egg-info __pycache__ .ipynb_checkpoints/*

@@ -47,7 +47,7 @@ For those in a hurry, here's a very basic example on how to quickly get started 
 import numpy as np
 from ridgeplot import ridgeplot
 
-my_samples = [np.random.normal(n / 1.2, size=600) for n in range(6, 0, -1)]
+my_samples = [np.random.normal(n, size=900) for n in range(6, 0, -2)]
 fig = ridgeplot(samples=my_samples)
 fig.show()
 ```
