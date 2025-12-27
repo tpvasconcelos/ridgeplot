@@ -51,7 +51,7 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
-          #- "3.14"
+          - "3.14"
         os:
           - ubuntu-latest
           # There shouldn't be any behavior differences between OSes,
