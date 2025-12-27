@@ -56,13 +56,13 @@ def test_to_rgb(color: Color, expected: str) -> None:
             "hex or rgb color, got 'not-a-color' instead",
         ),
         # invalid hex
-        ("#1234567890", ValueError, "too many values to unpack (expected 3)"),
+        ("#1234567890", ValueError, "too many values to unpack (expected 3"),
         ("#ABCDEFGHIJ", ValueError, "invalid literal for int() with base 16"),
         # invalid rgb
         ("rgb(0,0,999)", PlotlyError, "rgb colors tuples cannot exceed 255"),
         # invalid tuple
         ((1, 2), ValueError, "not enough values to unpack (expected 3, got 2)"),
-        ((1, 2, 3, 4), ValueError, "too many values to unpack (expected 3)"),
+        ((1, 2, 3, 4), ValueError, "too many values to unpack (expected 3"),
     ],
 )
 def test_to_rgb_fails_for_invalid_color(
