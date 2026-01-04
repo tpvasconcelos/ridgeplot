@@ -19,6 +19,7 @@ Unreleased changes
 ### Developer Experience
 
 - Add a basic version of Cursor's `worktrees.json` config ({gh-pr}`364`)
+- Small improvements to the project's Makefile ({gh-pr}`???`)
 
 ### CI/CD
 
