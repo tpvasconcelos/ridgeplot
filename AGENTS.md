@@ -56,8 +56,10 @@ uvx tox -m static-quick
 # to skip the 'no-commit-to-branch' check with:
 SKIP='no-commit-to-branch' uvx tox -m static
 
+# Run all pre-commit hooks on all files
+uvx pre-commit run --all-files
+
 # Run specific pre-commit hooks
-uvx pre-commit run ruff --all-files
 uvx pre-commit run ruff-format --all-files
 
 # Run type checking with pyright only
@@ -211,8 +213,7 @@ Codecov minimums are 98% overall and 100% diff coverage for new code.
 
 ## Notes for AI Assistants
 
-1. Run tests after changes when feasible, starting with the smallest relevant
-   subset.
+1. Run tests after changes when feasible, starting with the smallest relevant subset.
 2. Run `uvx tox -e typing` if types are touched or errors are likely.
 3. Run `uvx pre-commit run ruff-format --all-files` to format code.
 4. Preserve deprecation behavior and public API stability.

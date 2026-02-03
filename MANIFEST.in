@@ -33,9 +33,6 @@ prune docs/api/autogen
 prune docs/api/public
 
 # Misc
-include .claude/skills
-include .codex/skills
-include .cursor/skills
 recursive-include .claude *.md
 recursive-include .codex *.toml *.md
 recursive-include .cursor *.json *.md
