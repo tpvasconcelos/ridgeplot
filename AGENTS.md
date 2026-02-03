@@ -20,7 +20,7 @@
 
 ### Environment Setup
 
-```bash
+```shell
 # Initialize full development environment (recommended for first-time setup)
 # This creates .venv, installs dependencies, and sets up pre-commit hooks
 make init
@@ -31,7 +31,7 @@ source .venv/bin/activate
 
 ### Running Tests
 
-```bash
+```shell
 # Run all test suites (unit + e2e + cicd_utils)
 uvx tox -m tests
 
@@ -47,7 +47,7 @@ uvx tox -e pytest -- -k "test_specific_function" --no-cov
 
 ### Linting and Formatting
 
-```bash
+```shell
 # Run the main static checks
 uvx tox -m static-quick
 
@@ -68,14 +68,14 @@ uvx tox -e typing
 
 ### Documentation
 
-```bash
+```shell
 # Build static documentation
 uvx tox -e docs-static
 ```
 
 ## Project Map
 
-```
+```text
 src/ridgeplot/
 ├── __init__.py           # Public API exports
 ├── _ridgeplot.py         # Main ridgeplot() function
