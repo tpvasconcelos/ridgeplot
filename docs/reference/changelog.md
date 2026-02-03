@@ -18,8 +18,9 @@ Unreleased changes
 
 ### Developer Experience
 
+- Add AGENTS.md, CLAUDE.md, .codex/, and .cursor/ helper files for AI-assisted development ({gh-pr}`367`)
+- Small improvements to the project's Makefile ({gh-pr}`367`)
 - Add a basic version of Cursor's `worktrees.json` config ({gh-pr}`364`)
-- Small improvements to the project's Makefile ({gh-pr}`???`)
 
 ### CI/CD
 
