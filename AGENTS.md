@@ -25,12 +25,6 @@
 # This creates .venv, installs dependencies, and sets up pre-commit hooks
 make init
 
-# Use a different Python version if needed (default is python3.10)
-BASE_PYTHON=python3.14 make init
-
-# Offline mode (uses cached packages only)
-OFFLINE=1 make init
-
 # Activate the virtual environment
 source .venv/bin/activate
 ```
@@ -39,42 +33,42 @@ source .venv/bin/activate
 
 ```bash
 # Run all test suites (unit + e2e + cicd_utils)
-tox -m tests
+uvx tox -m tests
 
 # Run a specific test suite
-tox -e tests-unit        # Unit tests with coverage
-tox -e tests-e2e         # End-to-end tests
-tox -e tests-cicd_utils  # CI/CD utilities tests
+uvx tox -e tests-unit        # Unit tests with coverage
+uvx tox -e tests-e2e         # End-to-end tests
+uvx tox -e tests-cicd_utils  # CI/CD utilities tests
 
 # Run pytest directly with custom options
-tox -e pytest -- tests/unit/test_init.py --no-cov
-tox -e pytest -- -k "test_specific_function" --no-cov
+uvx tox -e pytest -- tests/unit/test_init.py --no-cov
+uvx tox -e pytest -- -k "test_specific_function" --no-cov
 ```
 
 ### Linting and Formatting
 
 ```bash
 # Run the main static checks
-tox -m static-quick
+uvx tox -m static-quick
 
 # Run the entire suite of static checks (incl. all pre-commit hooks)
 # If running from the main branch, you'll need
 # to skip the 'no-commit-to-branch' check with:
-SKIP='no-commit-to-branch' tox -m static
+SKIP='no-commit-to-branch' uvx tox -m static
 
 # Run specific pre-commit hooks
-pre-commit run ruff --all-files
-pre-commit run ruff-format --all-files
+uvx pre-commit run ruff --all-files
+uvx pre-commit run ruff-format --all-files
 
 # Run type checking with pyright only
-tox -e typing
+uvx tox -e typing
 ```
 
 ### Documentation
 
 ```bash
 # Build static documentation
-tox -e docs-static
+uvx tox -e docs-static
 ```
 
 ## Project Map
@@ -207,13 +201,8 @@ def _coerce_to_densities(...):
 ## Testing Notes
 
 - Use `--no-cov` flag during development for faster test runs
-- Run targeted tests via: `tox -e pytest -- tests/unit/test_foo.py -k "test_bar" --no-cov`
+- Run targeted tests via: `uvx tox -e pytest -- tests/unit/test_foo.py -k "test_bar" --no-cov`
 - The `tests/e2e/artifacts/` directory contains expected Plotly Figure JSON for e2e tests
-
-## Agent Skills
-
-Agent skills live under `skills/`. For Python version support changes, follow
-`skills/dropping-and-or-adding-support-for-python-versions/SKILL.md`.
 
 ## CI/CD Pipeline
 
@@ -224,8 +213,8 @@ Codecov minimums are 98% overall and 100% diff coverage for new code.
 
 1. Run tests after changes when feasible, starting with the smallest relevant
    subset.
-2. Run `tox -e typing` if types are touched or errors are likely.
-3. Run `pre-commit run ruff-format --all-files` to format code.
+2. Run `uvx tox -e typing` if types are touched or errors are likely.
+3. Run `uvx pre-commit run ruff-format --all-files` to format code.
 4. Preserve deprecation behavior and public API stability.
 5. Keep changes minimal and aligned with existing patterns.
 6. Respect existing patterns - this is a mature codebase with consistent style.
