@@ -33,7 +33,11 @@ prune docs/api/autogen
 prune docs/api/public
 
 # Misc
-recursive-include .codex *.toml
+include .claude/skills
+include .codex/skills
+include .cursor/skills
+recursive-include .claude *.md
+recursive-include .codex *.toml *.md
 recursive-include .cursor *.json *.md
 recursive-include .github *.yml *.yaml
 recursive-include cicd_utils README.md *.py *.sh
