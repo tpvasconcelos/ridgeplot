@@ -210,11 +210,10 @@ def _coerce_to_densities(...):
 - Run targeted tests via: `tox -e pytest -- tests/unit/test_foo.py -k "test_bar" --no-cov`
 - The `tests/e2e/artifacts/` directory contains expected Plotly Figure JSON for e2e tests
 
-## .cursor Rules
+## Agent Skills
 
-Check `.cursor/rules` before changing platform or version support. The only
-current rule is for adding or dropping Python versions at
-`.cursor/rules/dropping-and-or-adding-support-for-python-versions/RULES.md`.
+Agent skills live under `skills/`. For Python version support changes, follow
+`skills/dropping-and-or-adding-support-for-python-versions/SKILL.md`.
 
 ## CI/CD Pipeline
 
