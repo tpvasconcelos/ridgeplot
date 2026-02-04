@@ -10,7 +10,6 @@ VENV_BIN  := $(VENV_PATH)/bin
 OFFLINE ?= 0
 ifeq ($(OFFLINE), 1)
     _UV_OFFLINE_ARG = --offline
-
 else
     _UV_OFFLINE_ARG =
 endif
@@ -58,7 +57,7 @@ _check-sys: ## Check system requirements
 	fi
 
 
-$(VENV_PATH): _check-sys ## create a virtual environment
+$(VENV_PATH): | _check-sys ## create a virtual environment
 	@echo "==> Creating local virtual environment under: $(VENV_PATH)/ ($(BASE_PYTHON))"
 	@uv venv $(_UV_OFFLINE_ARG) --python="$(BASE_PYTHON)" --seed "$(VENV_PATH)"
 
@@ -78,7 +77,7 @@ install: $(VENV_PATH) ## install all local development dependencies
 .PHONY: jupyter-init
 jupyter-init: install ## initialise a jupyter environment
 	@echo "==> Setting up jupyterlab environment..."
-	@$(VENV_BIN)/uv pip install --upgrade ipykernel jupyter
+	@uv pip install --upgrade ipykernel jupyter
 	@$(VENV_BIN)/python -m ipykernel install --user --name='ridgeplot' --display-name='ridgeplot'
 
 

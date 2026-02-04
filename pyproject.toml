@@ -66,3 +66,13 @@ namespaces = false
 # and we want to push X.devM to TestPyPi
 # on every merge to the `main` branch
 local_scheme = "no-local-version"
+
+[tool.check-manifest]
+ignore = [
+    ".claude/skills",
+    ".claude/skills/**",
+    ".codex/skills",
+    ".codex/skills/**",
+    ".cursor/skills",
+    ".cursor/skills/**",
+]
