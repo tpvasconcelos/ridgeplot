@@ -22,6 +22,9 @@
   <a href="https://codecov.io/gh/tpvasconcelos/ridgeplot"><img src="https://codecov.io/gh/tpvasconcelos/ridgeplot/branch/main/graph/badge.svg" alt="codecov"></a>
   <a href="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot"><img src="https://www.codefactor.io/repository/github/tpvasconcelos/ridgeplot/badge" alt="CodeFactor"></a>
   <a href="https://app.codacy.com/gh/tpvasconcelos/ridgeplot/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade"><img src="https://app.codacy.com/project/badge/Grade/e21652ac49874b6f94ed3c9b7ac77021" alt="Codacy code quality Badge"></a>
+  <a href="https://gitcgr.com/tpvasconcelos/ridgeplot" target="_blank" rel="noopener noreferrer">
+    <img src="https://gitcgr.com/badge/tpvasconcelos/ridgeplot.svg" alt="gitcgr" />
+  </a>
 </p>
 
 -----------------
