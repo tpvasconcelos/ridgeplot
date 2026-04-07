@@ -5,6 +5,13 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+- ...
+
+---
+
+0.6.0
+------
+
 - Add support for Python 3.14, in accordance with the official Python support policy[^1] ({gh-pr}`346`)
 
 ### Bug fixes
