@@ -33,7 +33,7 @@ Unreleased changes
 - Bump actions/upload-artifact from 5 to 6 ({gh-pr}`360`)
 - Bump sigstore/gh-action-sigstore-python from 3.0.1 to 3.1.0 ({gh-pr}`352`)
 - Bump sigstore/gh-action-sigstore-python from 3.1.0 to 3.2.0 ({gh-pr}`359`)
-- pre-commit autoupdate ({gh-pr}`350`, {gh-pr}`355`, {gh-pr}`358`, {gh-pr}`362`)
+- pre-commit autoupdate ({gh-pr}`350`, {gh-pr}`355`, {gh-pr}`358`, {gh-pr}`362`, and {gh-pr}`366`)
 
 ---
 
