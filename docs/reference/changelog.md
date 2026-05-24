@@ -5,7 +5,9 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
-- ...
+### CI/CD
+
+- pre-commit autoupdate ({gh-pr}`374`)
 
 ---
 
