@@ -43,7 +43,7 @@ repos:
         exclude: ^\.bumpversion\.cfg$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema.git
-    rev: 0.36.0
+    rev: 0.37.2
     hooks:
       - id: check-github-actions
       - id: check-github-workflows
@@ -55,17 +55,17 @@ repos:
       - id: check-readthedocs
 
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.9
+    rev: v1.7.12
     hooks:
       - id: actionlint
 
   - repo: https://github.com/kynan/nbstripout
-    rev: 0.8.2
+    rev: 0.9.1
     hooks:
       - id: nbstripout
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.1
+    rev: v2.4.2
     hooks:
       - id: codespell
         args: [ "-L", "probly", "-L", "mis" ]
@@ -92,7 +92,7 @@ repos:
           - mdformat-myst
 
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.24.1
+    rev: v0.25
     hooks:
       - id: validate-pyproject
 
@@ -104,7 +104,7 @@ repos:
         additional_dependencies: [setuptools-scm]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.10
+    rev: v0.15.13
     hooks:
       - id: ruff-format
       - id: ruff

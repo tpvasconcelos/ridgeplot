@@ -14,7 +14,7 @@ import pytest_socket
 from plotly import graph_objects as go
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
     from importlib.abc import Loader
     from importlib.machinery import ModuleSpec
     from types import ModuleType
@@ -41,7 +41,7 @@ def plotly_show_browser(fig: go.Figure, renderer: str = "browser", **kwargs: Any
 
 
 @contextlib.contextmanager
-def patch_plotly_show() -> Iterator[None]:
+def patch_plotly_show() -> Generator[None]:
     """Patch the :func:`plotly.io.show()` function to skip any rendering steps
     and, instead, simply call
     :func:`plotly.io._utils.validate_coerce_fig_to_dict()`.

@@ -50,7 +50,7 @@ def to_rgb(color: Color) -> str:
 
 
 def unpack_rgb(rgb: str) -> tuple[float, float, float, float] | tuple[float, float, float]:
-    prefix = rgb.split("(")[0] + "("
+    prefix = rgb.split("(", maxsplit=1)[0] + "("
     values_str = map(str.strip, rgb.removeprefix(prefix).removesuffix(")").split(","))
     values_num = tuple(int(v) if v.isdecimal() else float(v) for v in values_str)
     return cast("tuple[float, float, float, float] | tuple[float, float, float]", values_num)

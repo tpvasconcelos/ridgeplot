@@ -5,6 +5,20 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### CI/CD
+
+- Bump actions/download-artifact from 7 to 8 ({gh-pr}`368`)
+- Bump actions/upload-artifact from 6 to 7 ({gh-pr}`369`)
+- Bump sigstore/gh-action-sigstore-python from 3.2.0 to 3.3.0 ({gh-pr}`370`)
+- Bump codecov/codecov-action from 5 to 6 ({gh-pr}`371`)
+- Bump actions/github-script from 8 to 9 ({gh-pr}`373`)
+- pre-commit autoupdate ({gh-pr}`374`)
+
+---
+
+0.6.0
+------
+
 - Add support for Python 3.14, in accordance with the official Python support policy[^1] ({gh-pr}`346`)
 
 ### Bug fixes
@@ -33,7 +47,7 @@ Unreleased changes
 - Bump actions/upload-artifact from 5 to 6 ({gh-pr}`360`)
 - Bump sigstore/gh-action-sigstore-python from 3.0.1 to 3.1.0 ({gh-pr}`352`)
 - Bump sigstore/gh-action-sigstore-python from 3.1.0 to 3.2.0 ({gh-pr}`359`)
-- pre-commit autoupdate ({gh-pr}`350`, {gh-pr}`355`, {gh-pr}`358`, {gh-pr}`362`)
+- pre-commit autoupdate ({gh-pr}`350`, {gh-pr}`355`, {gh-pr}`358`, {gh-pr}`362`, and {gh-pr}`366`)
 
 ---
 
