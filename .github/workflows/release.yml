@@ -131,7 +131,7 @@ jobs:
             ./dist/*.whl
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           body_path: LATEST_RELEASE_NOTES.md
           # `dist/` contains the built distributions, and the
