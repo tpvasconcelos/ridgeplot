@@ -20,8 +20,10 @@ runs:
     # Install uv and enable its built-in cache. The cache key takes the
     # platform, the uv version, and a hash of the files below into account.
     # See https://docs.astral.sh/uv/guides/integration/github/ for details.
+    # NOTE: setup-uv publishes immutable releases only (no
+    #       floating major tags), so we pin the full version
     - name: Install uv
-      uses: astral-sh/setup-uv@v9
+      uses: astral-sh/setup-uv@v9.0.0
       with:
         enable-cache: true
         cache-suffix: "py${{ inputs.python-version }}"
