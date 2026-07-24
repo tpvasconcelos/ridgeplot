@@ -76,7 +76,7 @@ def test_accepts_various_input_types(input_type: Callable[[list[int]], Any]) -> 
     # The output should always be normalised to built-in floats
     # (note: isinstance() checks wouldn't cut it here since
     #  np.float64 is also a subclass of the built-in float)
-    assert all(type(x) is float and type(y) is float for x, y in result)
+    assert {type(value) for xy_pair in result for value in xy_pair} == {float}
 
 
 def test_counts_sum_to_sample_size() -> None:
