@@ -14,6 +14,8 @@ from ridgeplot._color.utils import default_plotly_template
 if TYPE_CHECKING:
     from collections.abc import Collection
 
+    import plotly.graph_objects as go
+
     from ridgeplot._types import Color, ColorScale
 
 
@@ -43,19 +45,29 @@ class ColorscaleValidator(_ColorscaleValidator):
         return cast("ColorScale", coerced)
 
 
-def infer_default_colorscale() -> ColorScale | Collection[Color] | str:
+def infer_default_colorscale(
+    template: go.layout.Template | None = None,
+) -> ColorScale | Collection[Color] | str:
+    if template is None:
+        template = default_plotly_template()
     return validate_coerce_colorscale(
-        default_plotly_template().layout.colorscale.sequential or px.colors.sequential.Viridis
+        template.layout.colorscale.sequential or px.colors.sequential.Viridis
     )
 
 
 def validate_coerce_colorscale(
     colorscale: ColorScale | Collection[Color] | str | None,
+    template: go.layout.Template | None = None,
 ) -> ColorScale:
     """Convert mixed colorscale representations to the canonical
-    :data:`ColorScale` format."""
+    :data:`ColorScale` format.
+
+    If ``colorscale`` is None, the default colorscale is inferred from the
+    given ``template`` (or from the current default Plotly template, if no
+    template is specified).
+    """
     if colorscale is None:
-        colorscale = infer_default_colorscale()
+        colorscale = infer_default_colorscale(template=template)
     return ColorscaleValidator().validate_coerce(colorscale)
 
 

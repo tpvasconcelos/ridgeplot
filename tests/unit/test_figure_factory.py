@@ -134,4 +134,5 @@ class TestCreateRidgeplot:
                 line_width=...,  # type: ignore[reportArgumentType]
                 spacing=...,  # type: ignore[reportArgumentType]
                 xpad=...,  # type: ignore[reportArgumentType]
+                template=...,  # type: ignore[reportArgumentType]
             )
