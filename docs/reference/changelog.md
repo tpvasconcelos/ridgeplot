@@ -5,6 +5,10 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Developer Experience
+
+- Migrate all development dependencies from `requirements/*.txt` files to PEP 735 dependency groups in `pyproject.toml` ({gh-pr}`388`)
+
 ### CI/CD
 
 - Bump actions/download-artifact from 7 to 8 ({gh-pr}`368`)
