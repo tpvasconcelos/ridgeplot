@@ -1,0 +1,54 @@
+# Automation for PRs opened by trusted bots (dependabot and pre-commit.ci).
+#
+# For every bot PR, this workflow:
+#   1. Adds the `skip news` label, which exempts the PR from the changelog
+#      check (dependabot PRs already get it via .github/dependabot.yml).
+#      The corresponding changelog entries are added in bulk at release
+#      time with the help of ./cicd_utils/find-unmentioned-prs.sh
+#   2. Enables GitHub's native auto-merge (squash). The PR will then merge
+#      automatically as soon as the branch protection requirements are met
+#      (i.e., an approving review plus all required status checks passing).
+#
+# The only human action left is the review itself.
+#
+# Note: If auto-merge is enabled with the default GITHUB_TOKEN, the resulting
+# merge commit will not trigger other workflows (e.g., the CI run on main or
+# the TestPyPI publish). To get those post-merge runs, create a fine-grained
+# PAT with contents:write and pull-requests:write scoped to this repository
+# and store it as the AUTO_MERGE_PAT secret. This workflow falls back to
+# GITHUB_TOKEN when the secret is not set.
+#
+# Security: this workflow runs on pull_request_target but never checks out
+# or executes code from the PR branch.
+#
+name: Bot PRs
+
+on:
+  pull_request_target:
+    types: [ opened, reopened ]
+
+permissions: {}
+
+jobs:
+  automate:
+    name: Label and enable auto-merge
+    if: >-
+      github.event.pull_request.user.login == 'dependabot[bot]' ||
+      github.event.pull_request.user.login == 'pre-commit-ci[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Add 'skip news' label
+        run: gh pr edit "$PR_URL" --add-label 'skip news'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge (squash)
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT || secrets.GITHUB_TOKEN }}

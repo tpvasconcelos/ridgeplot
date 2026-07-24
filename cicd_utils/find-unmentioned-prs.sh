@@ -68,6 +68,7 @@ else
     echo "📋 PRs not mentioned in changelog (${#unmentioned_prs[@]} total):"
     echo
 
+    suggested_entries=()
     for pr in "${unmentioned_prs[@]}"; do
         # Get PR title and URL for better readability
         pr_info=$(gh pr view "$pr" --json title,url --jq '{title: .title, url: .url}')
@@ -77,5 +78,13 @@ else
         echo "  #$pr: $pr_title"
         echo "       $pr_url"
         echo
+
+        suggested_entries+=("- ${pr_title} ({gh-pr}\`${pr}\`)")
+    done
+
+    echo "📝 Suggested changelog entries (review and paste under 'Unreleased changes'):"
+    echo
+    for entry in "${suggested_entries[@]}"; do
+        echo "$entry"
     done
 fi
