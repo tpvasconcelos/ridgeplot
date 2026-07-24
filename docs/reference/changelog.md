@@ -5,6 +5,10 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Features
+
+- Implement a new `template` parameter to allow users to specify a Plotly figure template ({gh-pr}`389`)
+
 ### CI/CD
 
 - Bump actions/download-artifact from 7 to 8 ({gh-pr}`368`)
