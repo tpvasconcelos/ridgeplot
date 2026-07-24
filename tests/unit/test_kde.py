@@ -49,7 +49,11 @@ def test_estimate_density_trace_points() -> None:
     assert np.argmin(y) == 0
 
 
-@pytest.mark.parametrize("non_finite_value", [np.inf, np.nan, float("inf"), float("nan")])
+@pytest.mark.parametrize(
+    "non_finite_value",
+    [np.inf, np.nan, float("inf"), float("nan")],
+    ids=["np-inf", "np-nan", "float-inf", "float-nan"],
+)
 def test_estimate_density_trace_fails_for_non_finite_values(non_finite_value: float) -> None:
     err_msg = "The samples array should not contain any infs or NaNs."
     with pytest.raises(ValueError, match=err_msg):
@@ -101,7 +105,11 @@ def test_estimate_density_trace_weights_not_same_length() -> None:
         )
 
 
-@pytest.mark.parametrize("non_finite_value", [np.inf, np.nan, float("inf"), float("nan")])
+@pytest.mark.parametrize(
+    "non_finite_value",
+    [np.inf, np.nan, float("inf"), float("nan")],
+    ids=["np-inf", "np-nan", "float-inf", "float-nan"],
+)
 def test_estimate_density_trace_weights_fails_for_non_finite_values(
     non_finite_value: float,
 ) -> None:
