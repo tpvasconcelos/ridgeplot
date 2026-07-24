@@ -13,6 +13,12 @@ Unreleased changes
 - Bump codecov/codecov-action from 5 to 6 ({gh-pr}`371`)
 - Bump actions/github-script from 8 to 9 ({gh-pr}`373`)
 - pre-commit autoupdate ({gh-pr}`374`)
+- Bump softprops/action-gh-release from 2 to 3 ({gh-pr}`380`)
+- Bump codecov/codecov-action from 6 to 7 ({gh-pr}`381`)
+- Bump sigstore/gh-action-sigstore-python from 3.3.0 to 3.4.0 ({gh-pr}`382`)
+- Bump actions/checkout from 6 to 7 ({gh-pr}`383`)
+- pre-commit autoupdate ({gh-pr}`379`)
+- Fix the test suite's compatibility with the latest pytest release ({gh-pr}`384`)
 
 ---
 
