@@ -12,9 +12,12 @@ build:
 
 python:
   install:
-    - requirements: requirements/docs.txt
-    - method: pip
-      path: .
+    # Install the project plus the `docs` dependency
+    # group from pyproject.toml using `uv sync`
+    - method: uv
+      command: sync
+      groups:
+        - docs
 
 sphinx:
   configuration: docs/conf.py
