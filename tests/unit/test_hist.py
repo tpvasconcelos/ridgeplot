@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
 import pytest
 
@@ -7,6 +9,12 @@ from ridgeplot._hist import (
     bin_samples,
     bin_trace_samples,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import Any
+
+NON_FINITE_VALUES = [np.inf, -np.inf, np.nan]
 
 # ==============================================================
 # ---  bin_trace_samples()
@@ -20,12 +28,17 @@ from ridgeplot._hist import (
     ("samples", "nbins", "expected"),
     [
         # Basic case with repeated values
+        # NOTE: The expected x values correspond to the centers of
+        #       equally spaced bins over the range [min, max] of the
+        #       samples. This can be counterintuitive for count data,
+        #       as the bins do not align with the integer sample values.
         ([1, 2, 2, 3, 4], 4, [(1.375, 1), (2.125, 2), (2.875, 1), (3.625, 1)]),
         # Single bin aggregates all samples
         ([1, 2, 3], 1, [(2.0, 3)]),
         # Uniform distribution
         ([0, 1, 2, 3], 4, [(0.375, 1), (1.125, 1), (1.875, 1), (2.625, 1)]),
-        # All identical samples go to rightmost bin
+        # All identical samples fall in the rightmost bin
+        # (NumPy pads the zero-width range by +/-0.5)
         ([3, 3, 3], 2, [(2.75, 0), (3.25, 3)]),
         # Negative values
         ([-2, -1, 0, 1], 2, [(-1.25, 2), (0.25, 2)]),
@@ -42,7 +55,7 @@ def test_basic_binning(
 def test_float_samples_binning() -> None:
     result = bin_trace_samples([0.1, 0.5, 0.9], nbins=3)
     x_vals, y_vals = zip(*result, strict=True)
-    assert x_vals == pytest.approx((0.233, 0.5, 0.767), rel=1e-2)
+    assert x_vals == pytest.approx((7 / 30, 0.5, 23 / 30))
     assert y_vals == (1.0, 1.0, 1.0)
 
 
@@ -54,14 +67,16 @@ def test_output_length_matches_nbins(nbins: int) -> None:
 
 @pytest.mark.parametrize(
     "input_type",
-    [list, tuple, np.array],
+    [list, tuple, np.asarray],
     ids=["list", "tuple", "ndarray"],
 )
-def test_accepts_various_input_types(input_type: type) -> None:
-    samples = input_type([1, 2, 3])
-    result = bin_trace_samples(samples, nbins=2)
+def test_accepts_various_input_types(input_type: Callable[[list[int]], Any]) -> None:
+    result = bin_trace_samples(input_type([1, 2, 3]), nbins=2)
     assert len(result) == 2
-    assert all(isinstance(x, float) and isinstance(y, float) for x, y in result)
+    # The output should always be normalised to built-in floats
+    # (note: isinstance() checks wouldn't cut it here since
+    #  np.float64 is also a subclass of the built-in float)
+    assert all(type(x) is float and type(y) is float for x, y in result)
 
 
 def test_counts_sum_to_sample_size() -> None:
@@ -84,7 +99,7 @@ def test_bin_centers_within_data_range() -> None:
 @pytest.mark.parametrize(
     ("samples", "weights", "nbins", "expected_counts"),
     [
-        # Weights shift distribution
+        # Each sample falls in its own bin, so the weights become the counts
         ([1, 2, 3], [10, 1, 1], 3, [10, 1, 1]),
         # Zero weights effectively exclude samples
         ([1, 2, 3], [1, 0, 1], 3, [1, 0, 1]),
@@ -114,21 +129,13 @@ def test_weighted_counts_sum_to_weight_sum() -> None:
 # --- Error handling ---
 
 
-@pytest.mark.parametrize(
-    "non_finite",
-    [np.inf, -np.inf, np.nan, float("inf"), float("nan")],
-    ids=["inf", "neg_inf", "nan", "float_inf", "float_nan"],
-)
+@pytest.mark.parametrize("non_finite", NON_FINITE_VALUES)
 def test_rejects_non_finite_samples(non_finite: float) -> None:
     with pytest.raises(ValueError, match="samples array should not contain any infs or NaNs"):
         bin_trace_samples([1, 2, non_finite], nbins=2)
 
 
-@pytest.mark.parametrize(
-    "non_finite",
-    [np.inf, -np.inf, np.nan, float("inf"), float("nan")],
-    ids=["inf", "neg_inf", "nan", "float_inf", "float_nan"],
-)
+@pytest.mark.parametrize("non_finite", NON_FINITE_VALUES)
 def test_rejects_non_finite_weights(non_finite: float) -> None:
     with pytest.raises(ValueError, match="weights array should not contain any infs or NaNs"):
         bin_trace_samples([1, 2, 3], nbins=2, weights=[1, non_finite, 1])
@@ -155,14 +162,40 @@ def test_rejects_mismatched_weights_length(samples: list[float], weights: list[f
 
 def test_bin_samples() -> None:
     samples = [1, 2, 2, 3, 4]
-    nbins = 4
-    expected = [(1.375, 1), (2.125, 2), (2.875, 1), (3.625, 1)]
-    x_out, y_out = zip(*expected, strict=True)
-    densities = bin_samples(samples=[[samples], [samples]], nbins=nbins)
-    assert len(densities) == 2
-    for densities_row in densities:
-        assert len(densities_row) == 1
-        density_trace = next(iter(densities_row))
-        x, y = zip(*density_trace, strict=True)
-        assert x == x_out
-        assert y == y_out
+    expected_trace = [(1.375, 1.0), (2.125, 2.0), (2.875, 1.0), (3.625, 1.0)]
+    densities = bin_samples(samples=[[samples], [samples]], nbins=4)
+    assert densities == [[expected_trace], [expected_trace]]
+
+
+def test_bin_samples_preserves_shape() -> None:
+    densities = bin_samples(samples=[[[0, 1], [2, 3, 4]], [[5, 6, 7, 8]]], nbins=3)
+    assert [len(row) for row in densities] == [2, 1]
+    assert all(len(trace) == 3 for row in densities for trace in row)
+
+
+def test_bin_samples_broadcasts_flat_weights() -> None:
+    """A single flat weights vector should be applied to all traces."""
+    trace_a, trace_b = [1, 2, 3], [4, 5, 6]
+    weights = [1, 2, 3]
+    densities = bin_samples(samples=[[trace_a, trace_b]], nbins=2, sample_weights=weights)
+    assert densities == [
+        [
+            bin_trace_samples(trace_a, nbins=2, weights=weights),
+            bin_trace_samples(trace_b, nbins=2, weights=weights),
+        ]
+    ]
+
+
+def test_bin_samples_per_trace_weights() -> None:
+    """Per-trace weights (shallow form) should be matched to each trace."""
+    trace_a, trace_b = [1, 2, 3], [4, 5, 6, 7]
+    weights_a = [1, 2, 3]
+    densities = bin_samples(
+        samples=[[trace_a], [trace_b]],
+        nbins=2,
+        sample_weights=[weights_a, None],
+    )
+    assert densities == [
+        [bin_trace_samples(trace_a, nbins=2, weights=weights_a)],
+        [bin_trace_samples(trace_b, nbins=2)],
+    ]

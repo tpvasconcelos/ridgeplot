@@ -7,6 +7,7 @@ Unreleased changes
 
 ### CI/CD
 
+- Improve the unit test suite for the `ridgeplot._hist` module ({gh-pr}`365`)
 - Bump actions/download-artifact from 7 to 8 ({gh-pr}`368`)
 - Bump actions/upload-artifact from 6 to 7 ({gh-pr}`369`)
 - Bump sigstore/gh-action-sigstore-python from 3.2.0 to 3.3.0 ({gh-pr}`370`)
