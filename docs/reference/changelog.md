@@ -5,6 +5,14 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Features
+
+- Implement a new `template` parameter to allow users to specify a Plotly figure template ({gh-pr}`389`)
+
+### Documentation
+
+- Add a section on theming with Plotly templates to the getting started guide ({gh-pr}`389`)
+
 ### CI/CD
 
 - Review the coverage configuration in light of `covdefaults`, adopting its `assert_never` exclusion and `skip_covered` report setting, and raising all package coverage gates to 100% ({gh-pr}`390`)
