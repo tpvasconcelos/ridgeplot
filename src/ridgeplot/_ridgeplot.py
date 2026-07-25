@@ -31,6 +31,7 @@ if TYPE_CHECKING:
         ColorScale,
         LabelsArray,
         NormalisationOption,
+        PlotlyTemplate,
         SampleWeights,
         SampleWeightsArray,
         ShallowDensities,
@@ -120,6 +121,7 @@ def ridgeplot(
     line_width: float | None = None,
     spacing: float = 0.5,
     xpad: float = 0.05,
+    template: PlotlyTemplate | None = None,
     # Deprecated parameters
     coloralpha: float | None | MissingType = MISSING,
     linewidth: float | MissingType = MISSING,
@@ -140,6 +142,8 @@ def ridgeplot(
         https://www.statsmodels.org/stable/_modules/statsmodels/nonparametric/bandwidths.html
     .. _Plotly's built-in color-scales:
         https://plotly.com/python/builtin-colorscales/
+    .. _Plotly's theming and templates guide:
+        https://plotly.com/python/templates/
     .. _ragged:
        https://en.wikipedia.org/wiki/Jagged_array
 
@@ -290,8 +294,8 @@ def ridgeplot(
         ``["rgb(255, 0, 0)", "blue", "hsl(120, 100%, 50%)"]``). The list will
         ultimately be converted into a :data:`~ridgeplot._types.ColorScale`
         object, assuming the colors provided are evenly spaced. If not specified
-        (default), the color scale will be inferred from current Plotly
-        template.
+        (default), the color scale will be inferred from the current Plotly
+        template (see the :paramref:`.template` parameter).
 
     colormode : "fillgradient" or SolidColormode
         This parameter controls the logic used for the coloring of each
@@ -394,6 +398,20 @@ def ridgeplot(
         Specifies the extra padding to use on the x-axis. It is defined in
         units of the range between the minimum and maximum x-values from all
         distributions.
+
+    template : PlotlyTemplate or None
+        The Plotly template to use in this figure. This can be the name of a
+        registered template (e.g., ``"plotly_dark"``), a
+        :class:`plotly.graph_objects.layout.Template
+        <plotly.graph_objs.layout.Template>` instance, or a dictionary with a
+        template's properties. See `Plotly's theming and templates guide`_
+        for more details. If not specified (default), the plot will be
+        rendered using Plotly's current default template (i.e.,
+        ``plotly.io.templates.default``). Note that, unless a custom
+        :paramref:`.colorscale` is specified, the default colorscale will
+        also be inferred from this template.
+
+        .. versionadded:: 0.7.0
 
     coloralpha : float
 
@@ -511,5 +529,6 @@ def ridgeplot(
         line_width=line_width,
         spacing=spacing,
         xpad=xpad,
+        template=template,
     )
     return fig

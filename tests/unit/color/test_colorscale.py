@@ -3,6 +3,9 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING
 
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.io as pio
 import pytest
 
 from ridgeplot._color.colorscale import (
@@ -24,6 +27,20 @@ if TYPE_CHECKING:
 
 def test_infer_default_colorscale() -> None:
     assert infer_default_colorscale() == validate_coerce_colorscale("plasma")
+
+
+def test_infer_default_colorscale_from_template() -> None:
+    template = pio.templates["ggplot2"]
+    assert infer_default_colorscale(template=template) == validate_coerce_colorscale(
+        template.layout.colorscale.sequential
+    )
+
+
+def test_infer_default_colorscale_fallback_to_viridis() -> None:
+    template = go.layout.Template()
+    assert infer_default_colorscale(template=template) == validate_coerce_colorscale(
+        px.colors.sequential.Viridis
+    )
 
 
 # ==============================================================

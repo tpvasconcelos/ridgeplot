@@ -43,7 +43,7 @@ repos:
         exclude: ^\.bumpversion\.cfg$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema.git
-    rev: 0.37.2
+    rev: 0.37.4
     hooks:
       - id: check-github-actions
       - id: check-github-workflows
@@ -65,7 +65,7 @@ repos:
       - id: nbstripout
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.2
+    rev: v2.4.3
     hooks:
       - id: codespell
         args: [ "-L", "probly", "-L", "mis" ]
@@ -104,7 +104,7 @@ repos:
         additional_dependencies: [setuptools-scm]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.13
+    rev: v0.15.22
     hooks:
       - id: ruff-format
       - id: ruff

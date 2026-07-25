@@ -75,7 +75,8 @@ cicd_utils = [
 ]
 tests = [
     # pytest and plugins
-    "pytest",
+    # (pytest>=9 is needed for the `strict` config option set in pytest.ini)
+    "pytest>=9",
     "pytest-icdiff",
     "pytest-socket",
     # Coverage
