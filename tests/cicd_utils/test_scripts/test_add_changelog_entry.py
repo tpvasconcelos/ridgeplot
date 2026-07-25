@@ -222,6 +222,109 @@ Unreleased changes
 - Bump foo from 1 to 2 ({gh-pr}`123`)
 """
 
+CHANGELOG_WITH_ATX_HEADINGS = """\
+# Release Notes
+
+## Unreleased changes
+
+### CI/CD
+
+- Old entry ({gh-pr}`100`)
+
+---
+
+## 0.1.0
+
+- Old release change ({gh-pr}`99`)
+"""
+
+EXPECTED_WITH_ATX_HEADINGS = """\
+# Release Notes
+
+## Unreleased changes
+
+### CI/CD
+
+- Old entry ({gh-pr}`100`)
+- Bump foo from 1 to 2 ({gh-pr}`123`)
+
+---
+
+## 0.1.0
+
+- Old release change ({gh-pr}`99`)
+"""
+
+CHANGELOG_WITH_EMPTY_CICD_SUBSECTION = """\
+# Release Notes
+
+Unreleased changes
+------------------
+
+### CI/CD
+
+---
+
+0.1.0
+-----
+
+- Old release change ({gh-pr}`99`)
+"""
+
+EXPECTED_WITH_EMPTY_CICD_SUBSECTION = """\
+# Release Notes
+
+Unreleased changes
+------------------
+
+### CI/CD
+
+- Bump foo from 1 to 2 ({gh-pr}`123`)
+
+---
+
+0.1.0
+-----
+
+- Old release change ({gh-pr}`99`)
+"""
+
+CHANGELOG_WITHOUT_THEMATIC_BREAK = """\
+# Release Notes
+
+Unreleased changes
+------------------
+
+### Bug fixes
+
+- Fix something ({gh-pr}`101`)
+
+0.1.0
+-----
+
+- Old release change ({gh-pr}`99`)
+"""
+
+EXPECTED_WITHOUT_THEMATIC_BREAK = """\
+# Release Notes
+
+Unreleased changes
+------------------
+
+### Bug fixes
+
+- Fix something ({gh-pr}`101`)
+
+### CI/CD
+
+- Bump foo from 1 to 2 ({gh-pr}`123`)
+
+0.1.0
+-----
+
+- Old release change ({gh-pr}`99`)
+"""
+
 
 @pytest.mark.parametrize(
     ("changelog_content", "expected_content"),
@@ -232,6 +335,9 @@ Unreleased changes
         (CHANGELOG_WITHOUT_ANY_SECTIONS, EXPECTED_WITHOUT_ANY_SECTIONS),
         (CHANGELOG_WITH_TRAILING_SUBSECTION, EXPECTED_WITH_TRAILING_SUBSECTION),
         (CHANGELOG_WITH_LOOSE_ENTRIES, EXPECTED_WITH_LOOSE_ENTRIES),
+        (CHANGELOG_WITH_ATX_HEADINGS, EXPECTED_WITH_ATX_HEADINGS),
+        (CHANGELOG_WITH_EMPTY_CICD_SUBSECTION, EXPECTED_WITH_EMPTY_CICD_SUBSECTION),
+        (CHANGELOG_WITHOUT_THEMATIC_BREAK, EXPECTED_WITHOUT_THEMATIC_BREAK),
     ],
     ids=[
         "existing-cicd-subsection",
@@ -240,6 +346,9 @@ Unreleased changes
         "missing-any-sections",
         "trailing-subsection",
         "loose-entries",
+        "atx-headings",
+        "empty-cicd-subsection",
+        "missing-thematic-break",
     ],
 )
 def test_add_changelog_entry(changelog_content: str, expected_content: str, tmp_path: Path) -> None:

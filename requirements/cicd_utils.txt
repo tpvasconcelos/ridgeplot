@@ -4,6 +4,7 @@ minify-html
 kaleido<0.4
 
 # ./cicd_utils/cicd/scripts/extract_latest_release_notes.py
+# ./cicd_utils/cicd/scripts/add_changelog_entry.py (markdown-it-py only)
 markdown-it-py
 mdit-py-plugins
 mdformat

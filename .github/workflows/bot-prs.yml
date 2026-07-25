@@ -69,6 +69,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
+          python3 -m pip install --quiet markdown-it-py
           python3 cicd_utils/cicd/scripts/add_changelog_entry.py "$PR_NUMBER" "$PR_TITLE"
           if git diff --quiet -- docs/reference/changelog.md; then
             echo "Changelog entry already present; nothing to do."
@@ -120,6 +121,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python3 -m pip install --quiet markdown-it-py
 
           prs=$(
             gh pr list --author 'app/dependabot' --json number,headRefName,title --jq '.[] | [.number, .headRefName, .title] | @tsv'
