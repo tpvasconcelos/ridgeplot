@@ -8,6 +8,9 @@ Unreleased changes
 ### Developer Experience
 
 - Migrate all development dependencies from `requirements/*.txt` files to PEP 735 dependency groups in `pyproject.toml` ({gh-pr}`388`)
+- Declare the release notes script's dependencies as PEP 723 inline metadata and run it with `uv run` ({gh-pr}`392`)
+- Use `uv build` to build the source and binary distributions ({gh-pr}`392`)
+- Add a `.python-version` file pinning the default development interpreter to Python 3.10 ({gh-pr}`392`)
 
 ### CI/CD
 
