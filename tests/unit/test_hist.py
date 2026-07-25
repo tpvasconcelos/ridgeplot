@@ -63,6 +63,15 @@ def test_float_samples_binning() -> None:
 def test_output_length_matches_nbins(nbins: int) -> None:
     result = bin_trace_samples([1, 2, 3, 4, 5], nbins=nbins)
     assert len(result) == nbins
+@pytest.mark.parametrize(
+    "non_finite_value",
+    [np.inf, np.nan, float("inf"), float("nan")],
+    ids=["np-inf", "np-nan", "float-inf", "float-nan"],
+)
+def test_bin_trace_samples_fails_for_non_finite_values(non_finite_value: float) -> None:
+    err_msg = "The samples array should not contain any infs or NaNs."
+    with pytest.raises(ValueError, match=err_msg):
+        bin_trace_samples(trace_samples=[*SAMPLES_IN[:-1], non_finite_value], nbins=NBINS)
 
 
 @pytest.mark.parametrize(
@@ -153,6 +162,23 @@ def test_rejects_non_finite_weights(non_finite: float) -> None:
 def test_rejects_mismatched_weights_length(samples: list[float], weights: list[float]) -> None:
     with pytest.raises(ValueError, match="weights array should have the same length"):
         bin_trace_samples(samples, nbins=2, weights=weights)
+
+
+@pytest.mark.parametrize(
+    "non_finite_value",
+    [np.inf, np.nan, float("inf"), float("nan")],
+    ids=["np-inf", "np-nan", "float-inf", "float-nan"],
+)
+def test_bin_trace_samples_weights_fails_for_non_finite_values(
+    non_finite_value: float,
+) -> None:
+    err_msg = "The weights array should not contain any infs or NaNs."
+    with pytest.raises(ValueError, match=err_msg):
+        bin_trace_samples(
+            trace_samples=SAMPLES_IN,
+            nbins=NBINS,
+            weights=[*WEIGHTS[:-1], non_finite_value],
+        )
 
 
 # ==============================================================

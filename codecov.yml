@@ -1,0 +1,15 @@
+# Codecov configuration
+# ref: https://docs.codecov.com/docs/codecov-yaml
+#
+# Note: CI only uploads the combined coverage report
+# (see the coverage-combine env in tox.ini), which omits
+# "cicd_utils/*" and "tests/*", so these targets apply
+# to the src/ridgeplot package only.
+coverage:
+  status:
+    project:
+      default:
+        target: 100%
+    patch:
+      default:
+        target: 100%
