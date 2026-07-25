@@ -1,4 +1,18 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = [
+#     "markdown-it-py",
+#     "mdit-py-plugins",
+#     "mdformat",
+#     "mdformat-footnote",
+# ]
+# ///
+# NOTE: The PEP 723 inline metadata above is used when running this
+#       script standalone (e.g. via `uv run` or the `release-notes`
+#       tox env). The same dependencies are also declared in the
+#       `cicd_utils` dependency group in pyproject.toml, which is
+#       needed for the unit tests that import this module.
 """Extract the latest release notes
 
 Execution steps:

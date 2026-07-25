@@ -2,6 +2,7 @@
 include Makefile
 include .coveragerc
 include .editorconfig
+include .python-version
 include *.cfg
 include *.ini
 include *.md

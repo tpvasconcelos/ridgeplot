@@ -26,4 +26,6 @@ def test_py_scripts_are_executable(script_path: Path) -> None:
 def test_py_scripts_have_py_shebang(script_path: Path) -> None:
     with script_path.open("r") as f:
         first_line = f.readline()
-    assert first_line.startswith("#!/usr/bin/env python")
+    # Scripts are either run directly with python or, when they declare
+    # PEP 723 inline metadata, through `uv run --script`
+    assert first_line.startswith(("#!/usr/bin/env python", "#!/usr/bin/env -S uv run --script"))

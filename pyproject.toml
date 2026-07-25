@@ -64,7 +64,10 @@ cicd_utils = [
     #       manylinux2014_armv7l wheel, which breaks universal
     #       (multi-platform) resolution with `uv sync`/`uv lock`
     "kaleido<0.4,!=0.2.1.post1",
-    # ./cicd_utils/cicd/scripts/extract_latest_release_notes.py
+    # Deps for ./cicd_utils/cicd/scripts/extract_latest_release_notes.py
+    # NOTE: these are also declared in the script's PEP 723 inline
+    #       metadata (used by `uv run`); they are duplicated here so
+    #       that the unit tests can import the script's module
     "markdown-it-py",
     "mdit-py-plugins",
     "mdformat",
