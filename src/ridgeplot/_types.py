@@ -7,6 +7,7 @@ from collections.abc import Collection
 from typing import Literal, TypeAlias
 
 import numpy as np
+import plotly.graph_objects as go
 from typing_extensions import Any, TypeIs, TypeVar
 
 # Snippet used to generate and store the image artifacts:
@@ -69,6 +70,16 @@ NormalisationOption: TypeAlias = Literal["probability", "percent"]
 """A :data:`~typing.Literal` type that represents the normalisation options
 available for the ridgeplot. See :paramref:`ridgeplot.ridgeplot.norm` for more
 details."""
+
+PlotlyTemplate: TypeAlias = go.layout.Template | dict[str, Any] | str
+"""A Plotly figure template can be represented by a
+:class:`plotly.graph_objects.layout.Template <plotly.graph_objs.layout.Template>`
+instance, a dictionary with a template's properties, or the name of a registered
+template (e.g., ``"plotly_dark"``).
+
+See `Plotly's theming and templates guide
+<https://plotly.com/python/templates/>`_ for more details.
+"""
 
 # ========================================================
 # ---  Base nested Collection types (ragged arrays)

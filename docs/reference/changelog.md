@@ -5,6 +5,14 @@ This document outlines the list of changes to ridgeplot between each release. Fo
 Unreleased changes
 ------------------
 
+### Features
+
+- Implement a new `template` parameter to allow users to specify a Plotly figure template ({gh-pr}`389`)
+
+### Documentation
+
+- Add a section on theming with Plotly templates to the getting started guide ({gh-pr}`389`)
+
 ### CI/CD
 
 - Improve the unit test suite for the `ridgeplot._hist` module ({gh-pr}`365`)
@@ -17,6 +25,12 @@ Unreleased changes
 - Bump codecov/codecov-action from 5 to 6 ({gh-pr}`371`)
 - Bump actions/github-script from 8 to 9 ({gh-pr}`373`)
 - pre-commit autoupdate ({gh-pr}`374`)
+- Bump softprops/action-gh-release from 2 to 3 ({gh-pr}`380`)
+- Bump codecov/codecov-action from 6 to 7 ({gh-pr}`381`)
+- Bump sigstore/gh-action-sigstore-python from 3.3.0 to 3.4.0 ({gh-pr}`382`)
+- Bump actions/checkout from 6 to 7 ({gh-pr}`383`)
+- pre-commit autoupdate ({gh-pr}`379`)
+- Fix the test suite's compatibility with the latest pytest release ({gh-pr}`384`)
 - Use the official `astral-sh/setup-uv` action to install and cache `uv` in CI ({gh-pr}`386`)
 
 ---

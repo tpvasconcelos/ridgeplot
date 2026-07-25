@@ -14,6 +14,7 @@ from ridgeplot._color.interpolation import (
 )
 from ridgeplot._obj.traces import get_trace_cls
 from ridgeplot._obj.traces.base import ColoringContext
+from ridgeplot._template import validate_coerce_template
 from ridgeplot._types import (
     Color,
     ColorScale,
@@ -37,7 +38,7 @@ from ridgeplot._utils import (
 if TYPE_CHECKING:
     from collections.abc import Collection
 
-    from ridgeplot._types import Densities
+    from ridgeplot._types import Densities, PlotlyTemplate
 
 
 def normalise_trace_types(
@@ -80,8 +81,11 @@ def _update_layout(
     xpad: float,
     x_max: float,
     x_min: float,
+    template: go.layout.Template | None,
 ) -> go.Figure:
     """Update figure's layout."""
+    if template is not None:
+        fig.update_layout(template=template)
     fig.update_layout(
         legend=dict(traceorder="normal"),
     )
@@ -130,6 +134,7 @@ def create_ridgeplot(
     line_width: float | None,
     spacing: float,
     xpad: float,
+    template: PlotlyTemplate | None,
 ) -> go.Figure:
     # ==============================================================
     # ---  Get clean and validated input arguments
@@ -169,7 +174,8 @@ def create_ridgeplot(
     line_width = float(line_width) if line_width is not None else None
     spacing = float(spacing)
     xpad = float(xpad)
-    colorscale = validate_coerce_colorscale(colorscale)
+    template = validate_coerce_template(template)
+    colorscale = validate_coerce_colorscale(colorscale, template=template)
 
     # ==============================================================
     # ---  Build the figure
@@ -233,5 +239,6 @@ def create_ridgeplot(
         xpad=xpad,
         x_max=x_max,
         x_min=x_min,
+        template=template,
     )
     return fig
