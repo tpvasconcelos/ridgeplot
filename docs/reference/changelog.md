@@ -9,6 +9,10 @@ Unreleased changes
 
 - Implement a new `template` parameter to allow users to specify a Plotly figure template ({gh-pr}`389`)
 
+### Documentation
+
+- Add a section on theming with Plotly templates to the getting started guide ({gh-pr}`389`)
+
 ### CI/CD
 
 - Bump actions/download-artifact from 7 to 8 ({gh-pr}`368`)
