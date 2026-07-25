@@ -16,6 +16,7 @@ Unreleased changes
 - Bump codecov/codecov-action from 5 to 6 ({gh-pr}`371`)
 - Bump actions/github-script from 8 to 9 ({gh-pr}`373`)
 - pre-commit autoupdate ({gh-pr}`374`)
+- Use the official `astral-sh/setup-uv` action to install and cache `uv` in CI ({gh-pr}`386`)
 
 ---
 
