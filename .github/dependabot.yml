@@ -3,11 +3,8 @@
 # Notes:
 # - Updates are grouped into a single weekly PR per ecosystem to reduce
 #   review noise and avoid changelog merge conflicts between bot PRs.
-# - The `skip news` label exempts bot PRs from the changelog check
-#   (see .github/workflows/check-release-notes.yml). Their changelog
-#   entries are added in bulk at release time with the help of the
-#   ./cicd_utils/find-unmentioned-prs.sh script.
-# - Bot PRs are auto-merged once approved (see .github/workflows/bot-prs.yml).
+# - Bot PRs get an automated changelog entry commit and are auto-merged
+#   once approved (see .github/workflows/bot-prs.yml).
 #
 # References:
 # - https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
@@ -18,7 +15,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    labels: [ "github_actions", "skip news" ]
+    labels: [ "github_actions" ]
     groups:
       github-actions:
         patterns: [ "*" ]
@@ -26,7 +23,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    labels: [ "dependencies", "skip news" ]
+    labels: [ "dependencies" ]
     groups:
       pip:
         patterns: [ "*" ]

@@ -1,54 +1,165 @@
 # Automation for PRs opened by trusted bots (dependabot and pre-commit.ci).
 #
 # For every bot PR, this workflow:
-#   1. Adds the `skip news` label, which exempts the PR from the changelog
-#      check (dependabot PRs already get it via .github/dependabot.yml).
-#      The corresponding changelog entries are added in bulk at release
-#      time with the help of ./cicd_utils/find-unmentioned-prs.sh
+#   1. Commits a changelog entry for the PR (generated from the PR's title)
+#      directly to the PR branch, so that the "Check for entry in Changelog"
+#      requirement is satisfied and the entry can be reviewed as part of the
+#      PR itself. This step is idempotent and self-healing: if a bot
+#      force-pushes its branch (wiping our commit), the resulting
+#      `synchronize` event simply re-adds the entry.
 #   2. Enables GitHub's native auto-merge (squash). The PR will then merge
 #      automatically as soon as the branch protection requirements are met
 #      (i.e., an approving review plus all required status checks passing).
 #
+# Additionally, on every push to main, the `heal` job checks whether any
+# open bot PRs became conflicted (e.g., two bot PRs adding changelog
+# entries at the same location: the first one to merge conflicts the
+# other) and resolves them by merging main into the PR branch and
+# regenerating the changelog entry.
+#
 # The only human action left is the review itself.
 #
-# Note: If auto-merge is enabled with the default GITHUB_TOKEN, the resulting
-# merge commit will not trigger other workflows (e.g., the CI run on main or
-# the TestPyPI publish). To get those post-merge runs, create a fine-grained
-# PAT with contents:write and pull-requests:write scoped to this repository
-# and store it as the AUTO_MERGE_PAT secret. This workflow falls back to
-# GITHUB_TOKEN when the secret is not set.
+# Note: If the AUTO_MERGE_PAT secret is not set, this workflow falls back to
+# the default GITHUB_TOKEN. This comes with a significant caveat: pushes and
+# merges performed with GITHUB_TOKEN do not trigger other workflows, meaning
+# that (a) CI checks will not run against the changelog commits pushed to
+# bot PRs, and (b) post-merge workflows on main (CI run, TestPyPI publish)
+# will not be triggered. For the full experience, create a fine-grained PAT
+# with contents:write and pull-requests:write scoped to this repository and
+# store it as the AUTO_MERGE_PAT secret.
 #
-# Security: this workflow runs on pull_request_target but never checks out
-# or executes code from the PR branch.
+# Security: this workflow runs on pull_request_target with write
+# permissions, but only ever acts on same-repository PRs opened by
+# trusted bots, and never executes code from the PR branch.
 #
 name: Bot PRs
 
 on:
   pull_request_target:
-    types: [ opened, reopened ]
+    types: [ opened, reopened, synchronize ]
+  push:
+    branches: [ main ]
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  automate:
-    name: Label and enable auto-merge
+  changelog:
+    name: Add changelog entry
     if: >-
-      github.event.pull_request.user.login == 'dependabot[bot]' ||
-      github.event.pull_request.user.login == 'pre-commit-ci[bot]'
+      github.event_name == 'pull_request_target' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (github.event.pull_request.user.login == 'dependabot[bot]' ||
+       github.event.pull_request.user.login == 'pre-commit-ci[bot]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.AUTO_MERGE_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Add changelog entry and push
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          python3 cicd_utils/cicd/scripts/add_changelog_entry.py "$PR_NUMBER" "$PR_TITLE"
+          if git diff --quiet -- docs/reference/changelog.md; then
+            echo "Changelog entry already present; nothing to do."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/reference/changelog.md
+          git commit -m "Add changelog entry for #${PR_NUMBER}"
+          git push
+
+  automerge:
+    name: Enable auto-merge
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      github.event.action != 'synchronize' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (github.event.pull_request.user.login == 'dependabot[bot]' ||
+       github.event.pull_request.user.login == 'pre-commit-ci[bot]')
     runs-on: ubuntu-latest
     timeout-minutes: 2
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - name: Add 'skip news' label
-        run: gh pr edit "$PR_URL" --add-label 'skip news'
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Enable auto-merge (squash)
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT || secrets.GITHUB_TOKEN }}
+
+  heal:
+    name: Heal conflicted bot PRs
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.AUTO_MERGE_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Merge main into conflicted bot PRs
+        env:
+          GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          prs=$(
+            gh pr list --author 'app/dependabot' --json number,headRefName,title --jq '.[] | [.number, .headRefName, .title] | @tsv'
+            gh pr list --author 'app/pre-commit-ci' --json number,headRefName,title --jq '.[] | [.number, .headRefName, .title] | @tsv'
+          )
+          [ -n "$prs" ] || { echo "No open bot PRs."; exit 0; }
+
+          while IFS=$'\t' read -r number head_ref title; do
+            [ -n "$number" ] || continue
+
+            # Wait for GitHub to finish computing the mergeable state
+            mergeable=UNKNOWN
+            for _ in 1 2 3 4 5; do
+              mergeable=$(gh pr view "$number" --json mergeable --jq .mergeable)
+              [ "$mergeable" = "UNKNOWN" ] || break
+              sleep 10
+            done
+            echo "PR #${number} (${head_ref}) is ${mergeable}"
+            [ "$mergeable" = "CONFLICTING" ] || continue
+
+            git fetch origin "$head_ref" < /dev/null
+            git checkout -B "$head_ref" "origin/$head_ref" < /dev/null
+
+            if git merge --no-edit origin/main < /dev/null; then
+              git push origin "HEAD:$head_ref" < /dev/null
+              continue
+            fi
+
+            conflicts=$(git diff --name-only --diff-filter=U)
+            if [ "$conflicts" != "docs/reference/changelog.md" ]; then
+              git merge --abort < /dev/null
+              echo "::warning::PR #${number} has conflicts beyond the changelog; skipping."
+              continue
+            fi
+
+            # Resolve the changelog conflict by taking main's version
+            # and re-generating this PR's changelog entry on top of it
+            git checkout --theirs docs/reference/changelog.md < /dev/null
+            python3 cicd_utils/cicd/scripts/add_changelog_entry.py "$number" "$title"
+            git add docs/reference/changelog.md
+            git commit --no-edit < /dev/null
+            git push origin "HEAD:$head_ref" < /dev/null
+          done <<< "$prs"

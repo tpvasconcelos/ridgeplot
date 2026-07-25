@@ -30,7 +30,7 @@ Unreleased changes
 - Bump actions/checkout from 6 to 7 ({gh-pr}`383`)
 - pre-commit autoupdate ({gh-pr}`379`)
 - Fix the test suite's compatibility with the latest pytest release ({gh-pr}`384`)
-- Automate bot PR maintenance: weekly grouped dependabot updates, automatic `skip news` labeling, and auto-merge once approved ({gh-pr}`385`)
+- Automate bot PR maintenance: weekly grouped dependabot updates, automated changelog entries, and auto-merge once approved ({gh-pr}`385`)
 - Use the official `astral-sh/setup-uv` action to install and cache `uv` in CI ({gh-pr}`386`)
 
 ---
