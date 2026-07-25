@@ -298,3 +298,20 @@ fig = ridgeplot(
 ```{raw} html
 :file: ../_static/charts/lincoln_weather_red_blue.html
 ```
+
+## Theming with Plotly templates
+
+Since `ridgeplot` is built on top of Plotly, you can also theme your ridgeline plots using [Plotly's figure templates](https://plotly.com/python/templates/). Simply pass the name of a registered template (or any other valid template representation) to the {py:paramref}`~ridgeplot.ridgeplot.template` parameter. For instance, taking the basic example from the top of this page and applying the `"plotly_dark"` template:
+
+```python
+fig = ridgeplot(samples=my_samples, template="plotly_dark")
+fig.show()
+```
+
+```{raw} html
+:file: ../_static/charts/basic_dark.html
+```
+
+:::{note}
+Unless a custom {py:paramref}`~ridgeplot.ridgeplot.colorscale` is specified, the default colorscale will also be inferred from the specified template.
+:::

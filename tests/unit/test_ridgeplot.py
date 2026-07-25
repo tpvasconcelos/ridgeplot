@@ -4,6 +4,7 @@ import re
 from typing import TYPE_CHECKING, Any
 
 import plotly.express as px
+import plotly.io as pio
 import pytest
 
 from ridgeplot import ridgeplot
@@ -196,6 +197,65 @@ def test_colorscale_invalid(invalid_colorscale: ColorScale | Collection[Color] |
         ValueError, match=r"Invalid value .* received for the 'colorscale' property"
     ):
         ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], colorscale=invalid_colorscale)
+
+
+# ==============================================================
+# ---  param: template
+# ==============================================================
+
+
+def test_template_is_applied_to_the_figure() -> None:
+    fig = ridgeplot(samples=[[[1, 2, 3], [4, 5, 6]]], template="plotly_dark")
+    assert fig.layout.template == pio.templates["plotly_dark"]
+
+
+def test_template_equivalent_representations() -> None:
+    samples = [[[1, 2, 3], [4, 5, 6]]]
+    template = pio.templates["seaborn"]
+    assert (
+        ridgeplot(samples=samples, template="seaborn") ==
+        ridgeplot(samples=samples, template=template) ==
+        ridgeplot(samples=samples, template=template.to_plotly_json())
+    )  # fmt: skip
+
+
+def test_template_default() -> None:
+    # Not specifying a template should be equivalent to
+    # specifying Plotly's current default template
+    samples = [[[1, 2, 3], [4, 5, 6]]]
+    assert (
+        ridgeplot(samples=samples) ==
+        ridgeplot(samples=samples, template=pio.templates.default or "plotly")
+    )  # fmt: skip
+
+
+def test_template_sets_default_colorscale() -> None:
+    # The default colorscale should be inferred from the
+    # template specified via the `template` argument
+    samples = [[[1, 2, 3], [4, 5, 6]]]
+    template = pio.templates["ggplot2"]
+    assert (
+        ridgeplot(samples=samples, template="ggplot2") ==
+        ridgeplot(
+            samples=samples,
+            template="ggplot2",
+            colorscale=template.layout.colorscale.sequential,
+        )
+    )  # fmt: skip
+
+
+def test_template_explicit_colorscale_takes_precedence() -> None:
+    fig = ridgeplot(
+        samples=[[[1, 2, 3], [4, 5, 6]]],
+        template="ggplot2",
+        colorscale=(
+            (0.0, "rgb(10, 10, 10)"),
+            (1.0, "rgb(20, 20, 20)"),
+        ),
+        colormode="trace-index",
+    )
+    assert fig.data[1].fillcolor == "rgb(20, 20, 20)"
+    assert fig.data[3].fillcolor == "rgb(10, 10, 10)"
 
 
 # ==============================================================

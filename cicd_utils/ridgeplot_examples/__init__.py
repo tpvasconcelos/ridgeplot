@@ -19,6 +19,12 @@ def load_basic() -> go.Figure:
     return main()
 
 
+def load_basic_dark() -> go.Figure:
+    from ._basic_dark import main
+
+    return main()
+
+
 def load_basic_hist() -> go.Figure:
     from ._basic_hist import main
 
@@ -45,6 +51,7 @@ def load_probly() -> go.Figure:
 
 ALL_EXAMPLES: list[Example] = [
     Example("basic", load_basic),
+    Example("basic_dark", load_basic_dark),
     Example("basic_hist", load_basic_hist),
     Example("lincoln_weather", load_lincoln_weather),
     Example("lincoln_weather_red_blue", load_lincoln_weather_red_blue),
