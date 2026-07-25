@@ -39,7 +39,11 @@ def test_bin_trace_samples_nbins(nbins: int) -> None:
     assert len(density_trace) == nbins
 
 
-@pytest.mark.parametrize("non_finite_value", [np.inf, np.nan, float("inf"), float("nan")])
+@pytest.mark.parametrize(
+    "non_finite_value",
+    [np.inf, np.nan, float("inf"), float("nan")],
+    ids=["np-inf", "np-nan", "float-inf", "float-nan"],
+)
 def test_bin_trace_samples_fails_for_non_finite_values(non_finite_value: float) -> None:
     err_msg = "The samples array should not contain any infs or NaNs."
     with pytest.raises(ValueError, match=err_msg):
@@ -64,7 +68,11 @@ def test_bin_trace_samples_weights_not_same_length() -> None:
         bin_trace_samples(trace_samples=SAMPLES_IN, nbins=NBINS, weights=[1, 1, 1])
 
 
-@pytest.mark.parametrize("non_finite_value", [np.inf, np.nan, float("inf"), float("nan")])
+@pytest.mark.parametrize(
+    "non_finite_value",
+    [np.inf, np.nan, float("inf"), float("nan")],
+    ids=["np-inf", "np-nan", "float-inf", "float-nan"],
+)
 def test_bin_trace_samples_weights_fails_for_non_finite_values(
     non_finite_value: float,
 ) -> None:
