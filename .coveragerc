@@ -17,7 +17,7 @@ src =
 [report]
 precision = 1
 show_missing = true
-skip_covered = false
+skip_covered = true
 fail_under = 50
 
 # Some of the patterns below were taken or adapted
@@ -36,6 +36,7 @@ exclude_lines =
     : \.\.\.(\s*#.*)?$
     ^ +\.\.\.$
     -> ['"]?NoReturn['"]?:
+    ^\s*assert_never\b
     # non-runnable code
     if __name__ == ['"]__main__['"]:$
 partial_branches =
