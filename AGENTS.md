@@ -209,7 +209,8 @@ def _coerce_to_densities(...):
 ## CI/CD Pipeline
 
 GitHub Actions runs tests on Python 3.10–3.14 across Ubuntu, macOS, and Windows.
-Codecov minimums are 98% overall and 100% diff coverage for new code.
+Codecov minimums are 100% overall and 100% diff coverage for new code.
+Intentionally-untested lines must carry an explicit `# pragma: no cover` comment.
 
 ## Notes for AI Assistants
 
