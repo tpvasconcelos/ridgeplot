@@ -13,7 +13,10 @@ PATH_CHARTS = PATH_ROOT / "docs/_static/charts"
 
 
 def test_paths_exist() -> None:
-    assert PATH_ROOT.name == "ridgeplot"
+    # Sanity check that PATH_ROOT points at the repo root, without
+    # depending on the name of the checkout directory (which differs
+    # in git worktrees and renamed clones)
+    assert (PATH_ROOT / "pyproject.toml").is_file()
     assert PATH_ARTIFACTS.is_dir()
     assert PATH_CHARTS.is_dir()
 

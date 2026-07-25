@@ -44,7 +44,7 @@ class TestGetXYExtrema:
 
     @pytest.mark.parametrize(
         ("densities_type", "rows_type"),
-        product((id_func, tuple, list), (id_func, tuple, list, np.asarray)),
+        list(product((id_func, tuple, list), (id_func, tuple, list, np.asarray))),
     )
     def test_expected_output(
         self,
