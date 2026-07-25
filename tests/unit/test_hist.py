@@ -63,6 +63,8 @@ def test_float_samples_binning() -> None:
 def test_output_length_matches_nbins(nbins: int) -> None:
     result = bin_trace_samples([1, 2, 3, 4, 5], nbins=nbins)
     assert len(result) == nbins
+
+
 @pytest.mark.parametrize(
     "non_finite_value",
     [np.inf, np.nan, float("inf"), float("nan")],
