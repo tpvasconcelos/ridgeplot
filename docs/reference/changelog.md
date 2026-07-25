@@ -13,6 +13,10 @@ Unreleased changes
 
 - Add a section on theming with Plotly templates to the getting started guide ({gh-pr}`389`)
 
+### Developer Experience
+
+- Migrate all development dependencies from `requirements/*.txt` files to PEP 735 dependency groups in `pyproject.toml` ({gh-pr}`388`)
+
 ### CI/CD
 
 - Review the coverage configuration in light of `covdefaults`, adopting its `assert_never` exclusion and `skip_covered` report setting, and raising all package coverage gates to 100% ({gh-pr}`390`)
