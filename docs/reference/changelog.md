@@ -35,6 +35,7 @@ Unreleased changes
 - pre-commit autoupdate ({gh-pr}`379`)
 - Fix the test suite's compatibility with the latest pytest release ({gh-pr}`384`)
 - Use the official `astral-sh/setup-uv` action to install and cache `uv` in CI ({gh-pr}`386`)
+- Let `uv` manage the Python interpreter and virtual environment in CI ({gh-pr}`393`)
 
 ---
 
