@@ -74,7 +74,7 @@ details."""
 PlotlyTemplate: TypeAlias = go.layout.Template | dict[str, Any] | str
 """A Plotly figure template can be represented by a
 :class:`plotly.graph_objects.layout.Template <plotly.graph_objs.layout.Template>`
-object, a dictionary with a template's properties, or the name of a registered
+instance, a dictionary with a template's properties, or the name of a registered
 template (e.g., ``"plotly_dark"``).
 
 See `Plotly's theming and templates guide

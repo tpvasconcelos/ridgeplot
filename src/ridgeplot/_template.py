@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 def validate_coerce_template(template: PlotlyTemplate | None) -> go.layout.Template | None:
     """Convert mixed template representations into a
     :class:`plotly.graph_objects.layout.Template
-    <plotly.graph_objs.layout.Template>` object.
+    <plotly.graph_objs.layout.Template>` instance.
 
     ``None`` is passed through as-is, meaning that no template has been
     specified and that Plotly's current default template should be used.

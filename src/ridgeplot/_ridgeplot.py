@@ -403,7 +403,7 @@ def ridgeplot(
         The Plotly template to use in this figure. This can be the name of a
         registered template (e.g., ``"plotly_dark"``), a
         :class:`plotly.graph_objects.layout.Template
-        <plotly.graph_objs.layout.Template>` object, or a dictionary with a
+        <plotly.graph_objs.layout.Template>` instance, or a dictionary with a
         template's properties. See `Plotly's theming and templates guide`_
         for more details. If not specified (default), the plot will be
         rendered using Plotly's current default template (i.e.,
