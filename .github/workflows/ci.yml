@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-python
         with:
           python-version: "3.10"
@@ -68,7 +68,7 @@ jobs:
       DIFF_AGAINST: HEAD
     timeout-minutes: 8
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           # TODO: This can be very expensive for large repos. Is there a better way to do this?
           # Fetch all history and tags for setuptools_scm to work
@@ -104,7 +104,7 @@ jobs:
       # Upload coverage reports to Codecov
 
       - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         env:
           OS: "${{ matrix.os }}"
           PYTHON: "${{ matrix.python-version }}"
