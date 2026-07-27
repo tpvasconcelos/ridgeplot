@@ -30,7 +30,10 @@
 #
 # Security: this workflow runs on pull_request_target with write
 # permissions, but only ever acts on same-repository PRs opened by
-# trusted bots, and never executes code from the PR branch.
+# trusted bots, and never executes code from the PR branches: both jobs
+# run the changelog helper script from a checkout of the main branch
+# (which is also where this workflow definition itself is taken from),
+# only ever treating the PR branches' content as data.
 #
 name: Bot PRs
 
@@ -59,27 +62,44 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Note: this checks out the *base* branch (main), not the PR branch,
+      # so that the changelog helper script executed below always comes
+      # from trusted code and never from the PR branch.
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ secrets.AUTO_MERGE_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Add changelog entry and push
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_TITLE: ${{ github.event.pull_request.title }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           python3 -m pip install --quiet markdown-it-py
-          python3 cicd_utils/cicd/scripts/add_changelog_entry.py "$PR_NUMBER" "$PR_TITLE"
-          if git diff --quiet -- docs/reference/changelog.md; then
+
+          # Apply the (trusted, from main) helper script to the PR
+          # branch's version of the changelog
+          git fetch origin "$HEAD_REF"
+          git show FETCH_HEAD:docs/reference/changelog.md > "$RUNNER_TEMP/changelog.md"
+          cp "$RUNNER_TEMP/changelog.md" "$RUNNER_TEMP/changelog.orig.md"
+          python3 cicd_utils/cicd/scripts/add_changelog_entry.py "$PR_NUMBER" "$PR_TITLE" \
+            --changelog "$RUNNER_TEMP/changelog.md"
+          if cmp -s "$RUNNER_TEMP/changelog.md" "$RUNNER_TEMP/changelog.orig.md"; then
             echo "Changelog entry already present; nothing to do."
             exit 0
           fi
+
+          # Commit the updated changelog on top of the PR branch. This
+          # materializes the bot's tree in the working directory, but no
+          # code from it is ever executed (do not add steps below that
+          # run anything from the working tree!).
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$HEAD_REF" FETCH_HEAD
+          cp "$RUNNER_TEMP/changelog.md" docs/reference/changelog.md
           git add docs/reference/changelog.md
           git commit -m "Add changelog entry for #${PR_NUMBER}"
-          git push
+          git push origin "HEAD:$HEAD_REF"
 
   automerge:
     name: Enable auto-merge
@@ -123,6 +143,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python3 -m pip install --quiet markdown-it-py
 
+          # Stash a trusted copy of the helper script (we're on main here)
+          # so that we never execute code from the PR branches that get
+          # checked out in the loop below
+          cp cicd_utils/cicd/scripts/add_changelog_entry.py "$RUNNER_TEMP/add_changelog_entry.py"
+
           prs=$(
             gh pr list --author 'app/dependabot' --json number,headRefName,title --jq '.[] | [.number, .headRefName, .title] | @tsv'
             gh pr list --author 'app/pre-commit-ci' --json number,headRefName,title --jq '.[] | [.number, .headRefName, .title] | @tsv'
@@ -160,7 +185,8 @@ jobs:
             # Resolve the changelog conflict by taking main's version
             # and re-generating this PR's changelog entry on top of it
             git checkout --theirs docs/reference/changelog.md < /dev/null
-            python3 cicd_utils/cicd/scripts/add_changelog_entry.py "$number" "$title"
+            python3 "$RUNNER_TEMP/add_changelog_entry.py" "$number" "$title" \
+              --changelog docs/reference/changelog.md
             git add docs/reference/changelog.md
             git commit --no-edit < /dev/null
             git push origin "HEAD:$head_ref" < /dev/null
