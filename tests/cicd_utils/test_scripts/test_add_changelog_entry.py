@@ -36,7 +36,7 @@ def test_format_entry(pr_number: int, pr_title: str, expected: str) -> None:
     assert format_entry(pr_number, pr_title) == expected
 
 
-CHANGELOG_WITH_CICD_SUBSECTION = """\
+CHANGELOG_WITH_DEPS_SUBSECTION = """\
 # Release Notes
 
 Intro paragraph...
@@ -44,7 +44,7 @@ Intro paragraph...
 Unreleased changes
 ------------------
 
-### CI/CD
+### Dependencies
 
 - Old entry ({gh-pr}`100`)
 
@@ -56,7 +56,7 @@ Unreleased changes
 - Old release change ({gh-pr}`99`)
 """
 
-EXPECTED_WITH_CICD_SUBSECTION = """\
+EXPECTED_WITH_DEPS_SUBSECTION = """\
 # Release Notes
 
 Intro paragraph...
@@ -64,10 +64,10 @@ Intro paragraph...
 Unreleased changes
 ------------------
 
-### CI/CD
+### Dependencies
 
-- Old entry ({gh-pr}`100`)
 - Bump foo from 1 to 2 ({gh-pr}`123`)
+- Old entry ({gh-pr}`100`)
 
 ---
 
@@ -77,7 +77,7 @@ Unreleased changes
 - Old release change ({gh-pr}`99`)
 """
 
-CHANGELOG_WITHOUT_CICD_SUBSECTION = """\
+CHANGELOG_WITHOUT_DEPS_SUBSECTION = """\
 # Release Notes
 
 Unreleased changes
@@ -95,7 +95,7 @@ Unreleased changes
 - Old release change ({gh-pr}`99`)
 """
 
-EXPECTED_WITHOUT_CICD_SUBSECTION = """\
+EXPECTED_WITHOUT_DEPS_SUBSECTION = """\
 # Release Notes
 
 Unreleased changes
@@ -105,7 +105,7 @@ Unreleased changes
 
 - Fix something ({gh-pr}`101`)
 
-### CI/CD
+### Dependencies
 
 - Bump foo from 1 to 2 ({gh-pr}`123`)
 
@@ -136,7 +136,7 @@ Intro paragraph...
 Unreleased changes
 ------------------
 
-### CI/CD
+### Dependencies
 
 - Bump foo from 1 to 2 ({gh-pr}`123`)
 
@@ -162,7 +162,7 @@ Intro paragraph...
 Unreleased changes
 ------------------
 
-### CI/CD
+### Dependencies
 
 - Bump foo from 1 to 2 ({gh-pr}`123`)
 
@@ -175,7 +175,7 @@ CHANGELOG_WITH_TRAILING_SUBSECTION = """\
 Unreleased changes
 ------------------
 
-### CI/CD
+### Dependencies
 
 - Old entry ({gh-pr}`100`)
 
@@ -190,10 +190,10 @@ EXPECTED_WITH_TRAILING_SUBSECTION = """\
 Unreleased changes
 ------------------
 
-### CI/CD
+### Dependencies
 
-- Old entry ({gh-pr}`100`)
 - Bump foo from 1 to 2 ({gh-pr}`123`)
+- Old entry ({gh-pr}`100`)
 
 ### Documentation
 
@@ -217,7 +217,7 @@ Unreleased changes
 
 - Loose entry ({gh-pr}`100`)
 
-### CI/CD
+### Dependencies
 
 - Bump foo from 1 to 2 ({gh-pr}`123`)
 """
@@ -227,7 +227,7 @@ CHANGELOG_WITH_ATX_HEADINGS = """\
 
 ## Unreleased changes
 
-### CI/CD
+### Dependencies
 
 - Old entry ({gh-pr}`100`)
 
@@ -243,10 +243,10 @@ EXPECTED_WITH_ATX_HEADINGS = """\
 
 ## Unreleased changes
 
-### CI/CD
+### Dependencies
 
-- Old entry ({gh-pr}`100`)
 - Bump foo from 1 to 2 ({gh-pr}`123`)
+- Old entry ({gh-pr}`100`)
 
 ---
 
@@ -255,13 +255,13 @@ EXPECTED_WITH_ATX_HEADINGS = """\
 - Old release change ({gh-pr}`99`)
 """
 
-CHANGELOG_WITH_EMPTY_CICD_SUBSECTION = """\
+CHANGELOG_WITH_EMPTY_DEPS_SUBSECTION = """\
 # Release Notes
 
 Unreleased changes
 ------------------
 
-### CI/CD
+### Dependencies
 
 ---
 
@@ -271,13 +271,13 @@ Unreleased changes
 - Old release change ({gh-pr}`99`)
 """
 
-EXPECTED_WITH_EMPTY_CICD_SUBSECTION = """\
+EXPECTED_WITH_EMPTY_DEPS_SUBSECTION = """\
 # Release Notes
 
 Unreleased changes
 ------------------
 
-### CI/CD
+### Dependencies
 
 - Bump foo from 1 to 2 ({gh-pr}`123`)
 
@@ -315,7 +315,7 @@ Unreleased changes
 
 - Fix something ({gh-pr}`101`)
 
-### CI/CD
+### Dependencies
 
 - Bump foo from 1 to 2 ({gh-pr}`123`)
 
@@ -325,30 +325,128 @@ Unreleased changes
 - Old release change ({gh-pr}`99`)
 """
 
+CHANGELOG_WITH_UNSORTED_ENTRIES = """\
+# Release Notes
+
+Unreleased changes
+------------------
+
+### Dependencies
+
+- pre-commit autoupdate ({gh-pr}`102`)
+- Bump zebra from 3 to 4 ({gh-pr}`101`)
+- Bump apple from 1 to 2 ({gh-pr}`100`)
+
+---
+"""
+
+EXPECTED_WITH_UNSORTED_ENTRIES = """\
+# Release Notes
+
+Unreleased changes
+------------------
+
+### Dependencies
+
+- Bump apple from 1 to 2 ({gh-pr}`100`)
+- Bump foo from 1 to 2 ({gh-pr}`123`)
+- Bump zebra from 3 to 4 ({gh-pr}`101`)
+- pre-commit autoupdate ({gh-pr}`102`)
+
+---
+"""
+
+CHANGELOG_WITH_MULTILINE_ITEM = """\
+# Release Notes
+
+Unreleased changes
+------------------
+
+### Dependencies
+
+- Bump zebra from 3 to 4 ({gh-pr}`101`)
+  (this bump includes breaking changes)
+- Bump apple from 1 to 2 ({gh-pr}`100`)
+
+---
+"""
+
+EXPECTED_WITH_MULTILINE_ITEM = """\
+# Release Notes
+
+Unreleased changes
+------------------
+
+### Dependencies
+
+- Bump apple from 1 to 2 ({gh-pr}`100`)
+- Bump foo from 1 to 2 ({gh-pr}`123`)
+- Bump zebra from 3 to 4 ({gh-pr}`101`)
+  (this bump includes breaking changes)
+
+---
+"""
+
+CHANGELOG_WITH_LOOSE_LIST = """\
+# Release Notes
+
+Unreleased changes
+------------------
+
+### Dependencies
+
+- Bump zebra from 3 to 4 ({gh-pr}`101`)
+
+- Bump apple from 1 to 2 ({gh-pr}`100`)
+
+---
+"""
+
+EXPECTED_WITH_LOOSE_LIST = """\
+# Release Notes
+
+Unreleased changes
+------------------
+
+### Dependencies
+
+- Bump apple from 1 to 2 ({gh-pr}`100`)
+- Bump foo from 1 to 2 ({gh-pr}`123`)
+- Bump zebra from 3 to 4 ({gh-pr}`101`)
+
+---
+"""
+
 
 @pytest.mark.parametrize(
     ("changelog_content", "expected_content"),
     [
-        (CHANGELOG_WITH_CICD_SUBSECTION, EXPECTED_WITH_CICD_SUBSECTION),
-        (CHANGELOG_WITHOUT_CICD_SUBSECTION, EXPECTED_WITHOUT_CICD_SUBSECTION),
+        (CHANGELOG_WITH_DEPS_SUBSECTION, EXPECTED_WITH_DEPS_SUBSECTION),
+        (CHANGELOG_WITHOUT_DEPS_SUBSECTION, EXPECTED_WITHOUT_DEPS_SUBSECTION),
         (CHANGELOG_WITHOUT_UNRELEASED_SECTION, EXPECTED_WITHOUT_UNRELEASED_SECTION),
         (CHANGELOG_WITHOUT_ANY_SECTIONS, EXPECTED_WITHOUT_ANY_SECTIONS),
         (CHANGELOG_WITH_TRAILING_SUBSECTION, EXPECTED_WITH_TRAILING_SUBSECTION),
         (CHANGELOG_WITH_LOOSE_ENTRIES, EXPECTED_WITH_LOOSE_ENTRIES),
         (CHANGELOG_WITH_ATX_HEADINGS, EXPECTED_WITH_ATX_HEADINGS),
-        (CHANGELOG_WITH_EMPTY_CICD_SUBSECTION, EXPECTED_WITH_EMPTY_CICD_SUBSECTION),
+        (CHANGELOG_WITH_EMPTY_DEPS_SUBSECTION, EXPECTED_WITH_EMPTY_DEPS_SUBSECTION),
         (CHANGELOG_WITHOUT_THEMATIC_BREAK, EXPECTED_WITHOUT_THEMATIC_BREAK),
+        (CHANGELOG_WITH_UNSORTED_ENTRIES, EXPECTED_WITH_UNSORTED_ENTRIES),
+        (CHANGELOG_WITH_MULTILINE_ITEM, EXPECTED_WITH_MULTILINE_ITEM),
+        (CHANGELOG_WITH_LOOSE_LIST, EXPECTED_WITH_LOOSE_LIST),
     ],
     ids=[
-        "existing-cicd-subsection",
-        "missing-cicd-subsection",
+        "existing-deps-subsection",
+        "missing-deps-subsection",
         "missing-unreleased-section",
         "missing-any-sections",
         "trailing-subsection",
         "loose-entries",
         "atx-headings",
-        "empty-cicd-subsection",
+        "empty-deps-subsection",
         "missing-thematic-break",
+        "unsorted-existing-entries",
+        "multi-line-item",
+        "loose-list-items",
     ],
 )
 def test_add_changelog_entry(changelog_content: str, expected_content: str, tmp_path: Path) -> None:
@@ -359,6 +457,23 @@ def test_add_changelog_entry(changelog_content: str, expected_content: str, tmp_
     )
     assert changed is True
     assert changelog_path.read_text() == expected_content
+
+
+def test_add_changelog_entry_sorts_case_insensitively(tmp_path: Path) -> None:
+    # With a case-sensitive sort, "Update ..." (uppercase "U") would
+    # wrongly sort before "pre-commit ..." (lowercase "p")
+    changelog_path = tmp_path / "changelog.md"
+    changelog_path.write_text(
+        CHANGELOG_WITH_DEPS_SUBSECTION.replace("Old entry", "pre-commit autoupdate")
+    )
+    changed = add_changelog_entry(
+        changelog=changelog_path, pr_number=123, pr_title="Update foo to v2"
+    )
+    assert changed is True
+    text = changelog_path.read_text()
+    pre_commit_entry = "- pre-commit autoupdate ({gh-pr}`100`)"
+    update_entry = "- Update foo to v2 ({gh-pr}`123`)"
+    assert text.index(pre_commit_entry) < text.index(update_entry)
 
 
 def test_add_changelog_entry_to_real_changelog(tmp_path: Path) -> None:
@@ -379,17 +494,17 @@ def test_add_changelog_entry_to_real_changelog(tmp_path: Path) -> None:
 
 def test_add_changelog_entry_is_idempotent(tmp_path: Path) -> None:
     changelog_path = tmp_path / "changelog.md"
-    changelog_path.write_text(CHANGELOG_WITH_CICD_SUBSECTION)
+    changelog_path.write_text(CHANGELOG_WITH_DEPS_SUBSECTION)
     changed = add_changelog_entry(
         changelog=changelog_path, pr_number=100, pr_title="Some already mentioned PR"
     )
     assert changed is False
-    assert changelog_path.read_text() == CHANGELOG_WITH_CICD_SUBSECTION
+    assert changelog_path.read_text() == CHANGELOG_WITH_DEPS_SUBSECTION
 
 
 def test_main(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     changelog_path = tmp_path / "changelog.md"
-    changelog_path.write_text(CHANGELOG_WITH_CICD_SUBSECTION)
+    changelog_path.write_text(CHANGELOG_WITH_DEPS_SUBSECTION)
     monkeypatch.setattr(
         "sys.argv",
         [
@@ -401,4 +516,4 @@ def test_main(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         ],
     )
     main()
-    assert changelog_path.read_text() == EXPECTED_WITH_CICD_SUBSECTION
+    assert changelog_path.read_text() == EXPECTED_WITH_DEPS_SUBSECTION

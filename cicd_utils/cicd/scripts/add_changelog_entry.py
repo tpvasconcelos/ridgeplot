@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 """Add a changelog entry for a given pull request.
 
-Inserts a ``- <title> ({gh-pr}`<number>`)`` entry into the ``### CI/CD``
+Inserts a ``- <title> ({gh-pr}`<number>`)`` entry into the ``### Dependencies``
 subsection of the ``Unreleased changes`` section of the changelog, creating
-the subsection (or the whole section) if it doesn't exist yet.
+the subsection (or the whole section) if it doesn't exist yet. The
+subsection's entries are kept sorted alphabetically: the whole list is
+re-sorted on every insertion, which also repairs any pre-existing ordering
+violations (e.g., from manual edits).
 
 The changelog's structure is discovered with ``markdown-it-py`` (using the
 tokens' source line maps), while the actual edit is a surgical line splice.
@@ -37,7 +40,7 @@ PATH_ROOT_DIR = Path(__file__).parents[3]
 PATH_TO_CHANGELOG = PATH_ROOT_DIR.joinpath("docs/reference/changelog.md")
 
 UNRELEASED_HEADING = "Unreleased changes"
-CICD_HEADING = "CI/CD"
+DEPS_HEADING = "Dependencies"
 
 # Known bot prefixes that should be stripped from PR titles to
 # match the changelog's entry conventions (e.g., the convention
@@ -93,7 +96,7 @@ def _new_unreleased_section(entry: str) -> list[str]:
         UNRELEASED_HEADING,
         "-" * len(UNRELEASED_HEADING),
         "",
-        f"### {CICD_HEADING}",
+        f"### {DEPS_HEADING}",
         "",
         entry,
         "",
@@ -116,26 +119,68 @@ def _insert_unreleased_section(lines: list[str], tokens: list[Token], entry: str
     return [*lines, *_new_unreleased_section(entry)]
 
 
-def _find_cicd_insertion(tokens: list[Token], start: int, end: int) -> int | None:
-    """Find the source line at which to insert an entry into the '### CI/CD' subsection.
+def _find_deps_subsection(tokens: list[Token], start: int, end: int) -> tuple[int, int] | None:
+    """Find the (start, end) token index range of the '### Dependencies' subsection.
 
-    Returns the line right after the subsection's last bullet list (or right
-    after its heading, if it contains no list yet), or :data:`None` if the
+    ``start`` points at the subsection's ``heading_open`` token and ``end``
+    at the next subsection's ``heading_open`` token, the section's trailing
+    thematic break, or the end of the section. Returns :data:`None` if the
     subsection doesn't exist.
     """
-    insert_at = None
+    sub_start = None
     for i in range(start, end):
         token = tokens[i]
         if token.type == "heading_open":
-            if insert_at is not None:
-                break  # reached the next subsection
-            if _is_heading(tokens, i, tag="h3", text=CICD_HEADING):
-                insert_at = _token_lines(token)[1]
-        elif insert_at is not None and token.type == "hr":
-            break  # reached the section's trailing thematic break
-        elif insert_at is not None and token.type == "bullet_list_open" and token.level == 0:
-            insert_at = _token_lines(token)[1]
-    return insert_at
+            if sub_start is not None:
+                return sub_start, i
+            if _is_heading(tokens, i, tag="h3", text=DEPS_HEADING):
+                sub_start = i
+        elif sub_start is not None and token.type == "hr":
+            return sub_start, i
+    if sub_start is None:
+        return None
+    return sub_start, end
+
+
+def _insert_entry_into_subsection(
+    lines: list[str], tokens: list[Token], sub_start: int, sub_end: int, entry: str
+) -> list[str]:
+    """Insert the entry into the subsection's bullet list, keeping it sorted.
+
+    All of the subsection's list items are re-sorted alphabetically as a
+    whole, which also repairs any pre-existing ordering violations. Each
+    item's source lines are moved as one block, so that multi-line entries
+    (continuation lines, nested lists, etc.) are preserved intact.
+    """
+    blocks: list[list[str]] = []
+    span_start = span_end = None
+    for i in range(sub_start, sub_end):
+        token = tokens[i]
+        if token.type != "list_item_open" or token.level != 1:
+            continue  # only consider items of top-level bullet lists
+        item_start, item_end = _token_lines(token)
+        block = lines[item_start:item_end]
+        # An item's line map may extend over trailing blank lines
+        # (e.g., in loose lists); strip them so that the re-assembled
+        # list is a tight, contiguous block of entries
+        while block and not block[-1].strip():
+            block.pop()
+        blocks.append(block)
+        if span_start is None:
+            span_start = item_start
+        span_end = item_end
+    if span_start is None or span_end is None:
+        # No bullet list yet: insert right after the subsection's heading,
+        # keeping a blank line between the heading and the first entry
+        insert_at = _token_lines(tokens[sub_start])[1]
+        return [*lines[:insert_at], "", entry, *lines[insert_at:]]
+    # Walk back over any trailing blank lines covered by the last item's map
+    while span_end > span_start and not lines[span_end - 1].strip():
+        span_end -= 1
+    blocks.append([entry])
+    blocks.sort(key=lambda block: block[0].casefold())
+    sorted_lines = [line for block in blocks for line in block]
+    return [*lines[:span_start], *sorted_lines, *lines[span_end:]]
 
 
 def _find_subsection_insertion(tokens: list[Token], start: int, end: int, n_lines: int) -> int:
@@ -165,19 +210,16 @@ def add_changelog_entry(changelog: Path, pr_number: int, pr_title: str) -> bool:
         lines = _insert_unreleased_section(lines, tokens, entry)
     else:
         start, end = section
-        insert_at = _find_cicd_insertion(tokens, start, end)
-        if insert_at is None:
+        subsection = _find_deps_subsection(tokens, start, end)
+        if subsection is None:
             insert_at = _find_subsection_insertion(tokens, start, end, len(lines))
-            new_lines = ["", f"### {CICD_HEADING}", "", entry]
+            # Walk back over any blank lines
+            while insert_at > 0 and not lines[insert_at - 1].strip():
+                insert_at -= 1
+            lines[insert_at:insert_at] = ["", f"### {DEPS_HEADING}", "", entry]
         else:
-            new_lines = [entry]
-        # Walk back over any blank lines
-        while insert_at > 0 and not lines[insert_at - 1].strip():
-            insert_at -= 1
-        if new_lines == [entry] and lines[insert_at - 1].lstrip().startswith("#"):
-            # Keep a blank line between a heading and the first entry
-            new_lines = ["", entry]
-        lines[insert_at:insert_at] = new_lines
+            sub_start, sub_end = subsection
+            lines = _insert_entry_into_subsection(lines, tokens, sub_start, sub_end, entry)
 
     while lines and not lines[-1].strip():
         lines.pop()
