@@ -7,31 +7,31 @@ inputs:
     description: "Python version (e.g. '3.7', '3.8.13', '3.11.0-alpha.1', '3.x')."
     required: true
   requirements:
-    description: "Optional list of arguments passed to `uv pip install` (e.g. 'numpy==1.19.5', '-r requirements.txt')."
+    description: "Optional list of arguments passed to `uv pip install` (e.g. 'tox', 'numpy==1.19.5')."
     required: false
 
 runs:
   using: composite
   steps:
-    - uses: actions/setup-python@v5
-      with:
-        python-version: "${{ inputs.python-version }}"
-
-    # Install uv and enable its built-in cache. The cache key takes the
-    # platform, the uv version, and a hash of the files below into account.
+    # Install uv together with a uv-managed Python interpreter, and
+    # create and activate a virtual environment that is used by all
+    # subsequent steps (e.g. the `uv pip install` step below installs
+    # into it). Also enables uv's built-in cache. The cache key takes
+    # the platform, the uv version, and a hash of pyproject.toml
+    # into account.
     # See https://docs.astral.sh/uv/guides/integration/github/ for details.
     # NOTE: setup-uv publishes immutable releases only (no
     #       floating major tags), so we pin the full version
-    - name: Install uv
+    - name: Install uv and python
       uses: astral-sh/setup-uv@v9.0.0
       with:
+        python-version: "${{ inputs.python-version }}"
+        activate-environment: true
         enable-cache: true
         cache-suffix: "py${{ inputs.python-version }}"
-        cache-dependency-glob: |
-          pyproject.toml
-          requirements/*.txt
+        cache-dependency-glob: pyproject.toml
 
     - name: Install requirements
       if: ${{ inputs.requirements != '' }}
       shell: bash
-      run: uv pip install --verbose --system ${{ inputs.requirements }}
+      run: uv pip install --verbose ${{ inputs.requirements }}

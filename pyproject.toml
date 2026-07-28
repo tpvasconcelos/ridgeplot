@@ -52,6 +52,105 @@ Documentation = "https://ridgeplot.readthedocs.io/en/stable/"
 "Issue Tracker" = "https://github.com/tpvasconcelos/ridgeplot/issues"
 Changelog = "https://ridgeplot.readthedocs.io/en/stable/reference/changelog.html"
 
+# Development dependencies (PEP 735 dependency groups)
+# These are not included in the built distributions and can be
+# installed with e.g. `uv pip install --group local-dev`
+[dependency-groups]
+cicd_utils = [
+    # ./cicd_utils/ridgeplot_examples/_base.py
+    "minify-html",
+    # TODO: unpin after 1.0.0 (https://github.com/plotly/Kaleido/issues/226)
+    # NOTE: 0.2.1.post1 is excluded because it only ships a
+    #       manylinux2014_armv7l wheel, which breaks universal
+    #       (multi-platform) resolution with `uv sync`/`uv lock`
+    "kaleido<0.4,!=0.2.1.post1",
+    # ./cicd_utils/cicd/scripts/extract_latest_release_notes.py
+    # ./cicd_utils/cicd/scripts/add_changelog_entry.py (markdown-it-py only)
+    "markdown-it-py",
+    "mdit-py-plugins",
+    "mdformat",
+    "mdformat-footnote",
+]
+tests = [
+    # pytest and plugins
+    # (pytest>=9 is needed for the `strict` config option set in pytest.ini)
+    "pytest>=9",
+    "pytest-icdiff",
+    "pytest-socket",
+    # Coverage
+    "diff-cover",
+    "pytest-cov",
+    # `cicd_utils` requirements also need to be
+    # installed in order to test these utilities
+    { include-group = "cicd_utils" },
+]
+docs = [
+    # Depends on `cicd_utils`
+    { include-group = "cicd_utils" },
+    # Sphinx dependencies
+    "furo",
+    "jinja2",
+    "myst-parser>=0.19.0",
+    "sphinx",
+    "sphinx-autobuild",
+    "sphinx-autodoc-typehints",
+    "sphinx-copybutton",
+    "sphinx-inline-tabs",
+    "sphinx-notfound-page",
+    "sphinx-paramlinks",
+    "sphinx-remove-toctrees",
+    "sphinx-sitemap",
+    "sphinx-togglebutton",
+    "sphinx-toolbox",
+    "sphinx_design",
+    "sphinx_thebe",
+    "sphinxcontrib-apidoc",
+    "sphinxext-opengraph",
+    # matplotlib is used to generate social cards
+    "matplotlib",
+    # Cleanup generated files
+    "pre_commit_hooks",
+]
+typing = [
+    # pyright
+    "pyright",
+    # Third-party stubs
+    "types-python-dateutil",
+    "types-pytz",
+    "types-PyYAML",
+    "types-requests",
+    "types-tqdm",
+    "pandas-stubs",
+    # These seem to bring more problems than they solve for now... 👇
+    # "plotly-stubs",
+    # pyright also needs to inherit other environment dependencies in
+    # order to correctly infer types for code in tests, docs, etc.
+    { include-group = "cicd_utils" },
+    { include-group = "docs" },
+    { include-group = "tests" },
+]
+local-dev = [
+    # build dependencies
+    "setuptools>=64",
+    "setuptools-scm>=8",
+    # Tox
+    "tox",
+    # pre-commit
+    "pre-commit",
+    # Releases are still a manual process that
+    # requires the use of bumpversion locally
+    "bumpversion",
+    # Various useful utilities for local development
+    "ipython",
+    "pipdeptree",
+    "ptpython",
+    # And everything else...
+    { include-group = "cicd_utils" },
+    { include-group = "docs" },
+    { include-group = "typing" },
+    { include-group = "tests" },
+]
+
 # TODO: Update config based on:
 #       https://setuptools.pypa.io/en/latest/userguide/datafiles.html#subdirectory-for-data-files
 #[tool.setuptools.package-data]

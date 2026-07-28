@@ -13,6 +13,10 @@ Unreleased changes
 
 - Add a section on theming with Plotly templates to the getting started guide ({gh-pr}`389`)
 
+### Developer Experience
+
+- Migrate all development dependencies from `requirements/*.txt` files to PEP 735 dependency groups in `pyproject.toml` ({gh-pr}`388`)
+
 ### CI/CD
 
 - Review the coverage configuration in light of `covdefaults`, adopting its `assert_never` exclusion and `skip_covered` report setting, and raising all package coverage gates to 100% ({gh-pr}`390`)
@@ -32,6 +36,8 @@ Unreleased changes
 - Fix the test suite's compatibility with the latest pytest release ({gh-pr}`384`)
 - Automate bot PR maintenance: weekly grouped dependabot updates, automated changelog entries, and auto-merge once approved ({gh-pr}`385`)
 - Use the official `astral-sh/setup-uv` action to install and cache `uv` in CI ({gh-pr}`386`)
+- Let `uv` manage the Python interpreter and virtual environment in CI ({gh-pr}`393`)
+- Remove the stale `requirements/*.txt` glob from the CI cache key, left over from the migration to PEP 735 dependency groups ({gh-pr}`394`)
 
 ---
 

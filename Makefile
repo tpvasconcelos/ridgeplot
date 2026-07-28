@@ -65,7 +65,7 @@ $(VENV_PATH): | _check-sys ## create a virtual environment
 .PHONY: install
 install: $(VENV_PATH) ## install all local development dependencies
 	@echo "==> Installing local development requirements..."
-	@uv pip install $(_UV_OFFLINE_ARG) --upgrade -r requirements/local-dev.txt
+	@uv pip install $(_UV_OFFLINE_ARG) --upgrade --editable . --group local-dev
 	@if [ $(OFFLINE) -eq 0 ]; then \
 		echo "==> Installing pre-commit hooks..."; \
 		$(VENV_BIN)/pre-commit install --install-hooks; \
