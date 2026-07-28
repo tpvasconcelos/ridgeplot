@@ -152,6 +152,33 @@ def test_nbins() -> None:
 
 
 # ==============================================================
+# ---  param: sample_weights
+# ==============================================================
+
+
+@pytest.mark.parametrize("nbins", [None, 3], ids=["kde", "hist"])
+def test_empty_samples(nbins: int | None) -> None:
+    with pytest.raises(ValueError, match=re.escape("The samples array should not be empty.")):
+        ridgeplot(samples=[[[]]], nbins=nbins)
+
+
+@pytest.mark.parametrize("nbins", [None, 3], ids=["kde", "hist"])
+@pytest.mark.parametrize(
+    ("sample_weights", "err_msg"),
+    [
+        ([-1, 1, 1], "The weights array should not contain negative values."),
+        ([0, 0, 0], "The weights array should not be all zeros."),
+    ],
+    ids=["negative", "all_zeros"],
+)
+def test_invalid_sample_weights(
+    nbins: int | None, sample_weights: list[float], err_msg: str
+) -> None:
+    with pytest.raises(ValueError, match=re.escape(err_msg)):
+        ridgeplot(samples=[[1, 2, 3]], nbins=nbins, sample_weights=sample_weights)
+
+
+# ==============================================================
 # ---  param: colorscale
 # ==============================================================
 

@@ -266,9 +266,20 @@ def ridgeplot(
         .. versionadded:: 0.3.0
 
     sample_weights : SampleWeightsArray or ShallowSampleWeightsArray or SampleWeights or None
-        An (optional) array of KDE weights corresponding to each sample. The
-        weights should have the same shape as the samples array. If not
-        specified (default), all samples will be weighted equally.
+        An (optional) array of weights corresponding to each sample. The
+        weights are used by both density estimation methods (i.e., KDE and
+        histogram binning). If not specified (default), all samples will be
+        weighted equally. The following forms are accepted:
+
+        - A single flat array of weights, which will be broadcast to all
+          traces in the :paramref:`.samples` array. This requires all traces
+          to have the same number of samples as there are weights.
+        - A shallow array of weights with one entry per row, where each entry
+          is either a flat array of weights or ``None``. Each entry will be
+          applied to all traces in the corresponding row.
+        - A full (nested) array of weights with the same shape as the
+          :paramref:`.samples` array, specifying the weights for each trace
+          individually.
 
     norm : NormalisationOption or None
         The normalisation option to use when normalising the densities. If not

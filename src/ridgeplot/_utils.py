@@ -232,14 +232,19 @@ def normalise_row_attrs(
     Raises
     ------
     ValueError
-        If the number of traces does not match the number of attributes for a
-        row.
+        If the number of rows in ``attrs`` does not match the number of rows
+        in ``l2_target``, or if the number of traces does not match the number
+        of attributes for a row.
 
     Examples
     --------
     >>> densities = [[[(0, 0), (1, 1), (2, 0)]]]  # Single row, single trace
     >>> normalise_row_attrs(["A"], densities)
     [['A']]
+    >>> normalise_row_attrs([["A"], ["B"]], densities)
+    Traceback (most recent call last):
+    ...
+    ValueError: Mismatch between number of rows in attrs (2) and samples/densities (1).
     >>> normalise_row_attrs([["A", "B"]], densities)
     Traceback (most recent call last):
     ...
@@ -310,6 +315,12 @@ def normalise_row_attrs(
     """
     if not is_collection_l2(attrs):
         attrs = [attrs] if len(l2_target) == 1 else [[attr] for attr in attrs]
+
+    if len(attrs) != len(l2_target):
+        raise ValueError(
+            f"Mismatch between number of rows in attrs ({len(attrs)}) "
+            f"and samples/densities ({len(l2_target)})."
+        )
 
     result: list[list[_V]] = []
     for i, (row_attrs, row_traces) in enumerate(zip(attrs, l2_target, strict=True)):
