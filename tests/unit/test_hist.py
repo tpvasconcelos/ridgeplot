@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -87,10 +88,24 @@ def test_counts_sum_to_sample_size() -> None:
 
 
 def test_bin_centers_within_data_range() -> None:
+    # NOTE: This property does not hold for the degenerate case where all
+    #       samples are identical, since NumPy pads the zero-width range by
+    #       +/-0.5 and a bin center can then fall outside the data range
+    #       (e.g., [3, 3, 3] with nbins=2 produces a center at 2.75 < 3).
     samples = [10, 20, 30, 40, 50]
     result = bin_trace_samples(samples, nbins=5)
     centers = [x for x, _ in result]
     assert all(min(samples) <= c <= max(samples) for c in centers)
+
+
+def test_single_sample_falls_in_middle_bin() -> None:
+    """A single sample gets NumPy's +/-0.5 range padding, placing all of the
+    mass in the middle bin (unlike the all-identical case, where the mass
+    falls in the rightmost bin)."""
+    result = bin_trace_samples([5], nbins=3)
+    x_vals, y_vals = zip(*result, strict=True)
+    assert x_vals == pytest.approx((14 / 3, 5.0, 16 / 3))
+    assert y_vals == (0.0, 1.0, 0.0)
 
 
 # --- Weights ---
@@ -129,6 +144,11 @@ def test_weighted_counts_sum_to_weight_sum() -> None:
 # --- Error handling ---
 
 
+def test_rejects_empty_samples() -> None:
+    with pytest.raises(ValueError, match="samples array should not be empty"):
+        bin_trace_samples([], nbins=3)
+
+
 @pytest.mark.parametrize("non_finite", NON_FINITE_VALUES)
 def test_rejects_non_finite_samples(non_finite: float) -> None:
     with pytest.raises(ValueError, match="samples array should not contain any infs or NaNs"):
@@ -153,6 +173,16 @@ def test_rejects_non_finite_weights(non_finite: float) -> None:
 def test_rejects_mismatched_weights_length(samples: list[float], weights: list[float]) -> None:
     with pytest.raises(ValueError, match="weights array should have the same length"):
         bin_trace_samples(samples, nbins=2, weights=weights)
+
+
+def test_rejects_negative_weights() -> None:
+    with pytest.raises(ValueError, match="weights array should not contain negative values"):
+        bin_trace_samples([1, 2, 3], nbins=2, weights=[-1, 1, 1])
+
+
+def test_rejects_all_zero_weights() -> None:
+    with pytest.raises(ValueError, match="weights array should not be all zeros"):
+        bin_trace_samples([1, 2, 3], nbins=2, weights=[0, 0, 0])
 
 
 # ==============================================================
@@ -186,8 +216,8 @@ def test_bin_samples_broadcasts_flat_weights() -> None:
     ]
 
 
-def test_bin_samples_per_trace_weights() -> None:
-    """Per-trace weights (shallow form) should be matched to each trace."""
+def test_bin_samples_per_row_weights() -> None:
+    """Shallow weights (one entry per row) should be matched to each row."""
     trace_a, trace_b = [1, 2, 3], [4, 5, 6, 7]
     weights_a = [1, 2, 3]
     densities = bin_samples(
@@ -199,3 +229,43 @@ def test_bin_samples_per_trace_weights() -> None:
         [bin_trace_samples(trace_a, nbins=2, weights=weights_a)],
         [bin_trace_samples(trace_b, nbins=2)],
     ]
+
+
+def test_bin_samples_per_row_weights_broadcast_to_all_traces_in_row() -> None:
+    """Shallow weights are per-row, *not* per-trace: each entry should be
+    broadcast to all traces in the corresponding row."""
+    trace_a, trace_b, trace_c = [1, 2, 3], [4, 5, 6], [7, 8, 9, 10]
+    weights_row_1 = [1, 2, 3]
+    densities = bin_samples(
+        samples=[[trace_a, trace_b], [trace_c]],
+        nbins=2,
+        sample_weights=[weights_row_1, None],
+    )
+    assert densities == [
+        [
+            bin_trace_samples(trace_a, nbins=2, weights=weights_row_1),
+            bin_trace_samples(trace_b, nbins=2, weights=weights_row_1),
+        ],
+        [bin_trace_samples(trace_c, nbins=2)],
+    ]
+
+
+def test_bin_samples_rejects_shallow_weights_row_count_mismatch() -> None:
+    """Shallow weights should have exactly one entry per row."""
+    with pytest.raises(
+        ValueError,
+        match=re.escape("Mismatch between number of rows in attrs (1) and samples/densities (2)."),
+    ):
+        bin_samples(samples=[[[1, 2]], [[3, 4]]], nbins=2, sample_weights=[[1, 2]])
+
+
+def test_bin_samples_flat_weights_fail_for_ragged_traces() -> None:
+    """A flat weights vector is broadcast to all traces, so it should fail
+    (with a helpful error message) when traces have different lengths."""
+    err_msg = (
+        "The weights array should have the same length as the samples array "
+        "(got 3 weights for 4 samples). Note that a single flat array of "
+        "weights is broadcast to all traces in the samples array."
+    )
+    with pytest.raises(ValueError, match=re.escape(err_msg)):
+        bin_samples(samples=[[[1, 2, 3], [4, 5, 6, 7]]], nbins=2, sample_weights=[1, 2, 3])

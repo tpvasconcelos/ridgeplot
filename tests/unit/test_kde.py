@@ -49,6 +49,16 @@ def test_estimate_density_trace_points() -> None:
     assert np.argmin(y) == 0
 
 
+def test_estimate_density_trace_fails_for_empty_samples() -> None:
+    with pytest.raises(ValueError, match=re.escape("The samples array should not be empty.")):
+        estimate_density_trace(
+            trace_samples=[],
+            points=7,
+            kernel="gau",
+            bandwidth="normal_reference",
+        )
+
+
 @pytest.mark.parametrize(
     "non_finite_value",
     [np.inf, np.nan, float("inf"), float("nan")],
@@ -121,6 +131,29 @@ def test_estimate_density_trace_weights_fails_for_non_finite_values(
             kernel="gau",
             bandwidth="normal_reference",
             weights=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, non_finite_value],
+        )
+
+
+def test_estimate_density_trace_fails_for_negative_weights() -> None:
+    err_msg = "The weights array should not contain negative values."
+    with pytest.raises(ValueError, match=re.escape(err_msg)):
+        estimate_density_trace(
+            trace_samples=[0, 1, 2],
+            points=7,
+            kernel="gau",
+            bandwidth="normal_reference",
+            weights=[-1, 1, 1],
+        )
+
+
+def test_estimate_density_trace_fails_for_all_zero_weights() -> None:
+    with pytest.raises(ValueError, match=re.escape("The weights array should not be all zeros.")):
+        estimate_density_trace(
+            trace_samples=[0, 1, 2],
+            points=7,
+            kernel="gau",
+            bandwidth="normal_reference",
+            weights=[0, 0, 0],
         )
 
 

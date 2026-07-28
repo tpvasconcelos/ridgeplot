@@ -9,9 +9,16 @@ Unreleased changes
 
 - Implement a new `template` parameter to allow users to specify a Plotly figure template ({gh-pr}`389`)
 
+### Bug fixes
+
+- Raise a clear `ValueError` when an empty samples array is passed to either density estimation method (KDE or histogram binning), instead of failing downstream with obscure errors ({gh-pr}`365`)
+- Raise clear `ValueError`s for invalid `sample_weights` values (negative or all-zero weights), instead of failing downstream with obscure errors ({gh-pr}`365`)
+- Improve the error messages raised when the length of a `sample_weights` array does not match the length of the corresponding samples array, or when the number of rows in a shallow per-row attributes array (e.g., `sample_weights` or `labels`) does not match the number of rows in the samples array ({gh-pr}`365`)
+
 ### Documentation
 
 - Add a section on theming with Plotly templates to the getting started guide ({gh-pr}`389`)
+- Fix the description of the `sample_weights` parameter in the `ridgeplot()` docstring, which incorrectly stated that the weights only applied to KDE, and document the accepted forms and their broadcasting semantics ({gh-pr}`365`)
 
 ### CI/CD
 

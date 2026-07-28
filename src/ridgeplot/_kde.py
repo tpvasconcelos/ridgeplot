@@ -98,6 +98,40 @@ def normalize_sample_weights(
     return sample_weights
 
 
+def validate_trace_samples_and_weights(
+    trace_samples: SamplesTrace,
+    weights: SampleWeights,
+) -> tuple[npt.NDArray[np.floating[Any]], npt.NDArray[np.floating[Any]] | None]:
+    """Validate a trace's samples and weights and coerce them to NumPy arrays.
+
+    This validation logic is shared between the KDE
+    (:func:`estimate_density_trace`) and histogram binning
+    (:func:`ridgeplot._hist.bin_trace_samples`) paths.
+    """
+    samples_array = np.asarray(trace_samples, dtype=float)
+    if len(samples_array) == 0:
+        raise ValueError("The samples array should not be empty.")
+    if not np.isfinite(samples_array).all():
+        raise ValueError("The samples array should not contain any infs or NaNs.")
+    if weights is None:
+        return samples_array, None
+    weights_array = np.asarray(weights, dtype=float)
+    if len(weights_array) != len(samples_array):
+        raise ValueError(
+            f"The weights array should have the same length as the samples array "
+            f"(got {len(weights_array)} weights for {len(samples_array)} samples). "
+            f"Note that a single flat array of weights is broadcast to all traces "
+            f"in the samples array."
+        )
+    if not np.isfinite(weights_array).all():
+        raise ValueError("The weights array should not contain any infs or NaNs.")
+    if np.any(weights_array < 0):
+        raise ValueError("The weights array should not contain negative values.")
+    if not np.any(weights_array):
+        raise ValueError("The weights array should not be all zeros.")
+    return samples_array, weights_array
+
+
 def estimate_density_trace(
     trace_samples: SamplesTrace,
     points: KDEPoints,
@@ -110,16 +144,14 @@ def estimate_density_trace(
     For a given set of sample values, computes the kernel densities (KDE) at
     the given points.
     """
-    trace_samples = np.asarray(trace_samples, dtype=float)
-    if not np.isfinite(trace_samples).all():
-        raise ValueError("The samples array should not contain any infs or NaNs.")
+    samples_array, weights_array = validate_trace_samples_and_weights(trace_samples, weights)
     if isinstance(points, int):
         # By default, we'll use a 'hard' KDE span. That is, we'll
         # evaluate the densities and N equally spaced points
         # over the range [min(samples), max(samples)]
         density_x = np.linspace(
-            start=min(trace_samples),
-            stop=max(trace_samples),
+            start=min(samples_array),
+            stop=max(samples_array),
             num=points,
         )
     else:
@@ -130,15 +162,9 @@ def estimate_density_trace(
                 f"The 'points' at which KDE is computed should be represented by a "
                 f"one-dimensional array, got an array of shape {density_x.shape} instead."
             )
-    if weights is not None:
-        weights = np.asarray(weights, dtype=float)
-        if len(weights) != len(trace_samples):
-            raise ValueError("The weights array should have the same length as the samples array.")
-        if not np.isfinite(weights).all():
-            raise ValueError("The weights array should not contain any infs or NaNs.")
 
     # ref: https://github.com/tpvasconcelos/ridgeplot/issues/116
-    dens = sm.nonparametric.KDEUnivariate(trace_samples)
+    dens = sm.nonparametric.KDEUnivariate(samples_array)
 
     # I'm hard-coding `fft=kernel == "gau" and weights is not None`
     # to avoid exposing yet another KDE parameter in ridgeplot()
@@ -150,9 +176,9 @@ def estimate_density_trace(
     # directly to the ridgeplot() figure factory.
     dens.fit(
         kernel=kernel,
-        fft=kernel == "gau" and weights is None,
+        fft=kernel == "gau" and weights_array is None,
         bw=bandwidth,  # pyright: ignore[reportArgumentType]
-        weights=weights,
+        weights=weights_array,
     )
     density_y = dens.evaluate(density_x)
     density_y = _validate_densities(x=density_x, y=density_y, kernel=kernel)

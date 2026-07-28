@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, TypeVar
 import numpy as np
 import pytest
 
-from ridgeplot._utils import get_xy_extrema, normalise_min_max
+from ridgeplot._utils import get_xy_extrema, normalise_min_max, normalise_row_attrs
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -90,6 +90,43 @@ class TestGetXYExtrema:
             62,  # y_max
         )
         assert get_xy_extrema(densities) == expected
+
+
+class TestNormaliseRowAttrs:
+    """Tests for the :func:`ridgeplot._utils.normalise_row_attrs` function."""
+
+    def test_raises_for_row_count_mismatch(self) -> None:
+        """A mismatch between the number of rows in the attrs and target
+        arrays should raise a clear error (instead of leaking a bare
+        ``zip(..., strict=True)`` error)."""
+        densities = [
+            [[(0, 0), (1, 1), (2, 0)]],  # Row 1
+            [[(1, 0), (2, 1), (3, 0)]],  # Row 2
+        ]
+        with pytest.raises(
+            ValueError,
+            match=re.escape(
+                "Mismatch between number of rows in attrs (1) and samples/densities (2)."
+            ),
+        ):
+            normalise_row_attrs([["A"]], densities)
+
+    def test_raises_for_trace_count_mismatch(self) -> None:
+        densities = [[[(0, 0), (1, 1), (2, 0)]]]  # Single row, single trace
+        with pytest.raises(
+            ValueError,
+            match=re.escape("Mismatch between number of traces (1) and number of attrs (2)"),
+        ):
+            normalise_row_attrs([["A", "B"]], densities)
+
+    def test_broadcasts_single_attr_to_all_traces_in_row(self) -> None:
+        densities = [
+            [
+                [(0, 0), (1, 1), (2, 0)],  # Trace 1
+                [(1, 0), (2, 1), (3, 0)],  # Trace 2
+            ],
+        ]
+        assert normalise_row_attrs([["A"]], densities) == [["A", "A"]]
 
 
 class TestNormaliseMinMax:
