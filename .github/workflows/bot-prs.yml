@@ -19,14 +19,23 @@
 #
 # The only human action left is the review itself.
 #
-# Note: If the AUTO_MERGE_PAT secret is not set, this workflow falls back to
-# the default GITHUB_TOKEN. This comes with a significant caveat: pushes and
-# merges performed with GITHUB_TOKEN do not trigger other workflows, meaning
-# that (a) CI checks will not run against the changelog commits pushed to
-# bot PRs, and (b) post-merge workflows on main (CI run, TestPyPI publish)
-# will not be triggered. For the full experience, create a fine-grained PAT
-# with contents:write and pull-requests:write scoped to this repository and
-# store it as the AUTO_MERGE_PAT secret.
+# Setup requirements:
+#   - An AUTO_MERGE_PAT repository secret: a fine-grained personal access
+#     token scoped to this repository only, with read/write permissions
+#     for "Contents" and "Pull requests". The default GITHUB_TOKEN is
+#     deliberately *not* used as a fallback: events caused by pushes and
+#     merges performed with GITHUB_TOKEN do not trigger other workflows
+#     (GitHub's recursive-workflow protection), which would deadlock this
+#     automation - CI would never run on the changelog commits pushed to
+#     bot PRs, so the required status checks would stay pending forever
+#     and auto-merge would never fire. Merges to main performed with
+#     GITHUB_TOKEN would similarly skip the post-merge workflows on main
+#     (CI run, TestPyPI publish). Every job therefore fails fast with a
+#     clear error if the secret is not configured.
+#   - "Allow auto-merge" enabled in the repository settings
+#     (Settings > General > Pull Requests).
+#   - Branch protection on main requiring an approving review and the
+#     relevant status checks (auto-merge only waits for *required* checks).
 #
 # Security: this workflow runs on pull_request_target with write
 # permissions, but only ever acts on same-repository PRs opened by
@@ -62,12 +71,25 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Ensure AUTO_MERGE_PAT is configured
+        env:
+          AUTO_MERGE_PAT: ${{ secrets.AUTO_MERGE_PAT }}
+        run: |
+          if [ -z "$AUTO_MERGE_PAT" ]; then
+            echo "::error::The AUTO_MERGE_PAT secret is not configured." \
+              "Falling back to GITHUB_TOKEN would deadlock this automation" \
+              "(its pushes/merges do not trigger other workflows, so" \
+              "required status checks would never run). See the setup" \
+              "requirements at the top of .github/workflows/bot-prs.yml."
+            exit 1
+          fi
+
       # Note: this checks out the *base* branch (main), not the PR branch,
       # so that the changelog helper script executed below always comes
       # from trusted code and never from the PR branch.
       - uses: actions/checkout@v7
         with:
-          token: ${{ secrets.AUTO_MERGE_PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.AUTO_MERGE_PAT }}
 
       - name: Add changelog entry and push
         env:
@@ -115,11 +137,24 @@ jobs:
       contents: write
       pull-requests: write
     steps:
+      - name: Ensure AUTO_MERGE_PAT is configured
+        env:
+          AUTO_MERGE_PAT: ${{ secrets.AUTO_MERGE_PAT }}
+        run: |
+          if [ -z "$AUTO_MERGE_PAT" ]; then
+            echo "::error::The AUTO_MERGE_PAT secret is not configured." \
+              "Falling back to GITHUB_TOKEN would deadlock this automation" \
+              "(its pushes/merges do not trigger other workflows, so" \
+              "required status checks would never run). See the setup" \
+              "requirements at the top of .github/workflows/bot-prs.yml."
+            exit 1
+          fi
+
       - name: Enable auto-merge (squash)
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT }}
 
   heal:
     name: Heal conflicted bot PRs
@@ -130,14 +165,27 @@ jobs:
       contents: write
       pull-requests: read
     steps:
+      - name: Ensure AUTO_MERGE_PAT is configured
+        env:
+          AUTO_MERGE_PAT: ${{ secrets.AUTO_MERGE_PAT }}
+        run: |
+          if [ -z "$AUTO_MERGE_PAT" ]; then
+            echo "::error::The AUTO_MERGE_PAT secret is not configured." \
+              "Falling back to GITHUB_TOKEN would deadlock this automation" \
+              "(its pushes/merges do not trigger other workflows, so" \
+              "required status checks would never run). See the setup" \
+              "requirements at the top of .github/workflows/bot-prs.yml."
+            exit 1
+          fi
+
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          token: ${{ secrets.AUTO_MERGE_PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.AUTO_MERGE_PAT }}
 
       - name: Merge main into conflicted bot PRs
         env:
-          GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
