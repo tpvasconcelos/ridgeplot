@@ -134,8 +134,10 @@ local-dev = [
     "setuptools-scm>=8",
     # Tox
     "tox",
-    # pre-commit
+    # pre-commit (the pre-commit-uv plugin makes pre-commit
+    # build its hook environments with uv - faster installs)
     "pre-commit",
+    "pre-commit-uv",
     # Releases are still a manual process that
     # requires the use of bumpversion locally
     "bumpversion",

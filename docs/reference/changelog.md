@@ -16,6 +16,7 @@ Unreleased changes
 ### Developer Experience
 
 - Migrate all development dependencies from `requirements/*.txt` files to PEP 735 dependency groups in `pyproject.toml` ({gh-pr}`388`)
+- Use `pre-commit-uv` to speed up pre-commit hook environment installs ({gh-pr}`396`)
 
 ### CI/CD
 
