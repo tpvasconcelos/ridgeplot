@@ -11,11 +11,17 @@
 #      automatically as soon as the branch protection requirements are met
 #      (i.e., an approving review plus all required status checks passing).
 #
-# Additionally, on every push to main, the `heal` job checks whether any
-# open bot PRs became conflicted (e.g., two bot PRs adding changelog
-# entries at the same location: the first one to merge conflicts the
-# other) and resolves them by merging main into the PR branch and
-# regenerating the changelog entry.
+# Additionally, on every push to main, the `heal` job brings all open bot
+# PRs whose branches no longer contain the tip of main back into a
+# mergeable state by merging main into them:
+#   - PRs that merely fell behind main are updated so that they keep
+#     satisfying the "require branches to be up to date before merging"
+#     branch protection setting (which would otherwise leave auto-merge
+#     waiting forever, since nothing else updates bot PR branches).
+#   - PRs that became conflicted (e.g., two bot PRs whose changelog
+#     entries collide once the first one merges) are additionally
+#     resolved by taking main's version of the changelog and
+#     regenerating the PR's own changelog entry on top of it.
 #
 # The only human action left is the review itself.
 #
@@ -157,7 +163,7 @@ jobs:
           GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT }}
 
   heal:
-    name: Heal conflicted bot PRs
+    name: Heal out-of-date bot PRs
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -183,7 +189,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.AUTO_MERGE_PAT }}
 
-      - name: Merge main into conflicted bot PRs
+      - name: Merge main into out-of-date or conflicted bot PRs
         env:
           GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT }}
         run: |
@@ -205,17 +211,16 @@ jobs:
           while IFS=$'\t' read -r number head_ref title; do
             [ -n "$number" ] || continue
 
-            # Wait for GitHub to finish computing the mergeable state
-            mergeable=UNKNOWN
-            for _ in 1 2 3 4 5; do
-              mergeable=$(gh pr view "$number" --json mergeable --jq .mergeable)
-              [ "$mergeable" = "UNKNOWN" ] || break
-              sleep 10
-            done
-            echo "PR #${number} (${head_ref}) is ${mergeable}"
-            [ "$mergeable" = "CONFLICTING" ] || continue
-
+            # Determine staleness locally (instead of polling GitHub's
+            # asynchronous mergeability computation): a PR branch needs
+            # healing whenever the tip of main is not part of its history
             git fetch origin "$head_ref" < /dev/null
+            if git merge-base --is-ancestor origin/main "origin/$head_ref" < /dev/null; then
+              echo "PR #${number} (${head_ref}) is up to date with main."
+              continue
+            fi
+            echo "PR #${number} (${head_ref}) is behind main; merging main into it..."
+
             git checkout -B "$head_ref" "origin/$head_ref" < /dev/null
 
             if git merge --no-edit origin/main < /dev/null; then
