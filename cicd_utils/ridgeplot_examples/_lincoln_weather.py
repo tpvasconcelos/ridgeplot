@@ -27,8 +27,9 @@ def main(
 
     fig = ridgeplot(
         samples=samples,
-        labels=[["Min Temperature [F]", "Max Temperature [F]"]] * len(months),
+        labels=[["Min Temperatures", "Max Temperatures"]] * len(months),
         row_labels=months,
+        legendgroup=True,
         colorscale="Inferno",
         color_discrete_map=color_discrete_map,
         bandwidth=4,
@@ -46,7 +47,12 @@ def main(
         xaxis_gridwidth=2,
         yaxis_title="Month",
         xaxis_title="Temperature [F]",
-        showlegend=False,
+        legend=dict(
+            yanchor="top",
+            y=0.99,
+            xanchor="right",
+            x=0.99,
+        ),
     )
 
     return fig

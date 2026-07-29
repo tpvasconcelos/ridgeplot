@@ -134,8 +134,9 @@ samples = [
 # And finish by styling it up to your liking!
 fig = ridgeplot(
     samples=samples,
-    labels=[["Min Temperature [F]", "Max Temperature [F]"]] * len(months),
+    labels=[["Min Temperatures", "Max Temperatures"]] * len(months),
     row_labels=months,
+    legendgroup=True,
     colorscale="Inferno",
     bandwidth=4,
     kde_points=np.linspace(-40, 110, 400),
@@ -152,7 +153,12 @@ fig.update_layout(
     xaxis_gridwidth=2,
     yaxis_title="Month",
     xaxis_title="Temperature [F]",
-    showlegend=False,
+    legend=dict(
+        yanchor="top",
+        y=0.99,
+        xanchor="right",
+        x=0.99,
+    ),
 )
 fig.show()
 ```
@@ -229,14 +235,14 @@ Finally, we can pass the {py:paramref}`~ridgeplot.ridgeplot.samples` list to the
 ```python
 fig = ridgeplot(
     samples=samples,
-    labels=[["Min Temperature [F]", "Max Temperature [F]"]] * len(months),
+    labels=[["Min Temperatures", "Max Temperatures"]] * len(months),
     row_labels=months,
+    legendgroup=True,
     colorscale="Inferno",
     bandwidth=4,
     kde_points=np.linspace(-40, 110, 400),
     spacing=0.3,
 )
-
 fig.update_layout(
     title="Minimum and maximum daily temperatures in Lincoln, NE (2016)",
     height=600,
@@ -248,7 +254,12 @@ fig.update_layout(
     xaxis_gridwidth=2,
     yaxis_title="Month",
     xaxis_title="Temperature [F]",
-    showlegend=False,
+    legend=dict(
+        yanchor="top",
+        y=0.99,
+        xanchor="right",
+        x=0.99,
+    ),
 )
 fig.show()
 ```
@@ -277,8 +288,8 @@ fig = ridgeplot(
     # addition of `color_discrete_map`
     # ...
     color_discrete_map={
-        "Min Temperature [F]": "deepskyblue",
-        "Max Temperature [F]": "orangered",
+        "Min Temperatures": "deepskyblue",
+        "Max Temperatures": "orangered",
     }
     # ...
 )
