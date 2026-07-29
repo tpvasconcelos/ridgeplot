@@ -17,7 +17,7 @@ restyle it).
 This script is idempotent: if the changelog already references the given
 PR number, the file is left unchanged.
 
-Used by the ``.github/workflows/bot-prs.yml`` workflow to automatically add
+Used by the ``.github/workflows/bot-pr-automation.yml`` workflow to automatically add
 changelog entries to pull requests opened by trusted bots (e.g., dependabot
 and pre-commit.ci).
 

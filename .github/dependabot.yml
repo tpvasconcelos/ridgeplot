@@ -4,7 +4,7 @@
 # - Updates are grouped into a single weekly PR per ecosystem to reduce
 #   review noise and avoid changelog merge conflicts between bot PRs.
 # - Bot PRs get an automated changelog entry commit and are auto-merged
-#   once approved (see .github/workflows/bot-prs.yml).
+#   once approved (see .github/workflows/bot-pr-automation.yml).
 #
 # References:
 # - https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file

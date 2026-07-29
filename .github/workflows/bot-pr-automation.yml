@@ -44,7 +44,7 @@
 # (which is also where this workflow definition itself is taken from),
 # only ever treating the PR branches' content as data.
 #
-name: Bot PRs
+name: Bot PR automation
 
 on:
   pull_request_target:
@@ -80,7 +80,7 @@ jobs:
               "Falling back to GITHUB_TOKEN would deadlock this automation" \
               "(its pushes/merges do not trigger other workflows, so" \
               "required status checks would never run). See the setup" \
-              "requirements at the top of .github/workflows/bot-prs.yml."
+              "requirements at the top of .github/workflows/bot-pr-automation.yml."
             exit 1
           fi
 
@@ -146,7 +146,7 @@ jobs:
               "Falling back to GITHUB_TOKEN would deadlock this automation" \
               "(its pushes/merges do not trigger other workflows, so" \
               "required status checks would never run). See the setup" \
-              "requirements at the top of .github/workflows/bot-prs.yml."
+              "requirements at the top of .github/workflows/bot-pr-automation.yml."
             exit 1
           fi
 
@@ -174,7 +174,7 @@ jobs:
               "Falling back to GITHUB_TOKEN would deadlock this automation" \
               "(its pushes/merges do not trigger other workflows, so" \
               "required status checks would never run). See the setup" \
-              "requirements at the top of .github/workflows/bot-prs.yml."
+              "requirements at the top of .github/workflows/bot-pr-automation.yml."
             exit 1
           fi
 
