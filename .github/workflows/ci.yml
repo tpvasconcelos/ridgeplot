@@ -116,3 +116,22 @@ jobs:
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           verbose: true
+
+  # Aggregate job that succeeds only when every other job in this
+  # workflow succeeded. Branch protection requires this single, stable
+  # check instead of enumerating each (Python version) matrix job, so
+  # that adding or dropping Python versions never requires updating the
+  # repository's required status checks.
+  all-green:
+    name: All CI checks passed
+    # `always()` is load-bearing: without it, a failure in a needed job
+    # would leave this job "skipped", and GitHub treats skipped required
+    # checks as passing!
+    if: always()
+    needs: [ static-checks, software-tests ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Fail unless all needed jobs succeeded
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+        run: exit 1
