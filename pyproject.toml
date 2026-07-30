@@ -65,6 +65,7 @@ cicd_utils = [
     #       (multi-platform) resolution with `uv sync`/`uv lock`
     "kaleido<0.4,!=0.2.1.post1",
     # ./cicd_utils/cicd/scripts/extract_latest_release_notes.py
+    # ./cicd_utils/cicd/scripts/add_changelog_entry.py (markdown-it-py only)
     "markdown-it-py",
     "mdit-py-plugins",
     "mdformat",

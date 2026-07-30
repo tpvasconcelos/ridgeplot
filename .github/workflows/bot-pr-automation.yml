@@ -1,0 +1,254 @@
+# Automation for PRs opened by trusted bots (dependabot and pre-commit.ci).
+#
+# For every bot PR, this workflow:
+#   1. Commits a changelog entry for the PR (generated from the PR's title)
+#      directly to the PR branch, so that the "Check for entry in Changelog"
+#      requirement is satisfied and the entry can be reviewed as part of the
+#      PR itself. This step is idempotent and self-healing: if a bot
+#      force-pushes its branch (wiping our commit), the resulting
+#      `synchronize` event simply re-adds the entry.
+#   2. Enables GitHub's native auto-merge (squash). The PR will then merge
+#      automatically as soon as the branch protection requirements are met
+#      (i.e., an approving review plus all required status checks passing).
+#
+# Additionally, on every push to main, the `heal` job brings all open bot
+# PRs whose branches no longer contain the tip of main back into a
+# mergeable state by merging main into them:
+#   - PRs that merely fell behind main are updated so that they keep
+#     satisfying the "require branches to be up to date before merging"
+#     branch protection setting (which would otherwise leave auto-merge
+#     waiting forever, since nothing else updates bot PR branches).
+#   - PRs that became conflicted (e.g., two bot PRs whose changelog
+#     entries collide once the first one merges) are additionally
+#     resolved by taking main's version of the changelog and
+#     regenerating the PR's own changelog entry on top of it.
+#
+# The only human action left is the review itself.
+#
+# Setup requirements:
+#   - An AUTO_MERGE_PAT repository secret: a fine-grained personal access
+#     token scoped to this repository only, with read/write permissions
+#     for "Contents" and "Pull requests". The default GITHUB_TOKEN is
+#     deliberately *not* used as a fallback: events caused by pushes and
+#     merges performed with GITHUB_TOKEN do not trigger other workflows
+#     (GitHub's recursive-workflow protection), which would deadlock this
+#     automation - CI would never run on the changelog commits pushed to
+#     bot PRs, so the required status checks would stay pending forever
+#     and auto-merge would never fire. Merges to main performed with
+#     GITHUB_TOKEN would similarly skip the post-merge workflows on main
+#     (CI run, TestPyPI publish). Every job therefore fails fast with a
+#     clear error if the secret is not configured.
+#   - "Allow auto-merge" enabled in the repository settings
+#     (Settings > General > Pull Requests).
+#   - Branch protection on main requiring an approving review and the
+#     required status checks defined in
+#     .github/required-status-checks.json (the config-as-code source of
+#     truth; apply it with ./cicd_utils/apply-branch-protection.sh).
+#     These are stable, first-party contexts only - the ci.yml
+#     "All CI checks passed" gate job covers the whole test matrix, so
+#     Python version changes never require touching the list. External
+#     services (codecov, pre-commit.ci, Read the Docs, etc.) are
+#     advisory: they stay visible on PRs, but merges don't depend on
+#     their uptime. (Auto-merge only waits for *required* checks.)
+#
+# Security: this workflow runs on pull_request_target with write
+# permissions, but only ever acts on same-repository PRs opened by
+# trusted bots, and never executes code from the PR branches: both jobs
+# run the changelog helper script from a checkout of the main branch
+# (which is also where this workflow definition itself is taken from),
+# only ever treating the PR branches' content as data.
+#
+name: Bot PR automation
+
+on:
+  pull_request_target:
+    types: [ opened, reopened, synchronize ]
+  push:
+    branches: [ main ]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  changelog:
+    name: Add changelog entry
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (github.event.pull_request.user.login == 'dependabot[bot]' ||
+       github.event.pull_request.user.login == 'pre-commit-ci[bot]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      contents: write
+    steps:
+      - name: Ensure AUTO_MERGE_PAT is configured
+        env:
+          AUTO_MERGE_PAT: ${{ secrets.AUTO_MERGE_PAT }}
+        run: |
+          if [ -z "$AUTO_MERGE_PAT" ]; then
+            echo "::error::The AUTO_MERGE_PAT secret is not configured." \
+              "Falling back to GITHUB_TOKEN would deadlock this automation" \
+              "(its pushes/merges do not trigger other workflows, so" \
+              "required status checks would never run). See the setup" \
+              "requirements at the top of .github/workflows/bot-pr-automation.yml."
+            exit 1
+          fi
+
+      # Note: this checks out the *base* branch (main), not the PR branch,
+      # so that the changelog helper script executed below always comes
+      # from trusted code and never from the PR branch.
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.AUTO_MERGE_PAT }}
+
+      - name: Add changelog entry and push
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          python3 -m pip install --quiet markdown-it-py
+
+          # Apply the (trusted, from main) helper script to the PR
+          # branch's version of the changelog
+          git fetch origin "$HEAD_REF"
+          git show FETCH_HEAD:docs/reference/changelog.md > "$RUNNER_TEMP/changelog.md"
+          cp "$RUNNER_TEMP/changelog.md" "$RUNNER_TEMP/changelog.orig.md"
+          python3 cicd_utils/cicd/scripts/add_changelog_entry.py "$PR_NUMBER" "$PR_TITLE" \
+            --changelog "$RUNNER_TEMP/changelog.md"
+          if cmp -s "$RUNNER_TEMP/changelog.md" "$RUNNER_TEMP/changelog.orig.md"; then
+            echo "Changelog entry already present; nothing to do."
+            exit 0
+          fi
+
+          # Commit the updated changelog on top of the PR branch. This
+          # materializes the bot's tree in the working directory, but no
+          # code from it is ever executed (do not add steps below that
+          # run anything from the working tree!).
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$HEAD_REF" FETCH_HEAD
+          cp "$RUNNER_TEMP/changelog.md" docs/reference/changelog.md
+          git add docs/reference/changelog.md
+          git commit -m "Add changelog entry for #${PR_NUMBER}"
+          git push origin "HEAD:$HEAD_REF"
+
+  automerge:
+    name: Enable auto-merge
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      github.event.action != 'synchronize' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (github.event.pull_request.user.login == 'dependabot[bot]' ||
+       github.event.pull_request.user.login == 'pre-commit-ci[bot]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Ensure AUTO_MERGE_PAT is configured
+        env:
+          AUTO_MERGE_PAT: ${{ secrets.AUTO_MERGE_PAT }}
+        run: |
+          if [ -z "$AUTO_MERGE_PAT" ]; then
+            echo "::error::The AUTO_MERGE_PAT secret is not configured." \
+              "Falling back to GITHUB_TOKEN would deadlock this automation" \
+              "(its pushes/merges do not trigger other workflows, so" \
+              "required status checks would never run). See the setup" \
+              "requirements at the top of .github/workflows/bot-pr-automation.yml."
+            exit 1
+          fi
+
+      - name: Enable auto-merge (squash)
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT }}
+
+  heal:
+    name: Heal out-of-date bot PRs
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Ensure AUTO_MERGE_PAT is configured
+        env:
+          AUTO_MERGE_PAT: ${{ secrets.AUTO_MERGE_PAT }}
+        run: |
+          if [ -z "$AUTO_MERGE_PAT" ]; then
+            echo "::error::The AUTO_MERGE_PAT secret is not configured." \
+              "Falling back to GITHUB_TOKEN would deadlock this automation" \
+              "(its pushes/merges do not trigger other workflows, so" \
+              "required status checks would never run). See the setup" \
+              "requirements at the top of .github/workflows/bot-pr-automation.yml."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.AUTO_MERGE_PAT }}
+
+      - name: Merge main into out-of-date or conflicted bot PRs
+        env:
+          GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python3 -m pip install --quiet markdown-it-py
+
+          # Stash a trusted copy of the helper script (we're on main here)
+          # so that we never execute code from the PR branches that get
+          # checked out in the loop below
+          cp cicd_utils/cicd/scripts/add_changelog_entry.py "$RUNNER_TEMP/add_changelog_entry.py"
+
+          prs=$(
+            gh pr list --author 'app/dependabot' --json number,headRefName,title --jq '.[] | [.number, .headRefName, .title] | @tsv'
+            gh pr list --author 'app/pre-commit-ci' --json number,headRefName,title --jq '.[] | [.number, .headRefName, .title] | @tsv'
+          )
+          [ -n "$prs" ] || { echo "No open bot PRs."; exit 0; }
+
+          while IFS=$'\t' read -r number head_ref title; do
+            [ -n "$number" ] || continue
+
+            # Determine staleness locally (instead of polling GitHub's
+            # asynchronous mergeability computation): a PR branch needs
+            # healing whenever the tip of main is not part of its history
+            git fetch origin "$head_ref" < /dev/null
+            if git merge-base --is-ancestor origin/main "origin/$head_ref" < /dev/null; then
+              echo "PR #${number} (${head_ref}) is up to date with main."
+              continue
+            fi
+            echo "PR #${number} (${head_ref}) is behind main; merging main into it..."
+
+            git checkout -B "$head_ref" "origin/$head_ref" < /dev/null
+
+            if git merge --no-edit origin/main < /dev/null; then
+              git push origin "HEAD:$head_ref" < /dev/null
+              continue
+            fi
+
+            conflicts=$(git diff --name-only --diff-filter=U)
+            if [ "$conflicts" != "docs/reference/changelog.md" ]; then
+              git merge --abort < /dev/null
+              echo "::warning::PR #${number} has conflicts beyond the changelog; skipping."
+              continue
+            fi
+
+            # Resolve the changelog conflict by taking main's version
+            # and re-generating this PR's changelog entry on top of it
+            git checkout --theirs docs/reference/changelog.md < /dev/null
+            python3 "$RUNNER_TEMP/add_changelog_entry.py" "$number" "$title" \
+              --changelog docs/reference/changelog.md
+            git add docs/reference/changelog.md
+            git commit --no-edit < /dev/null
+            git push origin "HEAD:$head_ref" < /dev/null
+          done <<< "$prs"

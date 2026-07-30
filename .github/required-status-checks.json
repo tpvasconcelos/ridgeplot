@@ -1,0 +1,17 @@
+{
+  "strict": true,
+  "checks": [
+    {
+      "context": "All CI checks passed"
+    },
+    {
+      "context": "Check for entry in Changelog"
+    },
+    {
+      "context": "Build distributions"
+    },
+    {
+      "context": "Analyze (Python)"
+    }
+  ]
+}
