@@ -31,13 +31,13 @@ jobs:
 
       - uses: ./.github/actions/greet-new-users
         with:
-          issue-message: |
+          issue_message: |
             **Thank you for submitting your first issue with us!** 🎉
 
             Our response times may vary, but we'll get back to you as soon as we can!
 
             Welcome aboard! 🚀
-          pr-message: |
+          pr_message: |
             **Thank you for submitting your first pull request with us!** 🎉
 
             Our response times may vary, but we'll get back to you as soon as we can!
