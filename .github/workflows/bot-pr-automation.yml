@@ -41,12 +41,15 @@
 #   - "Allow auto-merge" enabled in the repository settings
 #     (Settings > General > Pull Requests).
 #   - Branch protection on main requiring an approving review and the
-#     stable first-party status checks (auto-merge only waits for
-#     *required* checks): "All CI checks passed" (the ci.yml gate job
-#     covering the whole test matrix), "Check for entry in Changelog",
-#     "Build distributions", and "Analyze (Python)". External services
-#     (codecov, pre-commit.ci, Read the Docs, etc.) are advisory: they
-#     stay visible on the PR but merges don't depend on their uptime.
+#     required status checks defined in
+#     .github/required-status-checks.json (the config-as-code source of
+#     truth; apply it with ./cicd_utils/apply-branch-protection.sh).
+#     These are stable, first-party contexts only - the ci.yml
+#     "All CI checks passed" gate job covers the whole test matrix, so
+#     Python version changes never require touching the list. External
+#     services (codecov, pre-commit.ci, Read the Docs, etc.) are
+#     advisory: they stay visible on PRs, but merges don't depend on
+#     their uptime. (Auto-merge only waits for *required* checks.)
 #
 # Security: this workflow runs on pull_request_target with write
 # permissions, but only ever acts on same-repository PRs opened by

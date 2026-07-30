@@ -122,7 +122,8 @@ jobs:
   # https://github.com/marketplace/actions/alls-green#why): branch
   # protection requires only this one context instead of enumerating
   # every matrix job, so adding or dropping Python versions never
-  # requires updating the repository settings.
+  # requires updating the repository settings. The full list of
+  # required contexts lives in .github/required-status-checks.json.
   all-green:
     name: All CI checks passed
     # `always()` is load-bearing: without it, a failure in a needed job
