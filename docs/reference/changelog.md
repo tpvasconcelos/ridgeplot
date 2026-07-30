@@ -37,7 +37,7 @@ Unreleased changes
 - Use the official `astral-sh/setup-uv` action to install and cache `uv` in CI ({gh-pr}`386`)
 - Let `uv` manage the Python interpreter and virtual environment in CI ({gh-pr}`393`)
 - Remove the stale `requirements/*.txt` glob from the CI cache key, left over from the migration to PEP 735 dependency groups ({gh-pr}`394`)
-- Replace the broken `actions/first-interaction` action with an inline `actions/github-script` step, so that first-time greetings are no longer posted on every PR opened by bots like pre-commit.ci and dependabot ({gh-pr}`398`)
+- Replace the broken `actions/first-interaction` action with a local reusable action (`.github/actions/greet-new-users`), so that first-time greetings are no longer posted on every PR opened by bots like pre-commit.ci and dependabot ({gh-pr}`398`)
 
 ---
 

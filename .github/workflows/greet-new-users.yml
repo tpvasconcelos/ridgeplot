@@ -7,11 +7,13 @@ on:
     types: [ opened ]
 
 # SECURITY: pull_request_target runs with a write token in the base-repo
-# context. This workflow must never check out or execute anything from the
-# PR head, and untrusted fields (titles, bodies, logins) must never be
-# `${{ }}`-interpolated into the script source — read them via
-# `context.payload` inside the script instead.
+# context. Only the *base* ref may ever be checked out here (the checkout
+# below uses the default ref, which on pull_request_target is the base
+# branch) - never the PR head. Untrusted fields (titles, bodies, logins)
+# must never be `${{ }}`-interpolated into scripts; the greet-new-users
+# action reads them via `context.payload` instead.
 permissions:
+  contents: read
   issues: write
   pull-requests: write
 
@@ -20,19 +22,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      # Inline replacement for actions/first-interaction, which greets every
-      # PR from any author who never opened an issue in this repo (including
-      # bots like pre-commit.ci and dependabot).
-      # See: https://github.com/actions/first-interaction/issues/369
-      - uses: actions/github-script@v9
-        env:
-          ISSUE_MESSAGE: |
+      # Needed to load the local action. On pull_request_target this checks
+      # out the base branch, so PR authors cannot alter the code that runs
+      # in this privileged workflow.
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/greet-new-users
+        with:
+          issue-message: |
             **Thank you for submitting your first issue with us!** 🎉
 
             Our response times may vary, but we'll get back to you as soon as we can!
 
             Welcome aboard! 🚀
-          PR_MESSAGE: |
+          pr-message: |
             **Thank you for submitting your first pull request with us!** 🎉
 
             Our response times may vary, but we'll get back to you as soon as we can!
@@ -40,64 +45,3 @@ jobs:
             To help us help you, please make sure you have ticked all the boxes in the pull request template.
 
             Welcome aboard! 🚀
-        with:
-          script: |
-            try {
-              const isIssue = context.eventName === 'issues'
-              const item = isIssue ? context.payload.issue : context.payload.pull_request
-              const author = item.user
-
-              // Never greet bots (pre-commit.ci, dependabot, github-actions, Copilot, ...)
-              if (author.type === 'Bot') {
-                return core.info(`Skipping: ${author.login} is a bot`)
-              }
-
-              // Repo-affiliated authors are never "new users". This is only a
-              // shortcut: a missing/unreliable value falls through to the real
-              // check below, so it can never cause a wrong greeting.
-              if (['OWNER', 'MEMBER', 'COLLABORATOR'].includes(item.author_association)) {
-                return core.info(`Skipping: ${author.login} is ${item.author_association}`)
-              }
-
-              let isFirst = true
-              if (isIssue) {
-                // Everything this author created (the endpoint returns PRs too,
-                // so keep only true issues that predate the current one).
-                const created = await github.paginate(github.rest.issues.listForRepo, {
-                  ...context.repo,
-                  creator: author.login,
-                  state: 'all',
-                  per_page: 100,
-                })
-                isFirst = !created.some((i) => !i.pull_request && i.number < item.number)
-              } else {
-                // pulls.list cannot filter by author, so scan all PRs and stop
-                // as soon as an older PR by this author shows up.
-                await github.paginate(
-                  github.rest.pulls.list,
-                  { ...context.repo, state: 'all', per_page: 100 },
-                  (response, done) => {
-                    if (response.data.some((p) => p.user?.login === author.login && p.number < item.number)) {
-                      isFirst = false
-                      done()
-                    }
-                    return []
-                  },
-                )
-              }
-
-              if (!isFirst) {
-                return core.info(`Skipping: not ${author.login}'s first ${isIssue ? 'issue' : 'pull request'}`)
-              }
-
-              core.info(`Greeting ${author.login} on their first ${isIssue ? 'issue' : 'pull request'}`)
-              await github.rest.issues.createComment({
-                ...context.repo,
-                issue_number: item.number,
-                body: isIssue ? process.env.ISSUE_MESSAGE : process.env.PR_MESSAGE,
-              })
-            } catch (error) {
-              // The greeting is cosmetic: a red X on a newcomer's first PR is
-              // worse than a missing welcome, so warn instead of failing.
-              core.warning(`Skipping greeting: ${error.message}`)
-            }
