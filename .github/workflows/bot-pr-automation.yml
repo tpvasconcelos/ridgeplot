@@ -41,7 +41,10 @@
 #   - "Allow auto-merge" enabled in the repository settings
 #     (Settings > General > Pull Requests).
 #   - Branch protection on main requiring an approving review and the
-#     relevant status checks (auto-merge only waits for *required* checks).
+#     "All checks passed" status check - the single required context,
+#     provided by .github/workflows/require-all-checks.yml, which gates
+#     on every check that reports on a PR (auto-merge only waits for
+#     *required* checks).
 #
 # Security: this workflow runs on pull_request_target with write
 # permissions, but only ever acts on same-repository PRs opened by
