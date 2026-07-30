@@ -116,3 +116,32 @@ jobs:
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           verbose: true
+
+  # Single, stable "gate" context for branch protection, following the
+  # pattern used by e.g. CPython, pydantic, uv, and FastAPI (see
+  # https://github.com/marketplace/actions/alls-green#why): branch
+  # protection requires only this one context instead of enumerating
+  # every matrix job, so adding or dropping Python versions never
+  # requires updating the repository settings.
+  all-green:
+    name: All CI checks passed
+    # `always()` is load-bearing: without it, a failure in a needed job
+    # would leave this job "skipped", and GitHub treats skipped required
+    # checks as passing!
+    if: always()
+    needs: [ static-checks, software-tests ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fail unless all needed jobs succeeded
+        env:
+          NEEDS_JSON: ${{ toJSON(needs) }}
+        run: |
+          echo "$NEEDS_JSON" | jq .
+          failing=$(echo "$NEEDS_JSON" | jq -r \
+            'to_entries[] | select(.value.result != "success") | "\(.key): \(.value.result)"')
+          if [ -n "$failing" ]; then
+            echo "The following required jobs did not succeed:"
+            echo "$failing"
+            exit 1
+          fi

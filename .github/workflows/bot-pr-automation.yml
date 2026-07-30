@@ -41,10 +41,12 @@
 #   - "Allow auto-merge" enabled in the repository settings
 #     (Settings > General > Pull Requests).
 #   - Branch protection on main requiring an approving review and the
-#     "All checks passed" status check - the single required context,
-#     provided by .github/workflows/require-all-checks.yml, which gates
-#     on every check that reports on a PR (auto-merge only waits for
-#     *required* checks).
+#     stable first-party status checks (auto-merge only waits for
+#     *required* checks): "All CI checks passed" (the ci.yml gate job
+#     covering the whole test matrix), "Check for entry in Changelog",
+#     "Build distributions", and "Analyze (Python)". External services
+#     (codecov, pre-commit.ci, Read the Docs, etc.) are advisory: they
+#     stay visible on the PR but merges don't depend on their uptime.
 #
 # Security: this workflow runs on pull_request_target with write
 # permissions, but only ever acts on same-repository PRs opened by
