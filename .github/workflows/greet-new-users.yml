@@ -6,14 +6,31 @@ on:
   pull_request_target:
     types: [ opened ]
 
+# SECURITY: pull_request_target runs with a write token in the base-repo
+# context. Only the *base* ref may ever be checked out here (the checkout
+# below uses the default ref, which on pull_request_target is the base
+# branch) - never the PR head. Untrusted fields (titles, bodies, logins)
+# must never be `${{ }}`-interpolated into scripts; the greet-new-users
+# action reads them via `context.payload` instead.
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   greeting:
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 2
     steps:
-      - uses: actions/first-interaction@v3
+      # Needed to load the local action. On pull_request_target this checks
+      # out the base branch, so PR authors cannot alter the code that runs
+      # in this privileged workflow.
+      - uses: actions/checkout@v7
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
+
+      - uses: ./.github/actions/greet-new-users
+        with:
           issue_message: |
             **Thank you for submitting your first issue with us!** 🎉
 

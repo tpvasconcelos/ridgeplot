@@ -1,0 +1,44 @@
+name: Greet new users
+
+description: >-
+  Comment on a user's first issue or pull request. A drop-in replacement for
+  actions/first-interaction, whose v3 rewrite greets every PR from any author
+  who never opened an issue in the repository - including every PR from bots
+  like pre-commit.ci and dependabot. See
+  https://github.com/actions/first-interaction/issues/369 for details.
+
+inputs:
+  issue_message:
+    description: "Message to post on a user's first issue. Leave empty to not greet issues."
+    required: false
+  pr_message:
+    description: "Message to post on a user's first pull request. Leave empty to not greet PRs."
+    required: false
+  token:
+    description: >-
+      GitHub token used to list existing issues/PRs and to post the greeting
+      comment. Requires `issues: write` and `pull-requests: write` permissions.
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  greeted:
+    description: "Whether a greeting comment was posted ('true'/'false')."
+    value: ${{ steps.greet.outputs.greeted }}
+
+runs:
+  using: composite
+  steps:
+    - id: greet
+      uses: actions/github-script@v9
+      env:
+        ISSUE_MESSAGE: ${{ inputs.issue_message }}
+        PR_MESSAGE: ${{ inputs.pr_message }}
+      with:
+        github-token: ${{ inputs.token }}
+        # The logic lives in main.js next to this file. The messages are
+        # passed through the environment so that no user-controlled content
+        # is ever `${{ }}`-interpolated into the script source.
+        script: |
+          const greet = require(`${process.env.GITHUB_ACTION_PATH}/main.js`)
+          await greet({ core, context, github })
