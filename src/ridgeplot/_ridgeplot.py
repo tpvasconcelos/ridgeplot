@@ -102,7 +102,7 @@ def ridgeplot(
     densities: Densities | ShallowDensities | None = None,
     trace_type: TraceTypesArray | ShallowTraceTypesArray | TraceType | None = None,
     labels: LabelsArray | ShallowLabelsArray | None = None,
-    row_labels: Collection[str] | None | Literal[False] = None,
+    row_labels: Collection[str] | Literal[False] | None = None,
     # KDE parameters
     kernel: str = "gau",
     bandwidth: KDEBandwidth = "normal_reference",
@@ -123,7 +123,7 @@ def ridgeplot(
     xpad: float = 0.05,
     template: PlotlyTemplate | None = None,
     # Deprecated parameters
-    coloralpha: float | None | MissingType = MISSING,
+    coloralpha: float | MissingType | None = MISSING,
     linewidth: float | MissingType = MISSING,
     show_yticklabels: bool | MissingType = MISSING,
 ) -> go.Figure:
