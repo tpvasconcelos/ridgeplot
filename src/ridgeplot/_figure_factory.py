@@ -125,7 +125,7 @@ def create_ridgeplot(
     densities: Densities,
     trace_labels: LabelsArray | ShallowLabelsArray | None,
     trace_types: TraceTypesArray | ShallowTraceTypesArray | TraceType,
-    row_labels: Collection[str] | None | Literal[False],
+    row_labels: Collection[str] | Literal[False] | None,
     colorscale: ColorScale | Collection[Color] | str | None,
     colormode: Literal["fillgradient"] | SolidColormode,
     color_discrete_map: dict[str, str] | None,
